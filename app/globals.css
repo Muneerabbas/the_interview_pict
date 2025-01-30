@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+ /* Apply the background and foreground colors */
+ body {
+    background-color:#F4F2EF;
+    color: hsl(var(--foreground));
+  }

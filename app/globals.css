@@ -8,3 +8,7 @@
     background-color:#F4F2EF;
     color: hsl(var(--foreground));
   }
+  body {
+    padding-top: 80px;
+     /* Adjust based on your navbar height */
+  }

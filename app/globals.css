@@ -6,7 +6,7 @@
 body {
   background-color: #F0F2F5;
   color: hsl(var(--foreground));
-  margin: 0;  /* Ensure no default margin */
+  /* margin: 0;  Ensure no default margin */
 }
 
 

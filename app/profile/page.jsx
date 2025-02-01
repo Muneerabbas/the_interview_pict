@@ -5,6 +5,9 @@ import { Edit, Trash2 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
 import ProfileCard from '../../components/Card'; // Import the ProfileCard component
+// import { useRouter } from "next/navigation";
+
+
 
 const ProfilePage = () => {
   const { data: session, status } = useSession();
@@ -38,15 +41,16 @@ const ProfilePage = () => {
     fetchPosts();
   }, [email]); // Ensure hooks run in the correct order
 
-  const handleEdit = (postId) => {
-    console.log('Edit post:', postId);
-    // Add your edit logic here
-  };
+//   const router = useRouter();
+
+ 
 
   const handleDelete = (postId) => {
     console.log('Delete post:', postId);
     // Add your delete logic here
   };
+  
+
 
   return (
     <div>
@@ -92,8 +96,7 @@ const ProfilePage = () => {
                       profile={post} 
                       edit={true} // Always show edit button
                       deletePost={true} // Always show delete button
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
+                    
                     />
                   </div>
                 ))

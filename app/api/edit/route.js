@@ -20,7 +20,7 @@ export async function PUT(req) {
 
         // Find the document with the provided id and update it
         const result = await experience.updateOne(
-            { uid }, // Use ObjectId for MongoDB IDs
+            { uid,email }, // Use ObjectId for MongoDB IDs
             { 
                 $set: {
                     exp_text, 

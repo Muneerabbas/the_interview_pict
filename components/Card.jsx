@@ -9,8 +9,6 @@ const ProfileCard = ({
   height = "h-60",
   edit = false,
   deletePost = false,
-  onEdit,
-  onDelete,
 }) => {
   const router = useRouter();
 
@@ -35,6 +33,43 @@ const ProfileCard = ({
   const handleReadMore = () => {
     router.push(`/single/${profile.uid}`); 
   };
+
+  const handleEdit = (postId) => {
+    console.log('Edit post:', postId);
+    router.push(`/edit/${profile.uid}`); 
+  };
+
+  const handleDelete = async () => {
+    const confirmation = window.confirm("Are you sure you want to delete this experience?");
+    if (!confirmation) return;
+
+    try {
+      // Send DELETE request to /api/delete
+      const response = await fetch('/api/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: profile.uid,
+          email: profile.email,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Experience deleted successfully");
+        onDelete(profile.uid);  // Call the onDelete callback if provided
+        // Optionally, re-fetch or update state to reflect the deletion
+      } else {
+        alert(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error deleting experience:', error);
+      // alert("There was an error deleting the experience.");
+    }
+  };
+    
 
   return (
     <div className={`${width} my-6 bg-white rounded-xl shadow-md border border-gray-200 ${height}`}>
@@ -78,12 +113,12 @@ const ProfileCard = ({
         {/* Edit/Delete Buttons */}
         <div className="flex justify-end gap-4 mt-4">
           {edit && (
-            <button onClick={() => onEdit(profile._id)} className="text-blue-500 hover:text-blue-700">
+            <button onClick={() => handleEdit()} className="text-blue-500 hover:text-blue-700">
               <Pencil size={20} />
             </button>
           )}
           {deletePost && (
-            <button onClick={() => onDelete(profile._id)} className="text-red-500 hover:text-red-700">
+            <button onClick={() =>handleDelete()} className="text-red-500 hover:text-red-700">
               <Trash size={20} />
             </button>
           )}

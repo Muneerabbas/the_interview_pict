@@ -7,6 +7,7 @@ import slugify from "slugify";
 const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db("int-exp");
 const experience = db.collection("experience");
+const user = db.collection("user");
 
 // Ensure MongoDB is connected
 (async () => {
@@ -16,10 +17,13 @@ const experience = db.collection("experience");
 
 export async function POST(req) {
   try {
-    const { exp_text, company, branch, batch, profile_pic, name, role } = await req.json();
+    const { exp_text, company, branch, batch, profile_pic, name, role,email} = await req.json();
     if (!exp_text || !company || !name) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
+
+    // Validate token
+    const userDoc = await user.findOne({ email });
 
     // Generate a meaningful UID: "google-sde-2025-nanoid"
     const baseSlug = slugify(`${name}'s experience at ${company} ${role} ${batch} `, { lower: true, strict: true });
@@ -33,8 +37,12 @@ export async function POST(req) {
     // Save experience to DB
     const now = new Date().toISOString();
     const result = await experience.insertOne({
-      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,
+      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,email
     });
+
+    if (!result.acknowledged) {
+      return NextResponse.json({ message: "Failed to save experience" }, { status: 500 });
+    }
 
     return NextResponse.json({ message: "Experience saved successfully", uid }, { status: 200 });
   } catch (error) {

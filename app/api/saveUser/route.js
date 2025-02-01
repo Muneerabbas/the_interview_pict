@@ -8,7 +8,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 
 
 export async function POST(req) {
-    const { gmail, name,profilePic_Url,token } = await req.json();
+    const { gmail, name,image } = await req.json();
     try {    
          await client.connect();
     console.log("Connected to MongoDB");
@@ -25,11 +25,11 @@ export async function POST(req) {
         if (existingUser) {
             const updateUser = await users.updateOne(
                 { gmail },
-                { $set: { name,profilePic_Url,token } }
+                { $set: { name,image} }
             )
         }
         else{
-        await users.insertOne({ gmail, name,profilePic_Url,token });
+        await users.insertOne({ gmail, name,image });
         }
 
         return NextResponse.json({ message: "User saved successfully" }, { status: 200 });

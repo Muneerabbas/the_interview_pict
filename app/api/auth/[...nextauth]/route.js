@@ -9,12 +9,20 @@ const authOptions = {
     }),
   ],
   callbacks: {
+    async jwt({ token, account, user }) {
+      if (account) {
+        token.id = user.id || account.providerAccountId; // Ensure the ID is saved
+      }
+      return token;
+    },
     async session({ session, token }) {
-      session.user.id = token.sub;
+      if (token.id) {
+        session.user.id = token.id;
+      }
       return session;
     },
   },
-  secret: "d01c16547d0994133aeefd2b22d48f0819907cfea58c8c645395a1aef623acf9", // Add the secret to the config
+  secret: "d01c16547d0994133aeefd2b22d48f0819907cfea58c8c645395a1aef623acf9", // Use the env variable
 };
 
 const handler = NextAuth(authOptions);

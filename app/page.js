@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from './Home.module.scss';
+import Link from 'next/link'; // Import Link
 
 export default function Home() {
   return (
@@ -22,30 +23,30 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="#overview" className={styles.card}>
+          <Link href="/home" className={styles.card}> {/* Changed to Link */}
             <h2>Overview &rarr;</h2>
             <p>Get a comprehensive overview of the PICT interview process.</p>
-          </a>
+          </Link>
 
-          <a href="#tips" className={styles.card}>
+          <Link href="/home" className={styles.card}> {/* Changed to Link */}
             <h2>Interview Tips &rarr;</h2>
             <p>Learn valuable tips to ace your PICT interview.</p>
-          </a>
+          </Link>
 
-          <a href="#experiences" className={styles.card}>
+          <Link href="/home" className={styles.card}> {/* Changed to Link */}
             <h2>Alumni Experiences &rarr;</h2>
             <p>Read real experiences shared by PICT alumni.</p>
-          </a>
+          </Link>
 
-          <a href="#resources" className={styles.card}>
+          <Link href="/home" className={styles.card}> {/* Changed to Link */}
             <h2>Resources &rarr;</h2>
             <p>Access curated resources to prepare effectively.</p>
-          </a>
+          </Link>
         </div>
       </main>
 
       <footer className={styles.footer}>
-        <p>© 2023 PICT Interview Experience. All rights reserved.</p>
+        <p>© 2025 The Interview PICT Life. All rights reserved.</p>
       </footer>
     </div>
   );

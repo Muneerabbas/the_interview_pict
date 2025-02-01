@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import Navbar from "../../components/Navbar";
-import Login from "../../components/Login";
 import ProfileCard from "../../components/Card";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,42 +12,16 @@ export default function HomePage() {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true); // To track if there are more profiles to load
-  const [searchQuery, setSearchQuery] = useState(""); // State to store search query
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(""); // Debounced search query
 
-  // New states for localStorage items
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [userId, setUserId] = useState(""); // New state for userId
-
-  // Function to handle search query changes
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  // Debounce the search input
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  // Fetch profiles from the API with an optional search query
-  const fetchProfiles = async (pageNumber, search = "") => {
+  // Fetch profiles from the API
+  const fetchProfiles = async (pageNumber) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `/api/feed?page=${pageNumber}&search=${search}`
-      );
+      const response = await axios.get(`/api/feed?page=${pageNumber}`);
       setProfiles((prev) => {
         // Remove duplicates based on profile._id
         const uniqueProfiles = [
-          ...new Map(
-            prev.concat(response.data).map((item) => [item._id, item])
-          ).values(),
+          ...new Map(prev.concat(response.data).map((item) => [item._id, item])).values(),
         ];
         return uniqueProfiles;
       });
@@ -65,49 +38,24 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchProfiles(page, debouncedSearchQuery); // Fetch profiles based on search query
-  }, [page, debouncedSearchQuery]);
+    fetchProfiles(page); // Fetch profiles when page changes
+  }, [page]);
 
   // Handle load more button click
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
   };
 
-  // Set email, name, profilePic, and userId from localStorage on component mount
-  useEffect(() => {
-    // Check if the values exist in localStorage, if not, set them
-    if (!localStorage.getItem('email')) {
-      localStorage.setItem('email', session?.user?.email || "");
-    }
-    if (!localStorage.getItem('name')) {
-      localStorage.setItem('name', session?.user?.name || "");
-    }
-    if (!localStorage.getItem('image')) {
-      localStorage.setItem('image', session?.user?.image || "");
-    }
-    if (!localStorage.getItem('userId')) {  // Check for userId
-      localStorage.setItem('userId', session?.user?.id || ""); // Store userId
-    }
-
-    // Set the state from localStorage (if available)
-    setEmail(localStorage.getItem('email') || "");
-    setName(localStorage.getItem('name') || "");
-    setProfilePic(localStorage.getItem('image') || "");
-    setUserId(localStorage.getItem('userId') || ""); // Retrieve userId from localStorage
-    //
-    
-  }, [session]);
-
   return (
     <main className="min-h-screen font-sans relative">
-      <div className={`transition-all ${!session ? "blur-md" : ""}`}>
+      <div className={`transition-all`}>
         <Navbar />
 
         {/* User Profile Image */}
         {session && (
           <div className="flex justify-center mt-6 mb-3">
             <img
-              src={profilePic || session.user.image || "/default-profile.png"}
+              src={session.user.image || "/default-profile.png"}
               alt="User Image"
               className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
             />
@@ -118,7 +66,7 @@ export default function HomePage() {
         <div className="text-center py-1">
           {session && (
             <h1 className="text-4xl font-bold text-gray-800">
-              Welcome, {name || session.user.name}
+              Welcome, {session.user.name}
             </h1>
           )}
         </div>
@@ -126,12 +74,12 @@ export default function HomePage() {
         {/* Profiles Section */}
         <div className="max-w-4xl mx-auto mt-8 space-y-4">
           {profiles.map((profile) => (
-            <ProfileCard key={`${profile._id}-${page}`} profile={profile} />
+            <ProfileCard key={profile._id} profile={profile} />
           ))}
         </div>
 
         {/* Load More Button or "You have reached the end" message */}
-        {session && !loading && hasMoreProfiles && (
+        {!loading && hasMoreProfiles && (
           <div className="flex justify-center mt-6">
             <button
               onClick={handleLoadMore}
@@ -143,7 +91,7 @@ export default function HomePage() {
         )}
 
         {/* "You have reached the end" message */}
-        {session && !loading && !hasMoreProfiles && (
+        { !loading && !hasMoreProfiles && (
           <div className="flex justify-center mt-6">
             <p className="text-gray-600">You have reached the end</p>
           </div>
@@ -156,18 +104,23 @@ export default function HomePage() {
           </div>
         )}
       </div>
-
-      {/* Login Overlay */}
-      {!session && (
-        <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50">
-          <div className="p-6 bg-white shadow-lg rounded-lg -mt-[300px]">
-            <p className="text-lg font-bold mb-4">
-              You must be logged in to view this page.
-            </p>
-            <Login />
-          </div>
-        </div>
-      )}
     </main>
   );
 }
+
+// // Removed the login check and Login overlay
+// {
+//   /* Login Overlay */
+// }
+// {
+//   !session && (
+//     <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50">
+//       <div className="p-6 bg-white shadow-lg rounded-lg -mt-[300px]">
+//         <p className="text-lg font-bold mb-4">
+//           You must be logged in to view this page.
+//         </p>
+//         <Login />
+//       </div>
+//     </div>
+//   );
+// }

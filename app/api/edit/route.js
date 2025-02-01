@@ -6,7 +6,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const client = new MongoClient(process.env.MONGODB_URI);
 
 export async function PUT(req) {
-    const { id, exp_text, company, branch, batch, role,email } = await req.json();
+    const { uid, exp_text, company, branch, batch, role,email} = await req.json();
 
     try {
         await client.connect();
@@ -16,20 +16,11 @@ export async function PUT(req) {
         const db = client.db("int-exp");
 
         // Access a collection
-        const experience = db.collection("experience");
-
-        const post=experience.find({uid})
-
-        if (!email==post.email)
-        {
-            return NextResponse.json({ message: "Not your post!" }, { status: 401 })
-        }
-
-
+        const experience = db.collection("experience");   
 
         // Find the document with the provided id and update it
         const result = await experience.updateOne(
-            { _id: new MongoClient.ObjectId(id) }, // Use ObjectId for MongoDB IDs
+            { uid }, // Use ObjectId for MongoDB IDs
             { 
                 $set: {
                     exp_text, 

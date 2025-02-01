@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation"; // Using useParams from next/navigation
-
+import { useSession } from "next-auth/react";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function MdxEditorPage() {
+    const { data: session } = useSession();
   const { id } = useParams(); // useParams hook to get the `id` parameter from the URL
   const [markdown, setMarkdown] = useState("");
   const [height, setHeight] = useState("100vh");
@@ -51,22 +52,24 @@ export default function MdxEditorPage() {
   // Handle the form submission and save the data
   const handleSubmit = async () => {
     try {
-      const email = localStorage.getItem("email");
-      const name = localStorage.getItem("name");
-      const profile_pic = localStorage.getItem("image");
-      const response = await fetch("/api/saveExp", {
-        method: "POST",
+     const email = session?.user?.email || "Unknown";
+      const name = session?.user?.name || "Anonymous";
+      const profile_pic = session?.user?.image || "";
+      const response = await fetch("/api/edit/", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          uid: id,
           exp_text: markdown,
           name,
-          profile_pic,
           batch,
           branch,
           company,
           role,
+          email,
+        
         }),
       });
       if (!response.ok) {

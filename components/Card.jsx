@@ -6,9 +6,10 @@ import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-
 const ProfileCard = ({
   profile,
   width = "w-full",
-  height = "min-h-[150px]", // Default height for mobile/tablet view
+  height = "min-h-[150px]",
   edit = false,
   deletePost = false,
+  disableCardClick = false, // New parameter to control card click behavior
 }) => {
   const router = useRouter();
 
@@ -30,15 +31,18 @@ const ProfileCard = ({
     timeZoneName: "short",
   });
 
-  const handleReadMore = () => {
+  const handleReadMore = (e) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to the card click handler
     router.push(`/single/${profile.uid}`);
   };
 
-  const handleEdit = () => {
+  const handleEdit = (e) => {
+    e.stopPropagation();
     router.push(`/edit/${profile.uid}`);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.stopPropagation();
     const confirmation = window.confirm("Are you sure you want to delete this experience?");
     if (!confirmation) return;
 
@@ -66,8 +70,23 @@ const ProfileCard = ({
     }
   };
 
+  const handleCardClick = () => {
+    if (!disableCardClick) {
+      router.push(`/single/${profile.uid}`);
+    }
+  };
+
   return (
-    <div className={`${width} mx-auto bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_24px_rgba(24,119,242,0.15)] transition-shadow duration-300 border border-[#E7F3FF] ${height} flex flex-col`}>
+    <div 
+      onClick={handleCardClick}
+      className={`${width} mx-auto bg-white rounded-xl 
+        ${disableCardClick ? '' : 'shadow-[0_4px_12px_rgba(0,0,0,0.1)]'} 
+        ${disableCardClick ? '' : 'hover:shadow-[0_8px_24px_rgba(24,119,242,0.15)]'}
+        ${disableCardClick ? '' : 'hover:bg-[#F7FAFF]'} 
+        ${disableCardClick ? '' : 'transform hover:-translate-y-1'} 
+        ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
+        transition-all duration-300 border border-[#E7F3FF] ${height} flex flex-col relative`}
+    >
       <div className="p-4 flex-grow">
         {/* Header Section */}
         <div className="flex items-start gap-4">
@@ -84,7 +103,7 @@ const ProfileCard = ({
 
           {/* Profile Info */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-lg font-bold text-[#1D1D1D] truncate">{profileName}</h2>
+            <h2 className="text-lg font-bold text-[#1D1D1D] truncate group-hover:text-[#1877F2]">{profileName}</h2>
             <div className="flex flex-wrap items-center gap-2 text-sm text-[#B0B3B8]">
               <div className="flex items-center gap-1">
                 <GraduationCap size={14} className="text-[#1877F2]" />
@@ -108,6 +127,7 @@ const ProfileCard = ({
             </div>
           </div>
         </div>
+        
 
         {/* Experience Text Section */}
         <div className="mt-4 text-[#1D1D1D]">

@@ -1,41 +1,61 @@
 import { NextResponse } from "next/server";
+import { MongoClient } from "mongodb";
 
-const { MongoClient } = require('mongodb');
+// Load MongoDB URI securely from environment variables
 const uri = process.env.MONGODB_URI;
-// Create a new MongoClient
-const client = new MongoClient("mongodb+srv://himanshugholse08:wBX31Hgv3SxhAg9E@interview-experience.s8jve.mongodb.net/");
+if (!uri) {
+  throw new Error("MONGODB_URI is not set in environment variables");
+}
+
+const client = new MongoClient(
+  "mongodb+srv://himanshugholse08:wBX31Hgv3SxhAg9E@interview-experience.s8jve.mongodb.net/"
+);
 
 
 async function main(search_text) {
-      
-         await client.connect();
-    console.log("Connected to MongoDB");
+  await client.connect();
+  console.log("Connected to MongoDB");
 
-    // Access a database
-    const db = client.db("int-exp");
+  const db = client.db("int-exp");
+  const experience = db.collection("experience");
 
-    // Access a collection
-    const experience = db.collection("experience");
+  // Atlas Search Query with Weights
+  const result = await experience
+    .aggregate([
+      {
+        $search: {
+          index: "main", // Replace with your actual search index name
+          compound: {
+            should: [
+              { text: { query: search_text, path: "company", score: { boost: { value: 5 } }, fuzzy: {} } },
+              { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
+              { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
+              { text: { query: search_text, path: "exp_text", score: { boost: { value: 5 } }, fuzzy: {} } },
+              { text: { query: search_text, path: "branch", score: { boost: { value: 3 } }, fuzzy: {} } },
+              { text: { query: search_text, path: "batch", score: { boost: { value: 2 } }, fuzzy: {} } }
+            ]
+          }
+        }
+      },
+      { $limit: 10 }
+    ])
+    .toArray();
 
-    // Insert a single document
-
-    const result =  await experience.find({ $text: { $search: search_text } }).limit(10).toArray();
-
-    return result;
-    
+  return result;
 }
 
-
-
-
 export async function GET(req) {
-    try {
-        const search = req.nextUrl.searchParams.get("search");
-        
-        const result = await main(search);
+  try {
+    const search = req.nextUrl.searchParams.get("search");
 
-        return NextResponse.json({ result }, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+    if (!search) {
+      return NextResponse.json({ message: "Search query is required" }, { status: 400 });
     }
+
+    const result = await main(search);
+
+    return NextResponse.json({ result }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
 }

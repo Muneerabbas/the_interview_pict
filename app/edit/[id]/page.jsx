@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation"; // Using useParams from next/navigation
 import { useSession } from "next-auth/react";
+import Navbar from "../../../components/Navbar"; // Imported Navbar component
+
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function MdxEditorPage() {
-    const { data: session } = useSession();
+  const { data: session } = useSession();
   const { id } = useParams(); // useParams hook to get the `id` parameter from the URL
   const [markdown, setMarkdown] = useState("");
   const [height, setHeight] = useState("100vh");
@@ -52,7 +54,7 @@ export default function MdxEditorPage() {
   // Handle the form submission and save the data
   const handleSubmit = async () => {
     try {
-     const email = session?.user?.email || "Unknown";
+      const email = session?.user?.email || "Unknown";
       const name = session?.user?.name || "Anonymous";
       const profile_pic = session?.user?.image || "";
       const response = await fetch("/api/edit/", {
@@ -69,7 +71,6 @@ export default function MdxEditorPage() {
           company,
           role,
           email,
-        
         }),
       });
       if (!response.ok) {
@@ -90,79 +91,86 @@ export default function MdxEditorPage() {
   }, [id]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      <div className="flex-1 p-4 md:p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6 text-gray-800">
-            MDX Editor
-          </h1>
-          <div className="flex space-x-4 mb-4">
-            <select
-              value={batch}
-              onChange={(e) => setBatch(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">Select Batch</option>
-              <option value="Batch 1">Batch 1</option>
-              <option value="Batch 2">Batch 2</option>
-              <option value="Batch 3">Batch 3</option>
-            </select>
-            <select
-              value={branch}
-              onChange={(e) => setBranch(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">Select Branch</option>
-              <option value="CS">Computer Science</option>
-              <option value="IT">Information Technology</option>
-              <option value="EC">Electronics</option>
-            </select>
-            <select
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">Select Company</option>
-              <option value="Barclays">Barclays</option>
-              <option value="Google">Google</option>
-              <option value="Microsoft">Microsoft</option>
-            </select>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg"
-            >
-              <option value="">Select Role</option>
-              <option value="Intern">Intern</option>
-              <option value="Full-time">Full-time</option>
-              <option value="Part-time">Part-time</option>
-              <option value="Freelancer">Freelancer</option>
-            </select>
-          </div>
-          <div
-            className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
-            style={{ height }}
-          >
-            <MDEditor
-              value={markdown}
-              onChange={(value) => setMarkdown(value || "")}
-              preview="live"
-              hideToolbar={false}
-              data-color-mode="light"
-              className="w-full h-full"
-              height="100%"
-            />
-          </div>
-          <div className="mt-4">
-            <button
-              onClick={handleSubmit}
-              className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
+    <div className="flex flex-col h-screen">
+  {/* Navbar rendered first */}
+  <Navbar />
+
+  <div className="lg:mt-[120px] md:mt-[80px] sm:mt-[100px]">
+    <div className="max-w-7xl mx-auto">
+      {/* Dropdowns and Submit Button aligned in the same row */}
+      <div className="flex items-center space-x-4 mb-4">
+        <select
+          value={batch}
+          onChange={(e) => setBatch(e.target.value)}
+          className="p-2 border border-gray-300 rounded-lg"
+        >
+          <option value="">Select Batch</option>
+          <option value="Batch 1">Batch 1</option>
+          <option value="Batch 2">Batch 2</option>
+          <option value="Batch 3">Batch 3</option>
+        </select>
+        <select
+          value={branch}
+          onChange={(e) => setBranch(e.target.value)}
+          className="p-2 border border-gray-300 rounded-lg"
+        >
+          <option value="">Select Branch</option>
+          <option value="CS">Computer Science</option>
+          <option value="IT">Information Technology</option>
+          <option value="EC">Electronics</option>
+        </select>
+        <select
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          className="p-2 border border-gray-300 rounded-lg"
+        >
+          <option value="">Select Company</option>
+          <option value="Barclays">Barclays</option>
+          <option value="Google">Google</option>
+          <option value="Microsoft">Microsoft</option>
+        </select>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="p-2 border border-gray-300 rounded-lg"
+        >
+          <option value="">Select Role</option>
+          <option value="Intern">Intern</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Freelancer">Freelancer</option>
+        </select>
+        
+        {/* Submit Button aligned to the right */}
+        <button
+          onClick={handleSubmit}
+          className="ml-auto px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+        >
+          Submit
+        </button>
+      </div>
+
+      {/* Markdown editor container */}
+      <div
+        className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm"
+        style={{ height }}
+      >
+        <MDEditor
+          value={markdown}
+          onChange={(value) => setMarkdown(value || "")}
+          preview="live"
+          hideToolbar={false}
+          data-color-mode="light"
+          className="w-full h-full"
+          height="100%"
+        />
       </div>
     </div>
+  </div>
+</div>
+
+  
+
+
   );
 }

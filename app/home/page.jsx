@@ -44,7 +44,8 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F0F2F5] font-sans">
+    <main className="min-h-screen bg-[#F0F2F5] font-sans pt-5 md:pt-20">
+
       <Navbar />
       
       <div className="max-w-4xl mx-auto px-4 pt-20 pb-12">

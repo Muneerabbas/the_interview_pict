@@ -1,15 +1,32 @@
 import axios from "axios";
 import MarkdownRenderer from "@/components/Markdown";
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
+import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
+import { JsonLd } from "react-schemaorg";
+import ArticleCard from "@/components/ArticleCard";
 
-export default async function InterviewExperience({ params }) {
+export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {
-    return <div style={styles.loading}>Invalid request</div>;
+    return <div className="text-center text-lg text-gray-600 mt-10">Invalid request</div>;
   }
 
   const { id } = await params;
   let data = null;
   let articles = [];
+
+  const formattedDate = (date) => {
+    return new Date(date).toLocaleString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZoneName: "short",
+    });
+  };
 
   try {
     const apiUrl = `http://localhost:3000/api/exp?uid=${id}`;
@@ -21,168 +38,154 @@ export default async function InterviewExperience({ params }) {
       exp_text: response.data.exp_text?.replace(/"/g, ""),
     };
 
-    // Fetch other articles from /feed
     const feedUrl = "http://localhost:3000/api/feed";
-    const searchFeed = `http://localhost:3000/api/search/${data.company} ${data.role} ${data.batch} ${data.branch}`;
+    const searchFeed = `http://localhost:3000/api/search/${data.company} ${data.branch}`;
     const feedResponse = await axios.get(feedUrl);
     const searchResponse = await axios.get(feedUrl);
     articles = feedResponse.data;
-   
-    //add 
-    articles = [...articles, ...searchResponse.data];
 
+    articles = [...articles, ...searchResponse.data];
     articles = articles.filter((article) => article.uid !== id);
-    //remove duplicate articles
-    articles = articles.filter((article, index) => {
-      const uid = article.uid;
-      return articles.findIndex((a) => a.uid === uid) === index;
-    })
+    articles = articles.filter((article, index) => articles.findIndex((a) => a.uid === article.uid) === index);
   } catch (error) {
     console.error("Error fetching data:", error);
-    return <div style={styles.loading}>Failed to load experience.</div>;
+    return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
+
+  const articleUrl = `https://pict.life/exp/${id}`;
+  const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
 
   return (
     <>
       <Head>
-        <title>{`${data.name}'s Interview Experience at ${data.company}`}</title>
-        <meta
-          name="description"
-          content={`${data.name} shares their experience interviewing for ${data.role} at ${data.company}. Insights from the ${data.batch} batch.`}
-        />
-        <meta
-          name="keywords"
-          content={`Interview Experience, ${data.company}, ${data.role}, ${data.batch}, ${data.branch}`}
-        />
+        <title>{`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`}</title>
+        <meta name="description" content={articleDescription} />
+        <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
         <meta name="author" content={data.name} />
-        <meta property="og:title" content={`${data.name}'s Interview Experience at ${data.company}`} />
-        <meta
-          property="og:description"
-          content={`${data.name} shares their experience interviewing for ${data.role} at ${data.company}.`}
-        />
+        
+        {/* Open Graph tags */}
+        <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
+        <meta property="og:description" content={articleDescription} />
         <meta property="og:image" content={data.profile_pic} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://pict.life/exp/${id}`} />
+        <meta property="og:url" content={articleUrl} />
+        <meta property="og:site_name" content="PICT Life" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
+        <meta name="twitter:description" content={articleDescription} />
+        <meta name="twitter:image" content={data.profile_pic} />
+        
+        {/* Additional SEO tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <link rel="canonical" href={articleUrl} />
+        
+        {/* Article specific metadata */}
+        <meta property="article:published_time" content={new Date(data.date).toISOString()} />
+        <meta property="article:section" content="Interview Experiences" />
+        <meta property="article:tag" content={`${data.company}, ${data.role}, ${data.branch}`} />
       </Head>
-      <div style={styles.container}>
-        <div style={styles.header}>
-          <img src={data.profile_pic} alt="Profile" style={styles.profilePic} />
-          <div style={styles.headerText}>
-            <h1 style={styles.name}>{data.name}</h1>
-            <p style={styles.meta}>
-              {data.company} - {data.role} | {data.branch} | {data.batch}
-            </p>
-            <p style={styles.date}>{data.date}</p>
+
+      {/* JSON-LD structured data */}
+      <JsonLd
+        item={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: `${data.company} Interview Experience: ${data.role} Position`,
+          author: {
+            "@type": "Person",
+            name: data.name,
+          },
+          datePublished: new Date(data.date).toISOString(),
+          image: data.profile_pic,
+          publisher: {
+            "@type": "Organization",
+            name: "PICT Life",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://pict.life/logo.png"
+            }
+          },
+          description: articleDescription,
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": articleUrl
+          }
+        }}
+      />
+
+      <Navbar />
+      <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
+        {/* Profile Info Section */}
+        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10">
+          {/* Profile Image */}
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md flex-shrink-0">
+            <img
+              src={data.profile_pic || "/api/placeholder/80/80"}
+              alt={`${data.name}'s profile picture`}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
           </div>
-        </div>
-        <div style={styles.content}>
-          <div style={styles.markdownContent}>
+
+          {/* Profile Info */}
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+              {data.name}
+            </h1>
+
+            {/* Info Grid */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-2 text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <GraduationCap size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <span className="truncate">{data.branch}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Building2 size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <span className="truncate">{data.company}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Briefcase size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <span className="truncate">{data.role}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Eye size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <span>{data.views} views</span>
+              </div>
+            </div>
+
+            {/* Date */}
+            <time dateTime={new Date(data.date).toISOString()} className="text-sm text-gray-500">
+              {formattedDate(data.date)}
+            </time>
+          </div>
+        </header>
+
+        <div className="border-t border-gray-300 my-6"></div>
+
+        {/* Main content */}
+        <main className="mb-10">
+          <div className="prose prose-lg max-w-none text-base text-gray-700">
             <MarkdownRenderer content={data.exp_text} />
           </div>
-        </div>
-        <div style={styles.footer}>
-          <p style={styles.views}>Views: {data.views}</p>
-        </div>
-        {/* Display links to other articles */}
-        <div style={styles.relatedArticles}>
-          <h3>Related Experiences:</h3>
-          <ul style={styles.relatedArticlesList}>
+        </main>
+
+        <footer className="text-center text-sm text-gray-500 pt-5 border-t border-gray-200">
+          <p>Views: {data.views}</p>
+        </footer>
+
+        {/* Related Articles */}
+        <section className="mt-10">
+          <h2 className="text-2xl font-semibold text-[#1D1D1D] mb-6">Related Experiences</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
             {articles.map((article) => (
-              <li key={article._id}>
-                <a href={`http://localhost:3000/single/${article.uid}`} style={styles.link}>
-                  {article.uid}
-                </a>
-              </li>
+              <ArticleCard key={article.uid} article={article} />
             ))}
-          </ul>
-        </div>
-      </div>
+          </div>
+        </section>
+      </article>
     </>
   );
 }
-
-const styles = {
-  container: {
-    fontFamily: "'Inter', sans-serif",
-    backgroundColor: "#ffffff",
-    color: "#333333",
-    margin: "0 auto",
-    maxWidth: "800px",
-    padding: "40px 20px",
-    lineHeight: "1.6",
-  },
-  loading: {
-    textAlign: "center",
-    fontSize: "18px",
-    color: "#666666",
-    marginTop: "40px",
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "40px",
-  },
-  profilePic: {
-    borderRadius: "50%",
-    width: "100px",
-    height: "100px",
-    marginRight: "24px",
-    border: "2px solid #e0e0e0",
-  },
-  headerText: {
-    flex: 1,
-  },
-  name: {
-    fontSize: "28px",
-    fontWeight: "600",
-    margin: "0 0 8px 0",
-    color: "#222222",
-  },
-  meta: {
-    fontSize: "16px",
-    color: "#666666",
-    margin: "0 0 8px 0",
-  },
-  date: {
-    fontSize: "14px",
-    color: "#888888",
-    margin: "0",
-  },
-  content: {
-    marginBottom: "40px",
-  },
-  sectionTitle: {
-    fontSize: "24px",
-    fontWeight: "600",
-    color: "#222222",
-    marginBottom: "20px",
-    paddingBottom: "10px",
-    borderBottom: "1px solid #e0e0e0",
-  },
-  markdownContent: {
-    fontSize: "16px",
-    color: "#444444",
-  },
-  footer: {
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#888888",
-    paddingTop: "20px",
-    borderTop: "1px solid #e0e0e0",
-  },
-  views: {
-    margin: "0",
-  },
-  relatedArticles: {
-    marginTop: "40px",
-  },
-  relatedArticlesList: {
-    listStyleType: "none",
-    paddingLeft: "0",
-  },
-  link: {
-    color: "#0070f3",
-    textDecoration: "none",
-    fontSize: "16px",
-  },
-};

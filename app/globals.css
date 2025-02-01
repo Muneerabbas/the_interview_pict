@@ -9,15 +9,6 @@ body {
   margin: 0;  /* Ensure no default margin */
 }
 
-@media(min-width: 1024px){
-  body {
-    padding-top: 80px; /* Adjust for smaller screens */
-  }
-}
 
-/* If you want to use dynamic styles for different screen sizes or conditions */
-@media (max-width: 1024px) {
-  body {
-    padding-top: 20px; /* Adjust for smaller screens */
-  }
-}
+
+

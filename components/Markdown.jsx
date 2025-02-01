@@ -1,4 +1,3 @@
-// MarkdownRenderer.jsx
 import React from 'react';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -10,29 +9,29 @@ const MarkdownRenderer = ({ content }) => {
   const components = {
     // Custom heading rendering
     h1: ({ children }) => (
-      <h1 className="text-[2em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de]">
+      <h1 className="text-[2em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de] break-words">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-[1.5em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de]">
+      <h2 className="text-[1.5em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de] break-words">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-[1.25em] font-semibold leading-[1.25] mt-6 mb-4">
+      <h3 className="text-[1.25em] font-semibold leading-[1.25] mt-6 mb-4 break-words">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-[1em] font-semibold leading-[1.25] mt-6 mb-4">
+      <h4 className="text-[1em] font-semibold leading-[1.25] mt-6 mb-4 break-words">
         {children}
       </h4>
     ),
     
     // Custom paragraph
     p: ({ children }) => (
-      <p className="mb-4 leading-[1.5] text-[#1F2328]">
+      <p className="mb-4 leading-[1.5] text-[#1F2328] break-words">
         {children}
       </p>
     ),
@@ -41,7 +40,7 @@ const MarkdownRenderer = ({ content }) => {
     a: ({ href, children }) => (
       <a 
         href={href} 
-        className="text-[#0969da] hover:underline" 
+        className="text-[#0969da] hover:underline break-words" 
         target="_blank" 
         rel="noopener noreferrer"
       >
@@ -51,24 +50,24 @@ const MarkdownRenderer = ({ content }) => {
     
     // Custom lists
     ul: ({ children }) => (
-      <ul className="pl-8 mb-4 list-disc">
+      <ul className="pl-8 mb-4 list-disc break-words">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="pl-8 mb-4 list-decimal">
+      <ol className="pl-8 mb-4 list-decimal break-words">
         {children}
       </ol>
     ),
     li: ({ children }) => (
-      <li className="mb-1">
+      <li className="mb-1 break-words">
         {children}
       </li>
     ),
     
     // Custom blockquotes
     blockquote: ({ children }) => (
-      <blockquote className="pl-4 color-[#656d76] border-l-4 border-[#d0d7de] my-4">
+      <blockquote className="pl-4 color-[#656d76] border-l-4 border-[#d0d7de] my-4 break-words">
         {children}
       </blockquote>
     ),
@@ -77,7 +76,7 @@ const MarkdownRenderer = ({ content }) => {
     code: ({ node, inline, className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className || '');
       return !inline && match ? (
-        <div className="my-4">
+        <div className="my-4 break-words">
           <SyntaxHighlighter
             language={match[1]}
             style={github}
@@ -90,7 +89,7 @@ const MarkdownRenderer = ({ content }) => {
         </div>
       ) : (
         <code 
-          className="px-2 py-1 text-[85%] bg-[rgba(175,184,193,0.2)] rounded-md font-mono"
+          className="px-2 py-1 text-[85%] bg-[rgba(175,184,193,0.2)] rounded-md font-mono break-words"
           {...props}
         >
           {children}
@@ -100,12 +99,12 @@ const MarkdownRenderer = ({ content }) => {
     
     // Custom horizontal rule
     hr: () => (
-      <hr className="h-1 my-6 bg-[#d0d7de] border-0" />
+      <hr className="h-1 my-6 bg-[#d0d7de] border-0 break-words" />
     ),
     
     // Custom table
     table: ({ children }) => (
-      <div className="overflow-x-auto my-4">
+      <div className="overflow-x-auto my-4 break-words">
         <table className="w-full border-collapse">
           {children}
         </table>
@@ -122,24 +121,24 @@ const MarkdownRenderer = ({ content }) => {
       </tbody>
     ),
     tr: ({ children }) => (
-      <tr className="border-t border-[#d0d7de]">
+      <tr className="border-t border-[#d0d7de] break-words">
         {children}
       </tr>
     ),
     th: ({ children }) => (
-      <th className="px-3 py-2 text-left text-sm font-semibold border border-[#d0d7de]">
+      <th className="px-3 py-2 text-left text-sm font-semibold border border-[#d0d7de] break-words">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-3 py-2 text-sm border border-[#d0d7de]">
+      <td className="px-3 py-2 text-sm border border-[#d0d7de] break-words">
         {children}
       </td>
     ),
   };
 
   return (
-    <div className="markdown-container font-[-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif] max-w-[900px] mx-auto p-4">
+    <div className="markdown-container font-[-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif] max-w-[900px] mx-auto p-4 break-words">
       <ReactMarkdown
         components={components}
         remarkPlugins={[remarkGfm]}

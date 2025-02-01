@@ -21,7 +21,6 @@ const SearchPage = ({ params }) => {
     }
   }, [search, searchText, router]);
 
-
   // Debounce function to delay search by 300ms
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -64,7 +63,7 @@ const SearchPage = ({ params }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 relative">
+    <div className="max-h-screen p-6 relative">
       <div className="absolute top-4 left-4">
         <button
           onClick={() => router.push("/home")}
@@ -100,7 +99,7 @@ const SearchPage = ({ params }) => {
           <p className="text-center mt-4 text-gray-600">Loading...</p>
         )}
 
-        <div className="mt-6">
+        <div className="mt-6 space-y-6"> {/* Added space-y-6 here */}
           {results.length > 0
             ? results.map((profile) => (
                 <ProfileCard key={profile._id} profile={profile} />

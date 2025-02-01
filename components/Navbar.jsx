@@ -96,7 +96,7 @@ export default function Navbar() {
             
             {session ? (
               <button onClick={handleLogout} className="flex flex-col items-center px-3 py-2 rounded-lg hover:bg-[#FF5F5F] hover:text-white transition-all duration-300 text-[#1D1D1D]">
-                <LogOut size={24} />
+                <LogOut size={24} className="text-[#1877F2]" />
                 <span className="text-sm mt-1">Logout</span>
               </button>
             ) : (
@@ -165,7 +165,7 @@ export default function Navbar() {
       </Link>
       {session ? (
         <button onClick={handleLogout} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#FF5F5F] hover:text-white transition-all duration-300 text-[#1D1D1D] w-full">
-          <LogOut size={24} />
+          <LogOut size={24} className="text-[#1877F2]" />
           <span>Logout</span>
         </button>
       ) : (

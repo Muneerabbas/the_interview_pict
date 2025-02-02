@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
+import ShareButton from "@/components/ShareButton";
 
 export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {
@@ -52,7 +53,7 @@ export default async function SimilarExperience({ params }) {
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
 
-  const articleUrl = `https://pict.life/exp/${id}`;
+  const articleUrl = `https://pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
 
   return (
@@ -119,7 +120,15 @@ export default async function SimilarExperience({ params }) {
       <Navbar />
       <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
         {/* Profile Info Section */}
-        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10">
+        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10 relative">
+        {/* ShareButton inside the profile */}
+
+        <ShareButton 
+            id={id} 
+            data={data}
+          />
+        
+          
           {/* Profile Image */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md flex-shrink-0">
             <img
@@ -186,6 +195,7 @@ export default async function SimilarExperience({ params }) {
           </div>
         </section>
       </article>
+      <div className='h-[30px]'></div>
     </>
   );
 }

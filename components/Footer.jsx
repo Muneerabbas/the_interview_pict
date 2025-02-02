@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { 
   Github, 
@@ -8,12 +8,42 @@ import {
   Mail, 
   Twitter,
   Heart,
-  MessageCircle,
   Phone,
   MapPin
 } from "lucide-react";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!email.includes("@")) {
+      setMessage("Please enter a valid email.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("Subscribed successfully!");
+        setEmail("");
+      } else {
+        setMessage(data.error || "Something went wrong.");
+      }
+    } catch (error) {
+      setMessage("Error subscribing. Please try again.");
+    }
+  };
+
   return (
     <footer className="bg-[#F0F2F5] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -87,9 +117,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-[#1D1D1D]">Newsletter</h3>
             <p className="text-sm text-[#1D1D1D]">Stay updated with the latest interview experiences.</p>
-            <form className="space-y-2">
+            <form onSubmit={handleSubmit} className="space-y-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="w-full p-2 rounded-lg border border-[#B0B3B8] focus:outline-none focus:ring-2 focus:ring-[#8B77F9] focus:border-transparent transition-all duration-300"
               />
@@ -99,6 +131,7 @@ export default function Footer() {
               >
                 Subscribe
               </button>
+              {message && <p className="text-sm text-[#1877F2]">{message}</p>}
             </form>
           </div>
         </div>

@@ -2,13 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   background-color: #F0F2F5;
   color: hsl(var(--foreground));
   /* margin: 0;  Ensure no default margin */
 }
 
+@keyframes placeholderExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
 
+@keyframes placeholderEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+input::placeholder {
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
 
+.animate-placeholder-exit::placeholder {
+  animation: placeholderExit 0.5s ease-out forwards;
+}
+
+.animate-placeholder-enter::placeholder {
+  animation: placeholderEnter 0.5s ease-out forwards;
+}

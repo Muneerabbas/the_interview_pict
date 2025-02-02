@@ -1,8 +1,10 @@
-"use client";
+// layout.js
+"use client"; // Add this line
 
 import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from ".././components/Footer"; // Adjust path to where your Footer component is located
+import { usePathname } from "next/navigation"; // Import usePathname
 import "./globals.css";
 
 // Custom fonts setup
@@ -17,15 +19,18 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname(); // Get the current path
+
+  // Check if the current path is `/search/[search]`
+  const isSearchPage = pathname?.startsWith("/search/");
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>{children}</SessionProvider>
 
-        {/* Add Footer component here */}
-        <Footer />
+        {/* Conditionally render Footer */}
+        {!isSearchPage && <Footer />}
       </body>
     </html>
   );

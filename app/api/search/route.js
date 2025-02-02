@@ -37,7 +37,7 @@ async function main(search_text) {
           }
         }
       },
-      { $limit: 10 }
+      { $limit: 10}
     ])
     .toArray();
 

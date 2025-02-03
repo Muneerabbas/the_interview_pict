@@ -1,4 +1,3 @@
-// tailwind.config.mjs
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -11,9 +10,26 @@ export default {
       colors: {
         'custom-cream': "#F4F2EF", // Custom cream color
         'interview-blue': '#3863D3', // Interview blue color
-        // Uncomment below lines if needed for custom variables
-        // background: "var(--background)",
-        // foreground: "var(--foreground)",
+      },
+      animation: {
+        slideIn: 'slideIn 0.5s ease-out',
+        fadeOut: 'fadeOut 3s 2.5s forwards',
+      },
+      keyframes: {
+        slideIn: {
+          '0%': {
+            transform: 'translateX(-50%) translateY(20px)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'translateX(-50%) translateY(0)',
+            opacity: '1',
+          },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
       },
     },
   },

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   background-color: #F0F2F5;
   color: hsl(var(--foreground));

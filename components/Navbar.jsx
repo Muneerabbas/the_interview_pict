@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Home, FileText, LogOut, Search, User, LogIn, Menu, X } from "lucide-react";
 import { useSession, signOut, signIn } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
-import Login from "./Login"
+import { motion, AnimatePresence, delay } from "framer-motion";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -15,7 +14,7 @@ export default function Navbar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const texts = [" company ", " batch ", " role " , " person "];
+  const texts = ["Company 🏢", "Batch 🎓", "Role 💼", "Person 👤"];  
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -109,19 +108,22 @@ export default function Navbar() {
                   placeholder="Search for "
                 />
                 {!searchText && (
-                  <div className="absolute top-[25px] left-[100px] transform -translate-y-1/2 overflow-hidden h-6 w-24">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={index}
-                        initial={{ y: "-100%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        exit={{ y: "100%", opacity: 0.8 }}
-                        transition={{ duration: 0.7 }}
-                        className="absolute w-full text-lg text-[#1877F2]"
-                      >
-                        {texts[index]}
-                      </motion.div>
-                    </AnimatePresence>
+                  <div className="absolute top-[25px] left-[100px] transform -translate-y-1/2 overflow-hidden h-6 w-28">
+                    <AnimatePresence mode="sync">
+  <motion.div
+    key={index}
+    initial={{ y: "-100%", opacity: 0 }}
+    animate={{ y: "0%", opacity: 1 }}
+    exit={{ y: "100%", opacity: 1 }}
+    transition={{ 
+      duration: 0.2,
+      delay: 0 
+    }}
+    className="absolute w-full text-lg text-[#1877F2]"
+  >
+    {texts[index]}
+  </motion.div>
+</AnimatePresence>
                   </div>
                 )}
               </div>
@@ -198,38 +200,44 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             <div className={`${isMenuOpen ? "block" : "hidden"} mt-4`}>
-              <form onSubmit={handleSearch} className="flex flex-col items-center w-full space-y-2">
-                {/* Search Bar */}
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="p-3 pl-4 text-lg border rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder="Search for"
-                  />
-                  <div className="absolute top-[24px] left-[105px] transform -translate-y-1/2 overflow-hidden h-6 w-24">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={index}
-                        initial={{ y: "-100%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        exit={{ y: "100%", opacity: 0 }}
-                        transition={{ duration: 0.7 }}
-                        className="absolute w-full text-lg text-[#1877F2]"
-                      >
-                        {texts[index]}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                </div>
-                {/* Search Button */}
-                <button
-                  type="submit"
-                  className="p-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9] w-full text-center"
-                >
-                  Search
-                </button>
-              </form>
+            <form onSubmit={handleSearch} className="flex flex-col items-center w-full space-y-2">
+  {/* Search Bar */}
+  <div className="relative w-full">
+    <input
+      type="text"
+      className="p-3 pl-4 text-lg border rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+      onChange={(e) => setSearchText(e.target.value)}
+      placeholder="Search for"
+    />
+    <div className="absolute top-[24px] left-[105px] transform -translate-y-1/2 overflow-hidden h-6 w-[98px]">
+      <AnimatePresence mode="wait">
+        {!searchText && (
+          <motion.div
+          key={index}
+          initial={{ y: "-100%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "100%", opacity: 1 }}
+          transition={{ 
+            duration: 0.2,
+            delay: 0 
+          }}
+          className="absolute w-[108%] text-lg text-[#1877F2]"
+        >
+          {texts[index]}
+        </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  </div>
+  {/* Search Button */}
+  <button
+    type="submit"
+    className="p-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9] w-full text-center"
+  >
+    Search
+  </button>
+</form>
+
 
               <div className="flex flex-col space-y-2 mt-4">
                 <Link

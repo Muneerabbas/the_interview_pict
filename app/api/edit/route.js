@@ -39,7 +39,7 @@ export async function PUT(req) {
 
         console.log(result);
 
-        return NextResponse.json({ message: "Experience updated successfully" }, { status: 200 });
+        return NextResponse.json({ message: "Experience updated successfully" ,uid}, { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });
     }

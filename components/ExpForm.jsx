@@ -1,84 +1,27 @@
 "use client";
-import React, { useEffect, useState, useCallback ,useRef} from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
+import 'font-awesome/css/font-awesome.min.css';
+
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
-const dummyText = `---
-title: "Interview Experience - [Company Name]"
-role: "[Job Role]"
----
-
-## Introduction
-<!-- Start with a brief introduction about your experience, including the company and role. -->
-I recently interviewed for the **[Job Role]** position at **[Company Name]**. Here's a summary of my experience and what I learned during the process.
-
-## Application Process
-<!-- Describe how you applied for the role (e.g., referral, campus placement, online application, etc.). -->
-I applied for the role via **[method, e.g., online portal, campus placement, referral, etc.]**. The application process was straightforward, and I received a response within **[time frame, e.g., 1 week]**.
-
-## Interview Rounds
-<!-- Structure your interview process in multiple rounds -->
-
-### Round 1: **[Online Assessment / Coding Challenge]**
-<!-- Mention the format, duration, and topics covered -->
-The first round was an **[online coding assessment / technical interview]** that lasted for **[Duration]**. It included:
-- **[Number of coding questions]** coding problems focusing on **[Topics like Arrays, Dynamic Programming, Graphs, etc.]**
-- MCQs on **[e.g., Algorithms, Data Structures, CS fundamentals]**
-
-### Round 2: **Technical Interview**
-<!-- Describe the questions asked, difficulty level, and your approach -->
-- **Question 1:** [Describe the problem briefly]
-  - My Approach: [Explain how you solved it. Discuss the logic, optimizations, or challenges you faced.]
-  
-- **Question 2:** [Another question you were asked]
-  - My Approach: [Your explanation of how you approached the question. Mention any tools or frameworks used if applicable.]
-
-### Round 3: **HR Interview**
-<!-- Mention behavioral questions and discussion topics -->
-The HR round was more about my background, motivations, and culture fit. Some questions I was asked:
-- **Tell me about yourself.**
-- **Why do you want to join [Company Name]?**
-- **What are your long-term career goals?**
-- **Do you have any questions for us?**
-
-## Preparation Tips
-<!-- Share useful tips and resources -->
-Here's what helped me prepare:
-
-- **DSA Practice:** [Platforms like LeetCode, CodeForces, HackerRank, etc. helped me prepare for coding rounds. My advice: solve problems on these platforms regularly.]
-- **System Design:** [Books like "Designing Data-Intensive Applications" or YouTube channels like Gaurav Sen's channel are great resources.]
-- **Mock Interviews:** [I practiced with mock interview platforms like InterviewBit, Pramp, or even with friends.]
-  
-## Final Outcome
-<!-- Share if you were selected or got feedback -->
-I **[was selected / am still waiting for results / received feedback]** after the interview rounds.
-
-## Useful Links
-<!-- Provide links to resources, your LinkedIn post, or discussion forums -->
-- [My LinkedIn Profile](https://www.linkedin.com/in/[your-profile])
-- [LeetCode Profile](https://leetcode.com/[your-username])
-- [Some useful resources or blogs you've found helpful](#)
-
----
-
-Feel free to reach out to me if you have any questions or need further clarification on any part of the interview process. Good luck with your interview preparation!`;
-  
+ 
 
 export default function MdxEditorPage() { 
   const [successMessage, setSuccessMessage] = useState('');
   const { data: session } = useSession();
   const [companies, setCompanies] = useState([]);
-  const editorRef = useRef(null);
   const [markdown, setMarkdown] = useState("");
   const [batch, setBatch] = useState("");
   const [branch, setBranch] = useState("");
   const [company, setCompany] = useState("");
   const [customCompany, setCustomCompany] = useState("");
   const [role, setRole] = useState("");
+  const [customRole, setCustomRole] = useState("");
   const [height,setHeight] =useState("100vh");
   const [bottomMargin,setBottomMargin] =useState("0");
   const [errors, setErrors] = useState({
@@ -90,28 +33,14 @@ export default function MdxEditorPage() {
   });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [previousMarkdown, setPreviousMarkdown] = useState("");
-  const years = Array.from({ length: 28 }, (_, index) => 2000 + index);
+  const years = Array.from({ length: 28 }, (_, index) => 2000 + index).reverse();
+
+  const roles = ["SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
+
+
   
   
 
-  const handleIdeasClick = () => {
-    // Store the current markdown before applying the template
-    setPreviousMarkdown(markdown);
-
-    // Create an undo stack entry
-    if (editorRef.current) {
-      const textArea = editorRef.current.querySelector('textarea');
-      if (textArea) {
-        const undoEvent = new InputEvent('input', {
-          inputType: 'historyUndo',
-          bubbles: true,
-          cancelable: true,
-        });
-        textArea.dispatchEvent(undoEvent);
-      }
-    }
-
-    setMarkdown(dummyText)};
 
     
     useEffect(() => {
@@ -142,7 +71,7 @@ export default function MdxEditorPage() {
       fetchCompanies();
     }, []);
     
-
+    
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -215,20 +144,6 @@ export default function MdxEditorPage() {
     [session]
   );
 
-  useEffect(() => {
-    if (session?.user?.email) {
-      // Check if the markdown is equal to the dummy text, don't save if it is
-      if (markdown !== dummyText) {
-        saveDraft({
-          exp_text: markdown,
-          batch,
-          branch,
-          company,
-          role,
-        });
-      }
-    }
-  }, [markdown, batch, branch, company, role, saveDraft, session?.user?.email]);
   
 
   // Validation function for specific fields
@@ -239,9 +154,9 @@ export default function MdxEditorPage() {
       case 'branch':
         return !value;
       case 'company':
-        return !value;
+        return !value || (value === 'others' && !customCompany); // Checks if company is empty or "others" without custom name
       case 'role':
-        return !value;
+        return !value || (value === 'others' && !customRole); // Checks if role is empty or "Others" without custom role
       case 'markdown':
         return !value.trim();
       default:
@@ -273,6 +188,10 @@ export default function MdxEditorPage() {
     if (e.target.value !== "others") {
       setCustomCompany(""); // Reset custom company when a predefined one is selected
     }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      company: validateField('company', e.target.value),
+    }));
   };
   
   const handleCustomCompanyChange = (e) => {
@@ -280,13 +199,20 @@ export default function MdxEditorPage() {
   };
 
   const handleRoleChange = (e) => {
-    const value = e.target.value;
-    setRole(value);
+    setRole(e.target.value);
+    if (e.target.value !== "others") {
+      setCustomRole(""); // Reset custom role when a predefined one is selected
+    }
     setErrors((prevErrors) => ({
       ...prevErrors,
-      role: validateField('role', value),
+      role: validateField('role', e.target.value),
     }));
   };
+  
+  const handleCustomRoleChange = (e) => {
+    setCustomRole(e.target.value); // Update custom role state when user types in the input field
+  };
+  
 
   const handleMarkdownChange = (value) => {
     setMarkdown(value || "");
@@ -297,8 +223,6 @@ export default function MdxEditorPage() {
   };
 
   const handleSubmit = async () => {
-    
-  
     if (!session) {
       alert("You need to be logged in to submit!");
       return;
@@ -320,6 +244,10 @@ export default function MdxEditorPage() {
       return;
     }
   
+    // Determine the company and role to send to the API (use custom values if "Others..." is selected)
+    const finalCompany = company === 'others' ? customCompany : company;
+    const finalRole = role === 'others' ? customRole : role;
+  
     try {
       const response = await fetch("/api/saveExp", {
         method: "POST",
@@ -330,12 +258,13 @@ export default function MdxEditorPage() {
           profile_pic: session.user.image,
           batch,
           branch,
-          company,
-          role,
+          company: finalCompany, // Use final company value
+          role: finalRole, // Use final role value
           email: session.user.email,
         }),
       });
   
+      const data = await response.json();
       if (!response.ok) throw new Error("Failed to submit markdown");
   
       // After successful submission, reset the draft
@@ -365,34 +294,51 @@ export default function MdxEditorPage() {
       setSuccessMessage("Your experience has been successfully submitted!");
   
       // Redirect to home after 2 seconds (for smooth UX)
-      setTimeout(() => {
-        window.location.href = '/home';
-      }, 2000);
-      
+      window.location.href = `/single/${data.uid}`;
   
     } catch (error) {
       console.error("Error submitting markdown:", error);
       alert("There was an error submitting your markdown.");
     }
   };
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      // Check if the markdown is equal to the dummy text, don't save if it is
+      
+        saveDraft({
+          exp_text: markdown,
+          batch,
+          branch,
+          company,
+          role,
+        });
+      
+    }
+  }, [markdown, batch, branch, company, role, saveDraft, session?.user?.email]);
+  
   
   
 
   return (
     <div className="flex flex-col h-screen">
-      <Navbar />
-
-      {/* Warning message for small screens */}
-      {isSmallScreen && (
-        <div className="text-yellow-500 text-center py-4 mt-[100px]" >
-          <p>For the best experience, please use a tablet or laptop.</p>
-        </div>
-      )}
-
-      <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
-        <div className="max-w-7xl mx-auto p-4 md:p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div className="relative">
+    <Navbar />
+  
+    {/* Warning message for small screens */}
+    {isSmallScreen && (
+      <div className=" text-gray-500 text-center py-4 mt-[100px]">
+        <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
+        <p>For the best experience, please use a tablet or laptop.</p>
+      </div>
+    )}
+  
+    <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
+      <div className="max-w-7xl mx-auto p-4 md:p-6">
+      <div className="text-center text-gray-500 text-sm mb-4">
+      <p>Pro Tip: Maximize the editor for a better experience!</p>
+    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div className="relative">
               <select
                 value={batch}
                 onChange={handleBatchChange}
@@ -441,12 +387,13 @@ export default function MdxEditorPage() {
     } rounded-lg`}
   >
     <option value="">Select Company</option>
+    <option value="others">Others...</option>
     {companies.map((comp) => (
       <option key={comp} value={comp}>
         {comp}
       </option>
     ))}
-    <option value="others">Others...</option>
+    
   </select>
 
   {/* Input field for custom company name */}
@@ -468,68 +415,114 @@ export default function MdxEditorPage() {
 </div>
 
 
-            <div className="relative">
-              <input
-                type="text"
-                value={role}
-                onChange={handleRoleChange}
-                placeholder="Enter Role (Eg: SDE)"
-                className={`w-full p-2 border ${
-                  errors.role ? "border-red-500" : "border-gray-300"
-                } rounded-lg`}
-              />
-              {errors.role && (
-                <p className="text-red-500 text-sm mt-1">Role is required</p>
-              )}
+<div className="relative">
+  <select
+    value={role}
+    onChange={handleRoleChange}
+    className={`w-full p-2 border ${
+      errors.role ? "border-red-500" : "border-gray-300"
+    } rounded-lg`}
+  >
+    <option value="">Select Role</option>
+    <option value="others">Others...</option>
+    {roles.map((roleOption) => (
+      <option key={roleOption} value={roleOption}>
+        {roleOption}
+      </option>
+    ))}
+  
+    
+  </select>
+
+  {/* Input field for custom role name */}
+  {role === "others" && (
+    <input
+      type="text"
+      onChange={handleCustomRoleChange}
+      placeholder="Enter Role"
+      value={customRole}
+      className={`w-full p-2 border ${
+        errors.role ? "border-red-500" : "border-gray-300"
+      } rounded-lg mt-2`}
+    />
+  )}
+
+  {errors.role && (
+    <p className="text-red-500 text-sm mt-1">Role is required</p>
+  )}
+</div>
+        </div>
+  
+        {/* Success message */}
+        {successMessage && (
+          <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
+            <div className="flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-[#00C853] mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.293 5.293a1 1 0 00-1.414 0L8 11.586 4.121 7.707a1 1 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <p className="font-semibold text-lg text-[#1D1D1D]">{successMessage}</p>
             </div>
           </div>
-          {successMessage && (
-  <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
-    <div className="flex items-center justify-center">
-      <svg className="w-6 h-6 text-[#00C853] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fillRule="evenodd" d="M16.293 5.293a1 1 0 00-1.414 0L8 11.586 4.121 7.707a1 1 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
-      </svg>
-      <p className="font-semibold text-lg text-[#1D1D1D]">{successMessage}</p>
-    </div>
+        )}
+  
+        {/* Editor Container with fixed height */}
+        <div
+  className="rounded-lg overflow-hidden relative"
+  style={{
+    height: 
+      window.innerWidth < 768
+        ? 'calc(75vh)'  // For mobile
+        : window.innerWidth < 1024
+        ? 'calc(100vh - 50px)'   // For tablet
+        : 'calc(100vh)',         // For laptop and larger screens
+    marginBottom: bottomMargin,
+  }}
+>
+
+          {/* Submit Button at the top */}
+          <div className="absolute top-4 w-full px-3 py-1.5 flex justify-center">
+          <button
+  onClick={handleSubmit}
+  type="button"
+  className="text-sm sm:text-md bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none py-2 px-16 z-50"
+>
+  Submit
+</button>
+
+
+
+
+</div>
+  
+          {/* Markdown Editor with Scrollable Content */}
+          <div className="relative w-full h-full pt-16 overflow-hidden">
+  {/* The padding-top `pt-16` ensures that the content does not overlap with the button */}
+  <div className="w-full h-full overflow-y-auto">
+    <MDEditor
+      value={markdown}
+      onChange={handleMarkdownChange}
+      preview="live"
+      hideToolbar={false}
+      data-color-mode="light"
+      className="w-full h-full"
+      height="100%"
+    />
   </div>
-)}
-
-
-          <div className="rounded-lg overflow-hidden relative" style={{ height, marginBottom: bottomMargin }}>
-  {/* Flexbox Container for Submit Button and Ideas Link */}
-  <div className="flex justify-between items-center mb-3 px-3 py-1.5">
-  {/* Submit Button */}
-  <button
-    onClick={handleSubmit}
-    className="text-sm sm:text-md bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none py-1.5 px-3.5"
-  >
-    Submit
-  </button>
-  {/* Ideas Link */}
-  <p
-    onClick={handleIdeasClick}
-    className="text-[#1877F2] cursor-pointer hover:underline text-sm"
-  >
-    Short on Ideas?
-  </p>
 </div>
-
-
-  {/* Markdown Editor */}
-  <MDEditor
-    value={markdown}
-    onChange={handleMarkdownChange}
-    preview="live"
-    hideToolbar={false}
-    data-color-mode="light"
-    className="w-full h-full"
-    height="100%"
-  />
-</div>
-
-
         </div>
       </div>
     </div>
+  </div>
+  
   );
 }

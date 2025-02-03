@@ -13,7 +13,9 @@ const ProfileCard = ({
   disableCardClick = false,
 }) => {
   const router = useRouter();
-  const [successMessage, setSuccessMessage] = useState(null); // New state for success message
+  const [successMessage, setSuccessMessage] = useState(null); // Success message state
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+  const [isDeleting, setIsDeleting] = useState(false); // Deleting state
 
   const fullText = profile.exp_text;
   const truncatedText = fullText.slice(0, 150) + "...";
@@ -34,7 +36,7 @@ const ProfileCard = ({
   });
 
   const handleReadMore = (e) => {
-    e.stopPropagation(); // Prevent the event from bubbling up to the card click handler
+    e.stopPropagation();
     router.push(`/single/${profile.uid}`);
   };
 
@@ -43,11 +45,14 @@ const ProfileCard = ({
     router.push(`/edit/${profile.uid}`);
   };
 
-  const handleDelete = async (e) => {
+  const handleDeleteClick = (e) => {
     e.stopPropagation();
-    const confirmation = window.confirm("Are you sure you want to delete this experience?");
-    if (!confirmation) return;
+    setIsModalOpen(true); // Open the modal
+  };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setIsModalOpen(false); // Close modal
     try {
       const response = await fetch('/api/delete', {
         method: 'DELETE',
@@ -62,7 +67,6 @@ const ProfileCard = ({
 
       const data = await response.json();
       if (response.ok) {
-        // Set success message and reload the page after a short delay
         setSuccessMessage("Experience deleted successfully!");
         setTimeout(() => {
           window.location.reload(); // Reload the page
@@ -72,7 +76,13 @@ const ProfileCard = ({
       }
     } catch (error) {
       console.error('Error deleting experience:', error);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalOpen(false); // Close modal
   };
 
   const handleCardClick = () => {
@@ -168,7 +178,7 @@ const ProfileCard = ({
               )}
               {deletePost && (
                 <button 
-                  onClick={handleDelete}
+                  onClick={handleDeleteClick}
                   className="p-1 rounded-lg hover:bg-[#FF5F5F] hover:text-white text-[#FF5F5F] transition-colors duration-300"
                 >
                   <Trash size={16} />
@@ -183,6 +193,30 @@ const ProfileCard = ({
       <div className="mt-4 mb-4 ml-4 text-xs text-[#B0B3B8]">
         {formattedDate}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-sm p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-[#1D1D1D] mb-4">Confirm Deletion</h3>
+            <p className="text-sm text-[#1D1D1D] mb-6">Are you sure you want to delete this experience?</p>
+            <div className="flex justify-between space-x-4">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 text-white font-semibold  bg-gray-500 hover:bg-green-600  rounded-lg transition"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={handleCancelDelete}
+                className="px-4 py-2 text-white font-semibold bg-red-500 hover:bg-green-600 rounded-lg transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

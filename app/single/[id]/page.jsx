@@ -30,7 +30,7 @@ export default async function SimilarExperience({ params }) {
   };
 
   try {
-    const apiUrl = `https://the-interview-1lav.vercel.app/api/exp?uid=${id}`;
+    const apiUrl = `https://pict.life/api/exp?uid=${id}`;
     const response = await axios.get(apiUrl);
     data = {
       ...response.data,

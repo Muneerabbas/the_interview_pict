@@ -6,6 +6,9 @@ const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      httpOptions: {
+        timeout: 10000,  // increase the timeout to 10 seconds
+      },
     }),
   ],
   callbacks: {

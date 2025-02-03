@@ -36,7 +36,5 @@ export async function GET(req) {
       message: "An error occurred while fetching data",
     });
   } finally {
-    // Close the connection when done (optional)
-    // await client.close();
   }
 }

@@ -4,7 +4,7 @@ import { Share2 } from 'lucide-react';
 export default function ShareButton({ id, data }) {
   const handleShare = () => {
     // Generate the article URL using the ID
-    const articleUrl = `https://localhost:3000/single/${id}`;
+    const articleUrl = `https://pict.life/single/${id}`;
 
     // Generate the article description
     const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;

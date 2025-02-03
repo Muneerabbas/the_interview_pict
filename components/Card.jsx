@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { marked } from "marked";
 import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-react";
+import { useState } from "react";
 
 const ProfileCard = ({
   profile,
@@ -9,9 +10,10 @@ const ProfileCard = ({
   height = "min-h-[150px]",
   edit = false,
   deletePost = false,
-  disableCardClick = false, // New parameter to control card click behavior
+  disableCardClick = false,
 }) => {
   const router = useRouter();
+  const [successMessage, setSuccessMessage] = useState(null); // New state for success message
 
   const fullText = profile.exp_text;
   const truncatedText = fullText.slice(0, 150) + "...";
@@ -60,8 +62,11 @@ const ProfileCard = ({
 
       const data = await response.json();
       if (response.ok) {
-        alert("Experience deleted successfully");
-        onDelete?.(profile.uid);
+        // Set success message and reload the page after a short delay
+        setSuccessMessage("Experience deleted successfully!");
+        setTimeout(() => {
+          window.location.reload(); // Reload the page
+        }, 2000);
       } else {
         alert(`Error: ${data.message}`);
       }
@@ -77,7 +82,7 @@ const ProfileCard = ({
   };
 
   return (
-    <div 
+    <div
       onClick={handleCardClick}
       className={`${width} mx-auto bg-white rounded-xl 
         ${disableCardClick ? '' : 'shadow-[0_4px_12px_rgba(0,0,0,0.1)]'} 
@@ -87,6 +92,17 @@ const ProfileCard = ({
         ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
         transition-all duration-300 border border-[#E7F3FF] ${height} flex flex-col relative`}
     >
+      {successMessage && (
+        <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
+          <div className="flex items-center justify-center">
+            <svg className="w-6 h-6 text-[#00C853] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fillRule="evenodd" d="M16.293 5.293a1 1 0 00-1.414 0L8 11.586 4.121 7.707a1 1 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
+            </svg>
+            <span>{successMessage}</span>
+          </div>
+        </div>
+      )}
+
       <div className="p-4 flex-grow">
         {/* Header Section */}
         <div className="flex items-start gap-4">
@@ -127,7 +143,6 @@ const ProfileCard = ({
             </div>
           </div>
         </div>
-        
 
         {/* Experience Text Section */}
         <div className="mt-4 text-[#1D1D1D]">

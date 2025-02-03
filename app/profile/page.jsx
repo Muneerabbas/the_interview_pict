@@ -1,3 +1,5 @@
+//Format the entire code
+
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -128,19 +130,21 @@ const ProfilePage = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-[#1D1D1D]">
-            Your Experiences
-          </h2>
-          {posts.length > 0 && (
-            <Link href="/post">
-              <button className="flex items-center gap-2 px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-colors duration-300 shadow-sm">
-                <PlusCircle size={20} />
-                <span>Share Experience</span>
-              </button>
-            </Link>
-          )}
-        </div>
+      <div className="flex items-center justify-between mb-6">
+  <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1D1D1D]">
+    Your Experiences
+  </h2>
+  {posts.length > 0 && (
+    <Link href="/post">
+      <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm">
+        <PlusCircle size={16} />
+        <span className="text-xs sm:text-sm">Share Experience</span>
+      </button>
+    </Link>
+  )}
+</div>
+
+
 
         {loadingPosts ? (
           <div className="flex items-center justify-center py-8">
@@ -153,13 +157,14 @@ const ProfilePage = () => {
           <div className="bg-white rounded-xl p-8 text-center shadow-sm">
             <div className="text-[#1D1D1D] mb-6">No experiences shared yet</div>
             <div className="flex justify-center">
-              <Link href="/post">
-                <button className="flex items-center gap-2 px-6 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-all duration-300 shadow-sm">
-                  <PlusCircle size={20} />
-                  <span>Share Your First Experience</span>
-                </button>
-              </Link>
-            </div>
+  <Link href="/post">
+    <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-all duration-300 shadow-sm text-xs sm:text-sm">
+      <PlusCircle size={16} />
+      <span className="text-xs sm:text-sm">Share Your First Experience</span>
+    </button>
+  </Link>
+</div>
+
           </div>
         ) : (
           <div className="grid gap-6">

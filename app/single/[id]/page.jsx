@@ -30,7 +30,7 @@ export default async function SimilarExperience({ params }) {
   };
 
   try {
-    const apiUrl = `http://localhost:3000/api/exp?uid=${id}`;
+    const apiUrl = `${process.env.BASE_URL}/api/exp?uid=${id}`;
     const response = await axios.get(apiUrl);
     data = {
       ...response.data,
@@ -39,8 +39,8 @@ export default async function SimilarExperience({ params }) {
       exp_text: response.data.exp_text?.replace(/"/g, ""),
     };
 
-    const feedUrl = "http://localhost:3000/api/feed";
-    const searchFeed = `http://localhost:3000/api/search/${data.company} ${data.branch}`;
+    const feedUrl = `${process.env.BASE_URL}/api/feed`;
+    const searchFeed = `${process.env.BASE_URL}/api/search/${data.company} ${data.branch}`;
     const feedResponse = await axios.get(feedUrl);
     const searchResponse = await axios.get(feedUrl);
     articles = feedResponse.data;
@@ -53,7 +53,7 @@ export default async function SimilarExperience({ params }) {
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
 
-  const articleUrl = `https://pict.life/single/${id}`;
+  const articleUrl = `${process.env.BASE_URL}/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
 
   return (
@@ -106,7 +106,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: "https://pict.life/logo.png"
+              url: "process.env.BASE_URL/logo.png"
             }
           },
           description: articleDescription,

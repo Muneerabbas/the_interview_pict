@@ -179,85 +179,82 @@ export default function EditPage() {
     }));
   };
 
-  const handleSubmit = async () => {
-    if (!session) {
-      alert("You need to be logged in to submit!");
-      return;
-    }
-  
-    // Validate all fields one last time before submitting
-    const newErrors = {
-      batch: validateField('batch', batch),
-      branch: validateField('branch', branch),
-      company: validateField('company', company),
-      role: validateField('role', role),
-      markdown: validateField('markdown', markdown),
-    };
-  
-    setErrors(newErrors);
-  
-    if (Object.values(newErrors).includes(true)) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-  
-    // Determine the company and role to send to the API (use custom values if "Others..." is selected)
-    const finalCompany = company === 'others' ? customCompany : company;
-    const finalRole = role === 'others' ? customRole : role;
-  
-    try {
-      const response = await fetch("/api/saveExp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          exp_text: markdown,
-          name: session.user.name,
-          profile_pic: session.user.image,
-          batch,
-          branch,
-          company: finalCompany, // Use final company value
-          role: finalRole, // Use final role value
-          email: session.user.email,
-        }),
-      });
-  
-      const data = await response.json();
-      if (!response.ok) throw new Error("Failed to submit markdown");
-  
-      // After successful submission, reset the draft
-      setBatch("");
-      setBranch("");
-      setCompany("");
-      setRole("");
-      setMarkdown("");
-      setErrors({
-        batch: false,
-        branch: false,
-        company: false,
-        role: false,
-        markdown: false,
-      });
-  
-      // Delete the draft from the backend
-      await fetch("/api/deleteDraft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: session.user.email,
-        }),
-      });
-  
-      // Show success message
-      setSuccessMessage("Your experience has been successfully submitted!");
-  
-      // Redirect to home after 2 seconds (for smooth UX)
-      window.location.href = `/single/${data.uid}`;
-  
-    } catch (error) {
-      console.error("Error submitting markdown:", error);
-      alert("There was an error submitting your markdown.");
-    }
+ // Frontend handleSubmit function
+const handleSubmit = async () => {
+  if (!session) {
+    alert("You need to be logged in to submit!");
+    return;
+  }
+
+  // Validate all fields one last time before submitting
+  const newErrors = {
+    batch: validateField('batch', batch),
+    branch: validateField('branch', branch),
+    company: validateField('company', company),
+    role: validateField('role', role),
+    markdown: validateField('markdown', markdown),
   };
+
+  setErrors(newErrors);
+
+  if (Object.values(newErrors).includes(true)) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  // Determine the company and role to send to the API
+  const finalCompany = company === 'others' ? customCompany : company;
+  const finalRole = role === 'others' ? customRole : role;
+
+  try {
+    const email = session?.user?.email || "Unknown";
+    const name = session?.user?.name || "Anonymous";
+    const profile_pic = session?.user?.image || "";
+    const response = await fetch("/api/edit/", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        uid: id,
+        exp_text: markdown,
+        name,
+        batch,
+        branch,
+        company,
+        role,
+        email,
+      }),
+    });
+
+    const data = await response.json();
+    
+    // Check both response.ok and data for error messages
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to edit experience");
+    }
+
+    // After successful submission, reset form
+    setBatch("");
+    setBranch("");
+    setCompany("");
+    setRole("");
+    setMarkdown("");
+    setErrors({
+      batch: false,
+      branch: false,
+      company: false,
+      role: false,
+      markdown: false,
+    });
+
+    setSuccessMessage("Your experience has been successfully updated!");
+    window.location.href = `/single/${data.uid}`;
+
+  } catch (error) {
+    console.error("Error updating experience:", error);
+    alert(error.message || "There was an error updating your experience.");
+  }
+};
+  
 
 
   return (

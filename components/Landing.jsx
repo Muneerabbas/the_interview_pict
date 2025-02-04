@@ -1,6 +1,6 @@
 'use client'
 
-import { useState ,useEffect} from 'react'
+import { useState ,useEffect ,useRef} from 'react'
 import Link from 'next/link'
 
 
@@ -11,6 +11,7 @@ export default function Home() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [visible, setVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const mobileMenuRef = useRef(null);
   
     // Toggle mobile menu
     const toggleMobileMenu = () => {
@@ -153,98 +154,123 @@ export default function Home() {
     return () => window.removeEventListener("scroll", controlNavbar);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.md:hidden')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    // Add event listener to handle outside click
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen">
       {/* Navigation */}
       <nav
-      className={`fixed top-0 w-full pb-2 transition-transform duration-300 ease-in-out ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      } bg-gray-100 shadow-sm z-50`}
-    >
-      <div className="flex justify-between items-center px-4 py-4 md:px-8">
-        {/* Logo */}
+  className={`fixed top-0 w-full pb-2 transition-transform duration-300 ease-in-out ${
+    visible ? "translate-y-0" : "-translate-y-full"
+  } bg-gray-100 shadow-sm z-50`}
+>
+  <div className="flex justify-between items-center px-4 py-4 md:px-8">
+    {/* Logo */}
+    <Link href="/" className="text-blue-600 text-2xl font-bold">
+      TheInterview
+    </Link>
+
+    {/* Hamburger for mobile */}
+    <div className="md:hidden" onClick={toggleMobileMenu}>
+      <button className="text-gray-800 focus:outline-none p-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
+
+    {/* Desktop Menu */}
+    <div className="hidden md:flex gap-8 items-center">
+      {/* Home Link */}
+      <Link href="/home" className="text-gray-800 hover:text-blue-600 transition duration-300">
+        Home
+      </Link>
+      <Link href="#featured" className="text-gray-800 hover:text-blue-600 transition duration-300">
+        Featured Stories
+      </Link>
+      <Link href="#topstories" className="text-gray-800 hover:text-blue-600 transition duration-300">
+        Top Stories
+      </Link>
+      <Link href="#companyspecific" className="text-gray-800 hover:text-blue-600 transition duration-300">
+        Company Tips
+      </Link>
+      <Link href="/post" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+        Share Experience
+      </Link>
+    </div>
+  </div>
+
+  {/* Mobile Menu */}
+  {isMobileMenuOpen && (
+    <div className="fixed top-0 left-0 w-full h-full z-50 md:hidden">
+      <div className="flex justify-between items-center p-4 border-b bg-gray-100">
         <Link href="/" className="text-blue-600 text-2xl font-bold">
           TheInterview
         </Link>
-
-        {/* Hamburger for mobile */}
-        <div className="md:hidden" onClick={toggleMobileMenu}>
-          <button className="text-gray-800 focus:outline-none p-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
-          <Link href="#featured" className="text-gray-800 hover:text-blue-600 transition duration-300">
-            Featured Stories
-          </Link>
-          <Link href="#topstories" className="text-gray-800 hover:text-blue-600 transition duration-300">
-            Top Stories
-          </Link>
-          <Link href="#companyspecific" className="text-gray-800 hover:text-blue-600 transition duration-300">
-            Company Tips
-          </Link>
-          <Link href="https://www.pict.life/post" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-            Share Experience
-          </Link>
-        </div>
+        <button onClick={toggleMobileMenu} className="text-gray-800 focus:outline-none p-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
       </div>
+      <div className="flex flex-col gap-4 p-4 bg-gray-100">
+        {/* Mobile Home Link */}
+        <Link href="/home" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
+          Home
+        </Link>
+        <Link href="#featured" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
+          Featured Stories
+        </Link>
+        <Link href="#topstories" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
+          Top Stories
+        </Link>
+        <Link href="#companyspecific" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
+          Company Tips
+        </Link>
+        <Link href="/post" className="bg-blue-600 text-white pl-1 pr-1 py-1 rounded-lg hover:bg-blue-700 transition duration-300 text-center" onClick={toggleMobileMenu}>
+          Share Experience
+        </Link>
+      </div>
+    </div>
+  )}
+</nav>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed top-0 left-0 w-full h-full z-50 md:hidden">
-          <div className="flex justify-between items-center p-4 border-b bg-gray-100">
-            <Link href="/" className="text-blue-600 text-2xl font-bold">
-              TheInterview
-            </Link>
-            <button onClick={toggleMobileMenu} className="text-gray-800 focus:outline-none p-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="flex flex-col gap-4 p-4 bg-gray-100">
-            <Link href="#featured" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
-              Featured Stories
-            </Link>
-            <Link href="#topstories" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
-              Top Stories
-            </Link>
-            <Link href="#companyspecific" className="text-gray-800 hover:text-blue-600 transition duration-300" onClick={toggleMobileMenu}>
-              Company Tips
-            </Link>
-            <Link href="https://www.pict.life/post" className="bg-blue-600 text-white pl-1 pr-1 py-1 rounded-lg hover:bg-blue-700 transition duration-300 text-center" onClick={toggleMobileMenu}>
-              Share Experience
-            </Link>
-          </div>
-        </div>
-      )}
-    </nav>
 
       {/* Hero Section */}
       <section className="bg-white text-center py-12 mt-20 px-4">
@@ -256,11 +282,11 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4 justify-center mb-12">
-          <Link href="https://www.pict.life/post"
+          <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium">
             Share Your Story
           </Link>
-          <Link href="https://www.pict.life/home"
+          <Link href="/home"
             className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-200 font-medium">
             Read Stories
           </Link>
@@ -295,11 +321,11 @@ export default function Home() {
         </div>
 
         <div className="flex gap-4 justify-center">
-          <Link href="https://www.pict.life/post"
+          <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             Share Your Experience
           </Link>
-          <Link href="https://www.pict.life/home"
+          <Link href="/home"
             className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
             View All Stories
           </Link>
@@ -377,11 +403,11 @@ export default function Home() {
         </div>
 
         <div className="flex gap-4 justify-center">
-          <Link href="https://www.pict.life/post"
+          <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             Share Your Experience
           </Link>
-          <Link href="https://www.pict.life/home"
+          <Link href="/home"
             className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
             View All Stories
           </Link>

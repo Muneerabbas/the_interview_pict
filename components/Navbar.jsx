@@ -174,7 +174,7 @@ export default function Navbar() {
           <div className="lg:hidden">
             <div className="flex justify-between items-center">
               <div className="text-xl font-bold text-blue-600">
-                <Link href="/">The Interview</Link>
+                <Link href="/">TheInterview</Link>
               </div>
               <div className="flex items-center space-x-4">
                 {/* Search Icon */}

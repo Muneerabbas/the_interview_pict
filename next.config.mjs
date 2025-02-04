@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig = {
+    experimental: {
+      serverActions: true,
+    },
+    webpack: (config) => {
+      config.experiments = { ...config.experiments, topLevelAwait: true };
+      return config;
+    },
+  };
+  
+  export default nextConfig;

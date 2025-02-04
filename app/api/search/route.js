@@ -7,9 +7,7 @@ if (!uri) {
   throw new Error("MONGODB_URI is not set in environment variables");
 }
 
-const client = new MongoClient(
-  "mongodb+srv://himanshugholse08:wBX31Hgv3SxhAg9E@interview-experience.s8jve.mongodb.net/"
-);
+const client = new MongoClient(uri);
 
 async function main(search_text, page = 1) {
   await client.connect();

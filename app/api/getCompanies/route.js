@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
-// Create a persistent MongoDB connection
+// Create a persistent MongoDB connection (outside the handler for performance)
 const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db("int-exp");
 const companyCollection = db.collection("dropdowns");
 
+// Ensure the client is connected when the server starts
+if (!client.isConnected()) {
+  client.connect().then(() => {
+    console.log("MongoDB connected successfully.");
+  }).catch(error => {
+    console.error("MongoDB connection failed", error);
+  });
+}
+
 // API handler to fetch data
 export async function GET(req) {
   try {
-     
-    await client.connect();
-    console.log("connected");
-
     // Query the collection to get the 'companies' array
     const result = await companyCollection.findOne({});
 
@@ -35,6 +40,5 @@ export async function GET(req) {
       success: false,
       message: "An error occurred while fetching data",
     });
-  } finally {
   }
 }

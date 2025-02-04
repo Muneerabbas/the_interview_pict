@@ -284,11 +284,11 @@ export default function Home() {
         <div className="flex gap-4 justify-center mb-12">
           <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium">
-            Share Your Story
+            Read Stories
           </Link>
           <Link href="/home"
             className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-200 font-medium">
-            Read Stories
+            Share Your Story
           </Link>
         </div>
       </section>
@@ -323,11 +323,11 @@ export default function Home() {
         <div className="flex gap-4 justify-center">
           <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-            Share Your Experience
+            View All Stories
           </Link>
           <Link href="/home"
             className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
-            View All Stories
+            Share Your Experience
           </Link>
         </div>
       </section>
@@ -405,11 +405,11 @@ export default function Home() {
         <div className="flex gap-4 justify-center">
           <Link href="/post"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-            Share Your Experience
+            View All Stories
           </Link>
           <Link href="/home"
             className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
-            View All Stories
+            Share Your Experience 
           </Link>
         </div>
       </section>

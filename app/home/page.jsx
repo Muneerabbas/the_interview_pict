@@ -69,7 +69,7 @@ export default function HomePage() {
 
         {/* Share Your Interview Experience Button */}
         <Link href="/post">
-          <button className="bg-[#E7F3FF] text-[#1877F2] px-4 py-2 rounded-lg hover:bg-[#1877F2] hover:text-white transition-colors duration-300 mt-4">
+          <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300 mt-4">
             Share Your Interview Experience
           </button>
         </Link>
@@ -78,7 +78,7 @@ export default function HomePage() {
       // If the user is not logged in, only show the button
       <div className="bg-white rounded-xl shadow-md p-6 mb-8 text-center">
         <Link href="/post">
-          <button className="bg-[#E7F3FF] text-[#1877F2] px-4 py-2 rounded-lg hover:bg-[#1877F2] hover:text-white transition-colors duration-300">
+          <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300">
             Share Your Interview Experience
           </button>
         </Link>
@@ -99,7 +99,7 @@ export default function HomePage() {
 
     <div className="mt-8 flex flex-col items-center space-y-4">
       {loading && (
-        <div className="flex items-center space-x-2 text-[#1877F2]">
+        <div className="flex items-center space-x-2 text-blue-600">
           <Loader2 className="animate-spin" size={24} />
           <span>Loading experiences...</span>
         </div>
@@ -108,7 +108,7 @@ export default function HomePage() {
       {!loading && hasMoreProfiles && (
         <button
           onClick={handleLoadMore}
-          className="px-6 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
         >
           Load More Experiences
         </button>

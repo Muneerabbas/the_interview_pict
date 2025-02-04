@@ -148,19 +148,19 @@ export default async function SimilarExperience({ params }) {
             {/* Info Grid */}
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-2 text-sm text-gray-600">
               <div className="flex items-center gap-1">
-                <GraduationCap size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <GraduationCap size={16} className="text-blue-600" aria-hidden="true" />
                 <span className="truncate">{data.branch}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Building2 size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <Building2 size={16} className="text-blue-600" aria-hidden="true" />
                 <span className="truncate">{data.company}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Briefcase size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <Briefcase size={16} className="text-blue-600" aria-hidden="true" />
                 <span className="truncate">{data.role}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Eye size={16} className="text-[#1877F2]" aria-hidden="true" />
+                <Eye size={16} className="text-blue-600" aria-hidden="true" />
                 <span>{data.views} views</span>
               </div>
             </div>

@@ -78,7 +78,7 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex justify-between items-center">
             <div className="flex space-x-6 items-center">
-              <div className="text-2xl font-bold text-[#1877F2] hover:text-[#8B77F9] transition-colors">
+              <div className="text-2xl font-bold text-blue-600 hover:text-[#8B77F9] transition-colors">
                 <Link href="/">The Interview</Link>
               </div>
               <div className="flex space-x-4">
@@ -86,14 +86,14 @@ export default function Navbar() {
                   href="/home"
                   className="flex flex-col items-center px-3 py-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
                 >
-                  <Home size={24} className="text-[#1877F2]" />
+                  <Home size={24} className="text-blue-600" />
                   <span className="text-sm mt-1">Home</span>
                 </Link>
                 <Link
                   href="/post"
                   className="flex flex-col items-center px-3 py-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
                 >
-                  <FileText size={24} className="text-[#1877F2]" />
+                  <FileText size={24} className="text-blue-600" />
                   <span className="text-sm mt-1">Post</span>
                 </Link>
               </div>
@@ -119,7 +119,7 @@ export default function Navbar() {
       duration: 0.2,
       delay: 0 
     }}
-    className="absolute w-full text-lg text-[#1877F2]"
+    className="absolute w-full text-lg text-blue-600"
   >
     {texts[index]}
   </motion.div>
@@ -129,7 +129,7 @@ export default function Navbar() {
               </div>
               <button
                 type="submit"
-                className="ml-2 p-2 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
+                className="ml-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
               >
                 <Search size={20} />
               </button>
@@ -140,7 +140,7 @@ export default function Navbar() {
                 href="/profile"
                 className="flex flex-col items-center px-3 py-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
               >
-                <User size={24} className="text-[#1877F2]" />
+                <User size={24} className="text-blue-600" />
                 <span className="text-sm mt-1">Profile</span>
               </Link>
 
@@ -151,7 +151,7 @@ export default function Navbar() {
   >
     <LogOut 
       size={24} 
-      className="text-[#1877F2] group-hover:text-white transition-colors duration-300" 
+      className="text-blue-600 group-hover:text-white transition-colors duration-300" 
     />
     <span className="text-sm mt-1 group-hover:text-white transition-colors duration-300">Logout</span>
   </button>
@@ -162,7 +162,7 @@ export default function Navbar() {
   >
     <LogIn 
       size={24} 
-      className="text-[#1877F2] group-hover:text-[#1877F2] transition-colors duration-300" 
+      className="text-blue-600 group-hover:text-blue-600 transition-colors duration-300" 
     />
     <span className="text-sm mt-1">Login</span>
   </button>
@@ -173,7 +173,7 @@ export default function Navbar() {
           {/* Mobile Navigation */}
           <div className="lg:hidden">
             <div className="flex justify-between items-center">
-              <div className="text-xl font-bold text-[#1877F2]">
+              <div className="text-xl font-bold text-blue-600">
                 <Link href="/">The Interview</Link>
               </div>
               <div className="flex items-center space-x-4">
@@ -182,7 +182,7 @@ export default function Navbar() {
                   onClick={() => setIsMenuOpen(true)}
                   className="p-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300"
                 >
-                  <Search size={24} className="text-[#1877F2]" />
+                  <Search size={24} className="text-blue-600" />
                 </button>
                 {/* Hamburger Menu */}
                 <button
@@ -190,9 +190,9 @@ export default function Navbar() {
                   className="p-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300"
                 >
                   {isMenuOpen ? (
-                    <X size={24} className="text-[#1877F2]" />
+                    <X size={24} className="text-blue-600" />
                   ) : (
-                    <Menu size={24} className="text-[#1877F2]" />
+                    <Menu size={24} className="text-blue-600" />
                   )}
                 </button>
               </div>
@@ -221,7 +221,7 @@ export default function Navbar() {
             duration: 0.2,
             delay: 0 
           }}
-          className="absolute w-[108%] text-lg text-[#1877F2]"
+          className="absolute w-[108%] text-lg text-blue-600"
         >
           {texts[index]}
         </motion.div>
@@ -232,7 +232,7 @@ export default function Navbar() {
   {/* Search Button */}
   <button
     type="submit"
-    className="p-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9] w-full text-center"
+    className="p-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9] w-full text-center"
   >
     Search
   </button>
@@ -244,21 +244,21 @@ export default function Navbar() {
                   href="/home"
                   className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
                 >
-                  <Home size={24} className="text-[#1877F2]" />
+                  <Home size={24} className="text-blue-600" />
                   <span>Home</span>
                 </Link>
                 <Link
                   href="/post"
                   className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
                 >
-                  <FileText size={24} className="text-[#1877F2]" />
+                  <FileText size={24} className="text-blue-600" />
                   <span>Post</span>
                 </Link>
                 <Link
                   href="/profile"
                   className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300 text-[#1D1D1D]"
                 >
-                  <User size={24} className="text-[#1877F2]" />
+                  <User size={24} className="text-blue-600" />
                   <span>Profile</span>
                 </Link>
                 {session ? (
@@ -268,7 +268,7 @@ export default function Navbar() {
   >
     <LogOut 
       size={24} 
-      className="text-[#1877F2] group-hover:text-white transition-colors duration-300" 
+      className="text-blue-600 group-hover:text-white transition-colors duration-300" 
     />
     <span className="group-hover:text-white transition-colors duration-300">Logout</span>
   </button>
@@ -279,7 +279,7 @@ export default function Navbar() {
   >
     <LogIn 
       size={24} 
-      className="text-[#1877F2] group-hover:text-[#1877F2] transition-colors duration-300" 
+      className="text-blue-600 group-hover:text-blue-600 transition-colors duration-300" 
     />
     <span>Login</span>
   </button>

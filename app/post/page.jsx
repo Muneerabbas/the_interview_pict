@@ -27,7 +27,7 @@ export default function Post() {
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F0F2F5]">
-        <div className="flex items-center space-x-2 text-[#1877F2]">
+        <div className="flex items-center space-x-2 text-blue-600">
           <Loader2 className="animate-spin" size={24} />
           <span className="text-xl font-medium">Loading...</span>
         </div>
@@ -47,7 +47,7 @@ export default function Post() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="max-w-5xl mx-auto px-4 py-8">
                   <div className="flex flex-col items-center text-center space-y-4">
-                    <FileText size={48} className="text-[#1877F2]" />
+                    <FileText size={48} className="text-blue-600" />
                     <h1 className="text-3xl font-bold text-[#1D1D1D]">Share Your Experience</h1>
                     <p className="text-lg text-[#1D1D1D] max-w-2xl">
                       Help others by sharing your interview experiences and insights

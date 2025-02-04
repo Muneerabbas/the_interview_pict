@@ -28,19 +28,19 @@ const ArticleCard = ({ article }) => {
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-[#1D1D1D] text-lg truncate">{name}</h3>
             <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
-              <div className="flex items-center gap-1.5 text-[#1877F2]">
+              <div className="flex items-center gap-1.5 text-blue-600">
                 <Building2 size={14} />
                 <span className="text-[#1D1D1D] truncate">{company}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-[#1877F2]">
+              <div className="flex items-center gap-1.5 text-blue-600">
                 <Briefcase size={14} />
                 <span className="text-[#1D1D1D] truncate">{role}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-[#1877F2]">
+              <div className="flex items-center gap-1.5 text-blue-600">
                 <GraduationCap size={14} />
                 <span className="text-[#1D1D1D]">{batch}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-[#1877F2]">
+              <div className="flex items-center gap-1.5 text-blue-600">
                 <CalendarDays size={14} />
                 <span className="text-[#1D1D1D] text-sm">{formattedDate}</span>
               </div>
@@ -49,7 +49,7 @@ const ArticleCard = ({ article }) => {
         </div>
       </div>
       <div className="px-4 py-2 bg-[#E7F3FF] border-t border-[#F0F2F5] flex items-center justify-between">
-        <span className="text-[#1877F2] text-sm font-medium">Read Experience</span>
+        <span className="text-blue-600 text-sm font-medium">Read Experience</span>
         <div className="flex items-center gap-1 text-[#B0B3B8]">
           <Eye size={14} />
           <span className="text-sm">{views}</span>

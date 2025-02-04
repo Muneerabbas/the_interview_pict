@@ -129,25 +129,25 @@ const ProfileCard = ({
 
           {/* Profile Info */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-lg font-bold text-[#1D1D1D] truncate group-hover:text-[#1877F2]">{profileName}</h2>
+            <h2 className="text-lg font-bold text-[#1D1D1D] truncate group-hover:text-blue-600">{profileName}</h2>
             <div className="flex flex-wrap items-center gap-2 text-sm text-[#B0B3B8]">
               <div className="flex items-center gap-1">
-                <GraduationCap size={14} className="text-[#1877F2]" />
+                <GraduationCap size={14} className="text-blue-600" />
                 <span className="truncate">{profile.branch}</span>
               </div>
               <span>•</span>
               <div className="flex items-center gap-1">
-                <Building2 size={14} className="text-[#1877F2]" />
+                <Building2 size={14} className="text-blue-600" />
                 <span className="truncate">{profile.company}</span>
               </div>
               <span>•</span>
               <div className="flex items-center gap-1">
-                <Briefcase size={14} className="text-[#1877F2]" />
+                <Briefcase size={14} className="text-blue-600" />
                 <span className="truncate">{profile.role}</span>
               </div>
               <span>•</span>
               <div className="flex items-center gap-1">
-                <Eye size={14} className="text-[#1877F2]" />
+                <Eye size={14} className="text-blue-600" />
                 <span>{profile.views} views</span>
               </div>
             </div>
@@ -164,14 +164,14 @@ const ProfileCard = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={handleReadMore}
-                className="text-[#1877F2] hover:text-[#8B77F9] font-medium text-sm transition-colors duration-300"
+                className="text-blue-600 hover:text-[#8B77F9] font-medium text-sm transition-colors duration-300"
               >
                 Read More
               </button>
               {edit && (
                 <button 
                   onClick={handleEdit}
-                  className="p-1 rounded-lg hover:bg-[#E7F3FF] text-[#1877F2] transition-colors duration-300"
+                  className="p-1 rounded-lg hover:bg-[#E7F3FF] text-blue-600 transition-colors duration-300"
                 >
                   <Pencil size={16} />
                 </button>

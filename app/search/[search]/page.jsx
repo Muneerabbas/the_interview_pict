@@ -86,7 +86,7 @@ const SearchPage = ({ params }) => {
           <button
             type="button"
             onClick={() => router.push("/home")}
-            className="p-2 text-[#1877F2] hover:bg-blue-50 rounded-full transition-colors duration-200 focus:outline-none"
+            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200 focus:outline-none"
             aria-label="Back to home"
           >
             <ArrowLeft size={24} />
@@ -104,7 +104,7 @@ const SearchPage = ({ params }) => {
             </div>
             <button
               type="submit"
-              className="p-2 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
+              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
               aria-label="Search"
             >
               <Search size={20} />
@@ -130,7 +130,7 @@ const SearchPage = ({ params }) => {
               )}
           <div className="mt-8 flex flex-col items-center space-y-4">
             {loadingMore && (
-              <div className="flex items-center space-x-2 text-[#1877F2]">
+              <div className="flex items-center space-x-2 text-blue-600">
                 <Loader2 className="animate-spin" size={24} />
                 <span>Loading experiences...</span>
               </div>
@@ -139,7 +139,7 @@ const SearchPage = ({ params }) => {
             {!loadingMore && hasMore && (
               <button
                 onClick={loadMore}
-                className="px-6 py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
               >
                 Load More Experiences
               </button>

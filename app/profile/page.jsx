@@ -52,7 +52,7 @@ const ProfilePage = () => {
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F0F2F5]">
-        <div className="flex items-center space-x-2 text-[#1877F2]">
+        <div className="flex items-center space-x-2 text-blue-600">
           <Loader2 className="animate-spin" size={24} />
           <span className="text-xl font-medium">Loading...</span>
         </div>
@@ -81,7 +81,7 @@ const ProfilePage = () => {
                 <div className="flex-1 text-center md:text-left space-y-3">
                   <h1 className="text-3xl font-bold text-[#1D1D1D]">{name}</h1>
                   <div className="flex items-center justify-center md:justify-start gap-2 text-[#1D1D1D] bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                    <Mail size={16} className="text-[#1877F2]" />
+                    <Mail size={16} className="text-blue-600" />
                     <span>{email}</span>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ const ProfilePage = () => {
             <div className="flex-1 text-center md:text-left space-y-3">
               <h1 className="text-3xl font-bold text-[#1D1D1D]">{name}</h1>
               <div className="flex items-center justify-center md:justify-start gap-2 text-[#1D1D1D] bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                <Mail size={16} className="text-[#1877F2]" />
+                <Mail size={16} className="text-blue-600" />
                 <span>{email}</span>
               </div>
             </div>
@@ -136,7 +136,7 @@ const ProfilePage = () => {
         </h2>
         {posts.length > 0 && (
           <Link href="/post">
-            <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm">
+            <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-600/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm">
               <PlusCircle size={16} />
               <span className="text-xs sm:text-sm">Share Experience</span>
             </button>
@@ -146,7 +146,7 @@ const ProfilePage = () => {
 
       {loadingPosts ? (
         <div className="flex items-center justify-center py-8">
-          <div className="flex items-center space-x-2 text-[#1877F2]">
+          <div className="flex items-center space-x-2 text-blue-600">
             <Loader2 className="animate-spin" size={24} />
             <span>Loading experiences...</span>
           </div>
@@ -156,7 +156,7 @@ const ProfilePage = () => {
           <div className="text-[#1D1D1D] mb-6">No experiences shared yet</div>
           <div className="flex justify-center">
             <Link href="/post">
-              <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-[#1877F2] text-white rounded-lg hover:bg-[#1877F2]/90 transition-all duration-300 shadow-sm text-xs sm:text-sm">
+              <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-600/90 transition-all duration-300 shadow-sm text-xs sm:text-sm">
                 <PlusCircle size={16} />
                 <span className="text-xs sm:text-sm">Share Your First Experience</span>
               </button>
@@ -178,6 +178,7 @@ const ProfilePage = () => {
         </div>
       )}
     </div>
+    <br /><br />
   </div>
 );
 

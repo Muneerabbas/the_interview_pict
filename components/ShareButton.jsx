@@ -112,7 +112,7 @@ export default function ShareButton({ id, data }) {
                 </button> */}
                 <button
                   onClick={handleFacebookShare}
-                  className="flex items-center gap-2 p-2 text-[#1877F2] hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 p-2 text-blue-600 hover:bg-gray-100 rounded-md"
                   aria-label="Share on Facebook"
                 >
                   <Facebook size={20} />

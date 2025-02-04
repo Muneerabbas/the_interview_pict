@@ -98,7 +98,7 @@ const Login = () => {
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
-        <div className="w-8 h-8 border-2 border-[#1877F2] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -108,12 +108,12 @@ const Login = () => {
       <div className="w-full max-w-[320px] sm:max-w-md backdrop-blur-lg bg-white/30 p-6 sm:p-8 rounded-2xl shadow-lg border border-white/20">
         {session ? (
           <div className="flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-[#1877F2] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <div className="flex flex-col items-center space-y-6 sm:space-y-8">
             <div className="text-center space-y-2 sm:space-y-3">
-              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#1877F2] to-[#8B77F9] bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-[#8B77F9] bg-clip-text text-transparent">
                 Welcome
               </h2>
               <p className="text-sm sm:text-base text-gray-600 px-2 sm:px-4">

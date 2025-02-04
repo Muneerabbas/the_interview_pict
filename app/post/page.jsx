@@ -42,7 +42,7 @@ export default function Post() {
         {!session ? (
           // Displaying the login overlay and banner when the user is not logged in
           <div className="relative h-screen">
-            <div className="relative h-96 bg-gradient-to-r from-[#1877F2]/10 to-[#8B77F9]/10">
+            <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10">
               <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="max-w-5xl mx-auto px-4 py-8">

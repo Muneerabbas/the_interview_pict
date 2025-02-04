@@ -58,7 +58,7 @@ export default function HomePage() {
             <img
               src={session.user.image || "/api/placeholder/96/96"}
               alt="User"
-              className="w-24 h-24 rounded-full object-cover border-4 border-[#1877F2]"
+              className="w-24 h-24 rounded-full object-cover border-4 border-blue-600"
             />
             <div className="absolute bottom-0 right-0 w-6 h-6 bg-[#00C853] border-4 border-white rounded-full"></div>
           </div>

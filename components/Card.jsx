@@ -122,7 +122,7 @@ const ProfileCard = ({
               <img
                 src={profilePic || "/api/placeholder/80/80"}
                 alt="Profile"
-                className="w-full h-full rounded-full object-cover border-2 border-[#1877F2]"
+                className="w-full h-full rounded-full object-cover border-2 border-blue-600"
               />
             </div>
           </div>

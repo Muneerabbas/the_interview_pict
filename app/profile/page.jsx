@@ -64,7 +64,7 @@ const ProfilePage = () => {
     return (
       <div className="min-h-screen bg-[#F0F2F5]">
         <Navbar />
-        <div className="relative h-96 bg-gradient-to-r from-[#1877F2]/10 to-[#8B77F9]/10 ">
+        <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10 ">
           <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="max-w-5xl mx-auto px-4 py-8">
@@ -103,7 +103,7 @@ const ProfilePage = () => {
   return (
   <div className="min-h-screen bg-[#F0F2F5]">
     <Navbar />
-    <div className="relative h-96 bg-gradient-to-r from-[#1877F2]/10 to-[#8B77F9]/10 mt-2 md:mt-1">
+    <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10 mt-2 md:mt-1">
       <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="max-w-5xl mx-auto px-4 ">

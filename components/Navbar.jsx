@@ -78,8 +78,8 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex justify-between items-center">
             <div className="flex space-x-6 items-center">
-              <div className="text-2xl font-bold text-blue-600 hover:text-[#8B77F9] transition-colors">
-                <Link href="/">The Interview</Link>
+              <div className="text-2xl font-bold text-blue-600 hover:pointer transition-colors">
+                <Link href="/">TheInterview</Link>
               </div>
               <div className="flex space-x-4">
                 <Link

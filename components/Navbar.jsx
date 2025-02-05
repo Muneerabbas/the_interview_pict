@@ -6,7 +6,8 @@ import Link from "next/link";
 import { Home, FileText, LogOut, Search, User, LogIn, Menu, X } from "lucide-react";
 import { useSession, signOut, signIn } from "next-auth/react";
 import { motion, AnimatePresence, delay } from "framer-motion";
-
+import Image from "next/image";
+import logo from "../public/logo.svg"
 export default function Navbar() {
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
@@ -65,8 +66,6 @@ export default function Navbar() {
     router.push("/login");
   };
   
-
-
   return (
     <>
       <nav
@@ -78,7 +77,8 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex justify-between items-center">
             <div className="flex space-x-6 items-center">
-              <div className="text-2xl font-bold text-blue-600 hover:pointer transition-colors">
+              <div className="flex items-center space-x-2 text-2xl font-bold text-blue-600 hover:pointer transition-colors">
+                <Image src={logo} alt="theInterview Logo" width={40} height={40} />
                 <Link href="/">theInterview</Link>
               </div>
               <div className="flex space-x-4">
@@ -173,7 +173,8 @@ export default function Navbar() {
           {/* Mobile Navigation */}
           <div className="lg:hidden">
             <div className="flex justify-between items-center">
-              <div className="text-xl font-bold text-blue-600">
+              <div className="flex items-center space-x-2 text-xl font-bold text-blue-600">
+                <Image src={logo} alt="theInterview Logo" width={30} height={30} />
                 <Link href="/">theInterview</Link>
               </div>
               <div className="flex items-center space-x-4">

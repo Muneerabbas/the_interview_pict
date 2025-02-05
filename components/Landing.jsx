@@ -1,7 +1,9 @@
 'use client'
-
 import { useState ,useEffect ,useRef} from 'react'
 import Link from 'next/link'
+import logo from "../public/logo.svg"
+import Image from 'next/image';
+
 
 
     
@@ -176,13 +178,23 @@ export default function Home() {
       <nav
   className={`fixed top-0 w-full pb-2 transition-transform duration-300 ease-in-out ${
     visible ? "translate-y-0" : "-translate-y-full"
-  } bg-gray-100 shadow-sm z-50`}
+  } bg-[#F0F2F5] shadow-sm z-50`}
 >
   <div className="flex justify-between items-center px-4 py-4 md:px-8">
     {/* Logo */}
-    <Link href="/" className="text-blue-600 text-2xl font-bold">
-      theInterview
-    </Link>
+    <Link
+            href="/"
+            className="flex items-center text-blue-600 text-2xl font-bold"
+          >
+            <Image
+              src={logo}
+              alt="theInterview Logo"
+              width={40}
+              height={40}
+              className="mr-2"
+            />
+            theInterview
+          </Link>
 
     {/* Hamburger for mobile */}
     <div className="md:hidden" onClick={toggleMobileMenu}>
@@ -229,9 +241,19 @@ export default function Home() {
   {isMobileMenuOpen && (
     <div className="fixed top-0 left-0 w-full h-full z-50 md:hidden">
       <div className="flex justify-between items-center p-4 border-b bg-gray-100">
-        <Link href="/" className="text-blue-600 text-2xl font-bold">
-          theInterview
-        </Link>
+      <Link
+                href="/"
+                className="flex items-center text-blue-600 text-2xl font-bold"
+              >
+                <Image
+                  src={logo}
+                  alt="theInterview Logo"
+                  width={40}
+                  height={40}
+                  className="mr-2"
+                />
+                theInterview
+              </Link>
         <button onClick={toggleMobileMenu} className="text-gray-800 focus:outline-none p-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -376,7 +398,7 @@ export default function Home() {
 
 
       {/* Top Stories */}
-      <section id="topstories" className="bg-white py-16 px-[5%] text-center">
+      <section id="topstories" className="bg-gray-100 py-16 px-[5%] text-center">
         <h2 className="text-4xl font-bold mb-8">Top Interview Stories</h2>
         
         <div className="flex gap-6 overflow-x-auto pb-6 mb-8">
@@ -417,29 +439,33 @@ export default function Home() {
       
 
       {/* Blog Section */}
-      <section className="bg-gray-900 text-white py-16 px-[5%]">
-        <h2 className="text-4xl font-bold text-center mb-12">What Community Says</h2>
-        
-        <div className="relative max-w-6xl mx-auto">
-          <div className="flex gap-6 overflow-x-auto pb-6">
-            {blogPosts.map((post, index) => (
-              <article key={index} className="bg-gray-800 rounded-xl p-6 min-w-[300px]">
-                <div className="h-48 bg-gray-700 rounded-lg mb-4"></div>
-                <div className="flex items-center gap-4 mb-4">
-                  <div className={`${post.avatarBg} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold`}>
-                    {post.avatar}
-                  </div>
-                  <div>
-                    <div className="font-bold">{post.author}</div>
-                    <div className="text-gray-400 text-sm">{post.title}</div>
-                  </div>
-                </div>
-                <div className="text-lg">{post.content}</div>
-              </article>
-            ))}
+      <section className="bg-white text-gray-900 py-16 px-[5%]">
+  <h2 className="text-4xl font-bold text-center mb-12">What Community Says</h2>
+
+  <div className="relative max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {blogPosts.map((post, index) => (
+        <article
+          key={index}
+          className="bg-gray-100 rounded-xl shadow-sm p-6 transition-transform transform hover:scale-105"
+        >
+          <div className="h-48 bg-gray-300 rounded-lg mb-4"></div>
+          <div className="flex items-center gap-4 mb-4">
+            <div className={`${post.avatarBg} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold`}>
+              {post.avatar}
+            </div>
+            <div>
+              <div className="font-bold text-lg">{post.author}</div>
+              <div className="text-gray-600 text-sm">{post.title}</div>
+            </div>
           </div>
-        </div>
-      </section>
+          <p className="text-gray-700">{post.content}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
     </main>
   )
 }

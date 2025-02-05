@@ -1,4 +1,3 @@
-import axios from "axios";
 import MarkdownRenderer from "@/components/Markdown";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
@@ -37,18 +36,21 @@ export default async function SimilarExperience({ params }) {
     const feedUrl = `${process.env.BASE_URL}/api/feed`;
 
     const [expResponse, feedResponse] = await Promise.all([
-      axios.get(apiUrl),
-      axios.get(feedUrl),
+      fetch(apiUrl),
+      fetch(feedUrl),
     ]);
 
-    expData = expResponse.data;
+    const expDataResponse = await expResponse.json();
+    const feedDataResponse = await feedResponse.json();
+
+    expData = expDataResponse;
     data = {
       ...expData,
       profile_pic: expData.profile_pic?.replace(/"/g, ""),
       name: expData.name?.replace(/"/g, ""),
       exp_text: expData.exp_text?.replace(/"/g, ""),
     };
-    feedArticles = feedResponse.data;
+    feedArticles = feedDataResponse;
 
 
 
@@ -75,6 +77,9 @@ export default async function SimilarExperience({ params }) {
         <meta name="description" content={articleDescription} />
         <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
         <meta name="author" content={data.name} />
+
+        {/* Add preconnect link */}
+        <link rel="preconnect" href={process.env.BASE_URL} />
 
         {/* Open Graph tags */}
         <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />

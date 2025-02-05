@@ -212,7 +212,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   useEffect(() => {
     const colors = {};
     fetchedFeaturedStories.forEach((story, index) => {
-      colors[story._id] = getRandomColor();
+      colors[story.uid] = getRandomColor();
     });
     fetchedTopStories.forEach((story, index) => {
       colors[story.uid] = getRandomColor();
@@ -327,8 +327,8 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Featured Interview Stories 🌟</h2> {/* Adjusted font size for mobile */}
         <ScrollableSection>
           {fetchedFeaturedStories.map((story, index) => (
-            <Link key={index} href={`https://www.pict.life/single/${story._id}`} target="_blank" rel="noopener noreferrer">
-              <StoryCard story={story} avatarColor={storyCardColors[story._id]} />
+            <Link key={index} href={`https://www.pict.life/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
+              <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
             </Link>
           ))}
         </ScrollableSection>

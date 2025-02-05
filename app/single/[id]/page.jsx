@@ -74,6 +74,7 @@ export default async function SimilarExperience({ params }) {
 
   const articleUrl = `${process.env.BASE_URL}/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
+  const profilePicUrl = data.profile_pic || `${process.env.BASE_URL}/logo.png`; // Fallback image if profile_pic is missing
 
   return (
     <>
@@ -86,29 +87,43 @@ export default async function SimilarExperience({ params }) {
         {/* Open Graph tags */}
         <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
         <meta property="og:description" content={articleDescription} />
-        <meta property="og:image" content={data.profile_pic} />
+        <meta property="og:image" content={profilePicUrl} />
+        <meta property="og:image:alt" content={`${data.name}'s Profile Picture`} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
         <meta property="og:site_name" content="PICT Life" />
+        {/* Add width and height of the image for better rendering (optional, but recommended) */}
+        {/* <meta property="og:image:width" content="1200" /> */}
+        {/* <meta property="og:image:height" content="630" /> */}
 
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
         <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content={data.profile_pic} />
+        <meta name="twitter:image" content={profilePicUrl} />
+        <meta name="twitter:image:alt" content={`${data.name}'s Profile Picture`} />
+        <meta name="twitter:site" content="@PICTLifeOfficial" /> {/* Replace with your twitter site handle */}
+        <meta name="twitter:creator" content="@PICTLifeOfficial" /> {/* Replace with your twitter creator handle or author's handle if available */}
 
-        {/* Additional SEO tags */}
+
+        {/* LinkedIn Post Sharing (LinkedIn uses Open Graph tags) - No specific LinkedIn tags needed here */}
+
+        {/* Pinterest Rich Pins (Pinterest uses Open Graph and Schema.org) - Already covered by Open Graph and JSON-LD */}
+
+        {/* Facebook Sharing (Facebook uses Open Graph tags) - Already covered by Open Graph */}
+
+        {/* Additional SEO tags (already present) */}
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
         <link rel="canonical" href={articleUrl} />
 
-        {/* Article specific metadata */}
+        {/* Article specific metadata (already present) */}
         <meta property="article:published_time" content={new Date(data.date).toISOString()} />
         <meta property="article:section" content="Interview Experiences" />
         <meta property="article:tag" content={`${data.company}, ${data.role}, ${data.branch}`} />
       </Head>
 
-      {/* JSON-LD structured data */}
+      {/* JSON-LD structured data (no changes) */}
       <JsonLd
         item={{
           "@context": "https://schema.org",
@@ -119,7 +134,7 @@ export default async function SimilarExperience({ params }) {
             name: data.name,
           },
           datePublished: new Date(data.date).toISOString(),
-          image: data.profile_pic,
+          image: profilePicUrl,
           publisher: {
             "@type": "Organization",
             name: "PICT Life",
@@ -138,15 +153,15 @@ export default async function SimilarExperience({ params }) {
 
       <Navbar />
       <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
-        {/* Profile Info Section */}
+        {/* Profile Info Section (no changes) */}
         <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10 relative">
-          {/* ShareButton inside the profile */}
+          {/* ShareButton inside the profile (no changes) */}
           <ShareButton
             id={id}
             data={data}
           />
 
-          {/* Profile Image */}
+          {/* Profile Image (no changes) */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md flex-shrink-0">
             <img
               src={data.profile_pic || "/api/placeholder/80/80"}
@@ -156,13 +171,13 @@ export default async function SimilarExperience({ params }) {
             />
           </div>
 
-          {/* Profile Info */}
+          {/* Profile Info (no changes) */}
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
               {data.name}
             </h1>
 
-            {/* Info Grid */}
+            {/* Info Grid (no changes) */}
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-2 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <GraduationCap size={16} className="text-blue-600" aria-hidden="true" />
@@ -182,7 +197,7 @@ export default async function SimilarExperience({ params }) {
               </div>
             </div>
 
-            {/* Date */}
+            {/* Date (no changes) */}
             <time dateTime={new Date(data.date).toISOString()} className="text-sm text-gray-500">
               {formattedDate(data.date)}
             </time>
@@ -191,7 +206,7 @@ export default async function SimilarExperience({ params }) {
 
         <div className="border-t border-gray-300 my-6"></div>
 
-        {/* Main content */}
+        {/* Main content (no changes) */}
         <main className="mb-10">
           <div className="prose prose-lg max-w-none text-base text-gray-700">
             <MarkdownRenderer content={data.exp_text} />
@@ -202,7 +217,7 @@ export default async function SimilarExperience({ params }) {
           <p>Views: {data.views}</p>
         </footer>
 
-        {/* Related Articles */}
+        {/* Related Articles (no changes) */}
         <section className="mt-10">
           <h2 className="text-2xl font-semibold text-[#1D1D1D] mb-6">Related Experiences</h2>
           <div className="grid gap-4 sm:grid-cols-2">

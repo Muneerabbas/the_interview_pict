@@ -138,6 +138,12 @@ export default function Home() {
 
   const [activeFilter, setActiveFilter] = useState('FAANG')
 
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== "undefined") {
@@ -294,8 +300,19 @@ export default function Home() {
 </nav>
 
 
-      {/* Hero Section */}
-      <section className="bg-white text-center py-12 mt-20 px-4">
+<section className="bg-white text-center py-12 mt-20 px-4">
+      <div className={`transform transition-all duration-700 ease-out ${
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
+      }`}>
+        <div className="relative w-20 h-20 mx-auto mb-8">
+          <Image
+            src={logo}
+            alt="theInterview Logo"
+            fill
+            className="object-contain animate-bounce"
+          />
+        </div>
+
         <h1 className="text-5xl font-bold mb-4">
           Share Your <span className="text-blue-600">Interview</span> Journey
         </h1>
@@ -304,16 +321,21 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4 justify-center mb-12">
-          <Link href="/home"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium">
+          <Link 
+            href="/home"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium transition-all duration-300 hover:scale-105"
+          >
             Read Stories
           </Link>
-          <Link href="/post"
-            className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-200 font-medium">
+          <Link 
+            href="/post"
+            className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-200 font-medium transition-all duration-300 hover:scale-105"
+          >
             Share Your Story
           </Link>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Featured Stories */}
       <section id="featured" className="bg-gray-100 py-16 px-[5%] text-center">

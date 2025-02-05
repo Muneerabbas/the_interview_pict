@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/third-parties": "^15.1.6",
     "@react-oauth/google": "^0.12.1",
     "@shadcn/ui": "^0.0.4",
     "@uiw/react-md-editor": "^4.0.5",

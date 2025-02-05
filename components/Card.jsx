@@ -11,12 +11,12 @@ const ProfileCard = ({
   edit = false,
   deletePost = false,
   disableCardClick = false,
+  setGlobalLoading,
 }) => {
   const router = useRouter();
-  const [successMessage, setSuccessMessage] = useState(null); // Success message state
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-  const [isDeleting, setIsDeleting] = useState(false); // Deleting state
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fullText = profile.exp_text;
   const truncatedText = fullText.slice(0, 150) + "...";
@@ -38,24 +38,22 @@ const ProfileCard = ({
 
   const handleReadMore = (e) => {
     e.stopPropagation();
-    setIsLoading(true); // Set loading state to true
     router.push(`/single/${profile.uid}`);
   };
 
   const handleEdit = (e) => {
     e.stopPropagation();
-    setIsLoading(true); // Set loading state to true
     router.push(`/edit/${profile.uid}`);
   };
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true);
   };
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    setIsModalOpen(false); // Close modal
+    setIsModalOpen(false);
     try {
       const response = await fetch('/api/delete', {
         method: 'DELETE',
@@ -72,7 +70,7 @@ const ProfileCard = ({
       if (response.ok) {
         setSuccessMessage("Experience deleted successfully!");
         setTimeout(() => {
-          window.location.reload(); // Reload the page
+          window.location.reload();
         }, 2000);
       } else {
         alert(`Error: ${data.message}`);
@@ -85,12 +83,12 @@ const ProfileCard = ({
   };
 
   const handleCancelDelete = () => {
-    setIsModalOpen(false); // Close modal
+    setIsModalOpen(false);
   };
 
   const handleCardClick = () => {
     if (!disableCardClick) {
-      setIsLoading(true); // Set loading state to true
+      setGlobalLoading(true); // Activate global loading
       router.push(`/single/${profile.uid}`);
     }
   };
@@ -106,17 +104,6 @@ const ProfileCard = ({
         ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
         transition-all duration-300 border border-[#E7F3FF] ${height} flex flex-col relative`}
     >
-      {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <span className="ml-3 text-[#1D1D1D]">Loading...</span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {successMessage && (
         <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
           <div className="flex items-center justify-center">
@@ -131,7 +118,6 @@ const ProfileCard = ({
       <div className="p-4 flex-grow">
         {/* Header Section */}
         <div className="flex items-start gap-4">
-          {/* Profile Image */}
           <div className="flex-shrink-0">
             <div className="w-16 h-16 sm:w-20 sm:h-20">
               <img
@@ -204,12 +190,9 @@ const ProfileCard = ({
         </div>
       </div>
 
-      {/* Date at the bottom */}
       <div className="mt-4 mb-4 ml-4 text-xs text-[#B0B3B8]">
         {formattedDate}
       </div>
-
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg w-full max-w-sm p-6 shadow-lg">
@@ -235,5 +218,6 @@ const ProfileCard = ({
     </div>
   );
 };
+
 
 export default ProfileCard;

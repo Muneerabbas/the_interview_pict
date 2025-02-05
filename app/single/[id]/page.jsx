@@ -12,9 +12,12 @@ export default async function SimilarExperience({ params }) {
     return <div className="text-center text-lg text-gray-600 mt-10">Invalid request</div>;
   }
 
-  const { id } = await params;
+  const { id } = params;
   let data = null;
   let articles = [];
+  let feedArticles = [];
+  let searchArticles = [];
+  let expData = null;
 
   const formattedDate = (date) => {
     return new Date(date).toLocaleString("en-US", {
@@ -30,28 +33,44 @@ export default async function SimilarExperience({ params }) {
   };
 
   try {
-    const apiUrl = `https://pict.life/api/exp?uid=${id}`;
-    const response = await axios.get(apiUrl);
-    data = {
-      ...response.data,
-      profile_pic: response.data.profile_pic?.replace(/"/g, ""),
-      name: response.data.name?.replace(/"/g, ""),
-      exp_text: response.data.exp_text?.replace(/"/g, ""),
-    };
-
+    const apiUrl = `${process.env.BASE_URL}/api/exp?uid=${id}`;
     const feedUrl = `${process.env.BASE_URL}/api/feed`;
-    const searchFeed = `${process.env.BASE_URL}/api/search/${data.company} ${data.branch}`;
-    const feedResponse = await axios.get(feedUrl);
-    const searchResponse = await axios.get(feedUrl);
-    articles = feedResponse.data;
 
-    articles = [...articles, ...searchResponse.data];
+    const [expResponse, feedResponse] = await Promise.all([
+      axios.get(apiUrl),
+      axios.get(feedUrl),
+    ]);
+
+    expData = expResponse.data;
+    data = {
+      ...expData,
+      profile_pic: expData.profile_pic?.replace(/"/g, ""),
+      name: expData.name?.replace(/"/g, ""),
+      exp_text: expData.exp_text?.replace(/"/g, ""),
+    };
+    feedArticles = feedResponse.data;
+
+
+    // try {
+    //   const searchFeed = `https://pict.life/api/search?search=${data.company} ${data.branch}`;
+    //   const searchResponse = await axios.get(searchFeed);
+    //   searchArticles = searchResponse.data.result;
+    // } catch (searchError) {
+    //   console.error("Error fetching search data:", searchError);
+    //   // Handle search error, maybe display a message that related articles might be limited
+    // }
+
+
+    articles = [...feedArticles, ...searchArticles];
     articles = articles.filter((article) => article.uid !== id);
     articles = articles.filter((article, index) => articles.findIndex((a) => a.uid === article.uid) === index);
+
+
   } catch (error) {
     console.error("Error fetching data:", error);
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
+
 
   const articleUrl = `${process.env.BASE_URL}/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
@@ -63,7 +82,7 @@ export default async function SimilarExperience({ params }) {
         <meta name="description" content={articleDescription} />
         <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
         <meta name="author" content={data.name} />
-        
+
         {/* Open Graph tags */}
         <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
         <meta property="og:description" content={articleDescription} />
@@ -71,18 +90,18 @@ export default async function SimilarExperience({ params }) {
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
         <meta property="og:site_name" content="PICT Life" />
-        
+
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
         <meta name="twitter:description" content={articleDescription} />
         <meta name="twitter:image" content={data.profile_pic} />
-        
+
         {/* Additional SEO tags */}
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
         <link rel="canonical" href={articleUrl} />
-        
+
         {/* Article specific metadata */}
         <meta property="article:published_time" content={new Date(data.date).toISOString()} />
         <meta property="article:section" content="Interview Experiences" />
@@ -106,7 +125,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: "process.env.BASE_URL/logo.png"
+              url: `${process.env.BASE_URL}/logo.png`
             }
           },
           description: articleDescription,
@@ -121,14 +140,12 @@ export default async function SimilarExperience({ params }) {
       <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
         {/* Profile Info Section */}
         <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10 relative">
-        {/* ShareButton inside the profile */}
-
-        <ShareButton 
-            id={id} 
+          {/* ShareButton inside the profile */}
+          <ShareButton
+            id={id}
             data={data}
           />
-        
-          
+
           {/* Profile Image */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md flex-shrink-0">
             <img

@@ -79,7 +79,7 @@ export default function Navbar() {
           <div className="hidden lg:flex justify-between items-center">
             <div className="flex space-x-6 items-center">
               <div className="text-2xl font-bold text-blue-600 hover:pointer transition-colors">
-                <Link href="/">TheInterview</Link>
+                <Link href="/">theInterview</Link>
               </div>
               <div className="flex space-x-4">
                 <Link
@@ -174,7 +174,7 @@ export default function Navbar() {
           <div className="lg:hidden">
             <div className="flex justify-between items-center">
               <div className="text-xl font-bold text-blue-600">
-                <Link href="/">TheInterview</Link>
+                <Link href="/">theInterview</Link>
               </div>
               <div className="flex items-center space-x-4">
                 {/* Search Icon */}

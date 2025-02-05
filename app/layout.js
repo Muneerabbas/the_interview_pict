@@ -26,6 +26,9 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head>
+      <link rel="icon" type="image/png" href="/icon.png" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>{children}</SessionProvider>
 

@@ -181,7 +181,7 @@ export default function Home() {
   <div className="flex justify-between items-center px-4 py-4 md:px-8">
     {/* Logo */}
     <Link href="/" className="text-blue-600 text-2xl font-bold">
-      TheInterview
+      theInterview
     </Link>
 
     {/* Hamburger for mobile */}
@@ -230,7 +230,7 @@ export default function Home() {
     <div className="fixed top-0 left-0 w-full h-full z-50 md:hidden">
       <div className="flex justify-between items-center p-4 border-b bg-gray-100">
         <Link href="/" className="text-blue-600 text-2xl font-bold">
-          TheInterview
+          theInterview
         </Link>
         <button onClick={toggleMobileMenu} className="text-gray-800 focus:outline-none p-2">
           <svg

@@ -50,7 +50,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-600">The Interview</h3>
+            <h3 className="text-xl font-bold text-blue-600">theInterview</h3>
             <p className="text-[#1D1D1D] text-sm">
               Empowering tech professionals with interview experiences and insights.
             </p>
@@ -100,7 +100,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
                 <Mail size={18} className="text-blue-600" />
-                <span className="text-[#1D1D1D]">support@theinterview.com</span>
+                <span className="text-[#1D1D1D]">support@-blue-600.com</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone size={18} className="text-blue-600" />

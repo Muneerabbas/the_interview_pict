@@ -16,6 +16,7 @@ const ProfileCard = ({
   const [successMessage, setSuccessMessage] = useState(null); // Success message state
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const [isDeleting, setIsDeleting] = useState(false); // Deleting state
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const fullText = profile.exp_text;
   const truncatedText = fullText.slice(0, 150) + "...";
@@ -37,11 +38,13 @@ const ProfileCard = ({
 
   const handleReadMore = (e) => {
     e.stopPropagation();
+    setIsLoading(true); // Set loading state to true
     router.push(`/single/${profile.uid}`);
   };
 
   const handleEdit = (e) => {
     e.stopPropagation();
+    setIsLoading(true); // Set loading state to true
     router.push(`/edit/${profile.uid}`);
   };
 
@@ -87,6 +90,7 @@ const ProfileCard = ({
 
   const handleCardClick = () => {
     if (!disableCardClick) {
+      setIsLoading(true); // Set loading state to true
       router.push(`/single/${profile.uid}`);
     }
   };
@@ -102,6 +106,17 @@ const ProfileCard = ({
         ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
         transition-all duration-300 border border-[#E7F3FF] ${height} flex flex-col relative`}
     >
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span className="ml-3 text-[#1D1D1D]">Loading...</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {successMessage && (
         <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
           <div className="flex items-center justify-center">

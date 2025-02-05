@@ -38,7 +38,12 @@ const ProfileCard = ({
 
   const handleReadMore = (e) => {
     e.stopPropagation();
+    console.log("ProfileCard: handleReadMore START"); // Debugging log
+    setGlobalLoading(true);
+    console.log("ProfileCard: setGlobalLoading(true) called"); // Debugging log
     router.push(`/single/${profile.uid}`);
+    console.log("ProfileCard: router.push called"); // Debugging log
+    console.log("ProfileCard: handleReadMore END"); // Debugging log
   };
 
   const handleEdit = (e) => {
@@ -88,19 +93,19 @@ const ProfileCard = ({
 
   const handleCardClick = () => {
     if (!disableCardClick) {
-      setGlobalLoading(true); // Activate global loading
+      setGlobalLoading(true);
       router.push(`/single/${profile.uid}`);
     }
   };
 
   return (
     <div
-      onClick={handleCardClick}
-      className={`${width} mx-auto bg-white rounded-xl 
-        ${disableCardClick ? '' : 'shadow-[0_4px_12px_rgba(0,0,0,0.1)]'} 
+      onClick={disableCardClick ? undefined : handleCardClick}
+      className={`${width} mx-auto bg-white rounded-xl
+        ${disableCardClick ? '' : 'shadow-[0_4px_12px_rgba(0,0,0,0.1)]'}
         ${disableCardClick ? '' : 'hover:shadow-[0_8px_24px_rgba(24,119,242,0.15)]'}
-        ${disableCardClick ? '' : 'hover:bg-[#F7FAFF]'} 
-        ${disableCardClick ? '' : 'transform hover:-translate-y-1'} 
+        ${disableCardClick ? '' : 'hover:bg-[#F7FAFF]'}
+        ${disableCardClick ? '' : 'transform hover:-translate-y-1'}
         ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
         transition-all duration-300 border border-[#E7F3FF] ${height} flex flex-col relative`}
     >
@@ -158,7 +163,7 @@ const ProfileCard = ({
         {/* Experience Text Section */}
         <div className="mt-4 text-[#1D1D1D]">
           <div className="flex flex-col gap-2">
-            <div 
+            <div
               className="prose prose-sm max-w-none line-clamp-6"
               dangerouslySetInnerHTML={{ __html: htmlTruncatedText }}
             />
@@ -170,7 +175,7 @@ const ProfileCard = ({
                 Read More
               </button>
               {edit && (
-                <button 
+                <button
                   onClick={handleEdit}
                   className="p-1 rounded-lg hover:bg-[#E7F3FF] text-blue-600 transition-colors duration-300"
                 >
@@ -178,7 +183,7 @@ const ProfileCard = ({
                 </button>
               )}
               {deletePost && (
-                <button 
+                <button
                   onClick={handleDeleteClick}
                   className="p-1 rounded-lg hover:bg-[#FF5F5F] hover:text-white text-[#FF5F5F] transition-colors duration-300"
                 >
@@ -218,6 +223,5 @@ const ProfileCard = ({
     </div>
   );
 };
-
 
 export default ProfileCard;

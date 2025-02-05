@@ -193,7 +193,7 @@ export default async function SimilarExperience({ params }) {
               </div>
               <div className="flex items-center gap-1">
                 <Eye size={16} className="text-blue-600" aria-hidden="true" />
-                <span>{data.views} views</span>
+                <span>{data.views} Reads</span>
               </div>
             </div>
 
@@ -214,7 +214,7 @@ export default async function SimilarExperience({ params }) {
         </main>
 
         <footer className="text-center text-sm text-gray-500 pt-5 border-t border-gray-200">
-          <p>Views: {data.views}</p>
+          <p>Reads: {data.views}</p>
         </footer>
 
         {/* Related Articles (no changes) */}

@@ -16,6 +16,7 @@ const SearchPage = ({ params }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [debouncedSearch, setDebouncedSearch] = useState(search || "");
+  const [globalLoading, setGlobalLoading] = useState(false); 
 
   useEffect(() => {
     if (!search && !searchText) {
@@ -81,6 +82,16 @@ const SearchPage = ({ params }) => {
 
   return (
     <div className="max-h-screen p-6 relative">
+      {globalLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <div className="flex items-center justify-center">
+              <Loader2 className="animate-spin text-blue-600" size={32} />
+              <span className="ml-3 text-[#1D1D1D] text-lg font-semibold">Loading...</span>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSearch} className="flex items-center gap-2 mb-6">
           <button
@@ -119,7 +130,8 @@ const SearchPage = ({ params }) => {
         <div className="mt-6 space-y-6">
           {results.length > 0
             ? results.map((profile) => (
-                <ProfileCard key={profile._id} profile={profile} />
+                <ProfileCard key={profile._id} profile={profile} 
+                setGlobalLoading={setGlobalLoading}/>
               ))
             : !loading && (
                 <p className="text-center text-gray-600">

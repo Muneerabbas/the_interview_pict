@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  Twitter,
+import {
+  Mail,
   Heart,
-  Phone,
   MapPin
 } from "lucide-react";
 
@@ -54,17 +50,6 @@ export default function Footer() {
             <p className="text-[#1D1D1D] text-sm">
               Empowering tech professionals with interview experiences and insights.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-blue-600 hover:text-[#8B77F9] transition-colors">
-                <Github size={24} />
-              </a>
-              <a href="#" className="text-blue-600 hover:text-[#8B77F9] transition-colors">
-                <Linkedin size={24} />
-              </a>
-              <a href="#" className="text-blue-600 hover:text-[#8B77F9] transition-colors">
-                <Twitter size={24} />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -72,25 +57,26 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-[#1D1D1D]">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-[#1D1D1D] hover:text-blue-600 transition-colors">
+                <Link href="/about" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-[#1D1D1D] hover:text-blue-600 transition-colors">
+                <Link href="/privacy" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-[#1D1D1D] hover:text-blue-600 transition-colors">
+                <Link href="/terms" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-[#1D1D1D] hover:text-blue-600 transition-colors">
+                <Link href="/faq" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
                   FAQ
                 </Link>
               </li>
+             
             </ul>
           </div>
 
@@ -99,16 +85,9 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-[#1D1D1D]">Contact Us</h3>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
-                <Mail size={18} className="text-blue-600" />
-                <span className="text-[#1D1D1D]">support@-blue-600.com</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <Phone size={18} className="text-blue-600" />
-                <span className="text-[#1D1D1D]">+1 (555) 123-4567</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <MapPin size={18} className="text-blue-600" />
-                <span className="text-[#1D1D1D]">San Francisco, CA</span>
+               <MapPin size={18} className="text-blue-600" />
+                  <a href="https://maps.app.goo.gl/xy4z53owHAz4SxgA8" target="_blank" rel="noopener noreferrer" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline"><span className="text-[#1D1D1D]">PICT, Pune, Maharashtra 411045</span> {/* Replace with actual PICT Pune address if needed */}
+                 </a>
               </li>
             </ul>
           </div>

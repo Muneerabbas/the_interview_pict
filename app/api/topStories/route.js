@@ -6,7 +6,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 export async function GET(req) {
   try {
     const page = parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const itemsPerPage = parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10); // Get itemsPerPage from query, default to 10
+    const ITEMS_PER_PAGE = 10; // Changed to 3 items per page
 
     await client.connect();
     const db = client.db("int-exp");
@@ -15,17 +15,10 @@ export async function GET(req) {
     const feed = await experience.find({}).toArray();
 
     const sortedFeed = feed
-      .map(item => ({
-        ...item,
-        date: new Date(item.date)
-      }))
-      .sort((a, b) => b.date - a.date)
-      .slice(page * itemsPerPage, (page + 1) * itemsPerPage); // Use itemsPerPage here
+      .sort((a, b) => b.views - a.views) // Sorted by views in descending order
+      .slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
-    const finalFeed = sortedFeed.map(item => ({
-      ...item,
-      date: item.date.toString()
-    }));
+    const finalFeed = sortedFeed; // No need to change date to string as we are not sorting by date anymore
 
     return NextResponse.json(finalFeed);
   } catch (error) {
@@ -33,3 +26,7 @@ export async function GET(req) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+
+
+// barclays , masatercard , bmc , eQ , BNY , siemens , arista , tracelink , phonepe , microsoft , palo alto , ZS associates, TCS , Infosys 
+// branch 

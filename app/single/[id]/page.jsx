@@ -74,7 +74,7 @@ export default async function SimilarExperience({ params }) {
 
   const articleUrl = `${process.env.BASE_URL}/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
-  const profilePicUrl = data.profile_pic || `${process.env.BASE_URL}/logo.png`; // Fallback image if profile_pic is missing
+  const profilePicUrl = data.profile_pic || `${process.env.BASE_URL}/logo.svg`; // Fallback image if profile_pic is missing
 
   return (
     <>
@@ -140,7 +140,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: `${process.env.BASE_URL}/logo.png`
+              url: `${process.env.BASE_URL}/logo.svg`
             }
           },
           description: articleDescription,

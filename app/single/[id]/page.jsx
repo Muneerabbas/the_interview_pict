@@ -51,14 +51,6 @@ export default async function SimilarExperience({ params }) {
     feedArticles = feedResponse.data;
 
 
-    // try {
-    //   const searchFeed = `https://pict.life/api/search?search=${data.company} ${data.branch}`;
-    //   const searchResponse = await axios.get(searchFeed);
-    //   searchArticles = searchResponse.data.result;
-    // } catch (searchError) {
-    //   console.error("Error fetching search data:", searchError);
-    //   // Handle search error, maybe display a message that related articles might be limited
-    // }
 
 
     articles = [...feedArticles, ...searchArticles];
@@ -74,7 +66,7 @@ export default async function SimilarExperience({ params }) {
 
   const articleUrl = `${process.env.BASE_URL}/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
-  const profilePicUrl = data.profile_pic || `${process.env.BASE_URL}/logo.svg`; // Fallback image if profile_pic is missing
+  const profilePicUrl = data.profile_pic || `@/public/logo.svg`; // Fallback image if profile_pic is missing
 
   return (
     <>

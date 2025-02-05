@@ -1,3 +1,4 @@
+// LandingPage.jsx
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -69,22 +70,22 @@ const StoryCard = ({ story, avatarColor }) => {
 };
 
 
-export default function Home() {
+export default function Home({ featuredStories, topStories }) { // Accept fetched stories as props
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const mobileMenuRef = useRef(null);
-  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState([]);
-  const [fetchedTopStories, setFetchedTopStories] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [storyCardColors, setStoryCardColors] = useState({});
+  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || []); // Use props, fallback to empty array
+  const [fetchedTopStories, setFetchedTopStories] = useState(topStories || []); // Use props, fallback to empty array
 
 
   const navItems = [
     { href: '/home', label: 'Home' },
     { href: '#featured', label: 'Featured Stories' },
     { href: '#topstories', label: 'Top Stories' },
-    { href: '#companyspecific', label: 'Company Tips' },
+    { href: '#companyspecific', label: 'Search Experience' },
     { href: '/post', label: 'Share Experience' }
   ];
 
@@ -207,32 +208,6 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchFeaturedStories = async () => {
-      try {
-        const response = await fetch('/api/feed?itemsPerPage=6');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        setFetchedFeaturedStories(data);
-      } catch (error) {
-        console.error("Fetching featured stories failed:", error);
-      }
-    };
-
-    const fetchTopStories = async () => {
-      try {
-        const response = await fetch('/api/topStories');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        setFetchedTopStories(data);
-      } catch (error) {
-        console.error("Fetching top stories failed:", error);
-      }
-    };
-
-    fetchFeaturedStories();
-    fetchTopStories();
-  }, []);
 
   useEffect(() => {
     const colors = {};

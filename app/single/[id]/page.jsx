@@ -6,6 +6,9 @@ import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
 
+// Define revalidation time (in seconds) for ISR
+const revalidateTime = 60; // Revalidate every 60 seconds (1 minute) - adjust as needed
+
 export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {
     return <div className="text-center text-lg text-gray-600 mt-10">Invalid request</div>;
@@ -36,8 +39,8 @@ export default async function SimilarExperience({ params }) {
     const feedUrl = `${process.env.BASE_URL}/api/feed`;
 
     const [expResponse, feedResponse] = await Promise.all([
-      fetch(apiUrl),
-      fetch(feedUrl),
+      fetch(apiUrl, { next: { revalidate: revalidateTime } }), // Enable ISR for apiUrl
+      fetch(feedUrl, { next: { revalidate: revalidateTime } }), // Enable ISR for feedUrl
     ]);
 
     const expDataResponse = await expResponse.json();

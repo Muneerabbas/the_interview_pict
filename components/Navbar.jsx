@@ -7,7 +7,7 @@ import { Home, FileText, LogOut, Search, User, LogIn, Menu, X } from "lucide-rea
 import { useSession, signOut, signIn } from "next-auth/react";
 import { motion, AnimatePresence, delay } from "framer-motion";
 import Image from "next/image";
-import logo from "../public/logo.svg"
+import logo from "../public/icon.svg"
 export default function Navbar() {
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");

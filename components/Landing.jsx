@@ -2,7 +2,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import logo from "../public/logo.svg"
+import logo from "../public/icon.svg"
 import Image from 'next/image'
 import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
 

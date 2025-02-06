@@ -62,21 +62,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
-                  Privacy Policy
+                <Link href="/help" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
+                  Help
                 </Link>
               </li>
-              <li>
-                <Link href="/terms" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
-                  FAQ
-                </Link>
-              </li>
-             
+            
             </ul>
           </div>
 

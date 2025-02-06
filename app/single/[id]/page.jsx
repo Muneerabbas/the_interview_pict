@@ -88,7 +88,7 @@ export default async function SimilarExperience({ params }) {
   console.log("process.env.BASE_URL:", process.env.BASE_URL);
   const articleUrl = `https://www.pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
-  const profilePicUrl = data.profile_pic || `@/public/logo.svg`; // Fallback image if profile_pic is missing
+  const profilePicUrl = data.profile_pic || `@/public/icon.svg`; // Fallback image if profile_pic is missing
 
   return (
     <>
@@ -104,7 +104,7 @@ export default async function SimilarExperience({ params }) {
         {/* Open Graph tags */}
         <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
         <meta property="og:description" content={articleDescription} />
-        <meta property="og:image" content={profilePicUrl} />
+        <meta property="og:image" content={"/icon.png"} />
         <meta property="og:image:alt" content={`${data.name}'s Profile Picture`} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
@@ -117,7 +117,7 @@ export default async function SimilarExperience({ params }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
         <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content={profilePicUrl} />
+        <meta name="twitter:image" content={"/icon.png"} />
         <meta name="twitter:image:alt" content={`${data.name}'s Profile Picture`} />
         <meta name="twitter:site" content="@PICTLifeOfficial" /> {/* Replace with your twitter site handle */}
         <meta name="twitter:creator" content="@PICTLifeOfficial" /> {/* Replace with your twitter creator handle or author's handle if available */}
@@ -157,7 +157,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: `https://www.pict.life/logo.svg`
+              url: `https://www.pict.life/icon.svg`
             }
           },
           description: articleDescription,

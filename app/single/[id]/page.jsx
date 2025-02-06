@@ -88,40 +88,43 @@ export default async function SimilarExperience({ params }) {
   console.log("process.env.BASE_URL:", process.env.BASE_URL);
   const articleUrl = `https://www.pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
-  const profilePicUrl = data.profile_pic || `@/public/icon.svg`; // Fallback image if profile_pic is missing
+  const profilePicUrl = data.profile_pic || `@/public/icon.png`; // Fallback image if profile_pic is missing
 
   return (
     <>
         <Head>
         {/* ... other meta tags ... */}
-        <title>{`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`}</title>
-        <meta name="description" content={articleDescription} />
+        <title>{`theInterview🚀`}</title>
+        <meta name="description" content="Share Your Interview Journey 🚀
+Learn from real experiences. Share your story. Help others succeed. ✨
+
+" />
         <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
         <meta name="author" content={data.name} />
-
         {/* Add preconnect link */}
         <link rel="preconnect" href={process.env.BASE_URL} />
         
         {/* Open Graph tags */}
-        <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
-        <meta property="og:description" content={articleDescription} />
-        <meta property="og:image" content="https://www.pict.life/icon.svg" />
+        <meta property="og:title" content={`theInterview🚀`} />
+        <meta property="og:description" content="Share Your Interview Journey 🚀
+Learn from real experiences. Share your story. Help others succeed. ✨" />
+        <meta property="og:image" content="https://www.pict.life/icon.png" />
 {/* Use profilePicUrl or fallback to /icon.png */}
-        <meta property="og:image:alt" content={`${data.name}'s Profile Picture`} />
+        <meta property="og:image:alt" content={`https://www.pict.life/icon.png`} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
-        <meta property="og:site_name" content="PICT Life" />
+        <meta property="og:site_name" content="theInterview" />
 
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
         <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content="https://www.pict.life/icon.svg" /> {/* Use profilePicUrl or fallback to /icon.png */}
+        <meta name="twitter:image" content="https://www.pict.life/icon.png" /> {/* Use profilePicUrl or fallback to /icon.png */}
         <meta name="twitter:image:alt" content={`${data.name}'s Profile Picture`} />
         {/* ... other twitter tags ... */}
 
         {/* Favicon (add this if not already present) */}
-        <link rel="icon" href="/icon.svg" type="image/png" sizes="any" /> {/* Or use SVG if supported widely */}
+        <link rel="icon" href="/icon.png" type="image/png" sizes="any" /> {/* Or use SVG if supported widely */}
       </Head>
 
       {/* JSON-LD structured data (no changes) */}
@@ -141,7 +144,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: `https://www.pict.life/icon.svg`
+              url: `https://www.pict.life/icon.png`
             }
           },
           description: articleDescription,

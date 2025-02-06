@@ -9,6 +9,7 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function EditPage() {
     const [successMessage, setSuccessMessage] = useState('');
+    const [warningMessage, setWarningMessage] = useState(''); // New warning message state
   const { data: session } = useSession();
   const { id } = useParams();
   const [markdown, setMarkdown] = useState("");
@@ -44,13 +45,13 @@ export default function EditPage() {
         setBottomMargin(window.innerWidth < 768 ? "80px" : "0px");
         setHeight(window.innerWidth < 768 ? "calc(100vh - 50px)" : "calc(100vh)"); // Adjust height based on screen size
       };
-  
+
       handleResize(); // Set initial state on mount
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
-  
+
 
 
 
@@ -102,7 +103,7 @@ export default function EditPage() {
       company: validateField('company', e.target.value),
     }));
   };
-  
+
   const handleCustomCompanyChange = (e) => {
     setCustomCompany(e.target.value);
   };
@@ -117,7 +118,7 @@ export default function EditPage() {
       role: validateField('role', e.target.value),
     }));
   };
-  
+
   const handleCustomRoleChange = (e) => {
     setCustomRole(e.target.value); // Update custom role state when user types in the input field
   };
@@ -193,14 +194,14 @@ const handleSubmit = async () => {
         name,
         batch,
         branch,
-        company,
-        role,
+        company: finalCompany, // Use finalCompany here
+        role: finalRole,       // Use finalRole here
         email,
       }),
     });
 
     const data = await response.json();
-    
+
     // Check both response.ok and data for error messages
     if (!response.ok) {
       throw new Error(data.message || "Failed to edit experience");
@@ -220,15 +221,19 @@ const handleSubmit = async () => {
       markdown: false,
     });
 
+    setWarningMessage("Changes may take a few minutes to appear.");
     setSuccessMessage("Your experience has been successfully updated!");
-    window.location.href = `/single/${data.uid}`;
+     // Set warning message
+
+    setTimeout(() => {
+      window.location.href = `/single/${data.uid}`;
+    }, 3000); // Redirect after 3 seconds, adjust time as needed
 
   } catch (error) {
     console.error("Error updating experience:", error);
     alert(error.message || "There was an error updating your experience.");
   }
 };
-  
 
 
   return (
@@ -338,8 +343,8 @@ const handleSubmit = async () => {
         {roleOption}
       </option>
     ))}
-  
-    
+
+
   </select>
 
   {/* Input field for custom role name */}
@@ -370,14 +375,23 @@ const handleSubmit = async () => {
     </div>
   </div>
 )}
+{warningMessage && (
+  <div className="bg-[#FFF3CD] text-[#85640A] p-4 rounded-lg shadow-md mb-4 text-center">
+    <div className="flex items-center justify-center">
+      <svg className="w-6 h-6 text-[#FFC107] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+      </svg>
+      <p className="font-semibold text-md text-[#85640A]">{warningMessage}</p>
+    </div>
+  </div>
+)}
 
-      
 
           {/* Editor Container with fixed height */}
         <div
   className="rounded-lg overflow-hidden relative"
   style={{
-    height: 
+    height:
       window.innerWidth < 768
         ? 'calc(100vh)'  // For mobile
         : window.innerWidth < 1024
@@ -400,7 +414,7 @@ const handleSubmit = async () => {
 
 
 </div>
-  
+
           {/* Markdown Editor with Scrollable Content */}
           <div className="relative w-full h-full pt-16 overflow-hidden">
   {/* The padding-top `pt-16` ensures that the content does not overlap with the button */}
@@ -418,7 +432,7 @@ const handleSubmit = async () => {
   <div className="mb-[800px]"></div>
 </div>
         </div>
-          
+
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
 
 // Define revalidation time (in seconds) for ISR
-const revalidateTime = 60; // Revalidate every 60 seconds (1 minute) - adjust as needed
+const revalidateTime = 300; // Revalidate every 60 seconds (1 minute) - adjust as needed
 
 export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {

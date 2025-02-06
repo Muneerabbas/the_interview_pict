@@ -1,6 +1,6 @@
 import MarkdownRenderer from "@/components/Markdown";
 import Head from "next/head";
-// import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar";
 import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
@@ -168,7 +168,7 @@ export default async function SimilarExperience({ params }) {
         }}
       />
 
-
+      <Navbar />
       <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
         {/* Profile Info Section (no changes) */}
         <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10 relative">

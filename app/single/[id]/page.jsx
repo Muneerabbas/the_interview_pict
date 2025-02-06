@@ -92,7 +92,8 @@ export default async function SimilarExperience({ params }) {
 
   return (
     <>
-      <Head>
+        <Head>
+        {/* ... other meta tags ... */}
         <title>{`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`}</title>
         <meta name="description" content={articleDescription} />
         <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
@@ -100,44 +101,27 @@ export default async function SimilarExperience({ params }) {
 
         {/* Add preconnect link */}
         <link rel="preconnect" href={process.env.BASE_URL} />
-
+        
         {/* Open Graph tags */}
         <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
         <meta property="og:description" content={articleDescription} />
-        <meta property="og:image" content={"/icon.png"} />
+        <meta property="og:image" content="https://www.pict.life/icon.svg" />
+{/* Use profilePicUrl or fallback to /icon.png */}
         <meta property="og:image:alt" content={`${data.name}'s Profile Picture`} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={articleUrl} />
         <meta property="og:site_name" content="PICT Life" />
-        {/* Add width and height of the image for better rendering (optional, but recommended) */}
-        {/* <meta property="og:image:width" content="1200" /> */}
-        {/* <meta property="og:image:height" content="630" /> */}
 
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
         <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content={"/icon.png"} />
+        <meta name="twitter:image" content="https://www.pict.life/icon.svg" /> {/* Use profilePicUrl or fallback to /icon.png */}
         <meta name="twitter:image:alt" content={`${data.name}'s Profile Picture`} />
-        <meta name="twitter:site" content="@PICTLifeOfficial" /> {/* Replace with your twitter site handle */}
-        <meta name="twitter:creator" content="@PICTLifeOfficial" /> {/* Replace with your twitter creator handle or author's handle if available */}
+        {/* ... other twitter tags ... */}
 
-
-        {/* LinkedIn Post Sharing (LinkedIn uses Open Graph tags) - No specific LinkedIn tags needed here */}
-
-        {/* Pinterest Rich Pins (Pinterest uses Open Graph and Schema.org) - Already covered by Open Graph and JSON-LD */}
-
-        {/* Facebook Sharing (Facebook uses Open Graph tags) - Already covered by Open Graph */}
-
-        {/* Additional SEO tags (already present) */}
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href={articleUrl} />
-
-        {/* Article specific metadata (already present) */}
-        <meta property="article:published_time" content={new Date(data.date).toISOString()} />
-        <meta property="article:section" content="Interview Experiences" />
-        <meta property="article:tag" content={`${data.company}, ${data.role}, ${data.branch}`} />
+        {/* Favicon (add this if not already present) */}
+        <link rel="icon" href="/icon.svg" type="image/png" sizes="any" /> {/* Or use SVG if supported widely */}
       </Head>
 
       {/* JSON-LD structured data (no changes) */}

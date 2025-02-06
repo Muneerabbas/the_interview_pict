@@ -327,7 +327,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Featured Interview Stories 🌟</h2> {/* Adjusted font size for mobile */}
         <ScrollableSection>
           {fetchedFeaturedStories.map((story, index) => (
-            <Link key={index} href={`${process.env.BASE_URL}/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
+            <Link key={index} href={`https://www.pict.life/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
               <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
             </Link>
           ))}
@@ -350,7 +350,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🏢 Company</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {companies.map((company) => (
-              <Link key={company} href={`${process.env.BASE_URL}/search/${company}`} target="_blank" rel="noopener noreferrer">
+              <Link key={company} href={`https://www.pict.life/search/${company}`} target="_blank" rel="noopener noreferrer">
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${companyColors[company].text} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {company}
                 </div>
@@ -364,7 +364,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🎓 Batch</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {batchYears.map((year) => (
-              <Link key={year} href={`${process.env.BASE_URL}/search/${year}`} target="_blank" rel="noopener noreferrer">
+              <Link key={year} href={`https://www.pict.life/search/${year}`} target="_blank" rel="noopener noreferrer">
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${batchColors[year]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {year}
                 </div>
@@ -378,7 +378,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🌱 Branch</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {branches.map((branch) => (
-              <Link key={branch} href={`${process.env.BASE_URL}/search/${branch}`} target="_blank" rel="noopener noreferrer">
+              <Link key={branch} href={`https://www.pict.life/search/${branch}`} target="_blank" rel="noopener noreferrer">
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${branchColors[branch]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {branch}
                 </div>
@@ -394,7 +394,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Top Interview Stories 🔥</h2> {/* Adjusted font size for mobile */}
         <ScrollableSection>
           {fetchedTopStories.map((story, index) => (
-            <Link key={index} href={`${process.env.BASE_URL}/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
+            <Link key={index} href={`https://www.pict.life/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
               <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
             </Link>
           ))}

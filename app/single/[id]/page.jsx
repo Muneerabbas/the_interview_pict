@@ -35,8 +35,8 @@ export default async function SimilarExperience({ params }) {
   };
 
   try {
-    const apiUrl = `${process.env.BASE_URL}/api/exp?uid=${id}`;
-    const feedUrl = `${process.env.BASE_URL}/api/feed`;
+    const apiUrl = `https://www.pict.life/api/exp?uid=${id}`;
+    const feedUrl = `https://www.pict.life/api/feed`;
 
     const [expResponse, feedResponse] = await Promise.all([
       fetch(apiUrl, { next: { revalidate: revalidateTime } }), // Enable ISR for apiUrl
@@ -62,14 +62,31 @@ export default async function SimilarExperience({ params }) {
     articles = articles.filter((article) => article.uid !== id);
     articles = articles.filter((article, index) => articles.findIndex((a) => a.uid === article.uid) === index);
 
+     // --- Send request to backend for view count ---
+     try {
+      const viewCountUrl = `https://www.pict.life/api/exp?uid=${id}`; // Replace with your actual backend endpoint for view count
+      await fetch(viewCountUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id }), // Send the article ID to the backend
+      });
+      // Optionally handle success or further actions here
+    } catch (viewCountError) {
+      console.error("Error sending view count to backend:", viewCountError);
+    
+    }
+    
+
 
   } catch (error) {
     console.error("Error fetching data:", error);
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
 
-
-  const articleUrl = `${process.env.BASE_URL}/single/${id}`;
+  console.log("process.env.BASE_URL:", process.env.BASE_URL);
+  const articleUrl = `https://www.pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
   const profilePicUrl = data.profile_pic || `@/public/logo.svg`; // Fallback image if profile_pic is missing
 
@@ -140,7 +157,7 @@ export default async function SimilarExperience({ params }) {
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: `${process.env.BASE_URL}/logo.svg`
+              url: `https://www.pict.life/logo.svg`
             }
           },
           description: articleDescription,

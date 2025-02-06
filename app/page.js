@@ -8,7 +8,7 @@ const revalidateTime = 300; // Revalidate every 60 seconds (1 minute) for ISR
 async function fetchFeaturedStories() {
     const itemsPerPage = 6;
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/feed?itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`https://www.pict.life/api/feed?itemsPerPage=${itemsPerPage}`, {
             next: { revalidate: revalidateTime }, // Enable ISR for this fetch
         });
         if (!response.ok) {
@@ -25,7 +25,7 @@ async function fetchFeaturedStories() {
 // Fetch Top Stories function (reusable)
 async function fetchTopStories() {
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/topStories`, {
+        const response = await fetch(`https://www.pict.life/api/topStories`, {
             next: { revalidate: revalidateTime }, // Enable ISR for this fetch
         });
         if (!response.ok) {

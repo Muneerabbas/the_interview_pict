@@ -1,4 +1,5 @@
 import MarkdownRenderer from "@/components/Markdown";
+import { Metadata, ResolvingMetadata } from 'next/types';
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
@@ -8,6 +9,52 @@ import ShareButton from "@/components/ShareButton";
 
 // Define revalidation time (in seconds) for ISR
 const revalidateTime = 300; // Revalidate every 60 seconds (1 minute) - adjust as needed
+
+export async function generateMetadata({ params }) {
+  // Fetch data
+  const id = params.id;
+  const apiUrl = `https://www.pict.life/api/exp?uid=${id}`;
+  const response = await fetch(apiUrl, { next: { revalidate: revalidateTime } });
+  const data = await response.json();
+
+  const articleUrl = `https://www.pict.life/single/${id}`;
+  const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
+
+  return {
+    title: 'theInterview🚀',
+    description: "Share Your Interview Journey 🚀\nLearn from real experiences. Share your story. Help others succeed. ✨",
+    keywords: `${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`,
+    authors: [{ name: data.name }],
+    openGraph: {
+      title: 'theInterview🚀',
+      description: "Share Your Interview Journey 🚀\nLearn from real experiences. Share your story. Help others succeed. ✨",
+      url: articleUrl,
+      siteName: 'theInterview',
+      images: [
+        {
+          url: 'https://www.pict.life/icon.png',
+          width: 1200,
+          height: 630,
+          alt: 'theInterview Logo',
+        },
+      ],
+      locale: 'en_US',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${data.company} Interview Experience: ${data.role} Position`,
+      description: articleDescription,
+      images: ['https://www.pict.life/icon.png'],
+      creator: '@yourtwitter', // Replace with your Twitter handle
+    },
+    icons: {
+      icon: [{ url: '/icon.png' }],
+    },
+    metadataBase: new URL('https://www.pict.life'),
+  };
+}
+
 
 export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {
@@ -39,8 +86,8 @@ export default async function SimilarExperience({ params }) {
     const feedUrl = `https://www.pict.life/api/feed`;
 
     const [expResponse, feedResponse] = await Promise.all([
-      fetch(apiUrl, { next: { revalidate: revalidateTime } }), // Enable ISR for apiUrl
-      fetch(feedUrl, { next: { revalidate: revalidateTime } }), // Enable ISR for feedUrl
+      fetch(apiUrl, { next: { revalidate: revalidateTime } }),
+      fetch(feedUrl, { next: { revalidate: revalidateTime } }),
     ]);
 
     const expDataResponse = await expResponse.json();
@@ -55,79 +102,34 @@ export default async function SimilarExperience({ params }) {
     };
     feedArticles = feedDataResponse;
 
-
-
-
     articles = [...feedArticles, ...searchArticles];
     articles = articles.filter((article) => article.uid !== id);
     articles = articles.filter((article, index) => articles.findIndex((a) => a.uid === article.uid) === index);
 
-     // --- Send request to backend for view count ---
-     try {
-      const viewCountUrl = `https://www.pict.life/api/exp?uid=${id}`; // Replace with your actual backend endpoint for view count
+    // View count tracking
+    try {
+      const viewCountUrl = `https://www.pict.life/api/exp?uid=${id}`;
       await fetch(viewCountUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: id }), // Send the article ID to the backend
+        body: JSON.stringify({ id: id }),
       });
-      // Optionally handle success or further actions here
     } catch (viewCountError) {
       console.error("Error sending view count to backend:", viewCountError);
-    
     }
-    
-
-
   } catch (error) {
     console.error("Error fetching data:", error);
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
 
-  console.log("process.env.BASE_URL:", process.env.BASE_URL);
   const articleUrl = `https://www.pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
-  const profilePicUrl = data.profile_pic || `@/public/icon.png`; // Fallback image if profile_pic is missing
+  const profilePicUrl = data.profile_pic || `@/public/icon.png`;
 
   return (
     <>
-        <Head>
-        {/* ... other meta tags ... */}
-        <title>{`theInterview🚀`}</title>
-        <meta name="description" content="Share Your Interview Journey 🚀
-Learn from real experiences. Share your story. Help others succeed. ✨
-
-" />
-        <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
-        <meta name="author" content={data.name} />
-        {/* Add preconnect link */}
-        <link rel="preconnect" href={process.env.BASE_URL} />
-        
-        {/* Open Graph tags */}
-        <meta property="og:title" content={`theInterview🚀`} />
-        <meta property="og:description" content="Share Your Interview Journey 🚀
-Learn from real experiences. Share your story. Help others succeed. ✨" />
-        <meta property="og:image" content="https://www.pict.life/icon.png" />
-{/* Use profilePicUrl or fallback to /icon.png */}
-        <meta property="og:image:alt" content={`https://www.pict.life/icon.png`} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={articleUrl} />
-        <meta property="og:site_name" content="theInterview" />
-
-        {/* Twitter Card tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
-        <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content="https://www.pict.life/icon.png" /> {/* Use profilePicUrl or fallback to /icon.png */}
-        <meta name="twitter:image:alt" content={`${data.name}'s Profile Picture`} />
-        {/* ... other twitter tags ... */}
-
-        {/* Favicon (add this if not already present) */}
-        <link rel="icon" href="/icon.png" type="image/png" sizes="any" /> {/* Or use SVG if supported widely */}
-      </Head>
-
-      {/* JSON-LD structured data (no changes) */}
       <JsonLd
         item={{
           "@context": "https://schema.org",

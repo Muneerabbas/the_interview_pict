@@ -187,7 +187,7 @@ export default async function SimilarExperience({ params }) {
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-2 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <GraduationCap size={16} className="text-blue-600" aria-hidden="true" />
-                <span className="truncate">{data.branch}</span>
+                <span className="truncate">{data.branch} {data.batch}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Building2 size={16} className="text-blue-600" aria-hidden="true" />

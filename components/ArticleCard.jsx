@@ -4,7 +4,7 @@ import React from 'react';
 import { Building2, Briefcase, GraduationCap, CalendarDays, Eye } from 'lucide-react'; // Make sure these are correct imports
 
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, role, batch, date, views, uid } = article;
+  const { profile_pic, name, company, role, batch, date, views, uid ,branch} = article;
 
   // Format the date
   const formattedDate = new Date(date).toLocaleDateString();
@@ -38,7 +38,7 @@ const ArticleCard = ({ article }) => {
               </div>
               <div className="flex items-center gap-1.5 text-blue-600">
                 <GraduationCap size={14} />
-                <span className="text-[#1D1D1D]">{batch}</span>
+                <span className="text-[#1D1D1D]">{branch} {batch}</span>
               </div>
               <div className="flex items-center gap-1.5 text-blue-600">
                 <CalendarDays size={14} />

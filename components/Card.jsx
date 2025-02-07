@@ -38,12 +38,12 @@ const ProfileCard = ({
 
   const handleReadMore = (e) => {
     e.stopPropagation();
-    console.log("ProfileCard: handleReadMore START"); // Debugging log
+    console.log("ProfileCard: handleReadMore START");
     setGlobalLoading(true);
-    console.log("ProfileCard: setGlobalLoading(true) called"); // Debugging log
+    console.log("ProfileCard: setGlobalLoading(true) called");
     router.push(`/single/${profile.uid}`);
-    console.log("ProfileCard: router.push called"); // Debugging log
-    console.log("ProfileCard: handleReadMore END"); // Debugging log
+    console.log("ProfileCard: router.push called");
+    console.log("ProfileCard: handleReadMore END");
   };
 
   const handleEdit = (e) => {
@@ -136,22 +136,22 @@ const ProfileCard = ({
           {/* Profile Info */}
           <div className="flex-1 min-w-0">
             <h2 className="text-lg font-bold text-[#1D1D1D] truncate group-hover:text-blue-600">{profileName}</h2>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-[#B0B3B8]">
+            <div className="flex flex-wrap items-center sm:justify-start gap-1 md:gap-2 text-sm text-[#B0B3B8]"> {/* UPDATED GAP AND ADDED sm:justify-start */}
               <div className="flex items-center gap-1">
                 <GraduationCap size={14} className="text-blue-600" />
-                <span className="truncate">{profile.branch}</span>
+                <span className="truncate">{profile.branch}</span> <span className="truncate">{profile.batch}</span>
               </div>
-              <span>•</span>
+              <span className="hidden sm:inline">•</span> {/* HIDE DOT ON SMALL SCREENS */}
               <div className="flex items-center gap-1">
                 <Building2 size={14} className="text-blue-600" />
                 <span className="truncate">{profile.company}</span>
               </div>
-              <span>•</span>
+              <span className="hidden sm:inline">•</span> {/* HIDE DOT ON SMALL SCREENS */}
               <div className="flex items-center gap-1">
                 <Briefcase size={14} className="text-blue-600" />
                 <span className="truncate">{profile.role}</span>
               </div>
-              <span>•</span>
+              <span className="hidden sm:inline">•</span> {/* HIDE DOT ON SMALL SCREENS */}
               <div className="flex items-center gap-1">
                 <Eye size={14} className="text-blue-600" />
                 <span>{profile.views} Reads</span>

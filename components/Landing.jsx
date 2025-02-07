@@ -75,18 +75,20 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const mobileMenuRef = useRef(null);
+  const mobileMenuButtonRef = useRef(null); // ADD: Ref for mobile menu button
   const [isVisible, setIsVisible] = useState(false);
   const [storyCardColors, setStoryCardColors] = useState({});
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || []); // Use props, fallback to empty array
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || []); // Use props, fallback to empty array
-
+  const [activeSection, setActiveSection] = useState('Home'); // ADD: State to track active section
 
   const navItems = [
-    { href: '/home', label: 'Home' },
-    { href: '#featured', label: 'Featured Stories' },
-    { href: '#topstories', label: 'Top Stories' },
-    { href: '#companyspecific', label: 'Search Experience' },
-    { href: '/post', label: 'Share Experience' }
+    { href: '/', label: 'Home', sectionId: 'hero' }, // ADD: sectionId, Changed href to "/" for landing page home
+    { href: '/home', label: 'Feed', sectionId: 'feed' }, // ADDED: Feed nav item
+    { href: '#featured', label: 'Featured Stories', sectionId: 'featured' }, // ADD: sectionId
+    { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' }, // ADD: sectionId
+    { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' }, // ADD: sectionId
+    { href: '/post', label: 'Share Experience', sectionId: 'share' } // ADD: sectionId
   ];
 
   const blogPosts = [
@@ -145,8 +147,8 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
     'Microsoft': { bg: 'bg-blue-600', text: 'text-blue-600' },
     'Palo Alto': { bg: 'bg-orange-600', text: 'text-orange-600' },
     'ZS Associates': { bg: 'bg-red-700', text: 'text-red-700' },
-    'TCS': { bg: 'bg-blue-800', text: 'text-blue-800' },
-    'Infosys': { bg: 'bg-blue-600', text: 'text-blue-600' }
+    'TCS': { bg: 'bg-blue-800', text: 'bg-blue-800' },
+    'Infosys': { bg: 'bg-blue-600', text: 'bg-blue-600' }
   };
 
   const batchColors = {
@@ -197,7 +199,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.md:hidden')) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !(mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(event.target))) { // MODIFIED: Check if click is NOT inside mobile menu button ref
         setIsMobileMenuOpen(false);
       }
     };
@@ -220,6 +222,29 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
     setStoryCardColors(colors);
   }, [fetchedFeaturedStories, fetchedTopStories]);
 
+  useEffect(() => { // ADD: useEffect to handle active section based on scroll
+    const handleScroll = () => {
+      const sections = navItems.map(item => document.getElementById(item.sectionId)).filter(Boolean);
+      let currentSection = 'Home'; // Default to Home
+
+      for (const section of sections) {
+        if (!section) continue; // Skip if section element is not found
+
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom >= 150) { // Adjust offset as needed
+          currentSection = navItems.find(item => item.sectionId === section.id)?.label || currentSection;
+          break; // Exit loop once active section is found
+        }
+      }
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check on load
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [navItems, setActiveSection]);
+
 
   return (
     <main className="min-h-screen">
@@ -239,7 +264,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-gray-800 hover:text-blue-600 transition duration-300"
+                  className={`text-gray-800  transition duration-300 rounded-md px-3 py-2 hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-white bg-blue-600 ' : 'hover:bg-blue-600 hover:text-white'}`} // ADD: Hover and Active styling
                 >
                   {item.label}
                 </Link>
@@ -257,6 +282,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-3 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300"
+                ref={mobileMenuButtonRef} // ADD: Ref to mobile menu button
               >
                 {isMobileMenuOpen ? (
                   <X size={28} className="text-blue-600" />
@@ -272,7 +298,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block p-4 text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                    className={`block p-4 text-gray-800 transition-colors duration-300 rounded-md hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-blue-600 bg-blue-100' : 'hover:bg-blue-100 hover:text-blue-600'}`} // ADD: Hover and Active styling for mobile
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.label}
@@ -285,7 +311,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-white text-center py-12 mt-16 sm:mt-24 px-4"> {/* Adjusted marginTop for mobile */}
+      <section id="hero" className="bg-white text-center py-12 mt-16 sm:mt-24 px-4"> {/* Adjusted marginTop for mobile */}
         <div className={`transform transition-all duration-700 ease-out ${
           isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
         }`}>

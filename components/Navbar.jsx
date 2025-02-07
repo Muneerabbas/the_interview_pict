@@ -131,7 +131,7 @@ export default function Navbar() {
                   <span className="text-sm mt-1">Home</span>
                 </Link>
                 <Link
-                  href="/home"
+                  href="/feed"
                   className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
                 >
                   <List size={24} className="text-blue-600" />
@@ -258,7 +258,7 @@ export default function Navbar() {
                   <span>Home</span>
                 </Link>
                 <Link
-                  href="/home"
+                  href="/feed"
                   className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
                 >
                   <List size={24} className="text-blue-600" />

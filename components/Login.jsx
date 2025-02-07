@@ -76,7 +76,7 @@ const Login = () => {
           
           if (window.location.pathname === "/login") {
             console.log("🚪 Redirecting to home");
-            router.push("/home");
+            router.push("/feed");
           }
         } catch (error) {
           console.error("❌ Failed to save user:", error);

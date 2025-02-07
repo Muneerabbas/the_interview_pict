@@ -96,7 +96,7 @@ const SearchPage = ({ params }) => {
         <form onSubmit={handleSearch} className="flex items-center gap-2 mb-6">
           <button
             type="button"
-            onClick={() => router.push("/home")}
+            onClick={() => router.push("/feed")}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200 focus:outline-none"
             aria-label="Back to home"
           >

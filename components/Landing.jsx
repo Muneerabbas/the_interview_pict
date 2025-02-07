@@ -84,7 +84,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
   const navItems = [
     { href: '/', label: 'Home', sectionId: 'hero' }, // ADD: sectionId, Changed href to "/" for landing page home
-    { href: '/home', label: 'Feed', sectionId: 'feed' }, // ADDED: Feed nav item
+    { href: '/feed', label: 'Feed', sectionId: 'feed' }, // ADDED: Feed nav item
     { href: '#featured', label: 'Featured Stories', sectionId: 'featured' }, // ADD: sectionId
     { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' }, // ADD: sectionId
     { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' }, // ADD: sectionId
@@ -317,7 +317,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12"> {/* Stacked buttons on mobile */}
             <Link
-              href="/home"
+              href="/feed"
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium transition-all duration-300 hover:scale-105"
             >
               Read Stories 📖
@@ -343,7 +343,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           ))}
         </ScrollableSection>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 sm:mt-8"> {/* Stacked buttons on mobile */}
-          <Link href="/home" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          <Link href="/feed" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             View All Stories 📚
           </Link>
           <Link href="/post" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">

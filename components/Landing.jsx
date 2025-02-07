@@ -92,12 +92,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   ];
 
   const blogPosts = [
-    {
-      author: 'Prakash Patil',
-      content: `"Currently using site religiously to prepare for interviews."`,
-      avatarBg: "bg-blue-600",
-      avatar: 'P'
-    },
+    
     {
       author: 'Siddhant Vishnu',
       content: `"Unbelivable stuff from seniors❤️ !Can't ask for more"`,
@@ -111,23 +106,12 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
       avatar: 'S'
     },
     {
-      author: 'Makrand Doiphode',
-      content: `"Reading these made me believe helped me understand interviews are not that tough"`,
-      avatarBg: "bg-gray-800",
-      avatar: 'M'
-    },
-    {
       author: 'Shreya Hiwarkar',
       content: `"Great work ! Really helpful"`,
       avatarBg: "bg-orange-400",
       avatar: 'S'
     },
-    {
-      author: 'Pranav Deshpande',
-      content: `"Bro mat bol mai bhai ni tera"`,
-      avatarBg: "bg-green-600",
-      avatar: 'P'
-    }
+    
   ];
 
   const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);

@@ -84,6 +84,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
   const navItems = [
     { href: '/', label: 'Home', sectionId: 'hero' }, // ADD: sectionId, Changed href to "/" for landing page home
+    { href: '/about', label: 'About Us', sectionId: 'about' }, // ADDED: About Us nav item
     { href: '/feed', label: 'Feed', sectionId: 'feed' }, // ADDED: Feed nav item
     { href: '#featured', label: 'Featured Stories', sectionId: 'featured' }, // ADD: sectionId
     { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' }, // ADD: sectionId
@@ -92,7 +93,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   ];
 
   const blogPosts = [
-    
+
     {
       author: 'Siddhant Vishnu',
       content: `"Unbelivable stuff from seniors❤️ !Can't ask for more"`,
@@ -111,7 +112,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
       avatarBg: "bg-orange-400",
       avatar: 'S'
     },
-    
+
   ];
 
   const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);
@@ -248,7 +249,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-gray-800  transition duration-300 rounded-md px-3 py-2 hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-white bg-blue-600 ' : 'hover:bg-blue-600 hover:text-white'}`} // ADD: Hover and Active styling
+                  className={`text-gray-800  transition duration-300 rounded-md px-3 py-2 hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-white bg-blue-600 ' : 'hover:bg-blue-600 hover:text-white'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-blue-600' : ''}`} // ADD: Hover and Active styling + Button styling for Share Experience
                 >
                   {item.label}
                 </Link>
@@ -282,7 +283,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`block p-4 text-gray-800 transition-colors duration-300 rounded-md hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-blue-600 bg-blue-100' : 'hover:bg-blue-100 hover:text-blue-600'}`} // ADD: Hover and Active styling for mobile
+                    className={`block p-4 text-gray-800 transition-colors duration-300 rounded-md hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-blue-600 bg-blue-100' : 'hover:bg-blue-100 hover:text-blue-600'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-gray-300' : ''}`} // ADD: Hover and Active styling for mobile + Button styling for Share Experience
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.label}
@@ -324,7 +325,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
             </Link>
             <Link
               href="/post"
-              className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-200 font-medium transition-all duration-300 hover:scale-105"
+              className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-medium transition-all duration-300 hover:scale-105 shadow-md" // Styled button
             >
               Share Your Story ✍️
             </Link>
@@ -346,7 +347,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <Link href="/feed" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             View All Stories 📚
           </Link>
-          <Link href="/post" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
+          <Link href="/post" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 shadow-md">  {/* Styled button */}
             Share Your Experience 📝
           </Link>
         </div>

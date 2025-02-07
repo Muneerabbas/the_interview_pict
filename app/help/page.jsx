@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "../../components/Navbar";
 
@@ -119,6 +119,8 @@ Good Luck, and Remember: Stay Confident! 😎
   const [height, setHeight] = useState("calc(100vh)");
   const [bottomMargin, setBottomMargin] = useState("0px");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [copyMessage, setCopyMessage] = useState("");
+  const messageTimeout = useRef(null); // Ref to hold the timeout
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -134,9 +136,32 @@ Good Luck, and Remember: Stay Confident! 😎
     }
   }, []);
 
+  const handleCopyClick = async () => {
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setCopyMessage("Template has been copied!");
 
-  const handleMarkdownChange = (value) => {
-    setMarkdown(value || "");
+      // Clear any existing timeout
+      if (messageTimeout.current) {
+        clearTimeout(messageTimeout.current);
+      }
+
+      // Set timeout to clear the message after 2 seconds
+      messageTimeout.current = setTimeout(() => {
+        setCopyMessage("");
+      }, 2000);
+
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+      setCopyMessage("Copy failed. Please try again.");
+       // Clear any existing timeout
+       if (messageTimeout.current) {
+        clearTimeout(messageTimeout.current);
+      }
+      messageTimeout.current = setTimeout(() => {
+        setCopyMessage("");
+      }, 2000);
+    }
   };
 
   return (
@@ -159,6 +184,15 @@ Good Luck, and Remember: Stay Confident! 😎
           <p className="text-gray-600 mb-4 text-center">
             To use this template, <strong className="underline">copy</strong> the content below and <strong className="underline">paste</strong> it into the Post section to share your experience.
           </p>
+
+          <div className="flex justify-end mb-2"> {/* Container for copy button, aligned to right */}
+            <button
+              onClick={handleCopyClick}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Copy Template Text
+            </button>
+          </div>
 
           {/* Editor Container with fixed height */}
           <div
@@ -186,8 +220,32 @@ Good Luck, and Remember: Stay Confident! 😎
             </div>
           </div>
 
+          {/* Floating copy message */}
+          {copyMessage && (
+            <div className="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-md shadow-lg animate-slide-in-right pointer-events-none">
+              {copyMessage}
+            </div>
+          )}
+
         </div>
       </div>
+       {/* Style for animation - Add to global styles or CSS file */}
+       <style jsx global>{`
+        @keyframes slideInRight {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        .animate-slide-in-right {
+          animation: slideInRight 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }

@@ -16,7 +16,7 @@ const Aboutus = () => {
         <div className='grid md:grid-cols-2 lg:grid-cols-3 justify-items-center'>
           <FounderCard img={himg} name="Himanshu Gholse" linkedin={"https://www.linkedin.com/in/himanshu-gholse-6604ba227/"} github={"https://github.com/himanshug-08"} des={"PICT'26 ENTC"} email="himanshugholse08@gmail.com" phone="+91 8805857669"/>
           <FounderCard img={nimg} name="Neeraj Magdum" linkedin={"https://www.linkedin.com/in/neerajmagdum/"} github={"https://github.com/nirz306"} des={"PICT'26 CE"} email="neerajmagdum10@gmail.com" phone="+91 7972065984"/>
-          <FounderCard img={niimg} name="Nilay Tayade" linkedin={"https://www.linkedin.com/in/nilay-tayade/"} github={"https://github.com/himanshug-08"} des={"PICT'26 CE"} email="" phone="+91 9370088933"/>
+          <FounderCard img={niimg} name="Nilay Tayade" linkedin={"https://www.linkedin.com/in/nilay-tayade/"} github={"https://github.com/himanshug-08"} des={"PICT'26 CE\nUpcoming Barclays Intern"} email="" phone="+91 9370088933"/>
         </div>
 
         <section className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md p-12 mt-20 border border-gray-100 relative overflow-hidden"> {/* relative and overflow-hidden for section bubbles */}

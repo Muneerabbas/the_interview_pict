@@ -109,12 +109,12 @@ export default function Footer() {
         <div className="mt-8 pt-4 border-t border-[#B0B3B8]">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-[#1D1D1D]">
-              © {new Date().getFullYear()} The Interview. All rights reserved.
+              © {new Date().getFullYear()} theInterview. All rights reserved.
             </p>
             <div className="flex items-center space-x-2 text-sm text-[#1D1D1D]">
               <span>Made with</span>
               <Heart size={16} className="text-[#FF5F5F] fill-[#FF5F5F]" />
-              <span>by The Interview Team</span>
+              <span className="underline">by <Link href='/about'>theInterview Team</Link></span>
             </div>
           </div>
         </div>

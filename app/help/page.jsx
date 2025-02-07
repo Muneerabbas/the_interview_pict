@@ -125,10 +125,10 @@ Good Luck, and Remember: Stay Confident! 😎
       const handleResize = () => {
         setIsSmallScreen(window.innerWidth < 768);
         setBottomMargin(window.innerWidth < 768 ? "80px" : "0px");
-        setHeight(window.innerWidth < 768 ? "calc(100vh - 50px)" : "calc(100vh)"); // Adjust height based on screen size
+        setHeight(window.innerWidth < 768 ? "calc(100vh - 50px)" : "calc(100vh)");
       };
 
-      handleResize(); // Set initial state on mount
+      handleResize();
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
@@ -152,9 +152,12 @@ Good Luck, and Remember: Stay Confident! 😎
 
       <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
         <div className="max-w-7xl mx-auto p-4 md:p-6">
-          <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Help & Template</h1>
+          <h1 className="text-2xl font-bold text-gray-700 mb-2 text-center">Help & Template</h1>
+          <p className="text-gray-700 font-semibold mb-2 text-center">
+            <span className="text-red-500">*</span> This is just a template. You cannot edit here. <span className="text-red-500">*</span>
+          </p>
           <p className="text-gray-600 mb-4 text-center">
-            Use this template to share your interview experiences. Fill in the details and help the community.
+            To use this template, <strong className="underline">copy</strong> the content below and <strong className="underline">paste</strong> it into the Post section to share your experience.
           </p>
 
           {/* Editor Container with fixed height */}
@@ -166,20 +169,20 @@ Good Luck, and Remember: Stay Confident! 😎
               minHeight: '100%',
             }}
           >
-            {/* Markdown Editor with Scrollable Content */}
+            {/* Markdown Editor with Scrollable Content - Read Only */}
             <div className="relative w-full h-full overflow-hidden">
               <div className="w-full h-full overflow-y-auto">
                 <MDEditor
                   value={markdown}
-                  onChange={handleMarkdownChange}
                   preview="live"
-                  hideToolbar={false}
+                  hideToolbar={true}  /* Hide toolbar to further discourage editing */
                   data-color-mode="light"
-                  className="w-full h-full"
+                  className="w-full h-full read-only-editor" /* Added custom class for read-only styling if needed */
                   height="100%"
+                  readOnly={true}      /* Make the editor read-only */
                 />
               </div>
-              <div className="mb-[800px]"></div>
+              <div className="mb-[800px]"></div> {/* Keep this for scroll, adjust if needed */}
             </div>
           </div>
 

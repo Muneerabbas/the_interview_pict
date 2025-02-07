@@ -8,7 +8,7 @@ import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
 
 // Define revalidation time (in seconds) for ISR
-const revalidateTime = 300; // Revalidate every 60 seconds (1 minute) - adjust as needed
+const revalidateTime = 90; // Revalidate every 60 seconds (1 minute) - adjust as needed
 
 export async function generateMetadata({ params }) {
   // Fetch data

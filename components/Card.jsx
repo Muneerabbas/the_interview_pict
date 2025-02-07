@@ -154,7 +154,7 @@ const ProfileCard = ({
               <span>•</span>
               <div className="flex items-center gap-1">
                 <Eye size={14} className="text-blue-600" />
-                <span>{profile.views} views</span>
+                <span>{profile.views} Reads</span>
               </div>
             </div>
           </div>

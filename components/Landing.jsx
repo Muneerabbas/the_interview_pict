@@ -63,7 +63,7 @@ const StoryCard = ({ story, avatarColor }) => {
       <p className="text-left mb-2 line-clamp-3 text-sm sm:text-base">{story.exp_text}</p>
       <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story.batch}</p>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600 text-xs sm:text-sm">Views: {story.views || '0'}</span>
+        <span className="text-gray-600 text-xs sm:text-sm">Reads: {story.views || '0'}</span>
       </div>
     </div>
   );

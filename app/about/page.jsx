@@ -67,7 +67,7 @@ const Aboutus = () => {
                 name="Nilay Tayade"
                 linkedin="https://www.linkedin.com/in/nilay-tayade/"
                 github="https://github.com/nilaytayade"
-                des="PICT'26 CE\nUpcoming Barclays Intern"
+                des={<><span>PICT'26 CE</span><br /><span>Upcoming Barclays Intern</span></>}
                 email="nilaytayadee@gmail.com"
                 phone="+91 9370088933"
               />

@@ -8,6 +8,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 const db = client.db("int-exp");
 const experience = db.collection("experience");
 const user = db.collection("user");
+const backup = db.collection("backup");
 
 // Ensure MongoDB is connected
 (async () => {
@@ -37,6 +38,9 @@ export async function POST(req) {
     // Save experience to DB
     const now = new Date().toISOString();
     const result = await experience.insertOne({
+      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,email
+    });
+    const bc = await backup.insertOne({
       uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,email
     });
 

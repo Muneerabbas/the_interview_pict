@@ -40,7 +40,7 @@ const Aboutus = () => {
         </div>
 
         {/* Team Content - Centered vertically with reduced gap */}
-        <div className='flex-grow flex flex-col justify-center -mt-16'>
+        <div className='flex-grow flex flex-col justify-center lg:-mt-16 mt-0'> {/* Adjusted margin for mobile */}
           <div className='container mx-auto px-6'>
             <h1 className='text-4xl font-bold text-center mb-12 text-gray-900'>Team</h1>
             <div className='founder flex flex-col lg:flex-row gap-8 justify-center items-center'>

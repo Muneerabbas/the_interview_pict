@@ -22,6 +22,7 @@ const geistMono = Geist_Mono({
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const isSearchPage = pathname?.startsWith("/search/");
+  const isAboutPage = pathname?.startsWith("/about");
 
   return (
     <html lang="en">
@@ -32,7 +33,7 @@ export default function RootLayout({ children }) {
         <SessionProvider>{children}</SessionProvider>
 
         {/* Conditionally render Footer */}
-        {!isSearchPage && <Footer />}
+        {!isSearchPage && !isAboutPage && <Footer />  }
 
         {/* Google Analytics Integration */}
         <GoogleAnalytics gaId="G-EBQQJCL50P" /> {/* Add GoogleAnalytics component here with your GA4 Measurement ID */}

@@ -7,6 +7,12 @@ import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
 import ProfileCard from '../../components/Card';
 
+const LoadingScreen = () => ( // LoadingScreen component - Ensure this is exactly the same as in HomePage
+    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+);
+
 const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
@@ -66,17 +72,7 @@ const ProfilePage = () => {
       <div className="min-h-screen bg-[#F0F2F5]">
         <Navbar />
 
-        {globalLoading && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <div className="flex items-center justify-center">
-                <Loader2 className="animate-spin text-blue-600" size={32} />
-                <span className="ml-3 text-[#1D1D1D] text-lg font-semibold">Loading...</span>
-                {console.log("ProfilePage: Loading indicator rendered (globalLoading is true)")}  // Debugging log - loading indicator rendering
-              </div>
-            </div>
-          </div>
-        )}
+        {globalLoading && <LoadingScreen />} {/* ADDED: LoadingScreen component here */}
 
         <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10 ">
           <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
@@ -143,17 +139,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {globalLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin text-blue-600" size={32} />
-              <span className="ml-3 text-[#1D1D1D] text-lg font-semibold">Loading...</span>
-              {/* {console.log("ProfilePage: Loading indicator rendered (globalLoading is true)")} // Debugging log - loading indicator rendering */}
-            </div>
-          </div>
-        </div>
-      )}
+      {globalLoading && <LoadingScreen />} {/* UPDATED: Replaced existing loading UI with LoadingScreen */}
 
       <div className="max-w-5xl mx-auto px-4 ">
         <div className="flex items-center justify-between mb-6">

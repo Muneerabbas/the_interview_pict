@@ -25,6 +25,9 @@ export default function HomePage() {
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isShareButtonLoading, setIsShareButtonLoading] = useState(false); // ADDED: Loading state for Share button
 
+    console.log("HomePage Component Rendered"); // ADDED: Log when HomePage renders
+    console.log("Initial globalLoading:", globalLoading); // ADDED: Log initial globalLoading
+
     const fetchProfiles = async (pageNumber, itemsPerPage) => {
         setPageLoading(true);
         try {
@@ -77,16 +80,7 @@ export default function HomePage() {
             <Navbar />
             {isShareButtonLoading && <LoadingScreen />} {/* ADDED: Conditional rendering of LoadingScreen */}
 
-            {globalLoading && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg p-6 shadow-lg">
-                        <div className="flex items-center justify-center">
-                            <Loader2 className="animate-spin text-blue-600" size={32} />
-                            <span className="ml-3 text-[#1D1D1D] text-lg font-semibold">Processing...</span>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {globalLoading && <LoadingScreen />} {/* UPDATED: Replaced existing loading UI with LoadingScreen */}
 
 
             <div className="max-w-4xl mx-auto px-4 pt-16 pb-12">
@@ -133,7 +127,7 @@ export default function HomePage() {
                                 profile={profile}
                                 width="w-full"
                                 height="min-h-[280px]"
-                                setGlobalLoading={setGlobalLoading}
+                                setGlobalLoading={setGlobalLoading} // Pass setGlobalLoading here
                             />
                         ))
                     )}

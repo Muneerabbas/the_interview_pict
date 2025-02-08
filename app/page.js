@@ -2,11 +2,11 @@
 import LandingPage from '@/components/Landing';
 
 // Define revalidation time (in seconds) for ISR
-const revalidateTime = 300; // Revalidate every 60 seconds (1 minute) for ISR
+const revalidateTime = 180; // Revalidate every 60 seconds (1 minute) for ISR
 
 // Fetch Featured Stories function (reusable)
 async function fetchFeaturedStories() {
-    const itemsPerPage = 6;
+    const itemsPerPage = '30';
     try {
         const response = await fetch(`https://www.pict.life/api/feed?itemsPerPage=${itemsPerPage}`, {
             next: { revalidate: revalidateTime }, // Enable ISR for this fetch

@@ -6,7 +6,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 export async function GET(req) {
   try {
     const page = parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const ITEMS_PER_PAGE = 10; // Changed to 3 items per page
+    const ITEMS_PER_PAGE = 30; // Changed to 3 items per page
 
     await client.connect();
     const db = client.db("int-exp");
@@ -26,7 +26,3 @@ export async function GET(req) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
-
-
-// barclays , masatercard , bmc , eQ , BNY , siemens , arista , tracelink , phonepe , microsoft , palo alto , ZS associates, TCS , Infosys 
-// branch 

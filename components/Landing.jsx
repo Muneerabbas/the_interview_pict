@@ -5,6 +5,7 @@ import Link from 'next/link'
 import logo from "../public/icon.svg"
 import Image from 'next/image'
 import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { marked } from 'marked'; // ADDED: Import marked
 
 // Reusable ScrollableSection component
 const ScrollableSection = ({ children }) => {
@@ -49,6 +50,9 @@ const ScrollableSection = ({ children }) => {
 
 // StoryCard component
 const StoryCard = ({ story, avatarColor }) => {
+  // Parse markdown to HTML
+  const htmlText = marked(story.exp_text || ''); // ADDED: Parse story.exp_text to HTML using marked, handle null
+
   return (
     <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm min-w-[280px] max-w-[350px] sm:min-w-[300px] sm:max-w-[300px] hover:shadow-md transition-shadow duration-300">
       <div className="flex items-center gap-4 mb-4">
@@ -60,7 +64,10 @@ const StoryCard = ({ story, avatarColor }) => {
           <p className="text-gray-600 text-sm sm:text-base">{story.role}</p>
         </div>
       </div>
-      <p className="text-left mb-2 line-clamp-3 text-sm sm:text-base">{story.exp_text}</p>
+      <p
+        className="text-left mb-2 line-clamp-3 text-sm sm:text-base"
+        dangerouslySetInnerHTML={{ __html: htmlText }} // MODIFIED: Render HTML using dangerouslySetInnerHTML
+      />
       <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story.batch}</p>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 text-xs sm:text-sm">Reads: {story.views || '0'}</span>

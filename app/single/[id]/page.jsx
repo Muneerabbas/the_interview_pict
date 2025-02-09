@@ -6,6 +6,7 @@ import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
+import ScrollViewTracker from "@/components/ScrollViewTracker";
 
 // Define revalidation time (in seconds) for ISR
 const revalidateTime = 90; // Revalidate every 60 seconds (1 minute) - adjust as needed
@@ -106,19 +107,7 @@ export default async function SimilarExperience({ params }) {
     articles = articles.filter((article) => article.uid !== id);
     articles = articles.filter((article, index) => articles.findIndex((a) => a.uid === article.uid) === index);
 
-    // View count tracking
-    try {
-      const viewCountUrl = `https://www.pict.life/api/exp?uid=${id}`;
-      await fetch(viewCountUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: id }),
-      });
-    } catch (viewCountError) {
-      console.error("Error sending view count to backend:", viewCountError);
-    }
+
   } catch (error) {
     console.error("Error fetching data:", error);
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
@@ -234,6 +223,7 @@ export default async function SimilarExperience({ params }) {
         </section>
       </article>
       <div className='h-[30px]'></div>
+      <ScrollViewTracker id = {id} />
     </>
   );
 }

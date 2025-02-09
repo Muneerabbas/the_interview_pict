@@ -172,7 +172,7 @@ const ProfileCard = ({
               <span className="hidden sm:inline">•</span> {/* Separator for larger screens only */}
               <div className="flex items-center gap-1">
                 <Eye size={12} className="text-blue-600" />
-                <span>{profile.views} views</span>
+                <span>{profile.views} Reads</span>
               </div>
             </div>
           </div>

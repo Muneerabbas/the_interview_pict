@@ -25,8 +25,8 @@ export default function HomePage() {
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isShareButtonLoading, setIsShareButtonLoading] = useState(false); // ADDED: Loading state for Share button
 
-    console.log("HomePage Component Rendered"); // ADDED: Log when HomePage renders
-    console.log("Initial globalLoading:", globalLoading); // ADDED: Log initial globalLoading
+    // console.log("HomePage Component Rendered"); // ADDED: Log when HomePage renders
+    // console.log("Initial globalLoading:", globalLoading); // ADDED: Log initial globalLoading
 
     const fetchProfiles = async (pageNumber, itemsPerPage) => {
         setPageLoading(true);

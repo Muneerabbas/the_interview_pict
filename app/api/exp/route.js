@@ -24,7 +24,7 @@ export async function GET(req) {
     // Fetch document & increment views in one atomic operation
     const data = await collection.findOneAndUpdate(
       { uid },
-      { $inc: { views: 7 } }, // Increment views
+      { $inc: { views: 1 } }, // Increment views
       { returnDocument: "after" } // Return updated document
     );
 

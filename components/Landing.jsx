@@ -5,7 +5,7 @@ import Link from 'next/link'
 import logo from "../public/icon.svg"
 import Image from 'next/image'
 import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
-import { marked } from 'marked'; // ADDED: Import marked
+import { marked } from 'marked'; // ADDED: Import marked - but will not be used for rendering HTML now
 
 // Reusable ScrollableSection component
 const ScrollableSection = ({ children }) => {
@@ -50,8 +50,33 @@ const ScrollableSection = ({ children }) => {
 
 // StoryCard component
 const StoryCard = ({ story, avatarColor }) => {
-  // Parse markdown to HTML
-  const htmlText = marked(story.exp_text || ''); // ADDED: Parse story.exp_text to HTML using marked, handle null
+  // Remove markdown formatting characters
+  let plainText = story.exp_text || '';
+
+  // Remove bold and italic markers
+  plainText = plainText.replace(/\*\*|_/g, '');
+  plainText = plainText.replace(/__/g, '');
+  plainText = plainText.replace(/\*/g, '');
+  plainText = plainText.replace(/_/g, '');
+
+  // Remove headings (lines starting with #, ##, ### etc.)
+  plainText = plainText.replace(/^#+\s/gm, ''); // Remove headings like # Heading, ## Subheading
+
+  // Remove lists (unordered and ordered)
+  plainText = plainText.replace(/^[\s]*[*+-]\s/gm, ''); // Remove unordered list markers like * item, - item, + item
+  plainText = plainText.replace(/^[\s]*\d+\.\s/gm, ''); // Remove ordered list markers like 1. item, 2. item
+
+  // Remove blockquotes (lines starting with >)
+  plainText = plainText.replace(/^>\s/gm, ''); // Remove blockquote markers like > quote
+
+  // Remove inline code (``...``)
+  plainText = plainText.replace(/`([^`]+)`/g, '$1'); // Replace `code` with code
+
+  // Remove horizontal rules (lines consisting of ---, ***, or ___)
+  plainText = plainText.replace(/^[-*_]{3,}$/gm, '');
+
+    // remove extra spaces and lines
+    plainText = plainText.replace(/[\r\n]+/g, ' ').trim(); // Replace line breaks with spaces and trim
 
   return (
     <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm min-w-[280px] max-w-[350px] sm:min-w-[300px] sm:max-w-[300px] hover:shadow-md transition-shadow duration-300">
@@ -66,8 +91,9 @@ const StoryCard = ({ story, avatarColor }) => {
       </div>
       <p
         className="text-left mb-2 line-clamp-3 text-sm sm:text-base"
-        dangerouslySetInnerHTML={{ __html: htmlText }} // MODIFIED: Render HTML using dangerouslySetInnerHTML
-      />
+      >
+        {plainText}
+      </p>
       <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story.batch}</p>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 text-xs sm:text-sm">Reads: {story.views || '0'}</span>

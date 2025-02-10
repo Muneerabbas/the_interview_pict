@@ -10,9 +10,9 @@ const LoginPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to /home if the user is already authenticated
+    // Redirect to /feed if the user is already authenticated
     if (status === "authenticated") {
-      router.push("/home");
+      router.push("/feed");
     }
   }, [status, router]);
 

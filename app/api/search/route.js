@@ -18,26 +18,27 @@ async function main(search_text, page = 1) {
   const skip = (page - 1) * 10;
   
   const result = await experience
-    .aggregate([
-      {
-        $search: {
-          index: "main",
-          compound: {
-            should: [
-              { text: { query: search_text, path: "company", score: { boost: { value: 5 } }, fuzzy: {} } },
-              { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
-              { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
-              { text: { query: search_text, path: "exp_text", score: { boost: { value: 5 } }, fuzzy: {} } },
-              { text: { query: search_text, path: "branch", score: { boost: { value: 3 } }, fuzzy: {} } },
-              { text: { query: search_text, path: "batch", score: { boost: { value: 2 } }, fuzzy: {} } }
-            ]
-          }
+  .aggregate([
+    {
+      $search: {
+        index: "main",
+        compound: {
+          should: [
+            { text: { query: search_text, path: "company", score: { boost: { value: 5 } }, fuzzy: {} } },
+            { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
+            { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
+            { text: { query: search_text, path: "branch", score: { boost: { value: 10 } }, fuzzy: {} } },
+            { text: { query: search_text, path: "batch", score: { boost: { value: 20 } }} },  // Increased boost
+            { text: { query: search_text, path: "exp_text", score: { boost: { value: 2 } }, fuzzy: {} } }
+          ]
         }
-      },
-      { $skip: skip },
-      { $limit: 10 }
-    ])
-    .toArray();
+      }
+    },
+    { $skip: skip },
+    { $limit: 10 }
+  ])
+  .toArray();
+
     
   return result;
 }

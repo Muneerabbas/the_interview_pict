@@ -1,11 +1,61 @@
-import axios from "axios";
 import MarkdownRenderer from "@/components/Markdown";
+import { Metadata, ResolvingMetadata } from 'next/types';
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { Building2, GraduationCap, Briefcase, Eye } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
+import ScrollViewTracker from "@/components/ScrollViewTracker";
+
+// Define revalidation time (in seconds) for ISR
+const revalidateTime = 90; // Revalidate every 60 seconds (1 minute) - adjust as needed
+
+export async function generateMetadata({ params }) {
+  // Fetch data
+  const id = params.id;
+  const apiUrl = `https://www.pict.life/api/exp?uid=${id}`;
+  const response = await fetch(apiUrl, { next: { revalidate: revalidateTime } });
+  const data = await response.json();
+
+  const articleUrl = `https://www.pict.life/single/${id}`;
+  const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
+
+  return {
+    title: 'theInterview🚀',
+    description: "Share Your Interview Journey 🚀\nLearn from real experiences. Share your story. Help others succeed. ✨",
+    keywords: `${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`,
+    authors: [{ name: data.name }],
+    openGraph: {
+      title: 'theInterview🚀',
+      description: "Share Your Interview Journey 🚀\nLearn from real experiences. Share your story. Help others succeed. ✨",
+      url: articleUrl,
+      siteName: 'theInterview',
+      images: [
+        {
+          url: 'https://www.pict.life/icon.png',
+          width: 1200,
+          height: 630,
+          alt: 'theInterview Logo',
+        },
+      ],
+      locale: 'en_US',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${data.company} Interview Experience: ${data.role} Position`,
+      description: articleDescription,
+      images: ['https://www.pict.life/icon.png'],
+      creator: '@yourtwitter', // Replace with your Twitter handle
+    },
+    icons: {
+      icon: [{ url: '/icon.png' }],
+    },
+    metadataBase: new URL('https://www.pict.life'),
+  };
+}
+
 
 export default async function SimilarExperience({ params }) {
   if (!params || !params.id) {
@@ -33,33 +83,25 @@ export default async function SimilarExperience({ params }) {
   };
 
   try {
-    const apiUrl = `${process.env.BASE_URL}/api/exp?uid=${id}`;
-    const feedUrl = `${process.env.BASE_URL}/api/feed`;
+    const apiUrl = `https://www.pict.life/api/exp?uid=${id}`;
+    const feedUrl = `https://www.pict.life/api/feed`;
 
     const [expResponse, feedResponse] = await Promise.all([
-      axios.get(apiUrl),
-      axios.get(feedUrl),
+      fetch(apiUrl, { next: { revalidate: revalidateTime } }),
+      fetch(feedUrl, { next: { revalidate: revalidateTime } }),
     ]);
 
-    expData = expResponse.data;
+    const expDataResponse = await expResponse.json();
+    const feedDataResponse = await feedResponse.json();
+
+    expData = expDataResponse;
     data = {
       ...expData,
       profile_pic: expData.profile_pic?.replace(/"/g, ""),
       name: expData.name?.replace(/"/g, ""),
       exp_text: expData.exp_text?.replace(/"/g, ""),
     };
-    feedArticles = feedResponse.data;
-
-
-    // try {
-    //   const searchFeed = `https://pict.life/api/search?search=${data.company} ${data.branch}`;
-    //   const searchResponse = await axios.get(searchFeed);
-    //   searchArticles = searchResponse.data.result;
-    // } catch (searchError) {
-    //   console.error("Error fetching search data:", searchError);
-    //   // Handle search error, maybe display a message that related articles might be limited
-    // }
-
+    feedArticles = feedDataResponse;
 
     articles = [...feedArticles, ...searchArticles];
     articles = articles.filter((article) => article.uid !== id);
@@ -71,44 +113,12 @@ export default async function SimilarExperience({ params }) {
     return <div className="text-center text-lg text-gray-600 mt-10">Failed to load experience.</div>;
   }
 
-
-  const articleUrl = `${process.env.BASE_URL}/single/${id}`;
+  const articleUrl = `https://www.pict.life/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
+  const profilePicUrl = data.profile_pic || `@/public/icon.png`;
 
   return (
     <>
-      <Head>
-        <title>{`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`}</title>
-        <meta name="description" content={articleDescription} />
-        <meta name="keywords" content={`${data.company} Interview, ${data.role}, ${data.branch} Jobs, Interview Questions, ${data.batch} Placements, Technical Interview, Interview Tips, Career Advice, Job Interview Experience`} />
-        <meta name="author" content={data.name} />
-
-        {/* Open Graph tags */}
-        <meta property="og:title" content={`${data.company} Interview Experience: ${data.role} Position | ${data.name}'s Journey`} />
-        <meta property="og:description" content={articleDescription} />
-        <meta property="og:image" content={data.profile_pic} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={articleUrl} />
-        <meta property="og:site_name" content="PICT Life" />
-
-        {/* Twitter Card tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${data.company} Interview Experience: ${data.role} Position`} />
-        <meta name="twitter:description" content={articleDescription} />
-        <meta name="twitter:image" content={data.profile_pic} />
-
-        {/* Additional SEO tags */}
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
-        <link rel="canonical" href={articleUrl} />
-
-        {/* Article specific metadata */}
-        <meta property="article:published_time" content={new Date(data.date).toISOString()} />
-        <meta property="article:section" content="Interview Experiences" />
-        <meta property="article:tag" content={`${data.company}, ${data.role}, ${data.branch}`} />
-      </Head>
-
-      {/* JSON-LD structured data */}
       <JsonLd
         item={{
           "@context": "https://schema.org",
@@ -119,13 +129,13 @@ export default async function SimilarExperience({ params }) {
             name: data.name,
           },
           datePublished: new Date(data.date).toISOString(),
-          image: data.profile_pic,
+          image: profilePicUrl,
           publisher: {
             "@type": "Organization",
             name: "PICT Life",
             logo: {
               "@type": "ImageObject",
-              url: `${process.env.BASE_URL}/logo.png`
+              url: `https://www.pict.life/icon.png`
             }
           },
           description: articleDescription,
@@ -138,15 +148,15 @@ export default async function SimilarExperience({ params }) {
 
       <Navbar />
       <article className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 bg-white text-gray-800 py-10 sm:py-12 lg:py-16 mt-20 sm:mt-24 lg:mt-28 overflow-x-hidden">
-        {/* Profile Info Section */}
+        {/* Profile Info Section (no changes) */}
         <header className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 sm:mb-10 relative">
-          {/* ShareButton inside the profile */}
+          {/* ShareButton inside the profile (no changes) */}
           <ShareButton
             id={id}
             data={data}
           />
 
-          {/* Profile Image */}
+          {/* Profile Image (no changes) */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md flex-shrink-0">
             <img
               src={data.profile_pic || "/api/placeholder/80/80"}
@@ -156,17 +166,17 @@ export default async function SimilarExperience({ params }) {
             />
           </div>
 
-          {/* Profile Info */}
+          {/* Profile Info (no changes) */}
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
               {data.name}
             </h1>
 
-            {/* Info Grid */}
+            {/* Info Grid (no changes) */}
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-2 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <GraduationCap size={16} className="text-blue-600" aria-hidden="true" />
-                <span className="truncate">{data.branch}</span>
+                <span className="truncate">{data.branch} {data.batch}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Building2 size={16} className="text-blue-600" aria-hidden="true" />
@@ -178,11 +188,11 @@ export default async function SimilarExperience({ params }) {
               </div>
               <div className="flex items-center gap-1">
                 <Eye size={16} className="text-blue-600" aria-hidden="true" />
-                <span>{data.views} views</span>
+                <span>{data.views} Reads</span>
               </div>
             </div>
 
-            {/* Date */}
+            {/* Date (no changes) */}
             <time dateTime={new Date(data.date).toISOString()} className="text-sm text-gray-500">
               {formattedDate(data.date)}
             </time>
@@ -191,7 +201,7 @@ export default async function SimilarExperience({ params }) {
 
         <div className="border-t border-gray-300 my-6"></div>
 
-        {/* Main content */}
+        {/* Main content (no changes) */}
         <main className="mb-10">
           <div className="prose prose-lg max-w-none text-base text-gray-700">
             <MarkdownRenderer content={data.exp_text} />
@@ -199,10 +209,10 @@ export default async function SimilarExperience({ params }) {
         </main>
 
         <footer className="text-center text-sm text-gray-500 pt-5 border-t border-gray-200">
-          <p>Views: {data.views}</p>
+          <p>Reads: {data.views}</p>
         </footer>
 
-        {/* Related Articles */}
+        {/* Related Articles (no changes) */}
         <section className="mt-10">
           <h2 className="text-2xl font-semibold text-[#1D1D1D] mb-6">Related Experiences</h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -213,6 +223,7 @@ export default async function SimilarExperience({ params }) {
         </section>
       </article>
       <div className='h-[30px]'></div>
+      <ScrollViewTracker id = {id} />
     </>
   );
 }

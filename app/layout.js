@@ -1,11 +1,12 @@
-// layout.js
-"use client"; // Add this line
+// app/layout.js  <-- Make sure this is in your app/layout.js file
+"use client"; // Keep this line
 
 import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
-import Footer from ".././components/Footer"; // Adjust path to where your Footer component is located
-import { usePathname } from "next/navigation"; // Import usePathname
+import Footer from ".././components/Footer"; // Adjust path if needed
+import { usePathname } from "next/navigation";
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google'; // Import GoogleAnalytics
 
 // Custom fonts setup
 const geistSans = Geist({
@@ -19,21 +20,23 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname(); // Get the current path
-
-  // Check if the current path is `/search/[search]`
+  const pathname = usePathname();
   const isSearchPage = pathname?.startsWith("/search/");
+  const isAboutPage = pathname?.startsWith("/about");
 
   return (
     <html lang="en">
       <head>
-      <link rel="icon" type="image/png" href="/icon.png" />
+        <link rel="icon" type="image/png" href="/icon.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>{children}</SessionProvider>
 
         {/* Conditionally render Footer */}
-        {!isSearchPage && <Footer />}
+        {!isSearchPage && !isAboutPage && <Footer />  }
+
+        {/* Google Analytics Integration */}
+        <GoogleAnalytics gaId="G-EBQQJCL50P" /> {/* Add GoogleAnalytics component here with your GA4 Measurement ID */}
       </body>
     </html>
   );

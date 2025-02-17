@@ -24,9 +24,24 @@ export default function HomePage() {
     const [globalLoading, setGlobalLoading] = useState(false);
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isShareButtonLoading, setIsShareButtonLoading] = useState(false); // ADDED: Loading state for Share button
+    const [postCount, setPostCount] = useState(null);
 
     // console.log("HomePage Component Rendered"); // ADDED: Log when HomePage renders
     // console.log("Initial globalLoading:", globalLoading); // ADDED: Log initial globalLoading
+    useEffect(() => {
+        const fetchPostCount = async () => {
+            try {
+                const response = await axios.get("/api/postsCount");
+                setPostCount(response.data.count);
+                console.log("posts: ",response.data.count)
+            } catch (error) {
+                console.error("Error fetching post count:", error);
+            }
+        };
+    
+        fetchPostCount();
+    }, []);
+    
 
     const fetchProfiles = async (pageNumber, itemsPerPage) => {
         setPageLoading(true);
@@ -116,6 +131,9 @@ export default function HomePage() {
                     </div>
                 )}
 
+<div className="flex justify-end text-black font-bold p-2">
+    {postCount !== null ? postCount : "Loading..."} Posts
+</div>
                 <div className="space-y-6">
                     {/* Skeletons are visible until profiles are loaded */}
                     {pageLoading && page === 0 && profiles.length === 0 ? (

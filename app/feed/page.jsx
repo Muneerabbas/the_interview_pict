@@ -24,24 +24,9 @@ export default function HomePage() {
     const [globalLoading, setGlobalLoading] = useState(false);
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isShareButtonLoading, setIsShareButtonLoading] = useState(false); // ADDED: Loading state for Share button
-    const [postCount, setPostCount] = useState(null);
 
     // console.log("HomePage Component Rendered"); // ADDED: Log when HomePage renders
     // console.log("Initial globalLoading:", globalLoading); // ADDED: Log initial globalLoading
-    useEffect(() => {
-        const fetchPostCount = async () => {
-            try {
-                const response = await axios.get("/api/postsCount");
-                setPostCount(response.data.count);
-                console.log("posts: ",response.data.count)
-            } catch (error) {
-                console.error("Error fetching post count:", error);
-            }
-        };
-    
-        fetchPostCount();
-    }, []);
-    
 
     const fetchProfiles = async (pageNumber, itemsPerPage) => {
         setPageLoading(true);
@@ -115,7 +100,7 @@ export default function HomePage() {
                             Welcome, {session.user.name}
                         </h1>
 
-                        <Link href="/post" onClick={handleShareExperienceClick}> {/* MODIFIED: Added onClick handler */}
+                        <Link href="/post" onClick={handleShareExperienceClick} prefetch={true} scroll={false}> {/* MODIFIED: Added onClick handler */}
                             <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300 mt-4">
                                 Share Your Interview Experience
                             </button>
@@ -123,7 +108,7 @@ export default function HomePage() {
                     </div>
                 ) : (
                     <div className="bg-white rounded-xl shadow-md p-6 mb-8 text-center">
-                        <Link href="/post" onClick={handleShareExperienceClick}> {/* MODIFIED: Added onClick handler */}
+                        <Link href="/post" onClick={handleShareExperienceClick} prefetch={true} scroll={false}> {/* MODIFIED: Added onClick handler */}
                             <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300">
                                 Share Your Interview Experience
                             </button>
@@ -131,9 +116,6 @@ export default function HomePage() {
                     </div>
                 )}
 
-<div className="flex justify-end text-black font-bold p-2">
-    {postCount !== null ? postCount : "Loading..."} Posts
-</div>
                 <div className="space-y-6">
                     {/* Skeletons are visible until profiles are loaded */}
                     {pageLoading && page === 0 && profiles.length === 0 ? (

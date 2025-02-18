@@ -41,7 +41,7 @@ const ProfileCard = ({
     console.log("ProfileCard: handleReadMore START");
     setGlobalLoading(true);
     console.log("ProfileCard: setGlobalLoading(true) called from ReadMore");
-    router.push(`/single/${profile.uid}`);
+    router.push(`/single/${profile.uid}`); // prefetch={true} scroll={false} - Not applicable here, for <Link> components
     console.log("ProfileCard: router.push called from ReadMore");
     console.log("ProfileCard: handleReadMore END");
   };
@@ -49,7 +49,7 @@ const ProfileCard = ({
   const handleEdit = (e) => {
     e.stopPropagation();
     setIsLoading(true);
-    router.push(`/edit/${profile.uid}`);
+    router.push(`/edit/${profile.uid}`); // prefetch={true} scroll={false} - Not applicable here, for <Link> components
   };
 
   const handleDeleteClick = (e) => {
@@ -97,7 +97,7 @@ const ProfileCard = ({
       console.log("ProfileCard: handleCardClick START");
       setGlobalLoading(true);
       console.log("ProfileCard: setGlobalLoading(true) called from CardClick");
-      router.push(`/single/${profile.uid}`);
+      router.push(`/single/${profile.uid}`); // prefetch={true} scroll={false} - Not applicable here, for <Link> components
       console.log("ProfileCard: router.push called from CardClick");
       console.log("ProfileCard: handleCardClick END");
     }

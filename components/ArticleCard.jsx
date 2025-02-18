@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link'; // Import Link
 
 // Import your icons from a library or define them if they are custom
 import { Building2, Briefcase, GraduationCap, CalendarDays, Eye } from 'lucide-react'; // Make sure these are correct imports
@@ -10,8 +11,9 @@ const ArticleCard = ({ article }) => {
   const formattedDate = new Date(date).toLocaleDateString();
 
   return (
-    <a
+    <Link // Replace <a> with Link
       href={`/single/${uid}`}
+      prefetch={true} // Add prefetch={true}
       className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[#F0F2F5] overflow-hidden"
       aria-label={`Read the experience of ${name}`} // Adding accessibility
     >
@@ -55,7 +57,7 @@ const ArticleCard = ({ article }) => {
           <span className="text-sm">{views}</span>
         </div>
       </div>
-    </a>
+    </Link> // Closing Link tag
   );
 };
 

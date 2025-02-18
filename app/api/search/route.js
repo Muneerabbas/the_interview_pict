@@ -24,7 +24,7 @@ async function main(search_text, page = 1) {
         index: "main",
         compound: {
           should: [
-            { text: { query: search_text, path: "company", score: { boost: { value: 5 } }, fuzzy: {} } },
+            { text: { query: search_text, path: "company", score: { boost: { value: 8 } }} },
             { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
             { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
             { text: { query: search_text, path: "branch", score: { boost: { value: 10 } }, fuzzy: {} } },

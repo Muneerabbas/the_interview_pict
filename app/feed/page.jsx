@@ -132,7 +132,7 @@ export default function HomePage() {
                 )}
 
 <div className="flex justify-end text-black font-bold p-2">
-    {postCount !== null ? postCount : "Loading..."} Experiences
+    {postCount !== null ? postCount : "Loading..."}Posts
 </div>
                 <div className="space-y-6">
                     {/* Skeletons are visible until profiles are loaded */}

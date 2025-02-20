@@ -150,24 +150,17 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
   const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);
   const branches = ["CS", "IT", "EnTC", "AIDS", "EC"];
-  const companies = ["Barclays", "Mastercard", "BMC", "eQ", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe", "Microsoft", "Palo Alto", "ZS Associates", "TCS", "Infosys"];
+  const companies = ["Barclays", "Mastercard", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe"];
 
   const companyColors = {
     'Barclays': { bg: 'bg-blue-700', text: 'text-blue-700' },
     'Mastercard': { bg: 'bg-red-600', text: 'text-red-600' },
-    'BMC': { bg: 'bg-yellow-500', text: 'text-yellow-500' },
-    'eQ': { bg: 'bg-green-600', text: 'text-green-600' },
     'BNY': { bg: 'bg-purple-600', text: 'text-purple-600' },
     'Siemens': { bg: 'bg-teal-600', text: 'text-teal-600' },
     'Arista': { bg: 'bg-blue-500', text: 'text-blue-500' },
     'Tracelink': { bg: 'bg-indigo-600', text: 'text-indigo-600' },
     'PhonePe': { bg: 'bg-purple-700', text: 'text-purple-700' },
-    'Microsoft': { bg: 'bg-blue-600', text: 'text-blue-600' },
-    'Palo Alto': { bg: 'bg-orange-600', text: 'text-orange-600' },
-    'ZS Associates': { bg: 'bg-red-700', text: 'text-red-700' },
-    'TCS': { bg: 'bg-blue-800', text: 'bg-blue-800' },
-    'Infosys': { bg: 'bg-blue-600', text: 'bg-blue-600' }
-  };
+ };
 
   const batchColors = {
     2027: 'text-green-500',

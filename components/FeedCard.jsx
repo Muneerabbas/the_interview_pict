@@ -105,7 +105,9 @@ const FeedCard = ({
         {/* Footer Section */}
         <div className="mt-auto flex flex-col items-start">
           <div className="flex items-center gap-2">
-             {/* "Read More" Link REMOVED */}
+            <span className="text-blue-600 hover:text-[#8B77F9] font-medium text-xs sm:text-sm transition-colors duration-300">
+              Read More...
+            </span>
           </div>
           <div className="text-[10px] sm:text-xs text-[#B0B3B8] mt-1">
             {formattedDate}

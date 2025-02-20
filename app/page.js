@@ -2,7 +2,7 @@
 import LandingPage from '@/components/Landing';
 
 // Define revalidation time (in seconds) for ISR
-const revalidateTime = 180; // Revalidate every 60 seconds (1 minute) for ISR
+const revalidateTime = 1800; 
 
 // Fetch Featured Stories function (reusable)
 async function fetchFeaturedStories() {

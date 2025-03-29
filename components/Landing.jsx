@@ -152,24 +152,17 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
 
   const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);
   const branches = ["CS", "IT", "EnTC", "AIDS", "EC"];
-  const companies = ["Barclays", "Mastercard", "BMC", "eQ", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe", "Microsoft", "Palo Alto", "ZS Associates", "TCS", "Infosys"];
+  const companies = ["Barclays", "Mastercard", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe"];
 
   const companyColors = {
     'Barclays': { bg: 'bg-blue-700', text: 'text-blue-700' },
     'Mastercard': { bg: 'bg-red-600', text: 'text-red-600' },
-    'BMC': { bg: 'bg-yellow-500', text: 'text-yellow-500' },
-    'eQ': { bg: 'bg-green-600', text: 'text-green-600' },
     'BNY': { bg: 'bg-purple-600', text: 'text-purple-600' },
     'Siemens': { bg: 'bg-teal-600', text: 'text-teal-600' },
     'Arista': { bg: 'bg-blue-500', text: 'text-blue-500' },
     'Tracelink': { bg: 'bg-indigo-600', text: 'text-indigo-600' },
     'PhonePe': { bg: 'bg-purple-700', text: 'text-purple-700' },
-    'Microsoft': { bg: 'bg-blue-600', text: 'text-blue-600' },
-    'Palo Alto': { bg: 'bg-orange-600', text: 'text-orange-600' },
-    'ZS Associates': { bg: 'bg-red-700', text: 'text-red-700' },
-    'TCS': { bg: 'bg-blue-800', text: 'bg-blue-800' },
-    'Infosys': { bg: 'bg-blue-600', text: 'bg-blue-600' }
-  };
+ };
 
   const batchColors = {
     2027: 'text-green-500',
@@ -277,13 +270,14 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <div className="hidden lg:flex justify-between items-center">
             <div className="flex items-center space-x-2 text-2xl font-bold text-blue-600">
               <Image src={logo} alt="theInterview Logo" width={40} height={40} />
-              <Link href="/">theInterview</Link>
+              <Link href="/" prefetch={true}>theInterview</Link>
             </div>
             <div className="flex items-center space-x-6">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   className={`text-gray-800  transition duration-300 rounded-md px-3 py-2 hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-white bg-blue-600 ' : 'hover:bg-blue-600 hover:text-white'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-blue-600' : ''}`} // ADD: Hover and Active styling + Button styling for Share Experience
                 >
                   {item.label}
@@ -297,7 +291,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2 text-xl font-bold text-blue-600">
                 <Image src={logo} alt="theInterview Logo" width={40} height={40} />
-                <Link href="/">theInterview</Link>
+                <Link href="/" prefetch={true}>theInterview</Link>
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -318,6 +312,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch={true}
                     className={`block p-4 text-gray-800 transition-colors duration-300 rounded-md hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-blue-600 bg-blue-100' : 'hover:bg-blue-100 hover:text-blue-600'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-gray-300' : ''}`} // ADD: Hover and Active styling for mobile + Button styling for Share Experience
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -357,12 +352,14 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12"> {/* Stacked buttons on mobile */}
             <Link
               href="/feed"
+              prefetch={true}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium transition-all duration-300 hover:scale-105"
             >
               Read Stories 📖
             </Link>
             <Link
               href="/post"
+              prefetch={true}
               className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-medium transition-all duration-300 hover:scale-105 shadow-md" // Styled button
             >
               Share Your Story ✍️
@@ -376,16 +373,16 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Featured Interview Stories 🌟</h2> {/* Adjusted font size for mobile */}
         <ScrollableSection>
           {fetchedFeaturedStories.map((story, index) => (
-            <Link key={index} href={`https://www.pict.life/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
+            <Link key={index} href={`/single/${story.uid}`} prefetch={true}>
               <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
             </Link>
           ))}
         </ScrollableSection>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 sm:mt-8"> {/* Stacked buttons on mobile */}
-          <Link href="/feed" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          <Link href="/feed" prefetch={true} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
             View All Stories 📚
           </Link>
-          <Link href="/post" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 shadow-md">  {/* Styled button */}
+          <Link href="/post" prefetch={true} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 shadow-md">  {/* Styled button */}
             Share Your Experience 📝
           </Link>
         </div>
@@ -399,7 +396,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🏢 Company</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {companies.map((company) => (
-              <Link key={company} href={`https://www.pict.life/search/${company}`} target="_blank" rel="noopener noreferrer">
+              <Link key={company} href={`/search/${company}`} prefetch={true}>
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${companyColors[company].text} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {company}
                 </div>
@@ -413,7 +410,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🎓 Batch</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {batchYears.map((year) => (
-              <Link key={year} href={`https://www.pict.life/search/${year}`} target="_blank" rel="noopener noreferrer">
+              <Link key={year} href={`/search/${year}`} prefetch={true}>
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${batchColors[year]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {year}
                 </div>
@@ -427,7 +424,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
           <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🌱 Branch</h3> {/* Adjusted font size for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
             {branches.map((branch) => (
-              <Link key={branch} href={`https://www.pict.life/search/${branch}`} target="_blank" rel="noopener noreferrer">
+              <Link key={branch} href={`/search/${branch}`} prefetch={true}>
                 <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${branchColors[branch]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
                   {branch}
                 </div>
@@ -443,7 +440,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Top Interview Stories 🔥</h2> {/* Adjusted font size for mobile */}
         <ScrollableSection>
           {fetchedTopStories.map((story, index) => (
-            <Link key={index} href={`https://www.pict.life/single/${story.uid}`} target="_blank" rel="noopener noreferrer">
+            <Link key={index} href={`/single/${story.uid}`} prefetch={true}>
               <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
             </Link>
           ))}

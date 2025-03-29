@@ -6,6 +6,8 @@ import logo from "../public/icon.svg"
 import Image from 'next/image'
 import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
 import { marked } from 'marked'; // ADDED: Import marked - but will not be used for rendering HTML now
+import AdComponent from "@/components/AdComponent";
+
 
 // Reusable ScrollableSection component
 const ScrollableSection = ({ children }) => {
@@ -333,6 +335,9 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         <div className={`transform transition-all duration-700 ease-out ${
           isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
         }`}>
+          {/* Ad Placement */}
+      {/* <AdComponent slot="4811519147" /> */}
+
           <div className="relative w-20 h-20 mx-auto mb-6 sm:mb-8"> {/* Adjusted marginBottom for mobile */}
             <Image
               src={logo}

@@ -3,11 +3,14 @@ const nextConfig = {
     typescript: {
       ignoreBuildErrors: true,
     },
-    eslint: {
-      ignoreDuringBuilds: true,
-    },
     images: {
-      domains: ['randomuser.me'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'randomuser.me',
+          pathname: '/**',
+        },
+      ],
     }
   };
   

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { marked } from "marked";
 import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-react";
 import { useState } from "react";
+import ProfileAvatar from './ProfileAvatar';
 
 const ProfileCard = ({
   profile,
@@ -18,12 +19,12 @@ const ProfileCard = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fullText = profile.exp_text;
+  const fullText = profile?.exp_text || "";
   const truncatedText = fullText.slice(0, 150) + "...";
   const htmlTruncatedText = marked(truncatedText);
 
-  const profilePic = profile.profile_pic.replace(/\"/g, "");
-  const profileName = profile.name.replace(/\"/g, "");
+  const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
+  const profileName = profile?.name?.replace(/\"/g, "") || "";
 
   const formattedDate = new Date(profile.date).toLocaleString("en-US", {
     weekday: "long",
@@ -143,8 +144,8 @@ const ProfileCard = ({
           {/* Profile Image */}
           <div className="flex-shrink-0">
             <div className="w-12 h-12 sm:w-20 sm:h-20">
-              <img
-                src={profilePic || "/api/placeholder/80/80"}
+              <ProfileAvatar
+                src={profilePic}
                 alt="Profile"
                 className="w-full h-full rounded-full object-cover border-2 border-blue-600"
               />

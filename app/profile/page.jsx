@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
 import ProfileCard from '../../components/Card';
+import ProfileAvatar from '../../components/ProfileAvatar';
 
 const LoadingScreen = () => ( // LoadingScreen component - Ensure this is exactly the same as in HomePage
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
@@ -17,7 +18,7 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const profile_pic = session?.user?.image || "/api/placeholder/128/128";
+  const profile_pic = session?.user?.image;
   const name = session?.user?.name || "John Doe";
   const email = session?.user?.email || "john.doe@example.com";
   const [globalLoading, setGlobalLoading] = useState(false);
@@ -81,7 +82,7 @@ const ProfilePage = () => {
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden">
-                    <img
+                    <ProfileAvatar
                       src={profile_pic}
                       alt="Profile"
                       className="w-full h-full object-cover"
@@ -120,7 +121,7 @@ const ProfilePage = () => {
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="relative group">
                 <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
-                  <img
+                  <ProfileAvatar
                     src={profile_pic}
                     alt="Profile"
                     className="w-full h-full object-cover"

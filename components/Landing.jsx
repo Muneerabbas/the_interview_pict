@@ -53,7 +53,7 @@ const ScrollableSection = ({ children }) => {
 // StoryCard component
 const StoryCard = ({ story, avatarColor }) => {
   // Remove markdown formatting characters
-  let plainText = story.exp_text || '';
+  let plainText = story?.exp_text || '';
 
   // Remove bold and italic markers
   plainText = plainText.replace(/\*\*|_/g, '');
@@ -84,11 +84,11 @@ const StoryCard = ({ story, avatarColor }) => {
     <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm min-w-[280px] max-w-[350px] sm:min-w-[300px] sm:max-w-[300px] hover:shadow-md transition-shadow duration-300">
       <div className="flex items-center gap-4 mb-4">
         <div className={`${avatarColor} w-10 h-10 rounded-full flex items-center justify-center text-white font-bold`}>
-          {story.company.charAt(0).toUpperCase()}
+          {story?.company?.charAt(0).toUpperCase()}
         </div>
         <div className="text-left">
-          <h3 className="font-bold text-lg">{story.company}</h3>
-          <p className="text-gray-600 text-sm sm:text-base">{story.role}</p>
+          <h3 className="font-bold text-lg">{story?.company}</h3>
+          <p className="text-gray-600 text-sm sm:text-base">{story?.role}</p>
         </div>
       </div>
       <p
@@ -96,9 +96,9 @@ const StoryCard = ({ story, avatarColor }) => {
       >
         {plainText}
       </p>
-      <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story.batch}</p>
+      <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story?.batch}</p>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600 text-xs sm:text-sm">Reads: {story.views || '0'}</span>
+        <span className="text-gray-600 text-xs sm:text-sm">Reads: {story?.views || '0'}</span>
       </div>
     </div>
   );

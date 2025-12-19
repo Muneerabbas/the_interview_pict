@@ -5,10 +5,10 @@ import Link from 'next/link'; // Import Link
 import { Building2, Briefcase, GraduationCap, CalendarDays, Eye } from 'lucide-react'; // Make sure these are correct imports
 
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, role, batch, date, views, uid ,branch} = article;
+  const { profile_pic, name, company, role, batch, date, views, uid ,branch} = article || {};
 
   // Format the date
-  const formattedDate = new Date(date).toLocaleDateString();
+  const formattedDate = date ? new Date(date).toLocaleDateString() : "";
 
   return (
     <Link // Replace <a> with Link

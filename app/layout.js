@@ -29,15 +29,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="icon" type="image/png" href="/icon.png" />
-        <meta name="google-adsense-account" content="ca-pub-2732193997912161"/>
+        <meta name="google-adsense-account" content="ca-pub-9530051498159475"/>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530051498159475" crossOrigin="anonymous"></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <Script
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          data-ad-client="ca-pub-2732193997912161"   
-          crossOrigin="anonymous"
-        />
         <SessionProvider>{children}</SessionProvider>
 
         {/* Conditionally render Footer */}

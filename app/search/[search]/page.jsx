@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import ProfileCard from "../../../components/Card";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,18 @@ const SearchPage = ({ params }) => {
   const [hasMore, setHasMore] = useState(true);
   const [debouncedSearch, setDebouncedSearch] = useState(search || "");
   const [globalLoading, setGlobalLoading] = useState(false); 
+
+  const observer = useRef();
+  const lastProfileElementRef = useCallback((node) => {
+    if (loadingMore) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMore();
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loadingMore, hasMore]);
 
   useEffect(() => {
     if (!search && !searchText) {
@@ -41,6 +53,7 @@ const SearchPage = ({ params }) => {
         );
         setResults(response.data.result);
         setHasMore(response.data.result.length === 10);
+        setPage(1); // Reset page on new search
       } catch (error) {
         console.error("Error fetching search results:", error);
       } finally {
@@ -61,7 +74,7 @@ const SearchPage = ({ params }) => {
         `/api/search?search=${debouncedSearch}&page=${nextPage}`
       );
       const newResults = response.data.result;
-      setResults([...results, ...newResults]);
+      setResults(prev => [...prev, ...newResults]);
       setPage(nextPage);
       setHasMore(newResults.length === 10);
     } catch (error) {
@@ -129,10 +142,27 @@ const SearchPage = ({ params }) => {
         )}
         <div className="mt-6 space-y-6">
           {results.length > 0
-            ? results.map((profile) => (
-                <ProfileCard key={profile._id} profile={profile} 
-                setGlobalLoading={setGlobalLoading}/>
-              ))
+            ? results.map((profile, index) => {
+                if (results.length === index + 2) {
+                    return (
+                        <div ref={lastProfileElementRef} key={profile._id}>
+                             <ProfileCard 
+                                profile={profile} 
+                                setGlobalLoading={setGlobalLoading}
+                            />
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div key={profile._id}>
+                             <ProfileCard 
+                                profile={profile} 
+                                setGlobalLoading={setGlobalLoading}
+                            />
+                        </div>
+                    );
+                }
+              })
             : !loading && (
                 <p className="text-center text-gray-600">
                   {searchText
@@ -148,17 +178,8 @@ const SearchPage = ({ params }) => {
               </div>
             )}
 
-            {!loadingMore && hasMore && (
-              <button
-                onClick={loadMore}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
-              >
-                Load More Experiences
-              </button>
-            )}
-
-            {!loadingMore && !hasMore && (
-              <p className="text-[#B0B3B8] text-lg">You've reached the end of the feed</p>
+            {!loadingMore && !hasMore && results.length > 0 && (
+              <p className="text-[#B0B3B8] text-lg"></p>
             )}
             <br />
           </div>

@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import Navbar from "../../components/Navbar";
 import FeedCard from "../../components/FeedCard"; // Ensure FeedCard is imported
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -23,6 +23,18 @@ export default function HomePage() {
     const [pageLoading, setPageLoading] = useState(false);
     const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
     const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
+
+    const observer = useRef();
+    const lastProfileElementRef = useCallback((node) => {
+        if (pageLoading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMoreProfiles) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [pageLoading, hasMoreProfiles]);
 
     const fetchProfiles = async (pageNumber, itemsPerPage) => {
         setPageLoading(true);
@@ -56,12 +68,6 @@ export default function HomePage() {
         setHasMoreProfiles(true);
         fetchProfiles(page, itemsPerPage);
     }, [page, itemsPerPage]);
-
-    const handleLoadMore = () => {
-        if (!pageLoading && hasMoreProfiles) {
-            setPage((prev) => prev + 1);
-        }
-    };
 
     const skeletonCards = Array.from({ length: 3 });
 
@@ -113,14 +119,29 @@ export default function HomePage() {
                     {pageLoading && page === 0 && profiles.length === 0 ? (
                         skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
                     ) : (
-                        profiles.map((profile) => (
-                            <FeedCard // Ensure FeedCard is used here
-                                key={profile._id}
-                                profile={profile}
-                                width="w-full"
-                                height="min-h-[280px]"
-                            />
-                        ))
+                        profiles.map((profile, index) => {
+                            if (profiles.length === index + 2) {
+                                return (
+                                    <div ref={lastProfileElementRef} key={profile._id}>
+                                        <FeedCard
+                                            profile={profile}
+                                            width="w-full"
+                                            height="min-h-[280px]"
+                                        />
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div key={profile._id}>
+                                        <FeedCard
+                                            profile={profile}
+                                            width="w-full"
+                                            height="min-h-[280px]"
+                                        />
+                                    </div>
+                                );
+                            }
+                        })
                     )}
                 </div>
 
@@ -132,17 +153,8 @@ export default function HomePage() {
                         </div>
                     )}
 
-                    {!pageLoading && hasMoreProfiles && (
-                        <button
-                            onClick={handleLoadMore}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 font-medium"
-                        >
-                            Load More Experiences
-                        </button>
-                    )}
-
                     {!pageLoading && !hasMoreProfiles && profiles.length > 0 && (
-                        <p className="text-[#B0B3B8] text-lg">You've reached the end of the feed</p>
+                        <p className="text-[#B0B3B8] text-lg"></p>
                     )}
                     {!pageLoading && !hasMoreProfiles && profiles.length === 0 && page === 0 && (
                         <p className="text-[#B0B3B8] text-lg">No experiences available yet.</p>

@@ -14,7 +14,7 @@ const revalidateTime = 3000; // Revalidate every 60 seconds (1 minute) - adjust 
 
 export async function generateMetadata({ params }) {
   // Fetch data
-  const id = params.id;
+  const { id } = await params;
   const apiUrl = `https://www.pict.life/api/exp?uid=${id}`;
   const response = await fetch(apiUrl, { next: { revalidate: revalidateTime } });
   const data = await response.json() || {};
@@ -59,11 +59,11 @@ export async function generateMetadata({ params }) {
 
 
 export default async function SimilarExperience({ params }) {
-  if (!params || !params.id) {
+  const { id } = await params;
+
+  if (!id) {
     return <div className="text-center text-lg text-gray-600 mt-10">Invalid request</div>;
   }
-
-  const { id } = params;
   let data = null;
   let articles = [];
   let feedArticles = [];

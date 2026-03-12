@@ -82,7 +82,7 @@ async function sendAcknowledgmentEmail(name, email,uid) {
         <p>Hello ${name},</p>
         <p>We truly appreciate you for taking the time to share your interview experience on our platform! 🙌</p>
         <p>Your insights will be incredibly helpful for the next batch of candidates preparing for their placements.</p>
-        <p>Here’s your post: <a href="pict.life/single/${postUrl}" target="_blank">${postUrl}</a></p>
+        <p>Here’s your post: <a href="https://the-interview-pict.vercel.app/single/${postUrl}" target="_blank">${postUrl}</a></p>
         <p>You can edit or delete your post anytime to keep it updated!</p>
         <br>
         <p>Best Regards,</p>

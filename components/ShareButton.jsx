@@ -6,7 +6,7 @@ export default function ShareButton({ id, data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [message1, setMessage1] = useState('');
 
-  const articleUrl = `https://pict.life/single/${id}`;
+  const articleUrl = `https://the-interview-pict.vercel.app/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
   const message = `${articleDescription} \n${articleUrl}`;
   const encodedMessage = encodeURIComponent(message);

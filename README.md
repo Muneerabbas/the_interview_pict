@@ -52,7 +52,7 @@ EMAIL_PASS="gmail-app-password"
 Notes:
 
 - **Database name** used by API routes is `int-exp`.
-- Some pages currently fetch from `https://www.pict.life/api/...` directly (not from the local server). If you’re developing locally and want local data/APIs, update those fetch URLs to use your local base URL (or refactor to an env like `NEXT_PUBLIC_BASE_URL`).
+- Some pages currently fetch from `https://the-interview-pict.vercel.app/api/...` directly (not from the local server). If you’re developing locally and want local data/APIs, update those fetch URLs to use your local base URL (or refactor to an env like `NEXT_PUBLIC_BASE_URL`).
 
 ## Project structure
 
@@ -193,5 +193,5 @@ All API routes live under `app/api/*` (Next.js route handlers). CORS headers are
 
 ## Notes for contributors
 
-- **CORS**: `app/middleware.js` only whitelists production origins (`pict.life`). Local dev is fine for same-origin requests, but cross-origin testing may require adjusting `allowedOrigins`.
+- **CORS**: `app/middleware.js` only whitelists the production origin (`the-interview-pict.vercel.app`). Local dev is fine for same-origin requests, but cross-origin testing may require adjusting `allowedOrigins`.
 - **Security**: ensure secrets live in `.env.local` and are not committed (OAuth secrets, `NEXTAUTH_SECRET`, email password).

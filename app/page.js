@@ -8,7 +8,7 @@ const revalidateTime = 1800;
 async function fetchFeaturedStories() {
     const itemsPerPage = '30';
     try {
-        const response = await fetch(`https://www.pict.life/api/feed?itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`https://the-interview-pict.vercel.app/api/feed?itemsPerPage=${itemsPerPage}`, {
             next: { revalidate: revalidateTime }, // Enable ISR for this fetch
         });
         if (!response.ok) {
@@ -25,7 +25,7 @@ async function fetchFeaturedStories() {
 // Fetch Top Stories function (reusable)
 async function fetchTopStories() {
     try {
-        const response = await fetch(`https://www.pict.life/api/topStories`, {
+        const response = await fetch(`https://the-interview-pict.vercel.app/api/topStories`, {
             next: { revalidate: revalidateTime }, // Enable ISR for this fetch
         });
         if (!response.ok) {

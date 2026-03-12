@@ -120,7 +120,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   useEffect(() => {
     const fetchTopStories = async () => {
       try {
-        const response = await fetch('/api/topStories');
+        const response = await fetch('https://theinterview-psi.vercel.app/api/topStories');
         const data = await response.json();
         setFetchedTopStories(data);
         console.log("top stories", data);
@@ -130,7 +130,7 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
     };
     const fetchFeaturedStories = async () => {
       try {
-        const response = await fetch('/api/feed');
+        const response = await fetch('https://theinterview-psi.vercel.app/api/feed');
         const data = await response.json();
         setFetchedFeaturedStories(data);
         console.log("featured stories", data);

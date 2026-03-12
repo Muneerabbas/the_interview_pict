@@ -117,6 +117,34 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || []); // Use props, fallback to empty array
   const [activeSection, setActiveSection] = useState('Home'); // ADD: State to track active section
 
+  useEffect(() => {
+    const fetchTopStories = async () => {
+      try {
+        const response = await fetch('/api/topStories');
+        const data = await response.json();
+        setFetchedTopStories(data);
+        console.log("top stories", data);
+      } catch (error) {
+        console.error("Fetching top stories failed:", error);
+      }
+    };
+    const fetchFeaturedStories = async () => {
+      try {
+        const response = await fetch('/api/feed');
+        const data = await response.json();
+        setFetchedFeaturedStories(data);
+        console.log("featured stories", data);
+      } catch (error) {
+        console.error("Fetching top stories failed:", error);
+      }
+    };
+    fetchFeaturedStories();
+    fetchTopStories();
+  }, []);
+ 
+
+
+
   const navItems = [
     { href: '/', label: 'Home', sectionId: 'hero' }, // ADD: sectionId, Changed href to "/" for landing page home
     { href: '/about', label: 'About Us', sectionId: 'about' }, // ADDED: About Us nav item

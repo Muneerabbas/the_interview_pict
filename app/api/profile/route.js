@@ -1,23 +1,21 @@
-import { NextResponse } from "next/server";
-const { MongoClient } = require('mongodb');
-
-// Create a new MongoClient
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, ok, serverError } from "@/lib/server/http";
+import { trimString } from "@/lib/server/validation";
 
 export async function POST(req) {
-     // Extract the ID from the request body
+  try {
+    const body = await req.json();
+    const email = trimString(body.email);
 
-    try {
-        const {email} = await req.json(); 
-        //find Experience by uid check if token is correct and email is correct then delete the experience
-        await client.connect();
-        const database = client.db("int-exp");
-        const collection = database.collection('experience');
-        const posts = (await collection.find({ email:email }).toArray()).reverse();
-        
-        return NextResponse.json({ posts }, { status: 200 });
-
-    } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+    if (!email) {
+      return badRequest("Email is required");
     }
+
+    const experience = await getCollection("experience");
+    const posts = await experience.find({ email }).sort({ date: -1 }).toArray();
+
+    return ok({ posts });
+  } catch (error) {
+    return serverError(error, "Failed to fetch profile posts");
+  }
 }

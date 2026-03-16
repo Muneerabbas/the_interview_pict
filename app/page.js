@@ -1,52 +1,51 @@
-// app/page.js
-import LandingPage from '@/components/Landing';
+import HomePageClient from "@/components/home/HomePageClient";
+import { SITE_URL } from "@/lib/server/config";
 
-// Define revalidation time (in seconds) for ISR
-const revalidateTime = 1800; 
+export const dynamic = "force-dynamic";
 
-// Fetch Featured Stories function (reusable)
+const revalidateTime = 1800;
+
 async function fetchFeaturedStories() {
-    const itemsPerPage = '30';
-    try {
-        const response = await fetch(`https://the-interview-pict.vercel.app/api/feed?itemsPerPage=${itemsPerPage}`, {
-            next: { revalidate: revalidateTime }, // Enable ISR for this fetch
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Fetching featured stories failed:", error);
-        return []; // Return empty array in case of error
-    }
-}
-
-// Fetch Top Stories function (reusable)
-async function fetchTopStories() {
-    try {
-        const response = await fetch(`https://the-interview-pict.vercel.app/api/topStories`, {
-            next: { revalidate: revalidateTime }, // Enable ISR for this fetch
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Fetching top stories failed:", error);
-        return []; // Return empty array in case of error
-    }
-}
-
-
-// This is a Server Component (default in app/)
-export default async function Home() {
-    // Fetch data directly in the Server Component
-    const featuredStories = await fetchFeaturedStories();
-    const topStories = await fetchTopStories();
-
-    return (
-        <LandingPage featuredStories={featuredStories} topStories={topStories} />
+  const itemsPerPage = "30";
+  try {
+    const response = await fetch(
+      `${SITE_URL}/api/feed?itemsPerPage=${itemsPerPage}`,
+      {
+        next: { revalidate: revalidateTime },
+      }
     );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetching featured stories failed:", error);
+    return [];
+  }
+}
+
+async function fetchTopStories() {
+  try {
+    const response = await fetch(`${SITE_URL}/api/topStories`, {
+      next: { revalidate: revalidateTime },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetching top stories failed:", error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const featuredStories = await fetchFeaturedStories();
+  const topStories = await fetchTopStories();
+
+  return <HomePageClient featuredStories={featuredStories} topStories={topStories} />;
 }

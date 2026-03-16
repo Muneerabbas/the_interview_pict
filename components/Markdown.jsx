@@ -9,29 +9,29 @@ const MarkdownRenderer = ({ content }) => {
   const components = {
     // Custom heading rendering
     h1: ({ children }) => (
-      <h1 className="text-[2em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de] break-words">
+      <h1 className="mt-6 mb-4 break-words border-b border-slate-300 pb-3 text-[2em] font-semibold leading-[1.25] text-slate-900 dark:border-slate-700 dark:text-slate-100">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-[1.5em] font-semibold leading-[1.25] mt-6 mb-4 pb-3 border-b border-[#d0d7de] break-words">
+      <h2 className="mt-6 mb-4 break-words border-b border-slate-300 pb-3 text-[1.5em] font-semibold leading-[1.25] text-slate-900 dark:border-slate-700 dark:text-slate-100">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-[1.25em] font-semibold leading-[1.25] mt-6 mb-4 break-words">
+      <h3 className="mt-6 mb-4 break-words text-[1.25em] font-semibold leading-[1.25] text-slate-900 dark:text-slate-100">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-[1em] font-semibold leading-[1.25] mt-6 mb-4 break-words">
+      <h4 className="mt-6 mb-4 break-words text-[1em] font-semibold leading-[1.25] text-slate-900 dark:text-slate-100">
         {children}
       </h4>
     ),
     
     // Custom paragraph
     p: ({ children }) => (
-      <p className="mb-4 leading-[1.5] text-[#1F2328] break-words">
+      <p className="mb-4 break-words leading-[1.7] text-slate-700 dark:text-slate-200">
         {children}
       </p>
     ),
@@ -40,7 +40,7 @@ const MarkdownRenderer = ({ content }) => {
     a: ({ href, children }) => (
       <a 
         href={href} 
-        className="text-[#0969da] hover:underline break-words" 
+        className="break-words text-primary hover:underline" 
         target="_blank" 
         rel="noopener noreferrer"
       >
@@ -50,12 +50,12 @@ const MarkdownRenderer = ({ content }) => {
     
     // Custom lists
     ul: ({ children }) => (
-      <ul className="pl-8 mb-4 list-disc break-words">
+      <ul className="mb-4 list-disc break-words pl-8 text-slate-700 dark:text-slate-200">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="pl-8 mb-4 list-decimal break-words">
+      <ol className="mb-4 list-decimal break-words pl-8 text-slate-700 dark:text-slate-200">
         {children}
       </ol>
     ),
@@ -67,7 +67,7 @@ const MarkdownRenderer = ({ content }) => {
     
     // Custom blockquotes
     blockquote: ({ children }) => (
-      <blockquote className="pl-4 color-[#656d76] border-l-4 border-[#d0d7de] my-4 break-words">
+      <blockquote className="my-4 break-words border-l-4 border-primary pl-4 italic text-slate-600 dark:text-slate-300">
         {children}
       </blockquote>
     ),
@@ -80,7 +80,7 @@ const MarkdownRenderer = ({ content }) => {
           <SyntaxHighlighter
             language={match[1]}
             style={github}
-            className="rounded-md border border-[#d0d7de] bg-[#f6f8fa] !p-4"
+            className="rounded-md border border-slate-300 bg-slate-50 !p-4 dark:border-slate-700 dark:bg-slate-900"
             showLineNumbers
             {...props}
           >
@@ -89,7 +89,7 @@ const MarkdownRenderer = ({ content }) => {
         </div>
       ) : (
         <code 
-          className="px-2 py-1 text-[85%] bg-[rgba(175,184,193,0.2)] rounded-md font-mono break-words"
+          className="break-words rounded-md bg-slate-200/70 px-2 py-1 font-mono text-[85%] text-slate-900 dark:bg-slate-700/60 dark:text-slate-100"
           {...props}
         >
           {children}
@@ -99,7 +99,7 @@ const MarkdownRenderer = ({ content }) => {
     
     // Custom horizontal rule
     hr: () => (
-      <hr className="h-1 my-6 bg-[#d0d7de] border-0 break-words" />
+      <hr className="my-6 h-px break-words border-0 bg-slate-300 dark:bg-slate-700" />
     ),
     
     // Custom table
@@ -111,7 +111,7 @@ const MarkdownRenderer = ({ content }) => {
       </div>
     ),
     thead: ({ children }) => (
-      <thead className="bg-[#f6f8fa]">
+      <thead className="bg-slate-100 dark:bg-slate-800">
         {children}
       </thead>
     ),
@@ -121,24 +121,24 @@ const MarkdownRenderer = ({ content }) => {
       </tbody>
     ),
     tr: ({ children }) => (
-      <tr className="border-t border-[#d0d7de] break-words">
+      <tr className="break-words border-t border-slate-300 dark:border-slate-700">
         {children}
       </tr>
     ),
     th: ({ children }) => (
-      <th className="px-3 py-2 text-left text-sm font-semibold border border-[#d0d7de] break-words">
+      <th className="break-words border border-slate-300 px-3 py-2 text-left text-sm font-semibold text-slate-900 dark:border-slate-700 dark:text-slate-100">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-3 py-2 text-sm border border-[#d0d7de] break-words">
+      <td className="break-words border border-slate-300 px-3 py-2 text-sm text-slate-700 dark:border-slate-700 dark:text-slate-200">
         {children}
       </td>
     ),
   };
 
   return (
-    <div className="markdown-container font-[-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif] max-w-[900px] mx-auto p-4 break-words">
+    <div className="markdown-container mx-auto max-w-[900px] break-words p-4 font-[-apple-system,BlinkMacSystemFont,'Segoe_UI','Noto_Sans',Helvetica,Arial,sans-serif] text-slate-700 dark:text-slate-200">
       <ReactMarkdown
         components={components}
         remarkPlugins={[remarkGfm]}

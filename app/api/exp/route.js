@@ -1,40 +1,28 @@
-import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-
-// Create a persistent MongoDB client
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const collection = db.collection("experience");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, notFound, ok, serverError } from "@/lib/server/http";
+import { trimString } from "@/lib/server/validation";
 
 export async function GET(req) {
   try {
-    // Get `uid` from query parameters
-    const uid = req.nextUrl.searchParams.get("uid");
+    const uid = trimString(req.nextUrl.searchParams.get("uid"));
 
     if (!uid) {
-      return NextResponse.json({ message: "Missing `uid` query parameter" }, { status: 400 });
+      return badRequest("Missing uid query parameter");
     }
 
-    // Fetch document & increment views in one atomic operation
-    const data = await collection.findOneAndUpdate(
+    const experience = await getCollection("experience");
+    const data = await experience.findOneAndUpdate(
       { uid },
-      { $inc: { views: 1 } }, // Increment views
-      { returnDocument: "after" } // Return updated document
+      { $inc: { views: 1 } },
+      { returnDocument: "after" }
     );
 
     if (!data) {
-      return NextResponse.json({ message: "Document not found" }, { status: 404 });
+      return notFound("Document not found");
     }
 
-    return NextResponse.json(data);
+    return ok(data);
   } catch (error) {
-    console.error("Error fetching data:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return serverError(error, "Failed to fetch experience");
   }
 }

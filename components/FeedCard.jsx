@@ -2,32 +2,33 @@
 import Link from 'next/link';
 import { marked } from "marked";
 import { Eye, Building2, GraduationCap, Briefcase } from "lucide-react";
-import { useState } from "react";
 import ProfileAvatar from './ProfileAvatar';
 
 const FeedCard = ({
   profile,
   width = "w-full",
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const fullText = profile?.exp_text || "";
   const truncatedText = fullText.slice(0, 150) + "...";
   const htmlTruncatedText = marked(truncatedText);
 
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
-  const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const profileName = profile?.name?.replace(/\"/g, "") || "Anonymous";
+  const safeDate = profile?.date ? new Date(profile.date) : null;
 
-  const formattedDate = new Date(profile?.date).toLocaleString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZoneName: "short",
-  });
+  const formattedDate =
+    safeDate && !Number.isNaN(safeDate.getTime())
+      ? safeDate.toLocaleString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+          timeZoneName: "short",
+        })
+      : "Recently posted";
 
 
   return (
@@ -36,17 +37,6 @@ const FeedCard = ({
       className={`${width} mx-auto bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_24px_rgba(24,119,242,0.15)] hover:bg-[#F7FAFF] transform hover:-translate-y-1 cursor-pointer transition-all duration-300 border border-[#E7F3FF] h-[230px] sm:h-[250px] flex flex-col relative`}
       prefetch={true}
     >
-      {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <span className="ml-3 text-[#1D1D1D]">Loading...</span>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="p-3 flex flex-col h-full">
         {/* Header Section */}
         <div className="flex items-start gap-2 pb-2 border-b border-gray-200">

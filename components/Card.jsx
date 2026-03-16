@@ -25,17 +25,21 @@ const ProfileCard = ({
 
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const safeDate = profile?.date ? new Date(profile.date) : null;
 
-  const formattedDate = new Date(profile.date).toLocaleString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZoneName: "short",
-  });
+  const formattedDate =
+    safeDate && !Number.isNaN(safeDate.getTime())
+      ? safeDate.toLocaleString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+          timeZoneName: "short",
+        })
+      : "Recently posted";
 
   const handleReadMore = (e) => {
     e.stopPropagation();

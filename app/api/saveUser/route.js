@@ -1,89 +1,51 @@
-import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-
-// Create the client outside the handler
-const uri = process.env.MONGODB_URI;
-let client = null;
-let clientPromise = null;
-
-// Initialize the client connection
-const getClient = async () => {
-  if (!client) {
-    client = new MongoClient(uri);
-    clientPromise = client.connect();
-  }
-  return clientPromise;
-};
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, ok, serverError } from "@/lib/server/http";
+import { trimString } from "@/lib/server/validation";
 
 export async function POST(req) {
-  console.log("📥 Received request to save user");
-  
   try {
-    // Parse request body
-    const { gmail, name, image } = await req.json();
-    console.log("📝 User data received:", { gmail, name, image });
+    const body = await req.json();
+    const gmail = trimString(body.gmail).toLowerCase();
+    const name = trimString(body.name);
+    const image = trimString(body.image);
 
     if (!gmail || !name) {
-      console.error("❌ Missing required fields");
-      return NextResponse.json(
-        { message: "Gmail and name are required" },
-        { status: 400 }
-      );
+      return badRequest("Gmail and name are required");
     }
 
-    // Get MongoDB client
-    const client = await getClient();
-    console.log("🔌 Connected to MongoDB");
-
-    const db = client.db("int-exp");
-    const users = db.collection("user");
-
-    // Check if user exists
+    const users = await getCollection("user");
     const existingUser = await users.findOne({ gmail });
-    console.log("🔍 Existing user check:", existingUser ? "Found" : "Not found");
 
+    const now = new Date().toISOString();
     let result;
+
     if (existingUser) {
-      // Update existing user
       result = await users.updateOne(
         { gmail },
-        { 
-          $set: { 
-            name, 
+        {
+          $set: {
+            name,
             image,
-            updatedAt: new Date()
-          } 
+            updatedAt: now,
+          },
         }
       );
-      console.log("✏️ User updated:", result);
     } else {
-      // Insert new user
-      result = await users.insertOne({ 
-        gmail, 
-        name, 
+      result = await users.insertOne({
+        gmail,
+        name,
         image,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: now,
+        updatedAt: now,
       });
-      console.log("➕ New user inserted:", result);
     }
 
-    console.log("✅ Operation completed successfully");
-    return NextResponse.json({ 
+    return ok({
       message: "User saved successfully",
       operation: existingUser ? "updated" : "inserted",
-      result 
-    }, { 
-      status: 200 
+      result,
     });
-
   } catch (error) {
-    console.error("❌ Error in saveUser API:", error);
-    return NextResponse.json({ 
-      message: "Failed to save user",
-      error: error.message 
-    }, { 
-      status: 500 
-    });
+    return serverError(error, "Failed to save user");
   }
 }

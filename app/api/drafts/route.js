@@ -1,101 +1,63 @@
-import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, notFound, ok, serverError } from "@/lib/server/http";
+import { trimString } from "@/lib/server/validation";
 
-// Create a persistent MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const drafts = db.collection("drafts");
-const user = db.collection("user");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
-
-// Save draft
 export async function POST(req) {
   try {
-    const { 
-      exp_text, 
-      company, 
-      branch, 
-      batch, 
-      profile_pic, 
-      name, 
-      role,
-      email 
-    } = await req.json();
+    const body = await req.json();
+    const email = trimString(body.email);
 
-    // Basic validation
     if (!email) {
-      return NextResponse.json({ message: "User email is required" }, { status: 400 });
+      return badRequest("User email is required");
     }
 
-    // // Validate user exists
-    // const userDoc = await user.findOne({ email });
-    // if (!userDoc) {
-    //   return NextResponse.json({ message: "User not found" }, { status: 404 });
-    // }
-
     const now = new Date().toISOString();
-    
-    // Create draft document
-    const draftDoc = {
-      exp_text: exp_text || '',
-      company: company || '',
-      branch: branch || '',
-      batch: batch || '',
-      profile_pic: profile_pic || '',
-      name: name || '',
-      role: role || '',
+    const draft = {
+      exp_text: trimString(body.exp_text),
+      company: trimString(body.company),
+      branch: trimString(body.branch),
+      batch: trimString(body.batch),
+      profile_pic: trimString(body.profile_pic),
+      name: trimString(body.name),
+      role: trimString(body.role),
       email,
-      created_at: now,
       last_edited: now,
-      status: 'draft'
+      status: "draft",
     };
 
-    // Upsert the draft - if exists update, if not create
-    const result = await drafts.updateOne(
+    const drafts = await getCollection("drafts");
+    await drafts.updateOne(
       { email },
-      { $set: draftDoc },
+      {
+        $set: draft,
+        $setOnInsert: { created_at: now },
+      },
       { upsert: true }
     );
 
-    if (!result.acknowledged) {
-      return NextResponse.json({ message: "Failed to save draft" }, { status: 500 });
-    }
-
-    return NextResponse.json({ 
-      message: "Draft saved successfully",
-      email 
-    }, { status: 200 });
-
+    return ok({ message: "Draft saved successfully", email });
   } catch (error) {
-    console.error("Error saving draft:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return serverError(error, "Failed to save draft");
   }
 }
 
-// Get draft by email
 export async function GET(req) {
   try {
-    const email = req.nextUrl.searchParams.get('email');
-    
+    const email = trimString(req.nextUrl.searchParams.get("email"));
+
     if (!email) {
-      return NextResponse.json({ message: "Email is required" }, { status: 400 });
+      return badRequest("Email is required");
     }
 
+    const drafts = await getCollection("drafts");
     const draft = await drafts.findOne({ email });
-    
+
     if (!draft) {
-      return NextResponse.json({ message: "No draft found" }, { status: 404 });
+      return notFound("No draft found");
     }
 
-    return NextResponse.json(draft, { status: 200 });
-
+    return ok(draft);
   } catch (error) {
-    console.error("Error retrieving draft:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return serverError(error, "Failed to retrieve draft");
   }
 }

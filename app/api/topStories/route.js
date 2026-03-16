@@ -1,28 +1,45 @@
-import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { getCollection } from "@/lib/server/mongodb";
+import { ok, serverError } from "@/lib/server/http";
+import { parsePositiveInt } from "@/lib/server/validation";
+import { TOP_STORIES_PAGE_SIZE } from "@/lib/server/config";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+const REMOTE_BASE_URL = "https://the-interview-pict.vercel.app";
+
+async function fetchRemoteTopStories(page) {
+  const remoteUrl = `${REMOTE_BASE_URL}/api/topStories?page=${page}`;
+  const response = await fetch(remoteUrl, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Remote top stories failed with ${response.status}`);
+  }
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}
 
 export async function GET(req) {
+  const page = parsePositiveInt(req.nextUrl.searchParams.get("page"), 0, 0);
+
   try {
-    const page = parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const ITEMS_PER_PAGE = 30; // Changed to 3 items per page
+    const experience = await getCollection("experience");
+    const topStories = await experience
+      .find({})
+      .sort({ views: -1 })
+      .skip(page * TOP_STORIES_PAGE_SIZE)
+      .limit(TOP_STORIES_PAGE_SIZE)
+      .toArray();
 
-    await client.connect();
-    const db = client.db("int-exp");
-    const experience = db.collection("experience");
+    if (topStories.length > 0) {
+      return ok(topStories);
+    }
 
-    const feed = await experience.find({}).toArray();
-
-    const sortedFeed = feed
-      .sort((a, b) => b.views - a.views) // Sorted by views in descending order
-      .slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
-    const finalFeed = sortedFeed; // No need to change date to string as we are not sorting by date anymore
-
-    return NextResponse.json(finalFeed);
+    const remoteTopStories = await fetchRemoteTopStories(page);
+    return ok(remoteTopStories);
   } catch (error) {
-    console.error("Error fetching data:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.warn("Local top stories unavailable, trying remote fallback.", error);
+    try {
+      const remoteTopStories = await fetchRemoteTopStories(page);
+      return ok(remoteTopStories);
+    } catch (remoteError) {
+      return serverError(remoteError, "Failed to fetch top stories");
+    }
   }
 }

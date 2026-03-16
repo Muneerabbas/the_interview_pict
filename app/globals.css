@@ -2,9 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Color tokens (RGB for Tailwind opacity support) */
+  --color-primary: 13 127 242;
+  --color-background-light: 248 250 252;
+  --color-background-dark: 2 6 23;
+  --color-surface-dark: 22 27 40;
+  --color-border-dark: 36 44 61;
+  --color-slate-card: 15 23 42;
+
+  /* Font tokens */
+  --font-display: "Inter", sans-serif;
+
+  /* Radius tokens */
+  --radius-default: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Type scale tokens */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --text-7xl: 4.5rem;
+  --text-8xl: 6rem;
+  --text-9xl: 8rem;
+}
+
+.dark {
+  --color-background-light: 2 6 23;
+}
+
 
 body {
-  background-color: #F0F2F5;
+  background-color: rgb(var(--color-background-light));
   color: hsl(var(--foreground));
   /* margin: 0;  Ensure no default margin */
 }
@@ -29,6 +67,52 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes feedShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes feedProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+.feed-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.9) 0%,
+    rgba(59, 130, 246, 0.18) 40%,
+    rgba(30, 41, 59, 0.9) 80%
+  );
+  background-size: 220% 100%;
+  animation: feedShimmer 1.6s linear infinite;
+}
+
+.feed-progress-track {
+  position: relative;
+  overflow: hidden;
+}
+
+.feed-progress-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 35%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(13, 127, 242, 0), rgba(13, 127, 242, 0.95), rgba(13, 127, 242, 0));
+  animation: feedProgress 1.4s ease-in-out infinite;
 }
 
 input::placeholder {

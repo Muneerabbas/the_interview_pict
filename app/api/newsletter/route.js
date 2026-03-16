@@ -1,32 +1,29 @@
-import { NextResponse } from "next/server";
-const { MongoClient } = require("mongodb");
-
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, ok, serverError } from "@/lib/server/http";
+import { isValidEmail, trimString } from "@/lib/server/validation";
 
 export async function POST(req) {
-    try {
-        const { email } = await req.json();
+  try {
+    const body = await req.json();
+    const email = trimString(body.email).toLowerCase();
 
-        // Check if the email is a Gmail address
-        if (!email.endsWith("@gmail.com")) {
-            return NextResponse.json({ message: "Only Gmail addresses are allowed" }, { status: 400 });
-        }
-
-        await client.connect();
-        console.log("Connected to MongoDB");
-
-        const db = client.db("int-exp");
-        const newsletters = db.collection("newsletter");
-
-        // Check if the email already exists
-        const existingEmail = await newsletters.findOne({ email });
-
-        if (!existingEmail) {
-            await newsletters.insertOne({ email });
-        }
-
-        return NextResponse.json({ message: "Email saved successfully" }, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+    if (!isValidEmail(email)) {
+      return badRequest("A valid email is required");
     }
+
+    if (!email.endsWith("@gmail.com")) {
+      return badRequest("Only Gmail addresses are allowed");
+    }
+
+    const newsletter = await getCollection("newsletter");
+    const existing = await newsletter.findOne({ email });
+
+    if (!existing) {
+      await newsletter.insertOne({ email, createdAt: new Date().toISOString() });
+    }
+
+    return ok({ message: "Email saved successfully" });
+  } catch (error) {
+    return serverError(error, "Failed to save newsletter email");
+  }
 }

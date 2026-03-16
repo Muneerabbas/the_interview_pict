@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link'; // Import Link
+import ProfileAvatar from './ProfileAvatar';
 
 // Import your icons from a library or define them if they are custom
 import { Building2, Briefcase, GraduationCap, CalendarDays, Eye } from 'lucide-react'; // Make sure these are correct imports
@@ -20,11 +21,10 @@ const ArticleCard = ({ article }) => {
       <div className="p-4">
         <div className="flex items-start gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-[#F0F2F5]">
-            <img
-              src={profile_pic || "/api/placeholder/48/48"} // Fallback if no profile pic
-              alt={`${name}'s profile`} // Alt text for accessibility
+            <ProfileAvatar
+              src={profile_pic}
+              alt={`${name || "Candidate"} profile`}
               className="w-full h-full object-cover"
-              loading="lazy"
             />
           </div>
           <div className="flex-1 min-w-0">

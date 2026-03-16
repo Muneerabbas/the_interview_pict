@@ -1,41 +1,20 @@
-import nodemailer from "nodemailer";
+import { badRequest, ok, serverError } from "@/lib/server/http";
+import { sendGenericAcknowledgement } from "@/lib/server/email";
+import { trimString } from "@/lib/server/validation";
 
 export async function POST(req) {
   try {
-    const { userEmail, userName } = await req.json();
+    const body = await req.json();
+    const userEmail = trimString(body.userEmail);
+    const userName = trimString(body.userName);
 
     if (!userEmail || !userName) {
-      return new Response(JSON.stringify({ error: "Missing email or name" }), { status: 400 });
+      return badRequest("Missing email or name");
     }
 
-    // Configure Nodemailer with Gmail SMTP (or another provider)
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email password or app-specific password
-      },
-    });
-
-    // Email content
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // Sender email
-      to: userEmail, // Recipient email
-      subject: "Acknowledgment: Experience Submission Received",
-      html: `
-        <p>Dear ${userName},</p>
-        <p>Thank you for submitting your experience! We have received your post successfully.</p>
-        <p>Best regards,<br>Team</p>
-      `,
-    };
-
-    // Send email
-    await transporter.sendMail(mailOptions);
-
-    return new Response(JSON.stringify({ message: "Email sent successfully" }), { status: 200 });
-
+    await sendGenericAcknowledgement({ userEmail, userName });
+    return ok({ message: "Email sent successfully" });
   } catch (error) {
-    console.error("Error sending email:", error);
-    return new Response(JSON.stringify({ error: "Failed to send email" }), { status: 500 });
+    return serverError(error, "Failed to send email");
   }
 }

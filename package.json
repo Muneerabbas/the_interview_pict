@@ -1,11 +1,14 @@
 {
   "name": "interview-experience",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test",
+    "check": "npm run test && npm run build"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.0",

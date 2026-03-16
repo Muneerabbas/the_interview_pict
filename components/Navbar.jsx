@@ -1,311 +1,117 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Home, FileText, LogOut, Search, User, LogIn, Menu, X, List } from "lucide-react";
-import { useSession, signOut, signIn } from "next-auth/react";
-import { motion, AnimatePresence, delay } from "framer-motion";
-import Image from "next/image";
-import logo from "../public/icon.svg"
+import { usePathname, useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { Grid3X3, Search, User } from "lucide-react";
+import { useMemo, useState } from "react";
+import ProfileAvatar from "./ProfileAvatar";
+
+const NAV_ITEMS = [
+  { href: "/", label: "Home" },
+  { href: "/feed", label: "Feed" },
+  { href: "/post", label: "Post" },
+  { href: "/profile", label: "Profile" },
+];
+
+function isActive(pathname, href) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export default function Navbar() {
   const { data: session } = useSession();
-  const [searchText, setSearchText] = useState("");
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const texts = ["Company 🏢", "Batch 🎓", "Role 💼", "Person 👤"];
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
+  const pathname = usePathname();
   const router = useRouter();
+  const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    const controlNavbar = () => {
-      if (window.scrollY > lastScrollY) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
-      setLastScrollY(window.scrollY);
-    };
+  const userImage = useMemo(() => session?.user?.image || "", [session?.user?.image]);
 
-    window.addEventListener("scroll", controlNavbar);
-    return () => window.removeEventListener("scroll", controlNavbar);
-  }, [lastScrollY]);
-
-  const clearAllSessionData = () => {
-    document.cookie.split(";").forEach((cookie) => {
-      const cookieName = cookie.split("=")[0].trim();
-      document.cookie = `${cookieName}=; max-age=0; path=/`;
-    });
-    sessionStorage.clear();
-    localStorage.clear();
-  };
-
-  const handleLogout = async () => {
-    clearAllSessionData();
-    await signOut({ callbackUrl: "/" });
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const query = searchText.trim() === "" ? "Himanshu-Nilay-Neeraj" : searchText.trim();
+  const onSearch = (event) => {
+    event.preventDefault();
+    const query = searchText.trim() || "Himanshu-Nilay-Neeraj";
     router.push(`/search/${encodeURIComponent(query)}`);
-    setIsMenuOpen(false);
   };
 
-  const handleLogin = () => {
+  const onAuthClick = async () => {
+    if (session) {
+      await signOut({ callbackUrl: "/" });
+      return;
+    }
     router.push("/login");
   };
 
   return (
-    <>
-      <nav
-        className={`fixed top-0 w-full transition-transform duration-300 ease-in-out ${
-          visible ? "translate-y-0" : "-translate-y-full"
-        } bg-[#F0F2F5] p-4 shadow-md z-50 backdrop-blur-sm bg-opacity-95`}
-      >
-        <div className="max-w-7xl mx-auto">
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex justify-between items-center">
-            <div className=" flex-1 flex items-center">
-              <div className=" flex items-center space-x-6 mr-8">
-                <div className="flex items-center space-x-2 text-2xl font-bold text-blue-600 hover:pointer transition-colors mr-6"> {/* Added mr-6 here */}
-                  <Image src={logo} alt="theInterview Logo" width={40} height={40} />
-                  <Link href="/">theInterview</Link>
-                </div>
-              </div>
+    <header className="sticky top-0 z-50 border-b border-border-dark bg-background-dark/95 backdrop-blur-md">
+      <div className="overflow-x-auto">
+        <div className="mx-auto flex h-20 min-w-[980px] max-w-[1600px] items-center gap-6 px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex shrink-0 items-center gap-3 text-primary">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/20 shadow-[0_0_15px_rgba(13,127,242,0.3)]">
+              <Grid3X3 size={18} className="text-primary" />
+            </div>
+            <h2 className="text-[32px] font-bold leading-none tracking-tight text-slate-100">The Interview Room</h2>
+          </Link>
 
-              <form onSubmit={handleSearch} className="flex items-center">
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="p-3 pr-4 text-lg border rounded-lg shadow-md w-[700px] focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder="Search for "
-                  />
-                  {!searchText && (
-                    <div className="absolute top-[25px] left-[100px] transform -translate-y-1/2 overflow-hidden h-6 w-28">
-                      <AnimatePresence mode="sync">
-                        <motion.div
-                          key={index}
-                          initial={{ y: "-100%", opacity: 0 }}
-                          animate={{ y: "0%", opacity: 1 }}
-                          exit={{ y: "100%", opacity: 1 }}
-                          transition={{
-                            duration: 0.2,
-                            delay: 0
-                          }}
-                          className="absolute w-full text-lg text-blue-600"
-                        >
-                          {texts[index]}
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
+          <form onSubmit={onSearch} className="flex h-10 min-w-[280px] max-w-[520px] flex-1">
+            <div className="flex h-full w-full items-stretch rounded-full border border-border-dark bg-surface-dark transition-all duration-300 focus-within:border-primary">
+              <div className="flex items-center justify-center pl-4 text-slate-400">
+                <Search size={18} />
+              </div>
+              <input
+                className="form-input flex w-full min-w-0 flex-1 border-none bg-transparent text-sm font-normal text-slate-100 placeholder:text-slate-500 focus:ring-0"
+                placeholder="Search companies, roles, or topics..."
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+              />
+            </div>
+          </form>
+
+          <nav className="ml-auto flex shrink-0 items-center gap-8">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative text-sm transition-colors ${
+                    active ? "font-semibold text-primary" : "font-medium text-slate-400 hover:text-primary"
+                  }`}
+                >
+                  {item.label}
+                  {active && (
+                    <span className="absolute -bottom-[21px] left-0 right-0 h-0.5 bg-primary shadow-[0_0_8px_rgba(13,127,242,0.6)]" />
                   )}
-                </div>
-                <button
-                  type="submit"
-                  className="ml-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
-                >
-                  <Search size={20} />
-                </button>
-              </form>
-            </div>
+                </Link>
+              );
+            })}
+          </nav>
 
-            <div className="flex space-x-0 items-center ml-4"> {/* Adjusted space-x-4 to space-x-0 and added items-center */}
-              <div className="flex space-x-4 items-center"> {/* Added items-center here */}
-                <Link
-                  href="/"
-                  className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <Home size={24} className="text-blue-600" />
-                  <span className="text-sm mt-1">Home</span>
-                </Link>
-                <Link
-                  href="/feed"
-                  className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <List size={24} className="text-blue-600" />
-                  <span className="text-sm mt-1">Feed</span>
-                </Link>
-                <Link
-                  href="/post"
-                  className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <FileText size={24} className="text-blue-600" />
-                  <span className="text-sm mt-1">Post</span>
-                </Link>
-                 <Link
-                  href="/profile"
-                  className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <User size={24} className="text-blue-600" />
-                  <span className="text-sm mt-1">Profile</span>
-                </Link>
+          <div className="h-6 w-px shrink-0 bg-border-dark" />
 
-                {session ? (
-                  <button
-                    onClick={handleLogout}
-                    className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-[#FF7A7A] transition-all duration-300 text-[#1D1D1D] group hover:shadow-md"
-                  >
-                    <LogOut
-                      size={24}
-                      className="text-blue-600 group-hover:text-white transition-colors duration-300"
-                    />
-                    <span className="text-sm mt-1 group-hover:text-white transition-colors duration-300">Logout</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleLogin}
-                    className="flex flex-col items-center px-3 py-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] group hover:shadow-md"
-                  >
-                    <LogIn
-                      size={24}
-                      className="text-blue-600 group-hover:text-blue-600 transition-colors duration-300"
-                    />
-                    <span className="text-sm mt-1">Login</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+          <button
+            onClick={onAuthClick}
+            className="flex h-10 min-w-[96px] shrink-0 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-white shadow-[0_4px_12px_rgba(13,127,242,0.3)] transition-all hover:bg-primary/90"
+          >
+            {session ? "Logout" : "Login"}
+          </button>
 
-          {/* Mobile Navigation */}
-          <div className="lg:hidden">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2 text-xl font-bold text-blue-600">
-                <Image src={logo} alt="theInterview Logo" width={30} height={30} />
-                <Link href="/">theInterview</Link>
-              </div>
-              <div className="flex items-center space-x-4">
-                {/* Search Icon */}
-                <button
-                  onClick={() => setIsMenuOpen(true)}
-                  className="p-2 rounded-md hover:bg-gray-100 transition-all duration-300 hover:shadow-md"
-                >
-                  <Search size={24} className="text-blue-600" />
-                </button>
-                {/* Hamburger Menu */}
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="p-2 rounded-md hover:bg-gray-100 transition-all duration-300 hover:shadow-md"
-                >
-                  {isMenuOpen ? (
-                    <X size={24} className="text-blue-600" />
-                  ) : (
-                    <Menu size={24} className="text-blue-600" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu */}
-            <div className={`${isMenuOpen ? "block" : "hidden"} mt-4`}>
-              <form onSubmit={handleSearch} className="flex flex-col items-center w-full space-y-2">
-                {/* Search Bar */}
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    className="p-3 pl-4 text-lg border rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder="Search for"
-                  />
-                  <div className="absolute top-[24px] left-[105px] transform -translate-y-1/2 overflow-hidden h-6 w-[98px]">
-                    <AnimatePresence mode="wait">
-                      {!searchText && (
-                        <motion.div
-                          key={index}
-                          initial={{ y: "-100%", opacity: 0 }}
-                          animate={{ y: "0%", opacity: 1 }}
-                          exit={{ y: "100%", opacity: 1 }}
-                          transition={{
-                            duration: 0.2,
-                            delay: 0
-                          }}
-                          className="absolute w-[108%] text-lg text-blue-600"
-                        >
-                          {texts[index]}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-                {/* Search Button */}
-                <button
-                  type="submit"
-                  className="p-3 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9] w-full text-center"
-                >
-                  Search
-                </button>
-              </form>
-
-
-              <div className="flex flex-col space-y-2 mt-4">
-                <Link
-                  href="/"
-                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <Home size={24} className="text-blue-600" />
-                  <span>Home</span>
-                </Link>
-                <Link
-                  href="/feed"
-                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <List size={24} className="text-blue-600" />
-                  <span>Feed</span>
-                </Link>
-                <Link
-                  href="/post"
-                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <FileText size={24} className="text-blue-600" />
-                  <span>Post</span>
-                </Link>
-                <Link
-                  href="/profile"
-                  className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] hover:shadow-md"
-                >
-                  <User size={24} className="text-blue-600" />
-                  <span>Profile</span>
-                </Link>
-                {session ? (
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-3 p-2 rounded-md hover:bg-[#FF7A7A] transition-all duration-300 text-[#1D1D1D] w-full group hover:shadow-md"
-                  >
-                    <LogOut
-                      size={24}
-                      className="text-blue-600 group-hover:text-white transition-colors duration-300"
-                    />
-                    <span className="group-hover:text-white transition-colors duration-300">Logout</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleLogin}
-                    className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-all duration-300 text-[#1D1D1D] w-full group hover:shadow-md"
-                  >
-                    <LogIn
-                      size={24}
-                      className="text-blue-600 group-hover:text-blue-600 transition-colors duration-300"
-                    />
-                    <span>Login</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+          <Link
+            href={session ? "/profile" : "/login"}
+            className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-primary/20 bg-surface-dark transition-colors hover:border-primary/50"
+            aria-label="Profile"
+          >
+            {userImage ? (
+              <ProfileAvatar
+                src={userImage}
+                alt="User profile avatar"
+                className="size-full rounded-full object-cover"
+              />
+            ) : (
+              <User size={18} className="text-slate-300" />
+            )}
+          </Link>
         </div>
-      </nav>
-    </>
+      </div>
+    </header>
   );
 }

@@ -1,60 +1,47 @@
-// api/search/route.js
-import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { getCollection } from "@/lib/server/mongodb";
+import { badRequest, ok, serverError } from "@/lib/server/http";
+import { parsePositiveInt, trimString } from "@/lib/server/validation";
+import { SEARCH_PAGE_SIZE } from "@/lib/server/config";
 
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-  throw new Error("MONGODB_URI is not set in environment variables");
-}
+async function searchExperiences(searchText, page = 1) {
+  const skip = (page - 1) * SEARCH_PAGE_SIZE;
+  const experience = await getCollection("experience");
 
-const client = new MongoClient(uri);
-
-async function main(search_text, page = 1) {
-  await client.connect();
-  console.log("Connected to MongoDB");
-  const db = client.db("int-exp");
-  const experience = db.collection("experience");
-  
-  const skip = (page - 1) * 10;
-  
-  const result = await experience
-  .aggregate([
-    {
-      $search: {
-        index: "main",
-        compound: {
-          should: [
-            { text: { query: search_text, path: "company", score: { boost: { value: 8 } }} },
-            { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "branch", score: { boost: { value: 10 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "batch", score: { boost: { value: 20 } }} },  // Increased boost
-            { text: { query: search_text, path: "exp_text", score: { boost: { value: 2 } }, fuzzy: {} } }
-          ]
-        }
-      }
-    },
-    { $skip: skip },
-    { $limit: 10 }
-  ])
-  .toArray();
-
-    
-  return result;
+  return experience
+    .aggregate([
+      {
+        $search: {
+          index: "main",
+          compound: {
+            should: [
+              { text: { query: searchText, path: "company", score: { boost: { value: 8 } } } },
+              { text: { query: searchText, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
+              { text: { query: searchText, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
+              { text: { query: searchText, path: "branch", score: { boost: { value: 10 } }, fuzzy: {} } },
+              { text: { query: searchText, path: "batch", score: { boost: { value: 20 } } } },
+              { text: { query: searchText, path: "exp_text", score: { boost: { value: 2 } }, fuzzy: {} } },
+            ],
+          },
+        },
+      },
+      { $skip: skip },
+      { $limit: SEARCH_PAGE_SIZE },
+    ])
+    .toArray();
 }
 
 export async function GET(req) {
   try {
-    const search = req.nextUrl.searchParams.get("search");
-    const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
-    
+    const search = trimString(req.nextUrl.searchParams.get("search"));
+    const page = parsePositiveInt(req.nextUrl.searchParams.get("page"), 1, 1);
+
     if (!search) {
-      return NextResponse.json({ message: "Search query is required" }, { status: 400 });
+      return badRequest("Search query is required");
     }
-    
-    const result = await main(search, page);
-    return NextResponse.json({ result }, { status: 200 });
+
+    const result = await searchExperiences(search, page);
+    return ok({ result });
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return serverError(error, "Search failed");
   }
 }

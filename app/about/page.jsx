@@ -1,202 +1,127 @@
-// aboutus/page.js
-"use client";
-import React, { useRef } from 'react';
-import FounderCard from '../../components/FounderCard';
-import himg from '../../public/h1.jpg';
-import nimg from '../../public/n2.jpg';
-import niimg from '../../public/n1.jpg';
-import logo from "../../public/icon.svg";
-import Image from 'next/image';
-import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import Link from "next/link";
+import { Code2, Grid3X3, UserCircle2 } from "lucide-react";
+import AdaptiveAvatar from "@/components/home/AdaptiveAvatar";
+import Navbar from "@/components/Navbar";
 
-const Aboutus = () => {
-  const storyRef = useRef(null);
+const TEAM = [
+  {
+    name: "Himanshu Gholse",
+    role: "Senior Technical Interviewer",
+    bio: "Backend-focused engineer helping candidates decode interviewer intent and round strategy.",
+    image: "/h1.jpg",
+    code: "https://github.com/himanshug-08",
+    profile: "https://www.linkedin.com/in/himanshu-gholse-6604ba227/",
+  },
+  {
+    name: "Neeraj Magdum",
+    role: "System Design Expert",
+    bio: "Specializes in architecture rounds and practical trade-off thinking for distributed systems.",
+    image: "/n2.jpg",
+    code: "https://github.com/nirz306",
+    profile: "https://www.linkedin.com/in/neerajmagdum/",
+  },
+  {
+    name: "Nilay Tayade",
+    role: "Frontend Architect",
+    bio: "Builds high-performance UI systems and helps candidates sharpen frontend interview depth.",
+    image: "/n1.jpg",
+    code: "https://github.com/nilaytayade",
+    profile: "https://www.linkedin.com/in/nilay-tayade/",
+  },
+  {
+    name: "Interview Team",
+    role: "HR Specialist",
+    bio: "Guides communication and behavioral interview preparation for real hiring workflows.",
+    image: "",
+    code: "/help",
+    profile: "/team",
+  },
+];
 
-  const scrollToStory = () => {
-    storyRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+export default function Aboutus() {
   return (
-    <div className='flex flex-col bg-blue-50'>
-      {/* First Screen */}
-      <div className='min-h-screen flex flex-col relative'>
-        {/* Logo Section - Fixed at top */}
-        <div className="w-full pt-8 pb-4">
-          <Link href="/" className="group flex flex-col items-center transition-transform duration-300 hover:scale-105">
-            <div className="animate-logo-entrance">
-              <Image
-                src={logo}
-                alt="theInterview Logo"
-                width={80}
-                height={80}
-                className="group-hover:animate-logo-spin mb-2"
-              />
-            </div>
-            <span className="text-4xl font-bold text-blue-600 animate-text-entrance group-hover:text-blue-700">
-              theInterview
-            </span>
-          </Link>
-        </div>
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-dark font-display text-slate-100">
+      <Navbar />
 
-        {/* Team Content - Centered vertically with reduced gap */}
-        <div className='flex-grow flex flex-col justify-center lg:-mt-16 mt-0'> {/* Adjusted margin for mobile */}
-          <div className='container mx-auto px-6'>
-            <h1 className='text-4xl font-bold text-center mb-12 text-gray-900'>Team</h1>
-            <div className='founder flex flex-col lg:flex-row gap-8 justify-center items-center'>
-              <FounderCard
-                img={himg}
-                name="Himanshu Gholse"
-                linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/"
-                github="https://github.com/himanshug-08"
-                des="PICT'26 ENTC"
-                email="himanshugholse08@gmail.com"
-                phone="+91 8805857669"
-              />
-              <FounderCard
-                img={nimg}
-                name="Neeraj Magdum"
-                linkedin="https://www.linkedin.com/in/neerajmagdum/"
-                github="https://github.com/nirz306"
-                des="PICT'26 CE"
-                email="neerajmagdum10@gmail.com"
-                phone="+91 7972065984"
-              />
-              <FounderCard
-                img={niimg}
-                name="Nilay Tayade"
-                linkedin="https://www.linkedin.com/in/nilay-tayade/"
-                github="https://github.com/nilaytayade"
-                des={<><span>PICT'26 CE</span><br /><span>Upcoming Barclays Intern</span></>}
-                email="nilaytayadee@gmail.com"
-                phone="+91 9370088933"
-              />
-            </div>
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12 md:py-24">
+        <div className="mb-20 space-y-6 text-center">
+          <h1 className="text-5xl font-black tracking-tight text-white md:text-7xl">Our Team</h1>
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-400">
+            Meet the experts focused on helping candidates crack interviews with practical, real-world guidance.
+          </p>
+          <div className="pt-6">
+            <Link
+              href="/post"
+              className="inline-flex rounded-full bg-primary px-10 py-4 font-bold text-white shadow-xl shadow-primary/30 transition-all hover:opacity-90 active:scale-95"
+            >
+              Join Our Collective
+            </Link>
           </div>
         </div>
 
-        {/* Scroll Arrow - Only visible on desktop */}
-        <div className="hidden lg:flex justify-center pb-8 absolute bottom-0 w-full">
-          <button
-            onClick={scrollToStory}
-            className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300 animate-bounce"
-            aria-label="Scroll to Our Story"
-          >
-            <ChevronDown size={24} />
-          </button>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {TEAM.map((member) => (
+            <article
+              key={member.name}
+              className="group flex flex-col items-center rounded-2xl border border-slate-800 bg-card-dark p-10 transition-all duration-300 hover:border-primary/40"
+            >
+              <div className="relative mb-8">
+                <div className="size-36 overflow-hidden rounded-full border-2 border-slate-700 transition-colors group-hover:border-primary">
+                  <AdaptiveAvatar
+                    src={member.image}
+                    alt={`${member.name} profile`}
+                    fallbackText={member.name}
+                    className="h-full w-full object-cover text-3xl"
+                    fallbackClassName="bg-gradient-to-br from-slate-700 to-slate-800"
+                  />
+                </div>
+              </div>
+
+              <h3 className="mb-1 text-xl font-bold text-white">{member.name}</h3>
+              <p className="mb-3 text-center text-sm font-bold uppercase tracking-wider text-primary">{member.role}</p>
+              <p className="mb-8 text-center text-sm leading-relaxed text-slate-400">{member.bio}</p>
+
+              <div className="mb-8 flex gap-5">
+                <Link className="text-slate-500 transition-colors hover:text-primary" href={member.code} target="_blank">
+                  <Code2 size={20} />
+                </Link>
+                <Link className="text-slate-500 transition-colors hover:text-primary" href={member.profile} target="_blank">
+                  <UserCircle2 size={20} />
+                </Link>
+              </div>
+
+              <Link
+                href={member.profile}
+                target="_blank"
+                className="w-full rounded-xl bg-slate-800/50 py-3 text-center text-sm font-bold text-slate-200 transition-all hover:bg-primary hover:text-white"
+              >
+                Contact Me
+              </Link>
+            </article>
+          ))}
         </div>
-      </div>
+      </main>
 
-      {/* Second Screen */}
-      <div ref={storyRef} className='min-h-screen flex flex-col relative overflow-hidden'>
-        <div className='container mx-auto px-6 py-16 relative z-10'>
-          <section className="max-w-3xl mx-auto bg-white rounded-2xl shadow-md p-12 border border-gray-100 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
-              <div className="absolute bg-blue-100 rounded-full w-24 h-24 opacity-40 animate-bubble1" style={{ top: '-5%', left: '10%' }} />
-              <div className="absolute bg-blue-100 rounded-full w-16 h-16 opacity-40 animate-bubble2" style={{ bottom: '15%', right: '20%' }} />
-              <div className="absolute bg-blue-100 rounded-full w-32 h-32 opacity-40 animate-bubble3" style={{ top: '20%', right: '5%' }} />
-              <div className="absolute bg-blue-100 rounded-full w-12 h-12 opacity-40 animate-bubble4" style={{ bottom: '-10%', left: '30%' }} />
-              {/* Added Bubbles */}
-              <div className="absolute bg-blue-100 rounded-full w-20 h-20 opacity-40 animate-bubble2" style={{ top: '30%', left: '20%', animationDelay: '2s' }} />
-              <div className="absolute bg-blue-100 rounded-full w-10 h-10 opacity-40 animate-bubble1" style={{ bottom: '25%', left: '5%' , animationDelay: '4s'}} />
-              <div className="absolute bg-blue-100 rounded-full w-18 h-18 opacity-40 animate-bubble3" style={{ top: '5%', right: '30%', animationDelay: '3s' }} />
-            </div>
-
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center relative z-20">Our Story</h2>
-            <div className="space-y-5 text-gray-700 relative z-20">
-              <p className="leading-relaxed text-lg">
-                We all know that preparing for job interviews can be a daunting task <span role="img" aria-label="grimacing face">😬</span>. But what if there was a way to make it a little easier <span role="img" aria-label="slightly smiling face">🙂</span>? That's when the idea for our website came to life <span role="img" aria-label="light bulb">💡</span>.
-              </p>
-              <p className="leading-relaxed text-lg">
-                As we navigated through our own job search journeys, we realized one thing: there was a huge gap <span role="img" aria-label="warning">⚠️</span> in resources that focused on real, firsthand interview experiences. Sure, you can find advice on how to answer questions, but what about the actual experience? What's the atmosphere like? What kind of questions do companies ask? What should you expect during the process?
-              </p>
-              <p className="leading-relaxed text-lg">
-                So, we decided to create a platform where people could share their unique interview experiences—no filters, no sugarcoating <span role="img" aria-label="no filter">🚫</span>.
-              </p>
-              <p className="leading-relaxed text-lg">
-                Through our website, we hope to build a community of people supporting each other <span role="img" aria-label="people holding hands">🤝</span>, sharing knowledge, and making the interview process a little less intimidating <span role="img" aria-label="relieved face">😌</span>. Because we believe that understanding the process is just as important as preparing the answers.
-              </p>
-              <p className="leading-relaxed text-lg font-semibold text-center mt-4">
-                By the students for the students <span role="img" aria-label="student">🧑‍🎓</span> <span role="img" aria-label="student">🧑‍🎓</span>
-              </p>
-            </div>
-          </section>
+      <footer className="mt-auto border-t border-slate-800 bg-background-dark/50 px-6 py-12">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 md:flex-row">
+          <div className="flex items-center gap-2">
+            <Grid3X3 className="text-primary" size={24} />
+            <span className="text-xl font-bold">The Interview Room</span>
+          </div>
+          <p className="text-sm text-slate-500">© 2026 The Interview Room. All rights reserved.</p>
+          <div className="flex gap-8">
+            <Link className="text-slate-500 transition-colors hover:text-primary" href="mailto:contact@the-interview.co.in">
+              <UserCircle2 size={20} />
+            </Link>
+            <Link className="text-slate-500 transition-colors hover:text-primary" href="/feed">
+              <Code2 size={20} />
+            </Link>
+            <Link className="text-slate-500 transition-colors hover:text-primary" href="/team">
+              <Grid3X3 size={20} />
+            </Link>
+          </div>
         </div>
-      </div>
-
-      <style jsx global>{`
-        /* Existing animations */
-        @keyframes bubble1 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes bubble2 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(8px); }
-        }
-        @keyframes bubble3 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        @keyframes bubble4 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(5px); }
-        }
-
-        /* New animations for logo and text */
-        @keyframes logo-entrance {
-          0% {
-            opacity: 0;
-            transform: translateY(-20px) scale(0.8);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        @keyframes text-entrance {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes logo-spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-logo-entrance {
-          animation: logo-entrance 1s ease-out forwards;
-        }
-
-        .animate-text-entrance {
-          animation: text-entrance 1s ease-out forwards;
-          animation-delay: 0.3s;
-          opacity: 0;
-        }
-
-        .group-hover:animate-logo-spin {
-          animation: logo-spin 1s ease-in-out;
-        }
-
-        /* Existing classes */
-        .animate-bubble1 { animation: bubble1 6s infinite ease-in-out; }
-        .animate-bubble2 { animation: bubble2 7s infinite ease-in-out; }
-        .animate-bubble3 { animation: bubble3 8s infinite ease-in-out; }
-        .animate-bubble4 { animation: bubble4 9s infinite ease-in-out; }
-      `}</style>
+      </footer>
     </div>
   );
-};
-
-export default Aboutus;
+}

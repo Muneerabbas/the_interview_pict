@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google'; // Import GoogleAnalytics
 import { SpeedInsights } from '@vercel/speed-insights/next'; // Import SpeedInsights
+import { Analytics } from '@vercel/analytics/next'; // Import Vercel Analytics
 
 // Custom fonts setup
 const geistSans = Geist({
@@ -44,6 +45,8 @@ export default function RootLayout({ children }) {
         
         {/* Vercel Speed Insights */}
         <SpeedInsights />
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </body>
     </html>
   );

@@ -32,19 +32,29 @@ export async function GET(req) {
 
   try {
     const experience = await getCollection("experience");
-    const feed = await experience
+    const localFeed = await experience
       .find({})
       .sort({ date: -1 })
       .skip(page * itemsPerPage)
       .limit(itemsPerPage)
       .toArray();
 
-    if (feed.length > 0) {
-      return ok(feed);
+    if (localFeed.length === itemsPerPage) {
+      return ok(localFeed);
     }
 
     const remoteFeed = await fetchRemoteFeed(page, itemsPerPage);
-    return ok(remoteFeed);
+    if (remoteFeed.length > 0) {
+      if (localFeed.length === 0) {
+        return ok(remoteFeed);
+      }
+
+      // When local data is only a partial mirror, prefer the remote page
+      // so the feed doesn't stop early.
+      return ok(remoteFeed.length >= localFeed.length ? remoteFeed : localFeed);
+    }
+
+    return ok(localFeed);
   } catch (error) {
     console.warn("Local feed unavailable, trying remote feed fallback.", error);
     try {

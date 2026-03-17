@@ -165,11 +165,11 @@ Good Luck, and Remember: Stay Confident! 😎
   };
 
   return (
-    <div className="flex flex-col h-screen mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
+    <div className="flex min-h-screen flex-col bg-background-light text-slate-900 dark:bg-background-dark dark:text-slate-100 mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
       <Navbar />
 
       {isSmallScreen && (
-        <div className=" text-gray-500 text-center py-4 mt-[100px]">
+        <div className="text-slate-500 dark:text-slate-400 text-center py-4 mt-[100px]">
           <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
           <p>For the best experience, please use a tablet or laptop.</p>
         </div>
@@ -177,18 +177,18 @@ Good Luck, and Remember: Stay Confident! 😎
 
       <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
         <div className="max-w-7xl mx-auto p-4 md:p-6">
-          <h1 className="text-2xl font-bold text-gray-700 mb-2 text-center">Help & Template</h1>
-          <p className="text-gray-700 font-semibold mb-2 text-center">
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2 text-center">Help & Template</h1>
+          <p className="text-slate-700 dark:text-slate-200 font-semibold mb-2 text-center">
             <span className="text-red-500">*</span> This is just a template. You cannot edit here. <span className="text-red-500">*</span>
           </p>
-          <p className="text-gray-600 mb-4 text-center">
+          <p className="text-slate-600 dark:text-slate-300 mb-4 text-center">
             To use this template, <strong className="underline">copy</strong> the content below and <strong className="underline">paste</strong> it into the Post section to share your experience.
           </p>
 
           <div className="flex justify-end mb-2"> {/* Container for copy button, aligned to right */}
             <button
               onClick={handleCopyClick}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Copy Template Text
             </button>

@@ -58,7 +58,9 @@ export function communityStories(stories, limit = 3) {
     quote: summarizeExperience(item?.exp_text, 180),
     author: normalizeText(item?.name, "Anonymous Candidate"),
     role: normalizeText(item?.role, "Candidate"),
-    company: normalizeText(item?.company, "Community"),
+    company: normalizeText(item?.company, "Unknown Company"),
+    batch: normalizeText(item?.batch || item?.year || item?.graduation_year, "N/A"),
+    views: Number(item?.views) || 0,
     avatar: normalizeText(item?.profile_pic),
   }));
 }

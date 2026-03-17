@@ -23,8 +23,14 @@ export default function HomePageClient({ topStories = [], featuredStories = [] }
     return source.slice(0, 6);
   }, [allStories, topStories]);
 
+  const bottomTopStories = useMemo(() => {
+    const source = topStories.length ? topStories : allStories;
+    const nextStories = source.slice(6, 9);
+    return nextStories.length ? nextStories : source.slice(0, 3);
+  }, [allStories, topStories]);
+
   const companies = useMemo(() => topCompanies(allStories, 5), [allStories]);
-  const community = useMemo(() => communityStories(allStories, 3), [allStories]);
+  const community = useMemo(() => communityStories(bottomTopStories, 3), [bottomTopStories]);
 
   return (
     <div className="dark relative flex min-h-screen flex-col overflow-x-hidden bg-background-light font-display text-slate-900 antialiased transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
@@ -33,8 +39,8 @@ export default function HomePageClient({ topStories = [], featuredStories = [] }
       <main className="flex-1">
         <HeroSection />
         <SearchSection popularCompanies={companies} />
-        <FeaturedSection stories={featured} />
         <CommunitySection items={community} />
+        <FeaturedSection stories={featured} />
       </main>
 
       <Footer />

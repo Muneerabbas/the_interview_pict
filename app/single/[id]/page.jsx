@@ -332,7 +332,7 @@ export default async function ExperienceViewer({ params }) {
               </article>
             </div>
 
-            <aside className="flex flex-col gap-8 lg:col-span-4">
+            <aside className="flex flex-col gap-8 lg:sticky lg:top-24 lg:col-span-4 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
               <section className="rounded-xl border border-slate-200 bg-slate-100 p-6 dark:border-slate-800 dark:bg-slate-800/50">
                 <h4 className="mb-4 flex items-center gap-2 text-lg font-bold">
                   <Info size={18} className="text-primary" />

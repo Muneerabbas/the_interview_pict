@@ -9,7 +9,7 @@ export default function SearchSection({ popularCompanies = [] }) {
   const [searchText, setSearchText] = useState("");
 
   const submitSearch = (query) => {
-    const cleaned = query.trim() || "Himanshu-Nilay-Neeraj";
+    const cleaned = query.trim() || "interview";
     router.push(`/search/${encodeURIComponent(cleaned)}`);
   };
 

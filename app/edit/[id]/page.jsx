@@ -237,11 +237,11 @@ const handleSubmit = async () => {
 
 
   return (
-    <div className="flex flex-col h-screen mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
+    <div className="flex min-h-screen flex-col bg-background-light text-slate-900 dark:bg-background-dark dark:text-slate-100 mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
       <Navbar />
 
       {isSmallScreen && (
-      <div className=" text-gray-500 text-center py-4 mt-[100px]">
+      <div className="text-slate-500 dark:text-slate-400 text-center py-4 mt-[100px]">
         <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
         <p>For the best experience, please use a tablet or laptop.</p>
       </div>
@@ -249,7 +249,7 @@ const handleSubmit = async () => {
 
       <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
         <div className="max-w-7xl mx-auto p-4 md:p-6">
-        <div className="text-center text-gray-500 text-sm mb-4">
+        <div className="text-center text-slate-500 dark:text-slate-400 text-sm mb-4">
       <p>Pro Tip: Maximize the editor for a better experience!</p>
     </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -257,9 +257,9 @@ const handleSubmit = async () => {
               <select
                 value={batch}
                 onChange={(e) => handleFieldChange("batch", e.target.value)}
-                className={`w-full p-2 border ${
-                  errors.batch ? "border-red-500" : "border-gray-300"
-                } rounded-lg`}
+                className={`w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+                  errors.batch ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+                }`}
               >
                 <option value="">Select Year</option>
                 {years.map((year) => (
@@ -277,9 +277,9 @@ const handleSubmit = async () => {
               <select
                 value={branch}
                 onChange={(e) => handleFieldChange("branch", e.target.value)}
-                className={`w-full p-2 border ${
-                  errors.branch ? "border-red-500" : "border-gray-300"
-                } rounded-lg`}
+                className={`w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+                  errors.branch ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+                }`}
               >
                 <option value="">Select Branch</option>
                 <option value="CS">Computer Science</option>
@@ -297,9 +297,9 @@ const handleSubmit = async () => {
   <select
     value={company}
     onChange={handleCompanyChange}
-    className={`w-full p-2 border ${
-      errors.company ? "border-red-500" : "border-gray-300"
-    } rounded-lg`}
+    className={`w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+      errors.company ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+    }`}
   >
     <option value="">Select Company</option>
     <option value="others">Others...</option>
@@ -317,9 +317,9 @@ const handleSubmit = async () => {
       onChange={handleCustomCompanyChange}
       placeholder="Enter Company Name"
       value={customCompany}
-      className={`w-full p-2 border ${
-        errors.company ? "border-red-500" : "border-gray-300"
-      } rounded-lg mt-2`}
+      className={`mt-2 w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+        errors.company ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+      }`}
     />
   )}
 
@@ -332,9 +332,9 @@ const handleSubmit = async () => {
   <select
     value={role}
     onChange={handleRoleChange}
-    className={`w-full p-2 border ${
-      errors.role ? "border-red-500" : "border-gray-300"
-    } rounded-lg`}
+    className={`w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+      errors.role ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+    }`}
   >
     <option value="">Select Role</option>
     <option value="others">Others...</option>
@@ -354,9 +354,9 @@ const handleSubmit = async () => {
       onChange={handleCustomRoleChange}
       placeholder="Enter Role"
       value={customRole}
-      className={`w-full p-2 border ${
-        errors.role ? "border-red-500" : "border-gray-300"
-      } rounded-lg mt-2`}
+      className={`mt-2 w-full rounded-lg border bg-white p-2 dark:bg-slate-900 dark:text-slate-100 ${
+        errors.role ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+      }`}
     />
   )}
 
@@ -376,27 +376,22 @@ const handleSubmit = async () => {
   </div>
 )}
 {warningMessage && (
-  <div className="bg-[#FFF3CD] text-[#85640A] p-4 rounded-lg shadow-md mb-4 text-center">
+  <div className="bg-amber-500/15 text-amber-300 p-4 rounded-lg border border-amber-500/30 shadow-md mb-4 text-center">
     <div className="flex items-center justify-center">
       <svg className="w-6 h-6 text-[#FFC107] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
       </svg>
-      <p className="font-semibold text-md text-[#85640A]">{warningMessage}</p>
+      <p className="font-semibold text-md text-amber-200">{warningMessage}</p>
     </div>
   </div>
 )}
 
 
           {/* Editor Container with fixed height */}
-        <div
+<div
   className="rounded-lg overflow-hidden relative"
   style={{
-    height:
-      window.innerWidth < 768
-        ? 'calc(100vh)'  // For mobile
-        : window.innerWidth < 1024
-        ? 'calc(100vh )'   // For tablet
-        : 'calc(100vh)',         // For laptop and larger screens
+    height,
     marginBottom: bottomMargin,
     minHeight: '100%',
   }}
@@ -407,7 +402,7 @@ const handleSubmit = async () => {
           <button
   onClick={handleSubmit}
   type="button"
-  className="text-sm sm:text-md bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none py-2 px-16 z-50"
+  className="text-sm sm:text-md bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors duration-200 focus:ring-4 focus:ring-primary/30 focus:outline-none py-2 px-16 z-50"
 >
   Submit
 </button>

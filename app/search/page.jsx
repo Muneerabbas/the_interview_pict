@@ -7,12 +7,11 @@ const SearchPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/search/Himanshu-Nilay-Neeraj");
+    router.push("/search/interview");
   }, [router]);
 
   return null; 
 };
 
 export default SearchPage;
-
 

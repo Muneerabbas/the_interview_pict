@@ -1,22 +1,21 @@
-import React from 'react';
-import Navbar from '@/components/Navbar';
-const TeamPage = () => {
-    return (
-               <div className="min-h-screen bg-[#F0F2F5]">
-            <Navbar />
-    <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-4">The Interview Team</h1>
-      <p className="text-gray-700">
-        This page will showcase the team behind "theInterview". You can add team member profiles, bios, etc.
-      </p>
-      <p className="text-gray-700 mt-4">
-         <a href="YOUR_EXTERNAL_LINK_HERE" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">
-            External Team Page Link (Replace with your actual external link)
-         </a>
-      </p>
-            </div>
-        </div>
-  );
-};
+import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
-export default TeamPage;
+export default function TeamPage() {
+  return (
+    <main className="min-h-screen bg-background-light text-slate-900 dark:bg-background-dark dark:text-slate-100">
+      <Navbar />
+      <section className="mx-auto max-w-4xl px-4 py-12">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <h1 className="mb-4 text-3xl font-black tracking-tight">The Interview Team</h1>
+          <p className="text-slate-600 dark:text-slate-300">
+            Meet the contributors building The Interview Room and helping candidates prepare with real interview stories.
+          </p>
+          <p className="mt-4 text-slate-600 dark:text-slate-300">
+            Visit the detailed team page on the <Link href="/about" className="font-semibold text-primary underline hover:text-primary/80">About</Link> section.
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}

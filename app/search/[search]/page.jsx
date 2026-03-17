@@ -1,80 +1,34 @@
 "use client";
+
 import { useState, useEffect, useRef, useCallback } from "react";
-import ProfileCard from "../../../components/Card";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React from "react";
-import { Loader2, ArrowLeft, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import FeedExperienceCard from "@/components/FeedExperienceCard";
 
 const SearchPage = ({ params }) => {
   const router = useRouter();
   const { search } = React.use(params);
-  const [searchText, setSearchText] = useState(search || "");
+  const activeSearch = typeof search === "string" && search.trim() ? decodeURIComponent(search) : "interview";
+
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [debouncedSearch, setDebouncedSearch] = useState(search || "");
-  const [globalLoading, setGlobalLoading] = useState(false); 
-
   const observer = useRef();
-  const lastProfileElementRef = useCallback((node) => {
-    if (loadingMore) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        loadMore();
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [loadingMore, hasMore]);
 
-  useEffect(() => {
-    if (!search && !searchText) {
-      router.push("/search/Himanshu-Nilay-Neeraj");
-    }
-  }, [search, searchText, router]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchText);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchText]);
-
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (debouncedSearch.trim() === "") return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `/api/search?search=${debouncedSearch}&page=1`
-        );
-        setResults(response.data.result);
-        setHasMore(response.data.result.length === 10);
-        setPage(1); // Reset page on new search
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (debouncedSearch) {
-      fetchResults();
-    }
-  }, [debouncedSearch]);
-
-  const loadMore = async () => {
+  const loadMore = useCallback(async () => {
     if (loadingMore || !hasMore) return;
     setLoadingMore(true);
     try {
       const nextPage = page + 1;
-      const response = await axios.get(
-        `/api/search?search=${debouncedSearch}&page=${nextPage}`
-      );
-      const newResults = response.data.result;
-      setResults(prev => [...prev, ...newResults]);
+      const response = await fetch(`/api/search?search=${encodeURIComponent(activeSearch)}&page=${nextPage}`);
+      if (!response.ok) throw new Error("Failed to load more");
+      const data = await response.json();
+      const newResults = data.result || [];
+      setResults((prev) => [...prev, ...newResults]);
       setPage(nextPage);
       setHasMore(newResults.length === 10);
     } catch (error) {
@@ -82,110 +36,100 @@ const SearchPage = ({ params }) => {
     } finally {
       setLoadingMore(false);
     }
-  };
+  }, [activeSearch, hasMore, loadingMore, page]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchText.trim() !== "") {
-      router.push(`/search/${encodeURIComponent(searchText)}`);
-    } else {
-      router.push(`/search/Himanshu-Nilay-Neeraj`);
+  const lastProfileElementRef = useCallback(
+    (node) => {
+      if (loadingMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0]?.isIntersecting && hasMore) {
+          loadMore();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [hasMore, loadMore, loadingMore]
+  );
+
+  useEffect(() => {
+    if (!search || !String(search).trim()) {
+      router.replace("/search/interview");
     }
-  };
+  }, [router, search]);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!activeSearch.trim()) return;
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/search?search=${encodeURIComponent(activeSearch)}&page=1`);
+        if (!response.ok) throw new Error("Failed to fetch results");
+        const data = await response.json();
+        const initialResults = data.result || [];
+        setResults(initialResults);
+        setHasMore(initialResults.length === 10);
+        setPage(1);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [activeSearch]);
 
   return (
-    <div className="max-h-screen p-6 relative">
-      {globalLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin text-blue-600" size={32} />
-              <span className="ml-3 text-[#1D1D1D] text-lg font-semibold">Loading...</span>
-            </div>
-          </div>
+    <main className="min-h-screen bg-background-light text-slate-900 dark:bg-background-dark dark:text-slate-100">
+      <Navbar />
+
+      <section className="mx-auto max-w-4xl px-4 py-8">
+        <div className="mb-6 rounded-2xl border border-slate-800 bg-surface-dark p-4 text-sm text-slate-400">
+          Showing results for: <span className="font-semibold text-primary">{activeSearch}</span>
         </div>
-      )}
-      <div className="max-w-3xl mx-auto">
-        <form onSubmit={handleSearch} className="flex items-center gap-2 mb-6">
-          <button
-            type="button"
-            onClick={() => router.push("/feed")}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors duration-200 focus:outline-none"
-            aria-label="Back to home"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <div className="flex-1 flex items-center space-x-2">
-            <div className="relative flex-1">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="w-full p-3 pl-10 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#B0B3B8]" />
-            </div>
-            <button
-              type="submit"
-              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8B77F9]"
-              aria-label="Search"
-            >
-              <Search size={20} />
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="max-w-3xl mx-auto">
+
         {loading && (
-          <p className="text-center mt-4 text-gray-600">Loading...</p>
+          <div className="mb-4 flex items-center justify-center gap-2 text-primary">
+            <Loader2 className="animate-spin" size={20} />
+            <span>Searching...</span>
+          </div>
         )}
-        <div className="mt-6 space-y-6">
+
+        <div className="space-y-6">
           {results.length > 0
             ? results.map((profile, index) => {
+                const key = profile?._id || profile?.uid || `search-${index}`;
                 if (results.length === index + 2) {
-                    return (
-                        <div ref={lastProfileElementRef} key={profile._id}>
-                             <ProfileCard 
-                                profile={profile} 
-                                setGlobalLoading={setGlobalLoading}
-                            />
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div key={profile._id}>
-                             <ProfileCard 
-                                profile={profile} 
-                                setGlobalLoading={setGlobalLoading}
-                            />
-                        </div>
-                    );
+                  return (
+                    <div ref={lastProfileElementRef} key={key}>
+                      <FeedExperienceCard profile={profile} />
+                    </div>
+                  );
                 }
+                return (
+                  <div key={key}>
+                    <FeedExperienceCard profile={profile} />
+                  </div>
+                );
               })
             : !loading && (
-                <p className="text-center text-gray-600">
-                  {searchText
-                    ? "No results found."
-                    : "Please enter a search query."}
+                <p className="rounded-xl border border-slate-200 bg-white p-6 text-center text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+                  No results found.
                 </p>
               )}
-          <div className="mt-8 flex flex-col items-center space-y-4">
-            {loadingMore && (
-              <div className="flex items-center space-x-2 text-blue-600">
-                <Loader2 className="animate-spin" size={24} />
-                <span>Loading experiences...</span>
-              </div>
-            )}
-
-            {!loadingMore && !hasMore && results.length > 0 && (
-              <p className="text-[#B0B3B8] text-lg"></p>
-            )}
-            <br />
-          </div>
         </div>
-      </div>
-    </div>
+
+        <div className="mt-8 flex flex-col items-center gap-4 pb-8">
+          {loadingMore && (
+            <div className="flex items-center gap-2 text-primary">
+              <Loader2 className="animate-spin" size={22} />
+              <span>Loading experiences...</span>
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 };
 

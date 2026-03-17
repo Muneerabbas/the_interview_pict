@@ -1,31 +1,49 @@
 import Link from "next/link";
 import AdaptiveAvatar from "./AdaptiveAvatar";
+import { formatCount } from "./homeUtils";
 
 function CommunityCard({ item }) {
+  const href = item?.uid ? `/single/${item.uid}` : "/feed";
+  const company = item?.company || "Unknown Company";
+  const role = item?.role || "Candidate";
+  const author = item?.author || "Anonymous Candidate";
+  const batch = item?.batch || "N/A";
+  const reads = formatCount(item?.views);
+
   return (
-    <article className="group relative rounded-[2.5rem] border border-slate-800 bg-slate-900 p-10 transition-transform duration-500 hover:-translate-y-2">
-      <span className="absolute right-6 top-6 select-none text-8xl text-primary/10 transition-colors group-hover:text-primary/20">"</span>
-      <p className="relative z-10 mb-10 text-lg font-medium leading-relaxed text-slate-300">
-        "{item.quote}"
-      </p>
-      <div className="flex items-center gap-4">
-        <div className="size-14 rounded-full border border-primary/30 bg-primary/20 p-0.5">
-          <AdaptiveAvatar
-            src={item.avatar}
-            alt={item.author}
-            fallbackText={item.author}
-            className="h-full w-full rounded-full object-cover text-sm"
-            fallbackClassName="bg-slate-700"
-          />
-        </div>
-        <div>
-          <div className="font-black text-white">{item.author}</div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-primary">
-            {item.role} at {item.company}
+    <Link href={href} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded-[2.5rem]">
+      <article className="group relative rounded-[2.5rem] border border-slate-800 bg-slate-900 p-10 transition-transform duration-500 hover:-translate-y-2">
+        <span className="absolute right-6 top-6 select-none text-8xl text-primary/10 transition-colors group-hover:text-primary/20">"</span>
+
+        <div className="mb-8 flex items-center gap-4">
+          <div className="size-14 rounded-full border border-primary/30 bg-primary/20 p-0.5">
+            <AdaptiveAvatar
+              src={item.avatar}
+              alt={author}
+              fallbackText={author}
+              className="h-full w-full rounded-full object-cover text-sm"
+              fallbackClassName="bg-slate-700"
+            />
+          </div>
+          <div>
+            <div className="text-xl font-black text-white">{company}</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-primary">{role}</div>
           </div>
         </div>
-      </div>
-    </article>
+
+        <p className="relative z-10 mb-8 text-lg font-medium leading-relaxed text-slate-300">
+          "{item.quote}"
+        </p>
+
+        <div className="border-t border-slate-800 pt-5">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-400">
+            <span>Batch: {batch}</span>
+            <span>Reads: {reads}</span>
+          </div>
+          <div className="mt-2 text-xs font-bold text-primary">By {author}</div>
+        </div>
+      </article>
+    </Link>
   );
 }
 
@@ -35,7 +53,7 @@ export default function CommunitySection({ items = [] }) {
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-20 text-center">
-          <h2 className="mb-6 text-4xl font-black italic tracking-tight text-white md:text-5xl">Community Impact</h2>
+          <h2 className="mb-6 text-4xl font-black italic tracking-tight text-white md:text-5xl">Featured Interview Stories</h2>
           <div className="mx-auto h-1.5 w-24 rounded-full bg-primary" />
         </div>
 

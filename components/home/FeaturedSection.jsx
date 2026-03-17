@@ -79,7 +79,7 @@ export default function FeaturedSection({ stories = [] }) {
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
       <div className="mb-16 flex items-end justify-between">
         <div>
-          <h2 className="mb-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white">Featured Experiences</h2>
+          <h2 className="mb-3 text-4xl font-black tracking-tight text-slate-900 dark:text-white">Top Interview Stories 🔥</h2>
           <p className="text-lg font-medium text-slate-500">Top-rated insider stories curated for your career growth.</p>
         </div>
         <Link href="/feed" className="group flex items-center gap-2 font-black text-primary transition-all hover:gap-3">

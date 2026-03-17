@@ -7,6 +7,15 @@ async function searchExperiences(searchText, page = 1) {
   const skip = (page - 1) * SEARCH_PAGE_SIZE;
   const experience = await getCollection("experience");
 
+  if (!searchText || searchText.toLowerCase() === "all") {
+    return experience
+      .find({})
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(SEARCH_PAGE_SIZE)
+      .toArray();
+  }
+
   return experience
     .aggregate([
       {

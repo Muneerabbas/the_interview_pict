@@ -35,6 +35,7 @@ Create a `.env.local` at the project root:
 ```bash
 # MongoDB
 MONGODB_URI="mongodb+srv://..."
+MONGODB_DB_NAME="int-exp"
 
 # NextAuth (Google)
 GOOGLE_CLIENT_ID="..."
@@ -51,7 +52,7 @@ EMAIL_PASS="gmail-app-password"
 
 Notes:
 
-- **Database name** used by API routes is `int-exp`.
+- **Database name** used by API routes defaults to `int-exp` and can be overridden with `MONGODB_DB_NAME`.
 - Some pages currently fetch from `https://the-interview-pict.vercel.app/api/...` directly (not from the local server). If you’re developing locally and want local data/APIs, update those fetch URLs to use your local base URL (or refactor to an env like `NEXT_PUBLIC_BASE_URL`).
 
 ## Project structure
@@ -190,6 +191,34 @@ All API routes live under `app/api/*` (Next.js route handlers). CORS headers are
 - **`npm run dev`**: start dev server
 - **`npm run build`**: production build
 - **`npm run start`**: run production server
+- **`npm run migrate:db`**: migrate data from one MongoDB to another
+
+## Database migration (to your own MongoDB)
+
+Use this when moving from current DB to your personal MongoDB cluster.
+
+1. Set migration env vars and run:
+
+```bash
+SOURCE_MONGODB_URI="mongodb+srv://old-cluster-uri" \
+TARGET_MONGODB_URI="mongodb+srv://your-new-cluster-uri" \
+SOURCE_DB_NAME="int-exp" \
+TARGET_DB_NAME="int-exp" \
+DROP_TARGET="false" \
+npm run migrate:db
+```
+
+2. Then update your app env to use your DB:
+
+```bash
+MONGODB_URI="mongodb+srv://your-new-cluster-uri"
+MONGODB_DB_NAME="int-exp"
+```
+
+Optional migration env vars:
+- `COLLECTIONS="experience,backup,drafts,user,newsletter,dropdowns"` (defaults to all above)
+- `MIGRATION_BATCH_SIZE="500"` (default `500`)
+- `DROP_TARGET="true"` to clear target collections before writing
 
 ## Notes for contributors
 

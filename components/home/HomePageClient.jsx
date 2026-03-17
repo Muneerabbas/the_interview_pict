@@ -35,13 +35,14 @@ export default function HomePageClient({ topStories = [], featuredStories = [] }
 
   return (
     <div className="dark relative flex min-h-screen flex-col overflow-x-hidden bg-background-light font-display text-slate-900 antialiased transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(13,127,242,0.12),transparent_35%),radial-gradient(circle_at_80%_18%,rgba(56,189,248,0.08),transparent_32%)]" />
       <Navbar />
 
       <main className="flex-1">
         <HeroSection />
         <SearchSection popularCompanies={companies} />
-        <CommunitySection items={community} />
         <FeaturedSection stories={featured} />
+        <CommunitySection items={community} />
         <TestimonialsSection />
       </main>
 

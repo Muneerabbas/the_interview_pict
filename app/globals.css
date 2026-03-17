@@ -126,3 +126,27 @@ input::placeholder {
 .animate-placeholder-enter::placeholder {
   animation: placeholderEnter 0.5s ease-out forwards;
 }
+
+.featured-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 127, 242, 0.6) rgba(30, 41, 59, 0.35);
+}
+
+.featured-scrollbar::-webkit-scrollbar {
+  height: 10px;
+}
+
+.featured-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.35);
+  border-radius: 999px;
+}
+
+.featured-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(13, 127, 242, 0.65), rgba(56, 189, 248, 0.7));
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 0.8);
+}
+
+.featured-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgba(13, 127, 242, 0.85), rgba(56, 189, 248, 0.9));
+}

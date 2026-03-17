@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "test": "node --test",
-    "check": "npm run test && npm run build"
+    "check": "npm run test && npm run build",
+    "migrate:db": "node scripts/migrate-mongodb.js"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.0",

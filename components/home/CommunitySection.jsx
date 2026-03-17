@@ -12,7 +12,7 @@ function CommunityCard({ item }) {
 
   return (
     <Link href={href} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded-[2.5rem]">
-      <article className="group relative rounded-[2.5rem] border border-slate-800 bg-slate-900 p-10 transition-transform duration-500 hover:-translate-y-2">
+      <article className="group relative rounded-[2rem] border border-slate-800/80 bg-slate-900/95 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(13,127,242,0.1)]">
         <span className="absolute right-6 top-6 select-none text-8xl text-primary/10 transition-colors group-hover:text-primary/20">"</span>
 
         <div className="mb-8 flex items-center gap-4">
@@ -26,13 +26,13 @@ function CommunityCard({ item }) {
             />
           </div>
           <div>
-            <div className="text-xl font-black text-white">{company}</div>
+            <div className="text-lg font-black text-white">{company}</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-primary">{role}</div>
           </div>
         </div>
 
-        <p className="relative z-10 mb-8 text-lg font-medium leading-relaxed text-slate-300">
-          "{item.quote}"
+        <p className="relative z-10 mb-6 text-base font-medium leading-relaxed text-slate-300">
+          {item.quote}
         </p>
 
         <div className="border-t border-slate-800 pt-5">
@@ -49,11 +49,14 @@ function CommunityCard({ item }) {
 
 export default function CommunitySection({ items = [] }) {
   return (
-    <section className="relative overflow-hidden bg-slate-950 py-32">
+    <section className="relative overflow-hidden bg-slate-950 py-14">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-20 text-center">
-          <h2 className="mb-6 text-4xl font-black italic tracking-tight text-white md:text-5xl">Featured Interview Stories</h2>
+        <div className="mb-9 text-center">
+          <h2 className="mb-3 text-4xl font-black tracking-tight text-white md:text-5xl">Featured Interview Stories</h2>
+          <p className="mx-auto max-w-2xl text-sm text-slate-400 md:text-base">
+            Handpicked stories with practical insights from recent interview experiences.
+          </p>
           <div className="mx-auto h-1.5 w-24 rounded-full bg-primary" />
         </div>
 
@@ -63,7 +66,7 @@ export default function CommunitySection({ items = [] }) {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center">
           <Link href="/post" className="font-black text-primary hover:text-primary/80">
             Share your experience with the community
           </Link>

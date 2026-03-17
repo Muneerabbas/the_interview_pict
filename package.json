@@ -12,6 +12,7 @@
     "@react-oauth/google": "^0.12.1",
     "@shadcn/ui": "^0.0.4",
     "@uiw/react-md-editor": "^4.0.5",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.7.9",
     "caniuse-lite": "^1.0.30001761",
     "date-fns": "^4.1.0",

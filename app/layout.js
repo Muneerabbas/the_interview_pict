@@ -8,6 +8,7 @@ import Footer from ".././components/Footer"; // Adjust path if needed
 import { usePathname } from "next/navigation";
 import "./globals.css";
 import { GoogleAnalytics } from '@next/third-parties/google'; // Import GoogleAnalytics
+import { SpeedInsights } from '@vercel/speed-insights/next'; // Import SpeedInsights
 
 // Custom fonts setup
 const geistSans = Geist({
@@ -40,6 +41,9 @@ export default function RootLayout({ children }) {
 
         {/* Google Analytics Integration */}
         <GoogleAnalytics gaId="G-EBQQJCL50P" /> {/* Add GoogleAnalytics component here with your GA4 Measurement ID */}
+        
+        {/* Vercel Speed Insights */}
+        <SpeedInsights />
       </body>
     </html>
   );

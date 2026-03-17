@@ -6,6 +6,7 @@ import CommunitySection from "./CommunitySection";
 import FeaturedSection from "./FeaturedSection";
 import HeroSection from "./HeroSection";
 import SearchSection from "./SearchSection";
+import TestimonialsSection from "./TestimonialsSection";
 import { buildUniqueStories, communityStories, topCompanies } from "./homeUtils";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,6 +42,7 @@ export default function HomePageClient({ topStories = [], featuredStories = [] }
         <SearchSection popularCompanies={companies} />
         <CommunitySection items={community} />
         <FeaturedSection stories={featured} />
+        <TestimonialsSection />
       </main>
 
       <Footer />

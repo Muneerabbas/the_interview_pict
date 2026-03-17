@@ -10,11 +10,11 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 
 const revalidateTime = 3000;
 const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.the-interview.co.in";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
 export async function generateMetadata({ params }) {
   const { id } = await params;
 
-  const baseUrl = "https://www.the-interview.co.in";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
 
   let data = {};
 

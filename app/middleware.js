@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
  
-const allowedOrigins = ['https://the-interview-pict.vercel.app']
+const allowedOrigins = ['https://www.pict.live']
  
 const corsOptions = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',

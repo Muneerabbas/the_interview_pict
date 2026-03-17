@@ -1,10 +1,12 @@
 // aboutus/page.js
 "use client";
 import React, { useRef } from 'react';
-import FounderCard from '../../components/FounderCard';
+    import TeamMemberCard from "../../components/FounderCard";
 import himg from '../../public/h1.jpg';
 import nimg from '../../public/n2.jpg';
 import niimg from '../../public/n1.jpg';
+import m1img from "../../public/m1.jpeg";
+import m2img from "../../public/m2.jpeg";
 import logo from "../../public/icon.svg";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,56 +23,87 @@ const Aboutus = () => {
     <div className='flex flex-col bg-blue-50'>
       {/* First Screen */}
       <div className='min-h-screen flex flex-col relative'>
-        {/* Logo Section - Fixed at top */}
-        <div className="w-full pt-8 pb-4">
-          <Link href="/" className="group flex flex-col items-center transition-transform duration-300 hover:scale-105">
-            <div className="animate-logo-entrance">
+        {/* Header */}
+        <header className="w-full pt-10 pb-6">
+          <Link
+            href="/"
+            className="group mx-auto flex w-fit flex-col items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
+          >
+            <div className="relative h-20 w-20 sm:h-24 sm:w-24">
+              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-xl transition duration-300 group-hover:bg-blue-600/15" />
               <Image
                 src={logo}
                 alt="theInterview Logo"
-                width={80}
-                height={80}
-                className="group-hover:animate-logo-spin mb-2"
+                fill
+                sizes="96px"
+                className="relative object-contain drop-shadow-sm"
+                priority
               />
             </div>
-            <span className="text-4xl font-bold text-blue-600 animate-text-entrance group-hover:text-blue-700">
-              theInterview
-            </span>
-          </Link>
-        </div>
 
-        {/* Team Content - Centered vertically with reduced gap */}
-        <div className='flex-grow flex flex-col justify-center lg:-mt-16 mt-0'> {/* Adjusted margin for mobile */}
+            <div className="text-center">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+                  theInterview
+                </span>
+              </h1>
+              <p className="mt-3 text-sm sm:text-base text-gray-600 max-w-2xl">
+                Students building a simple place to share and learn from real interview experiences.
+              </p>
+            </div>
+          </Link>
+        </header>
+
+        {/* Team Content */}
+        <div className='flex-grow flex flex-col pt-12 pb-20'>
           <div className='container mx-auto px-6'>
-            <h1 className='text-4xl font-bold text-center mb-12 text-gray-900'>Team</h1>
-            <div className='founder flex flex-col lg:flex-row gap-8 justify-center items-center'>
-              <FounderCard
-                img={himg}
-                name="Himanshu Gholse"
-                linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/"
-                github="https://github.com/himanshug-08"
-                des="PICT'26 ENTC"
-                email="himanshugholse08@gmail.com"
-                phone="+91 8805857669"
-              />
-              <FounderCard
-                img={nimg}
-                name="Neeraj Magdum"
-                linkedin="https://www.linkedin.com/in/neerajmagdum/"
-                github="https://github.com/nirz306"
-                des="PICT'26 CE"
-                email="neerajmagdum10@gmail.com"
-                phone="+91 7972065984"
-              />
-              <FounderCard
-                img={niimg}
-                name="Nilay Tayade"
-                linkedin="https://www.linkedin.com/in/nilay-tayade/"
-                github="https://github.com/nilaytayade"
-                des={<><span>PICT'26 CE</span><br /><span>Upcoming Barclays Intern</span></>}
-                email="nilaytayadee@gmail.com"
-                phone="+91 9370088933"
-              />
+            <h2 className="text-3xl sm:text-4xl font-semibold text-center mb-10 text-gray-900">
+              Team
+            </h2>
+
+            <div className="mx-auto mt-10 max-w-5xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center">
+                <TeamMemberCard
+                  img={himg}
+                  name="Himanshu Gholse"
+                  subtitle="PICT'26 ENTC"
+                  linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/"
+                  github="https://github.com/himanshug-08"
+                  email="himanshugholse08@gmail.com"
+                />
+                <TeamMemberCard
+                  img={nimg}
+                  name="Neeraj Magdum"
+                  subtitle="PICT'26 CE"
+                  linkedin="https://www.linkedin.com/in/neerajmagdum/"
+                  github="https://github.com/nirz306"
+                  email="neerajmagdum10@gmail.com"
+                />
+                <TeamMemberCard
+                  img={niimg}
+                  name="Nilay Tayade"
+                  subtitle="PICT'26 CE • Upcoming Barclays Intern"
+                  linkedin="https://www.linkedin.com/in/nilay-tayade/"
+                  github="https://github.com/nilaytayade"
+                  email="nilaytayadee@gmail.com"
+                />
+                <TeamMemberCard
+                  img={m1img}
+                  name="Muneer Abbas"
+                  subtitle="PICT'28 CE"
+                  linkedin="https://www.linkedin.com/in/muneer-abass-67a095285/"
+                  github="https://github.com/muneerabbas"
+                  email="muneer.abbas5678@gmail.com"
+                />
+                <TeamMemberCard
+                  img={m2img}
+                  name="Manas Khairnar"
+                  subtitle="PICT CE"
+                  linkedin="https://www.linkedin.com/in/manas-khairnar-98329132b/"
+                  github="https://github.com/derpx06"
+                  email="manaskhairnar1511@gmail.com"
+                />
+              </div>
             </div>
           </div>
         </div>

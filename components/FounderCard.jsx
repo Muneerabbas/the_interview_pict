@@ -1,3 +1,5 @@
+ "use client";
+
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
@@ -475,7 +477,7 @@ const FounderCard = ({
               </g>
             </g>
           </svg> */}
-          <Image src={img} alt="Neeraj" width={500} height={500} />
+          <Image src={img} alt={name} width={500} height={500} />
         </div>
         <div className="bottom">
           <div className="content">

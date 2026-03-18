@@ -27,27 +27,23 @@ ${JSON.stringify(data, null, 2)}
 
 FORMAT:
 
-# 🏢 ${data.company} Interview Experience | 👨‍💻 ${data.role}
+# 📌 Interview Experience – ${data.company} | ${data.role}
 
-**🎓 Batch:** ${data.batch} | **🏫 Branch:** ${data.branch} | **🔄 Rounds:** ${data.rounds}
+**🎓 Batch:** ${data.batch} | **🏫 Branch:** ${data.branch} | **🔄 Total Rounds:** ${data.rounds}
 
 ---
 
-### 📝 Application Process
+### 🔹 Shortlisting Criteria
 Rewrite this naturally:
-${data.application}
+${data.shortlisting}
 
-### 💻 Interview Rounds
-Rewrite this naturally:
+### ⏱️ Interview Rounds Breakdown
+Rewrite these rounds naturally, separating them clearly (e.g., 🧪 Round 1: Online Assessment, 🧠 Round 2: Technical, 🧑💼 Round 3: HR). Keep the student's exact questions and experiences intact:
 ${data.topics}
 
-### 📊 Overall Difficulty
-Rewrite this naturally in one line:
-${data.difficulty}
-
-### 💡 Experience & Tips
-Rewrite this naturally:
-${data.tips}
+### ✅ Final Verdict & Tips
+Rewrite this naturally in a supportive tone:
+${data.verdictAndTips}
 `;
 
         // const response = await ai.models.generateContent({
@@ -55,10 +51,10 @@ ${data.tips}
         //     contents: prompt,
         // });
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-2.5-flash",
             contents: prompt,
             config: {
-                temperature: 0.3,
+                temperature: 0.5,
             }
         });
         console.log(response)

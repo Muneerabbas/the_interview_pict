@@ -39,21 +39,21 @@ export default function MdxEditorPage() {
   const [previousMarkdown, setPreviousMarkdown] = useState("");
   const [mode, setMode] = useState("manual");
 
-  const initialMessage = "Hi! I'll help you write your interview experience. How did you apply for this role? (e.g., Campus placement, LinkedIn, Referral, Careers page)";
+  const initialMessage = "Hi! I'll help you write your interview experience. First, what were the shortlisting criteria? (e.g., CGPA cutoff, Resume screening, Direct OA)";
 
   const [chatMessages, setChatMessages] = useState([
     { role: 'assistant', text: initialMessage }
   ]);
   const [chatInput, setChatInput] = useState("");
-  const [chatStage, setChatStage] = useState('application'); // application -> rounds_count -> round_loop -> tips -> generating -> done
+  const [chatStage, setChatStage] = useState('shortlisting'); // shortlisting -> rounds_count -> round_loop -> verdict -> generating -> done
   const [totalRounds, setTotalRounds] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   
   const [chatAnswers, setChatAnswers] = useState({
-    application: "", roundsText: "", roundDetails: [], tips: ""
+    shortlisting: "", roundsText: "", roundDetails: [], verdictAndTips: ""
   });
-  const chatEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   const years = Array.from({ length: 28 }, (_, index) => 2000 + index).reverse();
   const [isLoading, setIsLoading] = useState(false);
@@ -318,11 +318,15 @@ export default function MdxEditorPage() {
     // No need to setIsLoading(false) here because page navigation will unmount the component
   };
 
+  // Use explicit scroll on the container to prevent global window jumps
   useEffect(() => {
-    if (mode === 'ai') {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (mode === 'ai' && chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [chatMessages, mode]);
+  }, [chatMessages, isGenerating, mode]);
 
   const generateFromAPI = async (finalAnswers) => {
     setIsGenerating(true);
@@ -333,11 +337,10 @@ export default function MdxEditorPage() {
          role: role === 'others' ? customRole : role || "Not specified",
          batch: batch || "Not specified",
          branch: branch || "Not specified",
-         application: finalAnswers.application,
+         shortlisting: finalAnswers.shortlisting,
          rounds: finalAnswers.roundsText,
          topics: roundsList, // Condensed from the round loop
-         difficulty: "Provided in round details",
-         tips: finalAnswers.tips
+         verdictAndTips: finalAnswers.verdictAndTips
       };
       
       const res = await fetch("/api/ai-generate", {
@@ -360,10 +363,10 @@ export default function MdxEditorPage() {
        setTimeout(() => {
           setMode('manual');
           // Reset chat completely for next time
-          setChatStage('application');
+          setChatStage('shortlisting');
           setTotalRounds(0);
           setCurrentRound(1);
-          setChatAnswers({ application: "", roundsText: "", roundDetails: [], tips: "" });
+          setChatAnswers({ shortlisting: "", roundsText: "", roundDetails: [], verdictAndTips: "" });
           setChatMessages([{ role: 'assistant', text: initialMessage }]);
        }, 2000);
     }
@@ -384,8 +387,8 @@ export default function MdxEditorPage() {
       let newStage = chatStage;
       let newAnswers = { ...chatAnswers };
 
-      if (chatStage === 'application') {
-         newAnswers.application = userMsg;
+      if (chatStage === 'shortlisting') {
+         newAnswers.shortlisting = userMsg;
          newStage = 'rounds_count';
          nextAssistantMsg = "Got it! And how many interview rounds were there in total? (e.g. 3)";
       } 
@@ -398,7 +401,7 @@ export default function MdxEditorPage() {
          setTotalRounds(clampedNum);
          setCurrentRound(1);
          newStage = 'round_loop';
-         nextAssistantMsg = `Alright, ${clampedNum} rounds it is. Let's talk about Round 1. What were the topics asked and how would you rate the difficulty?`;
+         nextAssistantMsg = `Alright, ${clampedNum} round(s) it is. Let's break down Round 1. What type of round was it (e.g. OA, Technical, HR) and what were the main questions or tasks?`;
       }
       else if (chatStage === 'round_loop') {
          newAnswers.roundDetails = [...newAnswers.roundDetails, `Round ${currentRound}: ${userMsg}`];
@@ -406,14 +409,14 @@ export default function MdxEditorPage() {
          if (currentRound < totalRounds) {
             const nextRound = currentRound + 1;
             setCurrentRound(nextRound);
-            nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what did they ask and how difficult was it?`;
+            nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what type of round was it and what did they ask?`;
          } else {
-            newStage = 'tips';
-            nextAssistantMsg = "We broke down all your rounds! Finally, what overall tips or advice would you give to candidates preparing for this interview?";
+            newStage = 'verdict';
+            nextAssistantMsg = "Thanks for mapping out the rounds! Finally, what was the final verdict (e.g. Selected, Rejected) and do you have any tips for others?";
          }
       }
-      else if (chatStage === 'tips') {
-         newAnswers.tips = userMsg;
+      else if (chatStage === 'verdict') {
+         newAnswers.verdictAndTips = userMsg;
          newStage = 'generating';
          nextAssistantMsg = "All done! Give me a second while I format your experience perfectly using AI...";
       }
@@ -627,13 +630,13 @@ export default function MdxEditorPage() {
                 </div>
 
                 {/* Chat messages area */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
+                <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
                   {chatMessages.map((msg, index) => (
                     <div key={index} className={`flex w-full \${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
+                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-[#1e293b] shadow-md rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
                         <p 
-                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed \${msg.role === 'user' ? 'text-white' : 'text-slate-900 font-semibold'}`}
-                          style={msg.role !== 'user' ? { color: '#0f172a' } : {}}
+                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold`}
+                          style={msg.role === 'user' ? { color: '#ffffff' } : { color: '#0f172a' }}
                         >
                           {msg.text}
                         </p>
@@ -651,7 +654,7 @@ export default function MdxEditorPage() {
                     </div>
                   )}
 
-                  <div ref={chatEndRef} />
+                  {/* End of messages marker removed, using container ref directly */}
                 </div>
 
                 {/* Chat input form */}

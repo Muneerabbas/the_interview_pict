@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
@@ -37,6 +37,24 @@ export default function MdxEditorPage() {
   });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [previousMarkdown, setPreviousMarkdown] = useState("");
+  const [mode, setMode] = useState("manual");
+
+  const initialMessage = "Hi! I'll help you write your interview experience. How did you apply for this role? (e.g., Campus placement, LinkedIn, Referral, Careers page)";
+
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', text: initialMessage }
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatStage, setChatStage] = useState('application'); // application -> rounds_count -> round_loop -> tips -> generating -> done
+  const [totalRounds, setTotalRounds] = useState(0);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [isGenerating, setIsGenerating] = useState(false);
+  
+  const [chatAnswers, setChatAnswers] = useState({
+    application: "", roundsText: "", roundDetails: [], tips: ""
+  });
+  const chatEndRef = useRef(null);
+
   const years = Array.from({ length: 28 }, (_, index) => 2000 + index).reverse();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -300,205 +318,381 @@ export default function MdxEditorPage() {
     // No need to setIsLoading(false) here because page navigation will unmount the component
   };
 
+  useEffect(() => {
+    if (mode === 'ai') {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, mode]);
+
+  const generateFromAPI = async (finalAnswers) => {
+    setIsGenerating(true);
+    try {
+      const roundsList = finalAnswers.roundDetails.join("\n\n");
+      const finalPayload = {
+         company: company === 'others' ? customCompany : company || "Not specified",
+         role: role === 'others' ? customRole : role || "Not specified",
+         batch: batch || "Not specified",
+         branch: branch || "Not specified",
+         application: finalAnswers.application,
+         rounds: finalAnswers.roundsText,
+         topics: roundsList, // Condensed from the round loop
+         difficulty: "Provided in round details",
+         tips: finalAnswers.tips
+      };
+      
+      const res = await fetch("/api/ai-generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: finalPayload }),
+      });
+
+      const result = await res.json();
+      if (result.text) {
+        setMarkdown(result.text);
+      } else {
+        throw new Error("No text returned from API");
+      }
+    } catch (error) {
+       console.error("Error generating from API:", error);
+       setMarkdown("## Error generating markdown. Please try again or switch to manual.");
+    } finally {
+       setIsGenerating(false);
+       setTimeout(() => {
+          setMode('manual');
+          // Reset chat completely for next time
+          setChatStage('application');
+          setTotalRounds(0);
+          setCurrentRound(1);
+          setChatAnswers({ application: "", roundsText: "", roundDetails: [], tips: "" });
+          setChatMessages([{ role: 'assistant', text: initialMessage }]);
+       }, 2000);
+    }
+  };
+
+  const handleSendChatMessage = (e) => {
+    if (e) e.preventDefault();
+    if (!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done') return;
+
+    const userMsg = chatInput.trim();
+    const newMessages = [...chatMessages, { role: 'user', text: userMsg }];
+    setChatMessages(newMessages);
+    setChatInput("");
+    setIsGenerating(true); // Gives a nice "typing" gap before assistant responds
+
+    setTimeout(() => {
+      let nextAssistantMsg = "";
+      let newStage = chatStage;
+      let newAnswers = { ...chatAnswers };
+
+      if (chatStage === 'application') {
+         newAnswers.application = userMsg;
+         newStage = 'rounds_count';
+         nextAssistantMsg = "Got it! And how many interview rounds were there in total? (e.g. 3)";
+      } 
+      else if (chatStage === 'rounds_count') {
+         newAnswers.roundsText = userMsg;
+         // Parse how many rounds out of their answer string
+         const match = userMsg.match(/\d+/);
+         const num = match ? parseInt(match[0], 10) : 1;
+         const clampedNum = Math.min(Math.max(num, 1), 10); // cap max rounds at 10
+         setTotalRounds(clampedNum);
+         setCurrentRound(1);
+         newStage = 'round_loop';
+         nextAssistantMsg = `Alright, ${clampedNum} rounds it is. Let's talk about Round 1. What were the topics asked and how would you rate the difficulty?`;
+      }
+      else if (chatStage === 'round_loop') {
+         newAnswers.roundDetails = [...newAnswers.roundDetails, `Round ${currentRound}: ${userMsg}`];
+         
+         if (currentRound < totalRounds) {
+            const nextRound = currentRound + 1;
+            setCurrentRound(nextRound);
+            nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what did they ask and how difficult was it?`;
+         } else {
+            newStage = 'tips';
+            nextAssistantMsg = "We broke down all your rounds! Finally, what overall tips or advice would you give to candidates preparing for this interview?";
+         }
+      }
+      else if (chatStage === 'tips') {
+         newAnswers.tips = userMsg;
+         newStage = 'generating';
+         nextAssistantMsg = "All done! Give me a second while I format your experience perfectly using AI...";
+      }
+
+      setChatAnswers(newAnswers);
+      setChatStage(newStage);
+      setChatMessages([...newMessages, { role: 'assistant', text: nextAssistantMsg }]);
+      setIsGenerating(false);
+
+      if (newStage === 'generating') {
+         setChatStage('done');
+         generateFromAPI(newAnswers); // Calls API
+      }
+    }, 600);
+  };
+
+
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col bg-slate-50 min-h-screen pb-12 relative">
       <Navbar />
       {isLoading && <LoadingScreen />}
 
       {/* Warning message for small screens */}
       {isSmallScreen && (
-        <div className=" text-gray-500 text-center py-4 mt-[100px]">
-          <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
+        <div className="text-slate-500 text-center py-4 mt-[80px]">
+          <i className="fa fa-exclamation-circle text-red-500 mr-2"></i> Small screen detected
           <p>For the best experience, please use a tablet or laptop.</p>
         </div>
       )}
 
-      <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
-        <div className="max-w-7xl mx-auto p-4 md:p-6">
-          <div className="text-center text-gray-500 text-sm mb-4">
-            <p>Pro Tip: Maximize the editor for a better experience!</p>
+      <div className={`max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
+
+        <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
+
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 text-center tracking-tight">
+            Share Your Interview Journey
+          </h1>
+          <p className="text-slate-500 text-sm sm:text-base text-center max-w-2xl mb-8 leading-relaxed">
+            Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
+          </p>
+
+          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-600 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-10 text-center transition hover:bg-blue-100">
+            Pro Tip: Maximize the editor for a better experience!
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-2 w-full text-left">
             <div className="relative">
-              <select
-                value={batch}
-                onChange={handleBatchChange}
-                className={`w-full p-2 border ${errors.batch ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
-              >
-                <option value="">Select Year</option>
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              {errors.batch && (
-                <p className="text-red-500 text-sm mt-1">Year is required</p>
-              )}
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Batch Year</label>
+              <div className="relative group">
+                <select
+                  value={batch}
+                  onChange={handleBatchChange}
+                  className={`w-full p-3.5 bg-white border ${errors.batch ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
+                >
+                  <option value="">Select Year</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+              </div>
+              {errors.batch && <p className="text-red-500 text-xs mt-1.5 font-medium">Year is required</p>}
             </div>
 
             <div className="relative">
-              <select
-                value={branch}
-                onChange={handleBranchChange}
-                className={`w-full p-2 border ${errors.branch ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
-              >
-                <option value="">Select Branch</option>
-                <option value="CS">Computer Science</option>
-                <option value="IT">Information Technology</option>
-                <option value="EnTC">Electronics and Telecommunication</option>
-                <option value="AIDS">Artificial Intelligence & Data Science</option>
-                <option value="EC">Electronics and Computer</option>
-              </select>
-              {errors.branch && (
-                <p className="text-red-500 text-sm mt-1">Branch is required</p>
-              )}
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Department</label>
+              <div className="relative group">
+                <select
+                  value={branch}
+                  onChange={handleBranchChange}
+                  className={`w-full p-3.5 bg-white border ${errors.branch ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
+                >
+                  <option value="">Select Department</option>
+                  <option value="CS">Computer Science</option>
+                  <option value="IT">Information Technology</option>
+                  <option value="EnTC">Electronics and Telecommunication</option>
+                  <option value="AIDS">Artificial Intelligence & Data Science</option>
+                  <option value="EC">Electronics and Computer</option>
+                </select>
+                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+              </div>
+              {errors.branch && <p className="text-red-500 text-xs mt-1.5 font-medium">Branch is required</p>}
             </div>
 
             <div className="relative">
-              <select
-                value={company}
-                onChange={handleCompanyChange}
-                className={`w-full p-2 border ${errors.company ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
-              >
-                <option value="">Select Company</option>
-                <option value="others">Others...</option>
-                {companies.map((comp) => (
-                  <option key={comp} value={comp}>
-                    {comp}
-                  </option>
-                ))}
-
-              </select>
-
-              {/* Input field for custom company name */}
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Company</label>
+              <div className="relative group">
+                <select
+                  value={company}
+                  onChange={handleCompanyChange}
+                  className={`w-full p-3.5 bg-white border ${errors.company ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
+                >
+                  <option value="">Select Company</option>
+                  <option value="others">Others...</option>
+                  {companies.map((comp) => (
+                    <option key={comp} value={comp}>{comp}</option>
+                  ))}
+                </select>
+                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+              </div>
               {company === "others" && (
                 <input
                   type="text"
                   onChange={handleCustomCompanyChange}
                   placeholder="Enter Company Name"
                   value={customCompany}
-                  className={`w-full p-2 border ${errors.company ? "border-red-500" : "border-gray-300"
-                    } rounded-lg mt-2`}
+                  className={`w-full p-3.5 bg-slate-50 border ${errors.company ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-inner mt-2 text-sm focus:outline-none focus:ring-2 transition`}
                 />
               )}
-
-              {errors.company && (
-                <p className="text-red-500 text-sm mt-1">Company is required</p>
-              )}
+              {errors.company && <p className="text-red-500 text-xs mt-1.5 font-medium">Company is required</p>}
             </div>
 
-
             <div className="relative">
-              <select
-                value={role}
-                onChange={handleRoleChange}
-                className={`w-full p-2 border ${errors.role ? "border-red-500" : "border-gray-300"
-                  } rounded-lg`}
-              >
-                <option value="">Select Role</option>
-                <option value="others">Others...</option>
-                {roles.map((roleOption) => (
-                  <option key={roleOption} value={roleOption}>
-                    {roleOption}
-                  </option>
-                ))}
-
-
-              </select>
-
-              {/* Input field for custom role name */}
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Role</label>
+              <div className="relative group">
+                <select
+                  value={role}
+                  onChange={handleRoleChange}
+                  className={`w-full p-3.5 bg-white border ${errors.role ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
+                >
+                  <option value="">Select Role</option>
+                  <option value="others">Others...</option>
+                  {roles.map((roleOption) => (
+                    <option key={roleOption} value={roleOption}>{roleOption}</option>
+                  ))}
+                </select>
+                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+              </div>
               {role === "others" && (
                 <input
                   type="text"
                   onChange={handleCustomRoleChange}
                   placeholder="Enter Role"
                   value={customRole}
-                  className={`w-full p-2 border ${errors.role ? "border-red-500" : "border-gray-300"
-                    } rounded-lg mt-2`}
+                  className={`w-full p-3.5 bg-slate-50 border ${errors.role ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-inner mt-2 text-sm focus:outline-none focus:ring-2 transition`}
                 />
               )}
-
-              {errors.role && (
-                <p className="text-red-500 text-sm mt-1">Role is required</p>
-              )}
+              {errors.role && <p className="text-red-500 text-xs mt-1.5 font-medium">Role is required</p>}
             </div>
           </div>
 
+          <hr className="w-full my-8 border-slate-100" />
+
           {/* Success message */}
           {successMessage && (
-            <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
-              <div className="flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-[#00C853] mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.293 5.293a1 1 0 00-1.414 0L8 11.586 4.121 7.707a1 1 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="font-semibold text-lg text-[#1D1D1D]">{successMessage}</p>
+            <div className="w-full bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-xl shadow-sm mb-6 flex justify-center border border-blue-100">
+              <div className="flex items-center gap-2">
+                <i className="fa fa-check-circle text-green-500 text-xl"></i>
+                <p className="font-semibold text-sm sm:text-base text-slate-800">{successMessage}</p>
               </div>
             </div>
           )}
 
-          {/* Editor Container with fixed height */}
-          <div
-            className="rounded-lg overflow-hidden relative"
-            style={{
-              height:
-                window.innerWidth < 768
-                  ? 'calc(75vh)'  // For mobile
-                  : window.innerWidth < 1024
-                    ? 'calc(100vh - 50px)'   // For tablet
-                    : 'calc(100vh)',         // For laptop and larger screens
-              marginBottom: bottomMargin,
-            }}
-          >
+          <div className="flex flex-col lg:flex-row items-center justify-between w-full pb-8 gap-6 relative">
 
-            {/* Submit Button at the top */}
-            <div className="absolute top-4 w-full py-1.5 flex justify-between items-center">
+            {/* Toggle (Left) */}
+            <div className="flex justify-start lg:w-1/3 w-full">
+              <div className="flex bg-slate-50/80 border border-slate-100 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
+                <button
+                  onClick={() => setMode('manual')}
+                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'manual' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <i className="fa fa-pencil text-blue-500 mt-0.5"></i> Manual Entry
+                </button>
+                <button
+                  onClick={() => setMode('ai')}
+                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'ai' ? 'bg-white shadow text-purple-600' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <i className="fa fa-bolt text-purple-500"></i> AI-Assisted Write
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Button (Center) */}
+            <div className="flex justify-center lg:w-1/3 w-full">
               <button
                 onClick={handleSubmit}
                 type="button"
-                className="text-sm sm:text-md bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none py-2 px-8 sm:px-16 z-50"
+                className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3.5 w-full sm:w-auto whitespace-nowrap"
               >
-                Submit
+                Submit Experience
               </button>
-
-              <Link href="/help" onClick={handleHelpClick} className="text-blue-500 -mb-4 hover:text-blue-700 transition-colors duration-200 z-50 text-sm sm:text-base">Short on ideas?</Link>
-
-
             </div>
 
-            {/* Markdown Editor with Scrollable Content */}
-            <div className="relative w-full h-full pt-16 overflow-hidden">
-              {/* The padding-top `pt-16` ensures that the content does not overlap with the button */}
-              <div className="w-full h-full overflow-y-auto">
-                <MDEditor
-                  value={markdown}
-                  onChange={handleMarkdownChange}
-                  preview="live"
-                  hideToolbar={false}
-                  data-color-mode="light"
-                  className="w-full h-full"
-                  height="100%"
-                />
+            {/* Short on ideas link (Right) */}
+            <div className={`sm:w-1/3 flex justify-center lg:justify-end w-full \${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
+              <Link href="/help" onClick={handleHelpClick} className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap">
+                Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
+              </Link>
+            </div>
+
+          </div>
+
+          <div className="w-full relative shadow-sm border border-slate-200 rounded-xl overflow-hidden mt-2 bg-slate-50/50">
+            {/* AI Prompt Area */}
+            {mode === 'ai' && (
+              <div className="w-full h-full min-h-[500px] flex flex-col bg-slate-50 border-t border-purple-50">
+
+                {/* Chat header */}
+                <div className="p-4 bg-white border-b border-purple-100 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                      <i className="fa fa-robot text-lg"></i>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900 tracking-tight" style={{ color: '#0f172a' }}>AI Writing Assistant</h3>
+                      <p className="text-xs text-slate-500">Fast & structured markdown generation</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat messages area */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
+                  {chatMessages.map((msg, index) => (
+                    <div key={index} className={`flex w-full \${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
+                        <p 
+                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed \${msg.role === 'user' ? 'text-white' : 'text-slate-900 font-semibold'}`}
+                          style={msg.role !== 'user' ? { color: '#0f172a' } : {}}
+                        >
+                          {msg.text}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Loader for typing / processing */}
+                  {isGenerating && (
+                    <div className="flex w-full justify-start">
+                      <div className="bg-white border border-slate-200 shadow-sm rounded-br-2xl rounded-tr-2xl rounded-bl-sm px-5 py-3 flex items-center gap-3">
+                         <i className="fa fa-circle-notch fa-spin text-purple-500"></i>
+                         <p className="text-sm font-medium text-slate-700" style={{ color: '#334155' }}>AI is thinking...</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div ref={chatEndRef} />
+                </div>
+
+                {/* Chat input form */}
+                <div className="bg-white p-4 border-t border-slate-200">
+                  <form onSubmit={handleSendChatMessage} className="flex gap-3 max-w-4xl mx-auto w-full relative">
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 text-slate-900 placeholder-slate-500 text-sm transition pr-14"
+                      style={{ color: '#0f172a' }}
+                      placeholder={chatStage === 'generating' || chatStage === 'done' ? "Generating your experience..." : "Type your answer here..."}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition disabled:opacity-50 disabled:hover:bg-purple-600 shadow-sm"
+                    >
+                      <i className="fa fa-paper-plane text-xs"></i>
+                    </button>
+                  </form>
+                </div>
               </div>
+            )}
+            {/* Markdown Editor */}
+            <div className={`w-full \${mode === 'ai' ? 'hidden' : 'block'}`}>
+              <MDEditor
+                value={markdown}
+                onChange={handleMarkdownChange}
+                preview="live"
+                hideToolbar={false}
+                data-color-mode="light"
+                className="w-full h-full border-none shadow-none"
+                height={550}
+              />
             </div>
           </div>
+
         </div>
       </div>
     </div>
-
   );
 }

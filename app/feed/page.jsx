@@ -82,37 +82,19 @@ export default function HomePage() {
             {isShareButtonLoading && <LoadingScreen />}
 
             <div className="max-w-4xl mx-auto px-4 pt-16 pb-12">
-                {session ? (
-                    <div className="bg-white rounded-xl shadow-md p-6 mb-8 text-center">
-                        <div className="flex justify-center mb-4">
-                            <div className="relative">
-                                <img
-                                    src={session.user.image || "/api/placeholder/96/96"}
-                                    alt="User"
-                                    className="w-24 h-24 rounded-full object-cover border-4 border-blue-600"
-                                />
-                                <div className="absolute bottom-0 right-0 w-6 h-6 bg-[#00C853] border-4 border-white rounded-full"></div>
-                            </div>
-                        </div>
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1D1D1D] mb-2">
-                            Welcome, {session.user.name}
-                        </h1>
-
-                        <Link href="/post" onClick={handleShareExperienceClick} prefetch={true} scroll={false}>
-                            <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300 mt-4">
-                                Share Your Interview Experience
-                            </button>
-                        </Link>
-                    </div>
-                ) : (
-                    <div className="bg-white rounded-xl shadow-md p-6 mb-8 text-center">
-                        <Link href="/post" onClick={handleShareExperienceClick} prefetch={true} scroll={false}>
-                            <button className="bg-[#E7F3FF] text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-300">
-                                Share Your Interview Experience
-                            </button>
-                        </Link>
-                    </div>
-                )}
+                <div className="bg-[#F8F9FF] rounded-2xl border border-blue-50/50 p-8 sm:p-10 mb-8 text-center shadow-sm">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                        Help your community grow
+                    </h2>
+                    <p className="text-slate-600 mb-6">
+                        Your interview journey could be someone else's roadmap to success.
+                    </p>
+                    <Link href="/post" onClick={handleShareExperienceClick} prefetch={true} scroll={false}>
+                        <button className="bg-blue-600 text-white font-semibold px-6 py-2.5 rounded-full hover:bg-blue-700 transition shadow-sm border border-transparent">
+                            Share Your Interview Experience
+                        </button>
+                    </Link>
+                </div>
 
                 <div className="space-y-6">
                     {/* Skeletons are visible until profiles are loaded */}

@@ -1,7 +1,7 @@
 // aboutus/page.js
 "use client";
 import React, { useRef } from 'react';
-    import TeamMemberCard from "../../components/FounderCard";
+import TeamMemberCard from "../../components/TeamMemberCard";
 import himg from '../../public/h1.jpg';
 import nimg from '../../public/n2.jpg';
 import niimg from '../../public/n1.jpg';

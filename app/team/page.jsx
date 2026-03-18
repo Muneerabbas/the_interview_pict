@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import TeamMemberCard from "@/components/FounderCard";
+import TeamMemberCard from "../../components/TeamMemberCard";
 
 import himg from "../../public/h1.jpg";
 import nimg from "../../public/n2.jpg";

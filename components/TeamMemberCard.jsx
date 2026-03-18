@@ -35,7 +35,7 @@ export default function TeamMemberCard({
     <article
       style={{ minHeight, backgroundColor: "#0f172a" }}
       className={[
-        "group relative isolate overflow-hidden rounded-[2rem] border border-white/70 bg-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_90px_rgba(15,23,42,0.24)]",
+        "group relative isolate w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/70 bg-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_90px_rgba(15,23,42,0.24)]",
         featured ? "min-h-[22rem]" : "min-h-[28rem]",
       ].join(" ")}
     >

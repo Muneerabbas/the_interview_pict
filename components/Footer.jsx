@@ -5,7 +5,10 @@ import Link from "next/link";
 import {
   Mail,
   Heart,
-  MapPin
+  MapPin,
+  Twitter,
+  Linkedin,
+  Instagram
 } from "lucide-react";
 
 export default function Footer() {
@@ -41,81 +44,115 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#F0F2F5] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50 backdrop-blur-sm bg-opacity-95">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
+    <footer className="border-t border-slate-200 bg-white">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-blue-600">theInterview</h3>
-            <p className="text-[#1D1D1D] text-sm">
-              Empowering tech professionals with interview experiences and insights.
+            <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+              <div className="flex h-8 w-8 items-center justify-center rounded bg-blue-600 shadow-sm">
+                <span className="text-white font-bold text-sm">ti</span>
+              </div>
+              <span className="text-lg">
+                the<span className="font-bold">Interview</span>
+              </span>
+            </Link>
+            <p className="text-sm text-slate-600 leading-relaxed max-w-xs">
+              Empowering students with real interview experiences and practical insights from top candidates at leading tech companies.
             </p>
+            <div className="flex items-center gap-4 text-slate-400">
+              <a href="#" className="hover:text-slate-600 transition"><Twitter size={18} /></a>
+              <a href="#" className="hover:text-slate-600 transition"><Linkedin size={18} /></a>
+              <a href="#" className="hover:text-slate-600 transition"><Instagram size={18} /></a>
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#1D1D1D]">Quick Links</h3>
-            <ul className="space-y-2">
+          {/* Links */}
+          <div className="space-y-4 lg:ml-8">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-900">Quick Links</div>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/about" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
-                  About Us
+                <Link href="/about" className="text-slate-600 hover:text-slate-900">
+                  About us
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline">
-                  Help
+                <Link href="/help" className="text-slate-600 hover:text-slate-900">
+                  Help Center
                 </Link>
               </li>
-            
+              <li>
+                <Link href="/terms" className="text-slate-600 hover:text-slate-900">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-slate-600 hover:text-slate-900">
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Contact */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#1D1D1D]">Contact Us</h3>
-            <ul className="space-y-2">
-              <li className="flex items-center space-x-2">
-               <MapPin size={18} className="text-blue-600" />
-                  <a href="https://maps.app.goo.gl/xy4z53owHAz4SxgA8" target="_blank" rel="noopener noreferrer" className="text-[#1D1D1D] hover:text-blue-600 transition-colors underline-offset-2 hover:underline"><span className="text-[#1D1D1D]">PICT, Pune, Maharashtra 411045</span> {/* Replace with actual PICT Pune address if needed */}
-                 </a>
-              </li>
-            </ul>
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-900">Contact</div>
+            <div className="space-y-3 text-sm">
+              <a
+                href="https://maps.app.goo.gl/xy4z53owHAz4SxgA8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-start gap-3 text-slate-600 hover:text-slate-900"
+              >
+                <MapPin size={18} className="translate-y-0.5 text-blue-600 shrink-0" />
+                <span>PICT, Pune, Maharashtra 411045</span>
+              </a>
+              <a
+                href="mailto:hello@theinterview.com"
+                className="group flex items-start gap-3 text-slate-600 hover:text-slate-900"
+              >
+                <Mail size={18} className="translate-y-0.5 text-blue-600 shrink-0" />
+                <span>hello@theinterview.com</span>
+              </a>
+            </div>
           </div>
 
           {/* Newsletter */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#1D1D1D]">Newsletter</h3>
-            <p className="text-sm text-[#1D1D1D]">Stay updated with the latest interview experiences.</p>
-            <form onSubmit={handleSubmit} className="space-y-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full p-2 rounded-lg border border-[#B0B3B8] focus:outline-none focus:ring-2 focus:ring-[#8B77F9] focus:border-transparent transition-all duration-300"
-              />
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-900">Newsletter</div>
+            <p className="text-sm text-slate-600 leading-relaxed">Get the latest interview experiences and tips delivered straight to your inbox.</p>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-4 pr-10 text-sm shadow-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                />
+                <Mail size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              </div>
               <button
                 type="submit"
-                className="w-full p-2 bg-blue-600 text-white rounded-lg hover:bg-[#8B77F9] transition-colors duration-300"
+                className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
               >
-                Subscribe
+                Subscribe Now
               </button>
-              {message && <p className="text-sm text-blue-600">{message}</p>}
+              {message && <p className="text-sm text-blue-700">{message}</p>}
             </form>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-8 pt-4 border-t border-[#B0B3B8]">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-[#1D1D1D]">
-              © {new Date().getFullYear()} theInterview. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-2 text-sm text-[#1D1D1D]">
-              <span>Made with</span>
-              <Heart size={16} className="text-[#FF5F5F] fill-[#FF5F5F]" />
-              <span className="underline">by <Link href='/about'>theInterview Team</Link></span>
-            </div>
+        <div className="mt-12 flex flex-col gap-4 border-t border-slate-200 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-slate-500">
+            © 2024 theInterview community. All rights reserved.
+          </p>
+          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+            <span>Made with</span>
+            <Heart size={14} className="text-rose-500 fill-rose-500" />
+            <span>
+              by <span className="font-semibold text-slate-900">theInterview Team</span>
+            </span>
           </div>
         </div>
       </div>

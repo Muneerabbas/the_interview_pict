@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import logo from "../public/icon.svg"
 import Image from 'next/image'
-import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
-import { marked } from 'marked'; // ADDED: Import marked - but will not be used for rendering HTML now
+import { Menu, X, ChevronLeft, ChevronRight, Search, Building2, GraduationCap, Blocks, Quote } from "lucide-react"
 import AdComponent from "@/components/AdComponent";
 
 
@@ -23,29 +22,30 @@ const ScrollableSection = ({ children }) => {
   };
 
   return (
-    <div className="relative max-w-7xl mx-auto">
-  <button
-    onClick={() => scroll('left')}
-    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 rounded-full p-2 shadow-lg hover:bg-gray-600 text-white sm:block" // Darker background, white text
-    aria-label="Scroll left"
-  >
-    <ChevronLeft size={24} />
-  </button>
-  <div
-    ref={scrollContainerRef}
-    className="flex gap-6 overflow-x-scroll scroll-smooth px-6 sm:px-12"
-  >
-    {children}
-  </div>
-  <button
-    onClick={() => scroll('right')}
-    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-700 rounded-full p-2 shadow-lg hover:bg-gray-600 text-white sm:block" // Darker background, white text
-    aria-label="Scroll right"
-  >
-    <ChevronRight size={24} />
-  </button>
-</div>
+    <div className="relative">
+      <button
+        onClick={() => scroll('left')}
+        className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm transition hover:bg-slate-50 hover:shadow sm:inline-flex"
+        aria-label="Scroll left"
+      >
+        <ChevronLeft size={20} />
+      </button>
 
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-6 overflow-x-auto scroll-smooth px-1 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {children}
+      </div>
+
+      <button
+        onClick={() => scroll('right')}
+        className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm transition hover:bg-slate-50 hover:shadow sm:inline-flex"
+        aria-label="Scroll right"
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
 
   );
 };
@@ -80,25 +80,55 @@ const StoryCard = ({ story, avatarColor }) => {
     // remove extra spaces and lines
     plainText = plainText.replace(/[\r\n]+/g, ' ').trim(); // Replace line breaks with spaces and trim
 
+  const bullets = plainText
+    .split(/\. +/g)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 2);
+
   return (
-    <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm min-w-[280px] max-w-[350px] sm:min-w-[300px] sm:max-w-[300px] hover:shadow-md transition-shadow duration-300">
-      <div className="flex items-center gap-4 mb-4">
-        <div className={`${avatarColor} w-10 h-10 rounded-full flex items-center justify-center text-white font-bold`}>
-          {story?.company?.charAt(0).toUpperCase()}
+    <div className="min-w-[300px] max-w-[360px] h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md flex flex-col justify-between">
+      <div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div
+              className={`${avatarColor} flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white`}
+              aria-hidden="true"
+            >
+              {story?.company?.charAt(0)?.toUpperCase() || "T"}
+            </div>
+            <div className="min-w-0 text-left">
+              <div className="font-semibold text-slate-900 truncate leading-tight">{story?.company}</div>
+              <div className="text-xs font-medium text-slate-500 truncate">
+                {story?.role || "Interview Experience"}
+              </div>
+            </div>
+          </div>
+          <div className="flex text-slate-200">
+            <Quote size={28} className="fill-slate-200" />
+          </div>
         </div>
-        <div className="text-left">
-          <h3 className="font-bold text-lg">{story?.company}</h3>
-          <p className="text-gray-600 text-sm sm:text-base">{story?.role}</p>
+
+        <div className="mt-4 space-y-2 text-left text-sm sm:text-base text-slate-700 italic leading-relaxed">
+          {bullets.length > 0 ? (
+            bullets.map((b, i) => (
+              <div key={i} className="line-clamp-2">
+                {b}
+              </div>
+            ))
+          ) : (
+            <div className="line-clamp-3">{plainText}</div>
+          )}
         </div>
       </div>
-      <p
-        className="text-left mb-2 line-clamp-3 text-sm sm:text-base"
-      >
-        {plainText}
-      </p>
-      <p className="text-left text-gray-700 text-xs sm:text-sm mb-2">Batch: {story?.batch}</p>
-      <div className="flex justify-between items-center">
-        <span className="text-gray-600 text-xs sm:text-sm">Reads: {story?.views || '0'}</span>
+
+      <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+        <span className="text-xs font-medium text-slate-500">
+          {story?.views ?? 0} views
+        </span>
+        <span className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+          Read story <ChevronRight size={14} />
+        </span>
       </div>
     </div>
   );
@@ -107,8 +137,6 @@ const StoryCard = ({ story, avatarColor }) => {
 
 export default function Home({ featuredStories, topStories }) { // Accept fetched stories as props
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const mobileMenuRef = useRef(null);
   const mobileMenuButtonRef = useRef(null); // ADD: Ref for mobile menu button
   const [isVisible, setIsVisible] = useState(false);
@@ -179,7 +207,13 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   ];
 
   const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);
-  const branches = ["CS", "IT", "EnTC", "AIDS", "EC"];
+  const departments = [
+    { key: "CS", label: "Computer Science" },
+    { key: "IT", label: "Information Tech" },
+    { key: "EnTC", label: "EnTC" },
+    { key: "AIDS", label: "AI & Data Science" },
+    { key: "EC", label: "Electronics" },
+  ];
   const companies = ["Barclays", "Mastercard", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe"];
 
   const companyColors = {
@@ -221,22 +255,6 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  useEffect(() => {
-    const controlNavbar = () => {
-      if (typeof window !== "undefined") {
-        if (window.scrollY > lastScrollY) {
-          setVisible(false);
-        } else {
-          setVisible(true);
-        }
-        setLastScrollY(window.scrollY);
-      }
-    };
-
-    window.addEventListener("scroll", controlNavbar);
-    return () => window.removeEventListener("scroll", controlNavbar);
-  }, [lastScrollY]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -290,63 +308,120 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
   return (
     <main className="min-h-screen">
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full transition-transform duration-300 ease-in-out ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      } bg-[#F0F2F5] p-4 sm:p-7 shadow-md z-50 backdrop-blur-sm bg-opacity-95`}> {/* Padding adjusted for mobile */}
-        <div className="max-w-7xl mx-auto">
+      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-white/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
           {/* Desktop Navigation */}
           <div className="hidden lg:flex justify-between items-center">
-            <div className="flex items-center space-x-2 text-2xl font-bold text-blue-600">
-              <Image src={logo} alt="theInterview Logo" width={40} height={40} />
-              <Link href="/" prefetch={true}>theInterview</Link>
+            <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority />
+              <span className="text-lg">
+                the<span className="text-blue-600">Interview</span>
+              </span>
+            </Link>
+
+            <div className="flex items-center gap-1">
+              {navItems
+                .filter((i) => i.label !== "Search Experience" && i.label !== "Share Experience")
+                .map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    prefetch={true}
+                    className={[
+                      "rounded-xl px-3 py-2 text-sm font-medium transition",
+                      activeSection === item.label
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+                    ].join(" ")}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
             </div>
-            <div className="flex items-center space-x-6">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  prefetch={true}
-                  className={`text-gray-800  transition duration-300 rounded-md px-3 py-2 hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-white bg-blue-600 ' : 'hover:bg-blue-600 hover:text-white'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-blue-600' : ''}`} // ADD: Hover and Active styling + Button styling for Share Experience
-                >
-                  {item.label}
-                </Link>
-              ))}
+
+            <div className="flex items-center gap-3">
+              <Link
+                href="/search"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              >
+                <Search size={18} className="text-slate-500" />
+                Search
+              </Link>
+              <Link
+                href="/post"
+                prefetch={true}
+                className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+              >
+                Share Experience
+              </Link>
             </div>
           </div>
 
           {/* Mobile Navigation */}
           <div className="lg:hidden">
             <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2 text-xl font-bold text-blue-600">
-                <Image src={logo} alt="theInterview Logo" width={40} height={40} />
-                <Link href="/" prefetch={true}>theInterview</Link>
-              </div>
+              <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+                <Image src={logo} alt="theInterview Logo" width={32} height={32} priority />
+                <span className="text-base sm:text-lg">
+                  the<span className="text-blue-600">Interview</span>
+                </span>
+              </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-3 rounded-lg hover:bg-[#E7F3FF] transition-all duration-300"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/70 text-slate-700 shadow-sm transition hover:bg-white"
                 ref={mobileMenuButtonRef} // ADD: Ref to mobile menu button
               >
                 {isMobileMenuOpen ? (
-                  <X size={28} className="text-blue-600" />
+                  <X size={20} />
                 ) : (
-                  <Menu size={28} className="text-blue-600" />
+                  <Menu size={20} />
                 )}
               </button>
             </div>
 
             {isMobileMenuOpen && (
-              <div className="absolute left-0 right-0 top-full bg-[#F0F2F5] shadow-md" ref={mobileMenuRef}>
-                {navItems.map((item) => (
+              <div
+                className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-md shadow-xl border-b border-black/5"
+                ref={mobileMenuRef}
+              >
+                <div className="p-3">
                   <Link
-                    key={item.href}
-                    href={item.href}
-                    prefetch={true}
-                    className={`block p-4 text-gray-800 transition-colors duration-300 rounded-md hover:bg-blue-600 hover:text-white ${activeSection === item.label ? 'font-semibold text-blue-600 bg-blue-100' : 'hover:bg-blue-100 hover:text-blue-600'} ${item.label === 'Share Experience' ? 'bg-gray-200 shadow-md hover:bg-gray-300' : ''}`} // ADD: Hover and Active styling for mobile + Button styling for Share Experience
+                    href="/search"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-100"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    {item.label}
+                    <Search size={18} className="text-slate-500" />
+                    Search
                   </Link>
-                ))}
+
+                  {navItems
+                    .filter((i) => i.label !== "Search Experience" && i.label !== "Share Experience")
+                    .map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        prefetch={true}
+                        className={[
+                          "block rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                          activeSection === item.label
+                            ? "bg-blue-50 text-blue-700"
+                            : "text-slate-800 hover:bg-slate-100",
+                        ].join(" ")}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+
+                  <Link
+                    href="/post"
+                    prefetch={true}
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Share Experience
+                  </Link>
+                </div>
               </div>
             )}
           </div>
@@ -354,149 +429,284 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="bg-white text-center py-12 mt-16 sm:mt-24 px-4"> {/* Adjusted marginTop for mobile */}
+      <section
+        id="hero"
+        className="relative overflow-hidden bg-gradient-to-b from-[#f7f9ff] via-white to-white text-center pt-24 sm:pt-32 pb-16 px-4"
+      >
+        {/* Decorative blobs */}
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-10 h-72 w-72 rounded-full bg-indigo-200/30 blur-3xl" />
+
         <div className={`transform transition-all duration-700 ease-out ${
           isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
         }`}>
           {/* Ad Placement */}
       {/* <AdComponent slot="4811519147" /> */}
 
-          <div className="relative w-20 h-20 mx-auto mb-6 sm:mb-8"> {/* Adjusted marginBottom for mobile */}
-            <Image
-              src={logo}
-              alt="theInterview Logo"
-              fill
-              className="object-contain animate-bounce"
-            />
-          </div>
+          <div className="mx-auto max-w-3xl">
+            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/25">
+              <Image src={logo} alt="theInterview Logo" width={34} height={34} className="invert" />
+            </div>
 
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            Share Your <span className="text-blue-600">Interview</span> Journey 🚀
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">
-            Learn from real experiences. Share your story. Help others succeed. ✨
-          </p>
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 leading-[1.05]">
+              Share Your <span className="text-blue-600">Interview</span>
+              <br />
+              Journey
+            </h1>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12"> {/* Stacked buttons on mobile */}
-            <Link
-              href="/feed"
-              prefetch={true}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium transition-all duration-300 hover:scale-105"
-            >
-              Read Stories 📖
-            </Link>
-            <Link
-              href="/post"
-              prefetch={true}
-              className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 font-medium transition-all duration-300 hover:scale-105 shadow-md" // Styled button
-            >
-              Share Your Story ✍️
-            </Link>
+            <p className="mt-5 text-base sm:text-lg text-slate-600">
+              Learn from real experiences. Share your story. Help others succeed in their next career move.
+            </p>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/feed"
+                prefetch={true}
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
+              >
+                Read Stories
+              </Link>
+              <Link
+                href="/post"
+                prefetch={true}
+                className="inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-200"
+              >
+                Share Your Story
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Featured Stories */}
-      <section id="featured" className="bg-gray-100 py-12 sm:py-16 text-center px-4"> {/* Adjusted padding for mobile */}
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Featured Interview Stories 🌟</h2> {/* Adjusted font size for mobile */}
-        <ScrollableSection>
-          {fetchedFeaturedStories.map((story, index) => (
-            <Link key={index} href={`/single/${story.uid}`} prefetch={true}>
-              <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
-            </Link>
-          ))}
-        </ScrollableSection>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 sm:mt-8"> {/* Stacked buttons on mobile */}
-          <Link href="/feed" prefetch={true} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-            View All Stories 📚
-          </Link>
-          <Link href="/post" prefetch={true} className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 shadow-md">  {/* Styled button */}
-            Share Your Experience 📝
-          </Link>
+      <section id="featured" className="bg-slate-50 py-14 sm:py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+              <span className="text-xl">✨</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+              Featured Stories
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+              Insights from top candidates at leading tech companies.
+            </p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                href="/feed"
+                prefetch={true}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800"
+              >
+                View all stories <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <ScrollableSection>
+              {fetchedFeaturedStories.map((story, index) => (
+                <Link
+                  key={index}
+                  href={`/single/${story.uid}`}
+                  prefetch={true}
+                  className="block h-full"
+                >
+                  <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
         </div>
       </section>
 
       {/* Company Specific Tips Section - Renamed to Search by Company for clarity */}
-      <section id="companyspecific" className="py-12 sm:py-16 px-4 bg-white"> {/* Adjusted padding for mobile */}
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">Search Experiences By 🔍</h2> {/* Adjusted font size for mobile */}
+      <section id="companyspecific" className="bg-white py-14 sm:py-20 px-4">
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+              <Search size={18} className="text-blue-600" />
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+              Search Experiences
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+              Browse authentic interview insights shared by alumni and peers. Refine your search to find the most relevant career guidance.
+            </p>
+          </div>
 
-        <div className="mb-10 sm:mb-12"> {/* Adjusted marginBottom for mobile */}
-          <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🏢 Company</h3> {/* Adjusted font size for mobile */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
-            {companies.map((company) => (
-              <Link key={company} href={`/search/${company}`} prefetch={true}>
-                <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${companyColors[company].text} font-semibold`}> {/* Adjusted padding and font size for mobile */}
-                  {company}
+          <div className="mt-10 space-y-6">
+            {/* Company */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="sm:max-w-[220px]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                      <Building2 size={18} />
+                    </div>
+                    <div className="font-semibold text-slate-900">Company</div>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Browse processes from top-tier organizations.
+                  </p>
                 </div>
-              </Link>
-            ))}
+
+                <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
+                  {companies.map((company) => (
+                    <Link
+                      key={company}
+                      href={`/search/${company}`}
+                      prefetch={true}
+                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-medium text-slate-800 shadow-sm transition hover:bg-white hover:shadow"
+                    >
+                      {company}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Batch year */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="sm:max-w-[220px]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                      <GraduationCap size={18} />
+                    </div>
+                    <div className="font-semibold text-slate-900">Batch Year</div>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600">
+                    See the evolution of interviews across graduating classes.
+                  </p>
+                </div>
+
+                <div className="grid flex-1 grid-cols-4 gap-3 sm:grid-cols-7">
+                  {batchYears.map((year) => {
+                    return (
+                      <Link
+                        key={year}
+                        href={`/search/${year}`}
+                        prefetch={true}
+                        className={[
+                          "rounded-xl px-4 py-3 text-center text-sm font-semibold shadow-sm transition",
+                          "border border-slate-200 bg-slate-50 text-slate-800 hover:bg-white hover:shadow",
+                        ].join(" ")}
+                      >
+                        {year}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Department */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="sm:max-w-[220px]">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-700">
+                      <Blocks size={18} />
+                    </div>
+                    <div className="font-semibold text-slate-900">Department</div>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Narrow down results based on your academic specialization.
+                  </p>
+                </div>
+
+                <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
+                  {departments.map((dept) => (
+                    <Link
+                      key={dept.key}
+                      href={`/search/${dept.key}`}
+                      prefetch={true}
+                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-medium text-slate-800 shadow-sm transition hover:bg-white hover:shadow"
+                    >
+                      {dept.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Search by Batch */}
-        <div className="mb-10 sm:mb-12"> {/* Adjusted marginBottom for mobile */}
-          <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🎓 Batch</h3> {/* Adjusted font size for mobile */}
-          <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-8 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
-            {batchYears.map((year) => (
-              <Link key={year} href={`/search/${year}`} prefetch={true}>
-                <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${batchColors[year]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
-                  {year}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Search by Branch */}
-        <div className="mb-10 sm:mb-12"> {/* Adjusted marginBottom for mobile */}
-          <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center">🌱 Branch</h3> {/* Adjusted font size for mobile */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4"> {/* Adjusted grid gap for mobile */}
-            {branches.map((branch) => (
-              <Link key={branch} href={`/search/${branch}`} prefetch={true}>
-                <div className={`bg-white border border-gray-200 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-center hover:shadow-md transition-shadow duration-200 text-sm sm:text-base ${branchColors[branch]} font-semibold`}> {/* Adjusted padding and font size for mobile */}
-                  {branch}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
       </section>
 
       {/* Top Stories */}
-      <section id="topstories" className="bg-gray-100 py-12 sm:py-16 px-4 text-center"> {/* Adjusted padding for mobile */}
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Top Interview Stories 🔥</h2> {/* Adjusted font size for mobile */}
-        <ScrollableSection>
-          {fetchedTopStories.map((story, index) => (
-            <Link key={index} href={`/single/${story.uid}`} prefetch={true}>
-              <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
-            </Link>
-          ))}
-        </ScrollableSection>
+      <section id="topstories" className="bg-slate-50 py-14 sm:py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+              <span className="text-xl">🔥</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+              Top Interview Stories
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+              The most read and helpful interview experiences from the community.
+            </p>
+          </div>
+          <div className="mt-8">
+            <ScrollableSection>
+              {fetchedTopStories.map((story, index) => (
+                <Link key={index} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+                  <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
+        </div>
       </section>
 
       {/* Blog Section */}
-      <section className="bg-white text-gray-900 py-12 sm:py-16 px-4"> {/* Adjusted padding for mobile */}
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">What Community Says 💬</h2> {/* Adjusted font size for mobile */}
-        <ScrollableSection>
-          {blogPosts.map((post, index) => (
-            <article
-              key={index}
-              className="bg-gray-100 rounded-xl shadow-sm p-4 sm:p-6 min-w-[280px] max-w-[350px] sm:min-w-[300px] sm:max-w-[300px] transition-transform" // Adjusted padding and width for mobile
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`${post.avatarBg} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold`}>
-                  {post.avatar}
-                </div>
-                <div>
-                  <div className="font-bold text-lg">{post.author}</div>
-                  <div className="text-gray-600 text-sm">{post.title}</div>
-                </div>
-              </div>
-              <p className="text-gray-700 text-sm sm:text-base">{post.content}</p> {/* Adjusted font size for mobile */}
-            </article>
-          ))}
-        </ScrollableSection>
+      <section className="bg-white py-14 sm:py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+              <span className="text-xl">💬</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+              What Community Says
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+              Real feedback from students using theInterview to prepare smarter and land their dream roles.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            <ScrollableSection>
+              {blogPosts.map((post, index) => (
+                <article
+                  key={index}
+                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`${post.avatarBg} flex h-11 w-11 items-center justify-center rounded-full text-white font-bold`}
+                        aria-hidden="true"
+                      >
+                        {post.avatar}
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold text-slate-900 leading-tight">{post.author}</div>
+                        <div className="text-xs font-medium text-slate-500">Student</div>
+                      </div>
+                    </div>
+                    <div className="flex text-slate-200">
+                      <Quote size={28} className="fill-slate-200" />
+                    </div>
+                  </div>
+
+                  <p className="mt-4 text-left text-sm sm:text-base text-slate-700 italic leading-relaxed line-clamp-4">
+                    {post.content}
+                  </p>
+                </article>
+              ))}
+            </ScrollableSection>
+          </div>
+        </div>
       </section>
     </main>
   );

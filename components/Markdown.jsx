@@ -138,7 +138,7 @@ const MarkdownRenderer = ({ content }) => {
   };
 
   return (
-    <div className="markdown-container font-[-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif] max-w-[900px] mx-auto p-4 break-words">
+    <div className="markdown-container font-sans max-w-[900px] mx-auto p-4 break-words">
       <ReactMarkdown
         components={components}
         remarkPlugins={[remarkGfm]}

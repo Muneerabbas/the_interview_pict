@@ -1,11 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Navbar from "../../../components/Navbar";
+import ExperienceTiptapEditor from "../../../components/ExperienceTiptapEditor";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+const getEditorPlainText = (value = "") =>
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 export default function EditPage() {
     const [successMessage, setSuccessMessage] = useState('');
@@ -87,7 +92,7 @@ export default function EditPage() {
       case 'role':
         return !value || (value === 'others' && !customRole); // Checks if role is empty or "Others" without custom role
       case 'markdown':
-        return !value.trim();
+        return !getEditorPlainText(value);
       default:
         return false;
     }
@@ -419,14 +424,10 @@ const handleSubmit = async () => {
           <div className="relative w-full h-full pt-16 overflow-hidden">
   {/* The padding-top `pt-16` ensures that the content does not overlap with the button */}
   <div className="w-full h-full overflow-y-auto">
-    <MDEditor
+    <ExperienceTiptapEditor
       value={markdown}
       onChange={handleMarkdownChange}
-      preview="live"
-      hideToolbar={false}
-      data-color-mode="light"
-      className="w-full h-full"
-      height="100%"
+      minHeight={700}
     />
   </div>
   <div className="mb-[800px]"></div>

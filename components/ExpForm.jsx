@@ -1,19 +1,125 @@
 "use client";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
 import 'font-awesome/css/font-awesome.min.css';
-import Link from "next/link";
-
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 
 const LoadingScreen = () => (
   <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
     <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
   </div>
 );
+
+const getEditorPlainText = (value = "") =>
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const INTERVIEW_TEMPLATE = `## Interview Experience Template
+
+Welcome to your Interview Experience Guide! This template is here to help you share your journey in a way that is informative and exciting. Feel free to customize it as you wish and help future aspirants.
+
+---
+
+### 1. Company and Role
+
+- **Company:** [Company Name] (e.g., Google, Microsoft, Startup X)
+- **Role:** [Job Title] (e.g., SDE Intern, Software Engineer, Data Scientist)
+- **Batch/Year of Graduation:** [Your Graduation Year] (e.g., 2024, 2023)
+- **Branch:** [Your Branch of Engineering] (e.g., Computer Science, IT, Electronics)
+
+---
+
+### 2. Application Process
+
+- **How did you apply?** (e.g., LinkedIn, Company Website, Referral, On-Campus)
+- **Timeline:**
+  - **Application Date:** [Date]
+  - **Online Assessment Date:** [Date] (if applicable)
+  - **Interview Dates:** [Date(s)]
+  - **Offer Date:** [Date] (if applicable)
+
+---
+
+### 3. Interview Rounds
+
+#### Round 1: [Round Name] (e.g., Online Assessment, Technical Interview 1)
+- **Type:** [e.g., Coding, MCQ, Technical, HR]
+- **Description:** [Detailed description of the round. What kind of questions were asked? Coding problems, DSA concepts, System Design, Behavioral questions etc.]
+  - **Example Questions:**
+    1. [Question 1]
+    2. [Question 2]
+    3. [Question 3]
+- **Difficulty Level:** [Easy, Medium, Hard]
+- **Your Experience:** [How did you perform? What was challenging? Tips for this round?]
+
+#### Round 2: [Round Name] (e.g., Technical Interview 2, HR Round)
+- **Type:** [e.g., Coding, Technical, HR, Managerial]
+- **Description:** [Detailed description of the round]
+  - **Example Questions:**
+    1. [Question 1]
+    2. [Question 2]
+- **Difficulty Level:** [Easy, Medium, Hard]
+- **Your Experience:** [Your performance and tips]
+
+#### Round 3 (and subsequent rounds if any):
+- [Follow the same format as above for each round.]
+
+---
+
+### 4. Overall Experience and Tips
+
+- **Overall Interview Experience:** [How was your overall experience with the company? Positive, negative, or neutral?]
+- **What to prepare?** [List of topics to prepare for this company and role, e.g., DSA, System Design, specific technologies, behavioral questions.]
+- **Tips for Aspirants:** [Any general tips or advice for future candidates?]
+- **Verdict:** [Selected/Rejected/Waiting] (Optional)
+
+### 5. 🖼️ **Add Images!**
+![image](https://i.imgflip.com/9jbjc6.jpg)
+
+Feel free to upload any image that showcases your interview experience—perhaps a photo of the company’s office or your work environment. Visuals help make your experience even more relatable!
+
+---
+
+### 6. Additional Comments (Optional)
+
+- [Any other information you want to share, e.g., interviewer feedback, company culture insights, salary discussions, etc.]
+
+---
+
+### Code Snippet Example (Optional)
+
+\`\`\`python
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+\`\`\`
+
+---
+
+Be as detailed as possible, and replace the placeholders with your actual interview details.`;
 
 
 export default function MdxEditorPage() {
@@ -163,7 +269,7 @@ export default function MdxEditorPage() {
       case 'role':
         return !value || (value === 'others' && !customRole); // Checks if role is empty or "Others" without custom role
       case 'markdown':
-        return !value.trim();
+        return !getEditorPlainText(value);
       default:
         return false;
     }
@@ -353,9 +459,13 @@ export default function MdxEditorPage() {
   }, [markdown, batch, branch, company, role, saveDraft, session?.user?.email]);
 
 
-  const handleHelpClick = () => {
-    setIsLoading(true);
-    // No need to setIsLoading(false) here because page navigation will unmount the component
+  const handleCopyTemplate = () => {
+    setMode("manual");
+    setMarkdown(INTERVIEW_TEMPLATE);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      markdown: false,
+    }));
   };
 
   const handleClearForm = () => {
@@ -802,11 +912,15 @@ export default function MdxEditorPage() {
                   </div>
                 </div>
 
-                {/* Short on ideas link (Right) */}
+                {/* Copy template button (Right) */}
                 <div className={`w-full xl:w-auto flex justify-center xl:justify-end ${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
-                  <Link href="/help" onClick={handleHelpClick} className="text-blue-700 hover:text-blue-900 font-semibold transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap bg-white border border-blue-100 rounded-xl px-4 py-3">
-                    Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
-                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleCopyTemplate}
+                    className="text-blue-700 hover:text-blue-900 font-semibold transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap bg-white border border-blue-100 rounded-xl px-4 py-3"
+                  >
+                    Copy Template <i className="fa fa-copy text-[11px] mt-0.5"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -890,14 +1004,10 @@ export default function MdxEditorPage() {
             )}
             {/* Markdown Editor */}
             <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
-              <MDEditor
+              <ExperienceTiptapEditor
                 value={markdown}
                 onChange={handleMarkdownChange}
-                preview="live"
-                hideToolbar={false}
-                data-color-mode="light"
-                className="w-full h-full border-none shadow-none"
-                height={550}
+                minHeight={550}
               />
             </div>
           </div>

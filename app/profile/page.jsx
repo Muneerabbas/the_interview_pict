@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Edit, Trash2, UserCircle, Mail, PlusCircle, Loader2 } from 'lucide-react';
+import { Mail, PlusCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
@@ -22,8 +22,6 @@ const ProfilePage = () => {
   const name = session?.user?.name || "John Doe";
   const email = session?.user?.email || "john.doe@example.com";
   const [globalLoading, setGlobalLoading] = useState(false);
-
-  console.log("ProfilePage: Initial globalLoading state:", globalLoading); // Debugging log - initial state
 
   useEffect(() => {
     if (status === 'loading' || !session) {
@@ -59,7 +57,7 @@ const ProfilePage = () => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F0F2F5]">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex items-center space-x-2 text-blue-600">
           <Loader2 className="animate-spin" size={24} />
           <span className="text-xl font-medium">Loading...</span>
@@ -70,12 +68,12 @@ const ProfilePage = () => {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-[#F0F2F5]">
+      <div className="min-h-screen bg-slate-50">
         <Navbar />
 
         {globalLoading && <LoadingScreen />} {/* ADDED: LoadingScreen component here */}
 
-        <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10 ">
+        <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-violet-500/10">
           <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="max-w-5xl mx-auto px-4 py-8">
@@ -112,12 +110,12 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5]">
+      <div className="min-h-screen bg-slate-50">
       <Navbar />
-      <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-[#8B77F9]/10 mt-2 md:mt-1">
+      <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-violet-500/10 mt-2 md:mt-1">
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="max-w-5xl mx-auto px-4 ">
+          <div className="max-w-5xl mx-auto px-4 w-full">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="relative group">
                 <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
@@ -134,6 +132,9 @@ const ProfilePage = () => {
                   <Mail size={16} className="text-blue-600" />
                   <span>{email}</span>
                 </div>
+                <p className="text-sm text-slate-600 max-w-xl">
+                  Track your interview posts and keep helping juniors prepare better.
+                </p>
               </div>
             </div>
           </div>
@@ -142,14 +143,19 @@ const ProfilePage = () => {
 
       {globalLoading && <LoadingScreen />} {/* UPDATED: Replaced existing loading UI with LoadingScreen */}
 
-      <div className="max-w-5xl mx-auto px-4 ">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1D1D1D]">
-            Your Experiences
-          </h2>
-          {posts.length > 0 && (
+      <div className="max-w-5xl mx-auto px-4 pb-12 mt-8">
+        <div className="flex items-center justify-between mb-6 gap-4">
+          <div>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1D1D1D]">
+              Your Experiences
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Total: <span className="font-semibold text-slate-700">{posts.length}</span>
+            </p>
+          </div>
+          {posts.length > 0 && !loadingPosts && (
             <Link href="/post">
-              <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-600/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm">
+              <button className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-600/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm font-medium">
                 <PlusCircle size={16} />
                 <span className="text-xs sm:text-sm">Share Experience</span>
               </button>
@@ -165,21 +171,29 @@ const ProfilePage = () => {
             </div>
           </div>
         ) : posts.length === 0 ? (
-          <div className="bg-white rounded-xl p-8 text-center shadow-sm">
-            <div className="text-[#1D1D1D] mb-6">No experiences shared yet</div>
-            <div className="flex justify-center">
-              <Link href="/post">
-                <button className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-600/90 transition-all duration-300 shadow-sm text-xs sm:text-sm">
-                  <PlusCircle size={16} />
-                  <span className="text-xs sm:text-sm">Share Your First Experience</span>
-                </button>
-              </Link>
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-600 flex items-center justify-center mb-5 border border-blue-100">
+                <PlusCircle size={28} />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">No experiences shared yet</h3>
+              <p className="text-sm sm:text-base text-slate-500 mb-7">
+                Your interview story can help juniors prepare smarter. Start with your most recent process and add practical tips.
+              </p>
+              <div className="flex justify-center">
+                <Link href="/post">
+                  <button className="inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-7 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-300 shadow-sm text-sm font-semibold">
+                    <PlusCircle size={17} />
+                    <span>Share Your First Experience</span>
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="grid gap-6">
+          <div className="grid gap-5">
             {posts.map((post) => (
-              <div key={post.uid} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div key={post.uid} className="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
                 <ProfileCard
                   profile={post}
                   edit={true}
@@ -192,7 +206,6 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
-      <br /><br />
     </div>
   );
 };

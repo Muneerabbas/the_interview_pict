@@ -202,6 +202,30 @@ export default function MdxEditorPage() {
     setCustomRole(e.target.value); // Update custom role state when user types in the input field
   };
 
+  const validateRequiredMetaForAI = () => {
+    const requiredErrors = {
+      batch: validateField('batch', batch),
+      branch: validateField('branch', branch),
+      company: validateField('company', company),
+      role: validateField('role', role),
+    };
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      ...requiredErrors,
+    }));
+
+    return !Object.values(requiredErrors).includes(true);
+  };
+
+  const handleModeChange = (nextMode) => {
+    if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
+      alert("Please select Batch, Department, Company, and Role before using AI.");
+      return;
+    }
+    setMode(nextMode);
+  };
+
 
   const handleMarkdownChange = (value) => {
     setMarkdown(value || "");
@@ -316,6 +340,32 @@ export default function MdxEditorPage() {
   const handleHelpClick = () => {
     setIsLoading(true);
     // No need to setIsLoading(false) here because page navigation will unmount the component
+  };
+
+  const handleClearForm = () => {
+    setBatch("");
+    setBranch("");
+    setCompany("");
+    setCustomCompany("");
+    setRole("");
+    setCustomRole("");
+    setMarkdown("");
+    setChatInput("");
+    setErrors({
+      batch: false,
+      branch: false,
+      company: false,
+      role: false,
+      markdown: false,
+    });
+    setMode("manual");
+    setSuccessMessage("");
+    setIsGenerating(false);
+    setChatStage('shortlisting');
+    setTotalRounds(0);
+    setCurrentRound(1);
+    setChatAnswers({ shortlisting: "", roundsText: "", roundDetails: [], verdictAndTips: "" });
+    setChatMessages([{ role: 'assistant', text: initialMessage }]);
   };
 
   // Use explicit scroll on the container to prevent global window jumps
@@ -450,7 +500,7 @@ export default function MdxEditorPage() {
 
       <div className={`max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
 
-        <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
+        <div className="bg-gradient-to-b from-white to-slate-50 rounded-[24px] shadow-md border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
 
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 text-center tracking-tight">
             Share Your Interview Journey
@@ -459,8 +509,17 @@ export default function MdxEditorPage() {
             Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
           </p>
 
-          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-600 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-10 text-center transition hover:bg-blue-100">
+          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-700 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-8 text-center transition hover:bg-blue-100 border border-blue-100">
             Pro Tip: Maximize the editor for a better experience!
+          </div>
+
+          <div className="w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-sm text-slate-700 font-medium">
+              Fill details once, then switch to AI mode for faster drafting.
+            </p>
+            <p className="text-xs text-slate-500">
+              Drafts are auto-saved every few seconds.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-2 w-full text-left">
@@ -571,44 +630,55 @@ export default function MdxEditorPage() {
             </div>
           )}
 
-          <div className="flex flex-col lg:flex-row items-center justify-between w-full pb-8 gap-6 relative">
+          <div className="w-full pb-8">
+            <div className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 p-3 sm:p-4 shadow-sm">
+              <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+                {/* Toggle (Left) */}
+                <div className="flex justify-start w-full xl:w-auto">
+                  <div className="flex bg-white border border-slate-200 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
+                    <button
+                      onClick={() => handleModeChange('manual')}
+                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'manual' ? 'bg-slate-900 shadow text-white' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                    >
+                      <i className={`fa fa-pencil mt-0.5 ${mode === 'manual' ? 'text-blue-200' : 'text-blue-500'}`}></i> Manual Entry
+                    </button>
+                    <button
+                      onClick={() => handleModeChange('ai')}
+                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'ai' ? 'bg-purple-600 shadow text-white' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                    >
+                      <i className={`fa fa-bolt ${mode === 'ai' ? 'text-purple-100' : 'text-purple-500'}`}></i> AI-Assisted Write
+                    </button>
+                  </div>
+                </div>
 
-            {/* Toggle (Left) */}
-            <div className="flex justify-start lg:w-1/3 w-full">
-              <div className="flex bg-slate-50/80 border border-slate-100 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
-                <button
-                  onClick={() => setMode('manual')}
-                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'manual' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  <i className="fa fa-pencil text-blue-500 mt-0.5"></i> Manual Entry
-                </button>
-                <button
-                  onClick={() => setMode('ai')}
-                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'ai' ? 'bg-white shadow text-purple-600' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  <i className="fa fa-bolt text-purple-500"></i> AI-Assisted Write
-                </button>
+                {/* Actions (Center) */}
+                <div className="flex justify-center xl:justify-start w-full xl:w-auto">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <button
+                      onClick={handleClearForm}
+                      type="button"
+                      className="bg-white border border-slate-200 text-slate-700 text-sm sm:text-base font-semibold rounded-xl hover:bg-slate-100 transition-colors shadow-sm px-6 py-3 w-full sm:w-auto whitespace-nowrap"
+                    >
+                      Clear Form
+                    </button>
+                    <button
+                      onClick={handleSubmit}
+                      type="button"
+                      className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3 w-full sm:w-auto whitespace-nowrap"
+                    >
+                      Submit Experience
+                    </button>
+                  </div>
+                </div>
+
+                {/* Short on ideas link (Right) */}
+                <div className={`w-full xl:w-auto flex justify-center xl:justify-end ${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
+                  <Link href="/help" onClick={handleHelpClick} className="text-blue-700 hover:text-blue-900 font-semibold transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap bg-white border border-blue-100 rounded-xl px-4 py-3">
+                    Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
+                  </Link>
+                </div>
               </div>
             </div>
-
-            {/* Submit Button (Center) */}
-            <div className="flex justify-center lg:w-1/3 w-full">
-              <button
-                onClick={handleSubmit}
-                type="button"
-                className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3.5 w-full sm:w-auto whitespace-nowrap"
-              >
-                Submit Experience
-              </button>
-            </div>
-
-            {/* Short on ideas link (Right) */}
-            <div className={`sm:w-1/3 flex justify-center lg:justify-end w-full \${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
-              <Link href="/help" onClick={handleHelpClick} className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap">
-                Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
-              </Link>
-            </div>
-
           </div>
 
           <div className="w-full relative shadow-sm border border-slate-200 rounded-xl overflow-hidden mt-2 bg-slate-50/50">
@@ -633,10 +703,9 @@ export default function MdxEditorPage() {
                 <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
                   {chatMessages.map((msg, index) => (
                     <div key={index} className={`flex w-full \${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-[#1e293b] shadow-md rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
-                        <p 
-                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold`}
-                          style={msg.role === 'user' ? { color: '#ffffff' } : { color: '#0f172a' }}
+                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-purple-50 border border-purple-200 shadow-sm rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
+                        <p
+                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold \${msg.role === 'user' ? 'text-slate-900' : 'text-slate-900'}`}
                         >
                           {msg.text}
                         </p>

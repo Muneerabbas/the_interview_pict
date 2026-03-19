@@ -27,21 +27,21 @@ ${JSON.stringify(data, null, 2)}
 
 FORMAT:
 
-# 📌 Interview Experience – ${data.company} | ${data.role}
+# Interview Experience – ${data.company} | ${data.role}
 
-**🎓 Batch:** ${data.batch} | **🏫 Branch:** ${data.branch} | **🔄 Total Rounds:** ${data.rounds}
+**Batch:** ${data.batch} | **Branch:** ${data.branch} | **Total Rounds:** ${data.rounds}
 
 ---
 
-### 🔹 Shortlisting Criteria
+### Shortlisting Criteria
 Rewrite this naturally:
 ${data.shortlisting}
 
-### ⏱️ Interview Rounds Breakdown
-Rewrite these rounds naturally, separating them clearly (e.g., 🧪 Round 1: Online Assessment, 🧠 Round 2: Technical, 🧑💼 Round 3: HR). Keep the student's exact questions and experiences intact:
+### Interview Rounds Breakdown
+Rewrite these rounds naturally, separating them clearly (e.g., Round 1: Online Assessment, Round 2: Technical, Round 3: HR). Keep the student's exact questions and experiences intact:
 ${data.topics}
 
-### ✅ Final Verdict & Tips
+### Final Verdict & Tips
 Rewrite this naturally in a supportive tone:
 ${data.verdictAndTips}
 `;

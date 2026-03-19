@@ -23,7 +23,7 @@ export default function Navbar() {
   const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const texts = ["Company 🏢", "Batch 🎓", "Role 💼", "Person 👤"];
+  const texts = ["Company", "Batch", "Role", "Candidate"];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

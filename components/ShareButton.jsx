@@ -71,70 +71,71 @@ export default function ShareButton({ id, data }) {
           handleCopyToClipboard();
           setIsModalOpen(true);
         }}
-        className="absolute top-0 right-0 p-2 text-gray-600 hover:text-[#25D366] transition-colors duration-200 flex items-center gap-2 rounded-full hover:bg-gray-100"
+        className="absolute right-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
         aria-label="Share article"
       >
-        <Share2 size={20} />
+        <Share2 size={16} />
+        <span className="hidden sm:inline">Share</span>
       </button>
 
       <div className="relative">
         {/* Modal for Share Options */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-            <div className="bg-white rounded-lg p-4 w-64 relative">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+            <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
               {/* Close Button */}
               <button
                 onClick={closeModal}
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                className="absolute right-3 top-3 text-slate-500 transition-colors hover:text-slate-700"
                 aria-label="Close modal"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
 
-              <h2 className="text-lg font-semibold text-center mb-4">Share this Article</h2>
+              <h2 className="mb-4 text-center text-lg font-bold text-slate-900">Share this Article</h2>
 
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleWhatsAppShare}
-                  className="flex items-center gap-2 p-2 text-[#25D366] hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#25D366] transition-colors hover:bg-slate-100"
                   aria-label="Share on WhatsApp"
                 >
-                  <Share2 size={20} />
+                  <Share2 size={18} />
                   WhatsApp
                 </button>
                 
                 <button
                   onClick={handleLinkedInShare}
-                  className="flex items-center gap-2 p-2 text-[#0077B5] hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#0077B5] transition-colors hover:bg-slate-100"
                   aria-label="Share on LinkedIn"
                 >
-                  <Linkedin size={20} />
+                  <Linkedin size={18} />
                   LinkedIn
                 </button>
 
                 <button
                   onClick={handleFacebookShare}
-                  className="flex items-center gap-2 p-2 text-blue-600 hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 rounded-lg p-2 text-blue-600 transition-colors hover:bg-slate-100"
                   aria-label="Share on Facebook"
                 >
-                  <Facebook size={20} />
+                  <Facebook size={18} />
                   Facebook
                 </button>
                 <button
                   onClick={handleTwitterShare}
-                  className="flex items-center gap-2 p-2 text-[#1DA1F2] hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#1DA1F2] transition-colors hover:bg-slate-100"
                   aria-label="Share on Twitter"
                 >
-                  <Twitter size={20} />
+                  <Twitter size={18} />
                   Twitter
                 </button>
                
                 <button
                   onClick={handleInstagramShare}
-                  className="flex items-center gap-2 p-2 text-[#E1306C] hover:bg-gray-100 rounded-md"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#E1306C] transition-colors hover:bg-slate-100"
                   aria-label="Share on Instagram"
                 >
-                  <Instagram size={20} />
+                  <Instagram size={18} />
                   Instagram
                 </button>
               </div>
@@ -143,10 +144,10 @@ export default function ShareButton({ id, data }) {
         )}
         {isModalOpen && message1 && (
           <div
-            className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-[#E7F3FF] text-[#1D1D1D] px-4 py-2 rounded-lg shadow-lg text-lg z-50 flex items-center space-x-2 animate-slideIn whitespace-nowrap"
+            className="fixed bottom-24 left-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn"
           >
-            <Clipboard className="h-6 w-6 text-[#1D1D1D]" />
-            <span>{message1}</span>
+            <Clipboard className="h-5 w-5 text-blue-700" />
+            <span className="text-center">{message1}</span>
           </div>
         )}
       </div>

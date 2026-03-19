@@ -39,19 +39,35 @@ export default function MdxEditorPage() {
   const [previousMarkdown, setPreviousMarkdown] = useState("");
   const [mode, setMode] = useState("manual");
 
-  const initialMessage = "Hi! I'll help you write your interview experience. First, what were the shortlisting criteria? (e.g., CGPA cutoff, Resume screening, Direct OA)";
+  const initialMessage = "Hi! I'll help you write a useful interview post for juniors. First, what were the exact eligibility/shortlisting criteria (CGPA cutoff, branches allowed, backlogs, resume screening, OA shortlist, etc.)?";
 
   const [chatMessages, setChatMessages] = useState([
     { role: 'assistant', text: initialMessage }
   ]);
   const [chatInput, setChatInput] = useState("");
-  const [chatStage, setChatStage] = useState('shortlisting'); // shortlisting -> rounds_count -> round_loop -> verdict -> generating -> done
+  const [chatStage, setChatStage] = useState('eligibility'); // eligibility -> ... -> verdict -> generating -> done
   const [totalRounds, setTotalRounds] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
   
   const [chatAnswers, setChatAnswers] = useState({
-    shortlisting: "", roundsText: "", roundDetails: [], verdictAndTips: ""
+    eligibility: "",
+    applicationRoute: "",
+    roundsText: "",
+    roundDetails: [],
+    timeline: "",
+    difficulty: "",
+    keyTopics: "",
+    codingSpecifics: "",
+    interviewFocus: "",
+    projectDeepDive: "",
+    hrBehavioral: "",
+    unexpected: "",
+    mistakesToAvoid: "",
+    prepStrategy: "",
+    sevenDayPlan: "",
+    offerDetails: "",
+    verdictAndTips: ""
   });
   const chatContainerRef = useRef(null);
 
@@ -202,6 +218,30 @@ export default function MdxEditorPage() {
     setCustomRole(e.target.value); // Update custom role state when user types in the input field
   };
 
+  const validateRequiredMetaForAI = () => {
+    const requiredErrors = {
+      batch: validateField('batch', batch),
+      branch: validateField('branch', branch),
+      company: validateField('company', company),
+      role: validateField('role', role),
+    };
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      ...requiredErrors,
+    }));
+
+    return !Object.values(requiredErrors).includes(true);
+  };
+
+  const handleModeChange = (nextMode) => {
+    if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
+      alert("Please select Batch, Department, Company, and Role before using AI.");
+      return;
+    }
+    setMode(nextMode);
+  };
+
 
   const handleMarkdownChange = (value) => {
     setMarkdown(value || "");
@@ -318,6 +358,50 @@ export default function MdxEditorPage() {
     // No need to setIsLoading(false) here because page navigation will unmount the component
   };
 
+  const handleClearForm = () => {
+    setBatch("");
+    setBranch("");
+    setCompany("");
+    setCustomCompany("");
+    setRole("");
+    setCustomRole("");
+    setMarkdown("");
+    setChatInput("");
+    setErrors({
+      batch: false,
+      branch: false,
+      company: false,
+      role: false,
+      markdown: false,
+    });
+    setMode("manual");
+    setSuccessMessage("");
+    setIsGenerating(false);
+    setChatStage('eligibility');
+    setTotalRounds(0);
+    setCurrentRound(1);
+    setChatAnswers({
+      eligibility: "",
+      applicationRoute: "",
+      roundsText: "",
+      roundDetails: [],
+      timeline: "",
+      difficulty: "",
+      keyTopics: "",
+      codingSpecifics: "",
+      interviewFocus: "",
+      projectDeepDive: "",
+      hrBehavioral: "",
+      unexpected: "",
+      mistakesToAvoid: "",
+      prepStrategy: "",
+      sevenDayPlan: "",
+      offerDetails: "",
+      verdictAndTips: ""
+    });
+    setChatMessages([{ role: 'assistant', text: initialMessage }]);
+  };
+
   // Use explicit scroll on the container to prevent global window jumps
   useEffect(() => {
     if (mode === 'ai' && chatContainerRef.current) {
@@ -337,9 +421,23 @@ export default function MdxEditorPage() {
          role: role === 'others' ? customRole : role || "Not specified",
          batch: batch || "Not specified",
          branch: branch || "Not specified",
-         shortlisting: finalAnswers.shortlisting,
+         shortlisting: finalAnswers.eligibility,
+         eligibility: finalAnswers.eligibility,
+         applicationRoute: finalAnswers.applicationRoute,
          rounds: finalAnswers.roundsText,
          topics: roundsList, // Condensed from the round loop
+         timeline: finalAnswers.timeline,
+         difficulty: finalAnswers.difficulty,
+         keyTopics: finalAnswers.keyTopics,
+         codingSpecifics: finalAnswers.codingSpecifics,
+         interviewFocus: finalAnswers.interviewFocus,
+         projectDeepDive: finalAnswers.projectDeepDive,
+         hrBehavioral: finalAnswers.hrBehavioral,
+         unexpected: finalAnswers.unexpected,
+         mistakesToAvoid: finalAnswers.mistakesToAvoid,
+         prepStrategy: finalAnswers.prepStrategy,
+         sevenDayPlan: finalAnswers.sevenDayPlan,
+         offerDetails: finalAnswers.offerDetails,
          verdictAndTips: finalAnswers.verdictAndTips
       };
       
@@ -363,10 +461,28 @@ export default function MdxEditorPage() {
        setTimeout(() => {
           setMode('manual');
           // Reset chat completely for next time
-          setChatStage('shortlisting');
+          setChatStage('eligibility');
           setTotalRounds(0);
           setCurrentRound(1);
-          setChatAnswers({ shortlisting: "", roundsText: "", roundDetails: [], verdictAndTips: "" });
+          setChatAnswers({
+            eligibility: "",
+            applicationRoute: "",
+            roundsText: "",
+            roundDetails: [],
+            timeline: "",
+            difficulty: "",
+            keyTopics: "",
+            codingSpecifics: "",
+            interviewFocus: "",
+            projectDeepDive: "",
+            hrBehavioral: "",
+            unexpected: "",
+            mistakesToAvoid: "",
+            prepStrategy: "",
+            sevenDayPlan: "",
+            offerDetails: "",
+            verdictAndTips: ""
+          });
           setChatMessages([{ role: 'assistant', text: initialMessage }]);
        }, 2000);
     }
@@ -387,11 +503,16 @@ export default function MdxEditorPage() {
       let newStage = chatStage;
       let newAnswers = { ...chatAnswers };
 
-      if (chatStage === 'shortlisting') {
-         newAnswers.shortlisting = userMsg;
-         newStage = 'rounds_count';
-         nextAssistantMsg = "Got it! And how many interview rounds were there in total? (e.g. 3)";
+      if (chatStage === 'eligibility') {
+         newAnswers.eligibility = userMsg;
+         newStage = 'application_route';
+         nextAssistantMsg = "Great. How did you apply (on campus, referral, off-campus) and when did the process start?";
       } 
+      else if (chatStage === 'application_route') {
+         newAnswers.applicationRoute = userMsg;
+         newStage = 'rounds_count';
+         nextAssistantMsg = "Nice. How many interview rounds were there in total? (e.g. 3)";
+      }
       else if (chatStage === 'rounds_count') {
          newAnswers.roundsText = userMsg;
          // Parse how many rounds out of their answer string
@@ -411,9 +532,69 @@ export default function MdxEditorPage() {
             setCurrentRound(nextRound);
             nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what type of round was it and what did they ask?`;
          } else {
-            newStage = 'verdict';
-            nextAssistantMsg = "Thanks for mapping out the rounds! Finally, what was the final verdict (e.g. Selected, Rejected) and do you have any tips for others?";
+            newStage = 'timeline';
+            nextAssistantMsg = "Thanks! What was the timeline like (days between rounds + approximate duration of each round)?";
          }
+      }
+      else if (chatStage === 'timeline') {
+         newAnswers.timeline = userMsg;
+         newStage = 'difficulty';
+         nextAssistantMsg = "How difficult was each round (easy/medium/hard) and why?";
+      }
+      else if (chatStage === 'difficulty') {
+         newAnswers.difficulty = userMsg;
+         newStage = 'key_topics';
+         nextAssistantMsg = "Which topics were asked the most (DSA, DBMS, OS, CN, OOP, core subjects, etc.)?";
+      }
+      else if (chatStage === 'key_topics') {
+         newAnswers.keyTopics = userMsg;
+         newStage = 'coding_specifics';
+         nextAssistantMsg = "Share coding specifics: question patterns, expected approach, constraints, and any optimizations discussed.";
+      }
+      else if (chatStage === 'coding_specifics') {
+         newAnswers.codingSpecifics = userMsg;
+         newStage = 'interview_focus';
+         nextAssistantMsg = "What did interviewers focus on more: problem-solving, fundamentals, projects, communication, or all equally?";
+      }
+      else if (chatStage === 'interview_focus') {
+         newAnswers.interviewFocus = userMsg;
+         newStage = 'project_deep_dive';
+         nextAssistantMsg = "Any project deep-dive questions (architecture, trade-offs, scalability, debugging)?";
+      }
+      else if (chatStage === 'project_deep_dive') {
+         newAnswers.projectDeepDive = userMsg;
+         newStage = 'hr_behavioral';
+         nextAssistantMsg = "What HR/behavioral questions came up, and which answers worked well for you?";
+      }
+      else if (chatStage === 'hr_behavioral') {
+         newAnswers.hrBehavioral = userMsg;
+         newStage = 'unexpected';
+         nextAssistantMsg = "Any surprise or tricky moments, and how did you handle them?";
+      }
+      else if (chatStage === 'unexpected') {
+         newAnswers.unexpected = userMsg;
+         newStage = 'mistakes';
+         nextAssistantMsg = "What common mistakes should juniors avoid in this process?";
+      }
+      else if (chatStage === 'mistakes') {
+         newAnswers.mistakesToAvoid = userMsg;
+         newStage = 'prep_strategy';
+         nextAssistantMsg = "What preparation strategy/resources helped most (platforms, sheets, mock interviews, timelines)?";
+      }
+      else if (chatStage === 'prep_strategy') {
+         newAnswers.prepStrategy = userMsg;
+         newStage = 'seven_day_plan';
+         nextAssistantMsg = "If someone has only 7 days, what should they prioritize day-wise or topic-wise?";
+      }
+      else if (chatStage === 'seven_day_plan') {
+         newAnswers.sevenDayPlan = userMsg;
+         newStage = 'offer_details';
+         nextAssistantMsg = "Optional: share offer details if comfortable (role type, location, package range). You can type 'skip' too.";
+      }
+      else if (chatStage === 'offer_details') {
+         newAnswers.offerDetails = userMsg;
+         newStage = 'verdict';
+         nextAssistantMsg = "Finally, what was the final verdict (Selected/Rejected/Waitlisted), and your top tips for future students?";
       }
       else if (chatStage === 'verdict') {
          newAnswers.verdictAndTips = userMsg;
@@ -450,7 +631,7 @@ export default function MdxEditorPage() {
 
       <div className={`max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
 
-        <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
+        <div className="bg-gradient-to-b from-white to-slate-50 rounded-[24px] shadow-md border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
 
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 text-center tracking-tight">
             Share Your Interview Journey
@@ -459,8 +640,17 @@ export default function MdxEditorPage() {
             Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
           </p>
 
-          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-600 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-10 text-center transition hover:bg-blue-100">
+          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-700 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-8 text-center transition hover:bg-blue-100 border border-blue-100">
             Pro Tip: Maximize the editor for a better experience!
+          </div>
+
+          <div className="w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p className="text-sm text-slate-700 font-medium">
+              Fill details once, then switch to AI mode for faster drafting.
+            </p>
+            <p className="text-xs text-slate-500">
+              Drafts are auto-saved every few seconds.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-2 w-full text-left">
@@ -571,44 +761,55 @@ export default function MdxEditorPage() {
             </div>
           )}
 
-          <div className="flex flex-col lg:flex-row items-center justify-between w-full pb-8 gap-6 relative">
+          <div className="w-full pb-8">
+            <div className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 p-3 sm:p-4 shadow-sm">
+              <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+                {/* Toggle (Left) */}
+                <div className="flex justify-start w-full xl:w-auto">
+                  <div className="flex bg-white border border-slate-200 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
+                    <button
+                      onClick={() => handleModeChange('manual')}
+                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'manual' ? 'bg-slate-900 shadow-lg text-white -translate-y-0.5' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                    >
+                      <i className={`fa fa-pencil mt-0.5 ${mode === 'manual' ? 'text-blue-200' : 'text-blue-500'}`}></i> Manual Entry
+                    </button>
+                    <button
+                      onClick={() => handleModeChange('ai')}
+                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'ai' ? 'bg-purple-600 shadow-lg text-white -translate-y-0.5' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                    >
+                      <i className={`fa fa-bolt ${mode === 'ai' ? 'text-purple-100' : 'text-purple-500'}`}></i> AI-Assisted Write
+                    </button>
+                  </div>
+                </div>
 
-            {/* Toggle (Left) */}
-            <div className="flex justify-start lg:w-1/3 w-full">
-              <div className="flex bg-slate-50/80 border border-slate-100 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
-                <button
-                  onClick={() => setMode('manual')}
-                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'manual' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  <i className="fa fa-pencil text-blue-500 mt-0.5"></i> Manual Entry
-                </button>
-                <button
-                  onClick={() => setMode('ai')}
-                  className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 flex justify-center items-center gap-2.5 font-semibold \${mode === 'ai' ? 'bg-white shadow text-purple-600' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  <i className="fa fa-bolt text-purple-500"></i> AI-Assisted Write
-                </button>
+                {/* Actions (Center) */}
+                <div className="flex justify-center xl:justify-start w-full xl:w-auto">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <button
+                      onClick={handleClearForm}
+                      type="button"
+                      className="bg-white border border-slate-200 text-slate-700 text-sm sm:text-base font-semibold rounded-xl hover:bg-slate-100 transition-colors shadow-sm px-6 py-3 w-full sm:w-auto whitespace-nowrap"
+                    >
+                      Clear Form
+                    </button>
+                    <button
+                      onClick={handleSubmit}
+                      type="button"
+                      className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3 w-full sm:w-auto whitespace-nowrap"
+                    >
+                      Submit Experience
+                    </button>
+                  </div>
+                </div>
+
+                {/* Short on ideas link (Right) */}
+                <div className={`w-full xl:w-auto flex justify-center xl:justify-end ${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
+                  <Link href="/help" onClick={handleHelpClick} className="text-blue-700 hover:text-blue-900 font-semibold transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap bg-white border border-blue-100 rounded-xl px-4 py-3">
+                    Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
+                  </Link>
+                </div>
               </div>
             </div>
-
-            {/* Submit Button (Center) */}
-            <div className="flex justify-center lg:w-1/3 w-full">
-              <button
-                onClick={handleSubmit}
-                type="button"
-                className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3.5 w-full sm:w-auto whitespace-nowrap"
-              >
-                Submit Experience
-              </button>
-            </div>
-
-            {/* Short on ideas link (Right) */}
-            <div className={`sm:w-1/3 flex justify-center lg:justify-end w-full \${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
-              <Link href="/help" onClick={handleHelpClick} className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap">
-                Short on ideas? <i className="fa fa-chevron-right text-[10px] mt-0.5"></i>
-              </Link>
-            </div>
-
           </div>
 
           <div className="w-full relative shadow-sm border border-slate-200 rounded-xl overflow-hidden mt-2 bg-slate-50/50">
@@ -632,11 +833,14 @@ export default function MdxEditorPage() {
                 {/* Chat messages area */}
                 <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
                   {chatMessages.map((msg, index) => (
-                    <div key={index} className={`flex w-full \${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 \${msg.role === 'user' ? 'bg-[#1e293b] shadow-md rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
-                        <p 
-                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold`}
-                          style={msg.role === 'user' ? { color: '#ffffff' } : { color: '#0f172a' }}
+                    <div
+                      key={index}
+                      className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      style={{ animation: 'chatBubbleIn 220ms ease-out' }}
+                    >
+                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 ${msg.role === 'user' ? 'bg-purple-50 border border-purple-200 shadow-sm rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
+                        <p
+                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold ${msg.role === 'user' ? 'text-slate-900' : 'text-slate-900'}`}
                         >
                           {msg.text}
                         </p>
@@ -648,7 +852,11 @@ export default function MdxEditorPage() {
                   {isGenerating && (
                     <div className="flex w-full justify-start">
                       <div className="bg-white border border-slate-200 shadow-sm rounded-br-2xl rounded-tr-2xl rounded-bl-sm px-5 py-3 flex items-center gap-3">
-                         <i className="fa fa-circle-notch fa-spin text-purple-500"></i>
+                         <div className="flex items-center gap-1.5">
+                           <span className="w-2 h-2 rounded-full bg-purple-500 animate-bounce"></span>
+                           <span className="w-2 h-2 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '120ms' }}></span>
+                           <span className="w-2 h-2 rounded-full bg-purple-300 animate-bounce" style={{ animationDelay: '240ms' }}></span>
+                         </div>
                          <p className="text-sm font-medium text-slate-700" style={{ color: '#334155' }}>AI is thinking...</p>
                       </div>
                     </div>
@@ -681,7 +889,7 @@ export default function MdxEditorPage() {
               </div>
             )}
             {/* Markdown Editor */}
-            <div className={`w-full \${mode === 'ai' ? 'hidden' : 'block'}`}>
+            <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
               <MDEditor
                 value={markdown}
                 onChange={handleMarkdownChange}
@@ -696,6 +904,18 @@ export default function MdxEditorPage() {
 
         </div>
       </div>
+      <style jsx>{`
+        @keyframes chatBubbleIn {
+          from {
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }

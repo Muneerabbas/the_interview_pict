@@ -12,9 +12,9 @@ body {
   /* margin: 0;  Ensure no default margin */
 }
 
-body.landing-dark {
-  background-color: #020617;
-  color-scheme: dark;
+body.landing-light {
+  background-color: #f8fafc;
+  color-scheme: light;
 }
 
 @keyframes teamFadeUp {

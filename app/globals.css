@@ -9,6 +9,11 @@ body {
   /* margin: 0;  Ensure no default margin */
 }
 
+body.landing-dark {
+  background-color: #020617;
+  color-scheme: dark;
+}
+
 @keyframes teamFadeUp {
   0% {
     opacity: 0;

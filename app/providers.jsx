@@ -16,9 +16,7 @@ export default function Providers({ children }) {
   return (
     <>
       <SessionProvider>{children}</SessionProvider>
-
-      {!isSearchPage && !isAboutPage && <Footer />}
-
+      {!isSearchPage && !isAboutPage && <Footer isLandingPage={pathname === "/"} />}
       <GoogleAnalytics gaId="G-EBQQJCL50P" />
       <SpeedInsights />
       <Analytics />

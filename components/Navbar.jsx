@@ -18,6 +18,7 @@ import { useSession, signOut, signIn } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import logo from "../public/icon.svg";
+
 export default function Navbar() {
   const { data: session } = useSession();
   const [searchText, setSearchText] = useState("");
@@ -84,46 +85,48 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 w-full z-50 border-b border-black/5 bg-white/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/60"
+        className="fixed top-0 w-full z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 shadow-sm"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           {/* Brand */}
           <Link
             href="/"
-            className="flex items-center gap-2 font-semibold tracking-tight text-slate-900"
+            className="group flex items-center gap-2.5 font-semibold tracking-tight transition-all active:scale-95 text-slate-900"
           >
-            <Image src={logo} alt="theInterview Logo" width={34} height={34} priority />
-            <span className="text-lg sm:text-xl">
-              the<span className="text-blue-600">Interview</span>
+            <div className="relative flex items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5 transition-transform group-hover:scale-105">
+              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-xl" />
+            </div>
+            <span className="text-lg sm:text-xl font-bold">
+              the<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
             </span>
           </Link>
 
           {/* Desktop: search + links */}
           <div className="hidden lg:flex flex-1 items-center justify-center px-8">
             <form onSubmit={handleSearch} className="w-full max-w-2xl">
-              <div className="relative">
+              <div className="relative group">
                 <Search
                   size={18}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"
                 />
                 <input
                   type="text"
                   value={searchText}
-                  className="w-full rounded-xl border border-slate-200 bg-white/80 py-2.5 pl-10 pr-28 text-sm shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/50 py-2.5 pl-11 pr-28 text-sm shadow-inner transition-all duration-300 outline-none placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                   onChange={(e) => setSearchText(e.target.value)}
                   placeholder="Search for"
                 />
 
                 {!searchText && (
-                  <div className="pointer-events-none absolute left-[112px] top-1/2 -translate-y-1/2 overflow-hidden h-5 w-28">
+                  <div className="pointer-events-none absolute left-[116px] top-1/2 -translate-y-1/2 overflow-hidden h-5 w-28">
                     <AnimatePresence mode="sync">
                       <motion.div
                         key={index}
                         initial={{ y: "-100%", opacity: 0 }}
                         animate={{ y: "0%", opacity: 1 }}
                         exit={{ y: "100%", opacity: 0 }}
-                        transition={{ duration: 0.22 }}
-                        className="absolute w-full text-sm font-medium text-blue-600"
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="absolute w-full text-sm font-medium text-blue-500"
                       >
                         {texts[index]}
                       </motion.div>
@@ -133,7 +136,7 @@ export default function Navbar() {
 
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8B77F9] focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:-translate-y-[0.5px] hover:shadow-blue-500/30 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 >
                   Search
                 </button>
@@ -148,36 +151,37 @@ export default function Navbar() {
                 key={href}
                 href={href}
                 className={[
-                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition",
+                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-all active:scale-95",
                   isActive(href)
-                    ? "bg-blue-50 text-blue-700"
-                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
-                ].join(" ")}
+                    ? "bg-indigo-50/80 text-blue-700"
+                    : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900",
+                ].join(" ")
+              }
               >
                 <Icon
                   size={18}
-                  className={isActive(href) ? "text-blue-700" : "text-slate-500 group-hover:text-slate-700"}
+                  className={`transition-colors duration-200 ${isActive(href) ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"}`}
                 />
                 <span>{label}</span>
               </Link>
             ))}
 
-            <div className="ml-2 h-8 w-px bg-slate-200" />
+            <div className="ml-2 h-8 w-px bg-slate-200/80" />
 
             {session ? (
               <button
                 onClick={handleLogout}
-                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition-all active:scale-95 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-200"
               >
-                <LogOut size={18} />
+                <LogOut size={16} />
                 Logout
               </button>
             ) : (
               <button
                 onClick={handleLogin}
-                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-lg hover:-translate-y-[0.5px] active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300"
               >
-                <LogIn size={18} />
+                <LogIn size={16} />
                 Login
               </button>
             )}
@@ -187,14 +191,14 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => router.push("/search")}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/70 text-slate-700 shadow-sm transition hover:bg-white"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
               aria-label="Search"
             >
               <Search size={20} />
             </button>
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/70 text-slate-700 shadow-sm transition hover:bg-white"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
             >
@@ -219,71 +223,71 @@ export default function Navbar() {
             />
 
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
-              className="fixed left-0 right-0 top-[64px] z-50 mx-auto w-full max-w-7xl px-4 lg:hidden"
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="fixed left-0 right-0 top-[68px] z-50 mx-auto w-full max-w-7xl px-4 lg:hidden"
             >
-              <div className="rounded-2xl border border-slate-200 bg-white shadow-xl">
+              <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-xl shadow-2xl shadow-slate-900/10 supports-[backdrop-filter]:bg-white/90">
                 <div className="p-4">
                   <form onSubmit={handleSearch}>
-                    <div className="relative">
+                    <div className="relative group">
                       <Search
                         size={18}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"
                       />
                       <input
                         type="text"
                         value={searchText}
-                        className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm shadow-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 focus:bg-white py-3 pl-11 pr-4 text-sm shadow-inner transition-all duration-300 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Search for"
+                        placeholder="Search for companies or roles..."
                         autoFocus
                       />
                     </div>
                     <button
                       type="submit"
-                      className="mt-3 w-full rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8B77F9] focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      className="mt-3 w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
                       Search
                     </button>
                   </form>
                 </div>
 
-                <div className="border-t border-slate-200 p-2">
+                <div className="border-t border-slate-100 p-2">
                   {navItems.map(({ href, label, Icon }) => (
                     <Link
                       key={href}
                       href={href}
                       className={[
-                        "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                        "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all active:scale-[0.98]",
                         isActive(href)
-                          ? "bg-blue-50 text-blue-700"
-                          : "text-slate-800 hover:bg-slate-100",
+                          ? "bg-indigo-50/80 text-blue-700"
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
                       ].join(" ")}
                     >
-                      <Icon size={18} className={isActive(href) ? "text-blue-700" : "text-slate-500"} />
+                      <Icon size={18} className={isActive(href) ? "text-blue-600" : "text-slate-400"} />
                       {label}
                     </Link>
                   ))}
                 </div>
 
-                <div className="border-t border-slate-200 p-3">
+                <div className="border-t border-slate-100 p-3">
                   {session ? (
                     <button
                       onClick={handleLogout}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 py-2.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 py-3 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-200"
                     >
-                      <LogOut size={18} />
+                      <LogOut size={16} />
                       Logout
                     </button>
                   ) : (
                     <button
                       onClick={handleLogin}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300"
                     >
-                      <LogIn size={18} />
+                      <LogIn size={16} />
                       Login
                     </button>
                   )}

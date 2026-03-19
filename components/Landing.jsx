@@ -1,422 +1,386 @@
-// LandingPage.jsx
 'use client'
-import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
-import logo from "../public/icon.svg"
+
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
-import { Menu, X, ChevronLeft, ChevronRight, Search, Building2, GraduationCap, Blocks, Quote } from "lucide-react"
-import AdComponent from "@/components/AdComponent";
+import Link from 'next/link'
+import logo from '../public/icon.svg'
+import {
+  ArrowRight,
+  Blocks,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Flame,
+  GraduationCap,
+  Menu,
+  MessageSquareText,
+  Quote,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  X,
+} from 'lucide-react'
 
+const NAV_ITEMS = [
+  { href: '/', label: 'Home', sectionId: 'hero' },
+  { href: '/about', label: 'About Us', sectionId: 'about' },
+  { href: '/feed', label: 'Feed', sectionId: 'feed' },
+  { href: '#featured', label: 'Featured Stories', sectionId: 'featured' },
+  { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' },
+  { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' },
+  { href: '/post', label: 'Share Experience', sectionId: 'share' },
+]
 
-// Reusable ScrollableSection component
+const BLOG_POSTS = [
+  {
+    author: 'Siddhant Vishnu',
+    content: '"Unbelievable stuff from seniors. Could not ask for more."',
+    avatarBg: 'bg-emerald-500',
+    avatar: 'S',
+  },
+  {
+    author: 'Shlok S',
+    content: '"Bro, now placement prep finally feels manageable."',
+    avatarBg: 'bg-orange-500',
+    avatar: 'S',
+  },
+  {
+    author: 'Shreya Hiwarkar',
+    content: '"Great work, super helpful and easy to follow."',
+    avatarBg: 'bg-sky-500',
+    avatar: 'S',
+  },
+]
+
+const DEPARTMENTS = [
+  { key: 'CS', label: 'Computer Science' },
+  { key: 'IT', label: 'Information Tech' },
+  { key: 'EnTC', label: 'EnTC' },
+  { key: 'AIDS', label: 'AI & Data Science' },
+  { key: 'EC', label: 'Electronics' },
+]
+
+const COMPANIES = ['Barclays', 'Mastercard', 'BNY', 'Siemens', 'Arista', 'Tracelink', 'PhonePe']
+
+const AVATAR_COLORS = ['bg-sky-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-indigo-500', 'bg-cyan-500']
+
+const getAvatarColor = (seed = '') => {
+  let hash = 0
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]
+}
+
 const ScrollableSection = ({ children }) => {
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef(null)
 
   const scroll = (direction) => {
-    const container = scrollContainerRef.current;
-    const scrollAmount = container.offsetWidth;
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const scrollAmount = container.offsetWidth
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth'
-    });
-  };
+      behavior: 'smooth',
+    })
+  }
 
   return (
     <div className="relative">
       <button
         onClick={() => scroll('left')}
-        className="absolute -left-5 top-1/2 -translate-y-1/2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm transition hover:bg-slate-50 hover:shadow sm:inline-flex"
+        className="absolute -left-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-900/95 text-slate-300 shadow-lg shadow-black/40 transition hover:border-cyan-300/40 hover:text-cyan-200 sm:inline-flex"
         aria-label="Scroll left"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft size={18} />
       </button>
 
       <div
         ref={scrollContainerRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth px-1 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </div>
 
       <button
         onClick={() => scroll('right')}
-        className="absolute -right-5 top-1/2 -translate-y-1/2 z-10 hidden h-10 w-10 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-600 shadow-sm transition hover:bg-slate-50 hover:shadow sm:inline-flex"
+        className="absolute -right-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-900/95 text-slate-300 shadow-lg shadow-black/40 transition hover:border-cyan-300/40 hover:text-cyan-200 sm:inline-flex"
         aria-label="Scroll right"
       >
-        <ChevronRight size={20} />
+        <ChevronRight size={18} />
       </button>
     </div>
+  )
+}
 
-  );
-};
+const SectionHeader = ({ icon: Icon, eyebrow, title, description, ctaHref, ctaLabel }) => {
+  return (
+    <div className="text-center">
+      <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
+        <Icon size={14} />
+        {eyebrow}
+      </div>
+      <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-100 sm:text-4xl">{title}</h2>
+      <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">{description}</p>
+      {ctaHref && ctaLabel && (
+        <div className="mt-5">
+          <Link
+            href={ctaHref}
+            prefetch={true}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 transition hover:text-cyan-200"
+          >
+            {ctaLabel}
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
 
-// StoryCard component
-const StoryCard = ({ story, avatarColor }) => {
-  // Remove markdown formatting characters
-  let plainText = story?.exp_text || '';
-
-  // Remove bold and italic markers
-  plainText = plainText.replace(/\*\*|_/g, '');
-  plainText = plainText.replace(/__/g, '');
-  plainText = plainText.replace(/\*/g, '');
-  plainText = plainText.replace(/_/g, '');
-
-  // Remove headings (lines starting with #, ##, ### etc.)
-  plainText = plainText.replace(/^#+\s/gm, ''); // Remove headings like # Heading, ## Subheading
-
-  // Remove lists (unordered and ordered)
-  plainText = plainText.replace(/^[\s]*[*+-]\s/gm, ''); // Remove unordered list markers like * item, - item, + item
-  plainText = plainText.replace(/^[\s]*\d+\.\s/gm, ''); // Remove ordered list markers like 1. item, 2. item
-
-  // Remove blockquotes (lines starting with >)
-  plainText = plainText.replace(/^>\s/gm, ''); // Remove blockquote markers like > quote
-
-  // Remove inline code (``...``)
-  plainText = plainText.replace(/`([^`]+)`/g, '$1'); // Replace `code` with code
-
-  // Remove horizontal rules (lines consisting of ---, ***, or ___)
-  plainText = plainText.replace(/^[-*_]{3,}$/gm, '');
-
-    // remove extra spaces and lines
-    plainText = plainText.replace(/[\r\n]+/g, ' ').trim(); // Replace line breaks with spaces and trim
+const StoryCard = ({ story }) => {
+  let plainText = story?.exp_text || ''
+  plainText = plainText.replace(/\*\*|__/g, '')
+  plainText = plainText.replace(/\*/g, '')
+  plainText = plainText.replace(/_/g, '')
+  plainText = plainText.replace(/^#{1,6}\s/gm, '')
+  plainText = plainText.replace(/^[\s]*[*+-]\s/gm, '')
+  plainText = plainText.replace(/^[\s]*\d+\.\s/gm, '')
+  plainText = plainText.replace(/^>\s/gm, '')
+  plainText = plainText.replace(/`([^`]+)`/g, '$1')
+  plainText = plainText.replace(/^[-*_]{3,}$/gm, '')
+  plainText = plainText.replace(/[\r\n]+/g, ' ').trim()
 
   const bullets = plainText
-    .split(/\. +/g)
-    .map((s) => s.trim())
+    .split(/[.!?]\s+/g)
+    .map((segment) => segment.trim())
     .filter(Boolean)
-    .slice(0, 2);
+    .slice(0, 2)
+
+  const seed = String(story?.uid || story?.company || story?.role || 'story')
+  const avatarColor = getAvatarColor(seed)
 
   return (
-    <div className="min-w-[300px] max-w-[360px] h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md flex flex-col justify-between">
-      <div>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div
-              className={`${avatarColor} flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white`}
-              aria-hidden="true"
-            >
-              {story?.company?.charAt(0)?.toUpperCase() || "T"}
-            </div>
-            <div className="min-w-0 text-left">
-              <div className="font-semibold text-slate-900 truncate leading-tight">{story?.company}</div>
-              <div className="text-xs font-medium text-slate-500 truncate">
-                {story?.role || "Interview Experience"}
-              </div>
-            </div>
+    <article className="min-w-[300px] max-w-[360px] rounded-2xl border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/40 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:shadow-cyan-950/40">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div
+            className={`${avatarColor} flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white`}
+            aria-hidden="true"
+          >
+            {story?.company?.charAt(0)?.toUpperCase() || 'T'}
           </div>
-          <div className="flex text-slate-200">
-            <Quote size={28} className="fill-slate-200" />
+          <div className="min-w-0 text-left">
+            <p className="truncate text-sm font-semibold leading-tight text-slate-100">{story?.company || 'Top Company'}</p>
+            <p className="truncate text-xs font-medium text-slate-400">{story?.role || 'Interview Experience'}</p>
           </div>
         </div>
-
-        <div className="mt-4 space-y-2 text-left text-sm sm:text-base text-slate-700 italic leading-relaxed">
-          {bullets.length > 0 ? (
-            bullets.map((b, i) => (
-              <div key={i} className="line-clamp-2">
-                {b}
-              </div>
-            ))
-          ) : (
-            <div className="line-clamp-3">{plainText}</div>
-          )}
-        </div>
+        <Quote size={24} className="fill-slate-700 text-slate-700" />
       </div>
 
-      <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
-        <span className="text-xs font-medium text-slate-500">
-          {story?.views ?? 0} views
-        </span>
-        <span className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
-          Read story <ChevronRight size={14} />
+      <div className="mt-4 space-y-2 text-left text-sm italic leading-relaxed text-slate-300 sm:text-base">
+        {bullets.length > 0 ? (
+          bullets.map((bullet, index) => (
+            <p key={index} className="line-clamp-2">
+              {bullet}
+            </p>
+          ))
+        ) : (
+          <p className="line-clamp-3">{plainText || 'Practical preparation tips from real rounds and real candidates.'}</p>
+        )}
+      </div>
+
+      <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+        <span className="text-xs font-medium text-slate-400">{story?.views ?? 0} views</span>
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-300">
+          Read story
+          <ChevronRight size={14} />
         </span>
       </div>
-    </div>
-  );
-};
+    </article>
+  )
+}
 
+export default function Home({ featuredStories, topStories }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
+  const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
+  const [activeSection, setActiveSection] = useState('Home')
 
-export default function Home({ featuredStories, topStories }) { // Accept fetched stories as props
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const mobileMenuRef = useRef(null);
-  const mobileMenuButtonRef = useRef(null); // ADD: Ref for mobile menu button
-  const [isVisible, setIsVisible] = useState(false);
-  const [storyCardColors, setStoryCardColors] = useState({});
-  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || []); // Use props, fallback to empty array
-  const [fetchedTopStories, setFetchedTopStories] = useState(topStories || []); // Use props, fallback to empty array
-  const [activeSection, setActiveSection] = useState('Home'); // ADD: State to track active section
+  const mobileMenuRef = useRef(null)
+  const mobileMenuButtonRef = useRef(null)
 
-  useEffect(() => {
-    const fetchTopStories = async () => {
-      try {
-        const response = await fetch('https://www.pict.live/api/topStories');
-        const data = await response.json();
-        setFetchedTopStories(data);
-        console.log("top stories", data);
-      } catch (error) {
-        console.error("Fetching top stories failed:", error);
-      }
-    };
-    const fetchFeaturedStories = async () => {
-      try {
-        const response = await fetch('https://www.pict.live/api/feed');
-        const data = await response.json();
-        setFetchedFeaturedStories(data);
-        console.log("featured stories", data);
-      } catch (error) {
-        console.error("Fetching top stories failed:", error);
-      }
-    };
-    fetchFeaturedStories();
-    fetchTopStories();
-  }, []);
- 
-
-
-
-  const navItems = [
-    { href: '/', label: 'Home', sectionId: 'hero' }, // ADD: sectionId, Changed href to "/" for landing page home
-    { href: '/about', label: 'About Us', sectionId: 'about' }, // ADDED: About Us nav item
-    { href: '/feed', label: 'Feed', sectionId: 'feed' }, // ADDED: Feed nav item
-    { href: '#featured', label: 'Featured Stories', sectionId: 'featured' }, // ADD: sectionId
-    { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' }, // ADD: sectionId
-    { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' }, // ADD: sectionId
-    { href: '/post', label: 'Share Experience', sectionId: 'share' } // ADD: sectionId
-  ];
-
-  const blogPosts = [
-
-    {
-      author: 'Siddhant Vishnu',
-      content: `"Unbelivable stuff from seniors❤️ !Can't ask for more"`,
-      avatarBg: "bg-green-600",
-      avatar: 'S'
-    },
-    {
-      author: 'Shlok S',
-      content: `"Bro abhi job lag jaegi"`,
-      avatarBg: "bg-red-400",
-      avatar: 'S'
-    },
-    {
-      author: 'Shreya Hiwarkar',
-      content: `"Great work ! Really helpful"`,
-      avatarBg: "bg-orange-400",
-      avatar: 'S'
-    },
-
-  ];
-
-  const batchYears = Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i);
-  const departments = [
-    { key: "CS", label: "Computer Science" },
-    { key: "IT", label: "Information Tech" },
-    { key: "EnTC", label: "EnTC" },
-    { key: "AIDS", label: "AI & Data Science" },
-    { key: "EC", label: "Electronics" },
-  ];
-  const companies = ["Barclays", "Mastercard", "BNY", "Siemens", "Arista", "Tracelink", "PhonePe"];
-
-  const companyColors = {
-    'Barclays': { bg: 'bg-blue-700', text: 'text-blue-700' },
-    'Mastercard': { bg: 'bg-red-600', text: 'text-red-600' },
-    'BNY': { bg: 'bg-purple-600', text: 'text-purple-600' },
-    'Siemens': { bg: 'bg-teal-600', text: 'text-teal-600' },
-    'Arista': { bg: 'bg-blue-500', text: 'text-blue-500' },
-    'Tracelink': { bg: 'bg-indigo-600', text: 'text-indigo-600' },
-    'PhonePe': { bg: 'bg-purple-700', text: 'text-purple-700' },
- };
-
-  const batchColors = {
-    2027: 'text-green-500',
-    2026: 'text-blue-500',
-    2025: 'text-yellow-500',
-    2024: 'text-red-500',
-    2023: 'text-purple-500',
-    2022: 'text-teal-500',
-    2021: 'text-orange-500',
-    2020: 'text-pink-500',
-    2019: 'text-gray-500',
-  };
-
-  const branchColors = {
-    "CS": 'text-indigo-500',
-    "IT": 'text-emerald-500',
-    "EnTC": 'text-rose-500',
-    "AIDS": 'text-cyan-500',
-    "EC": 'text-amber-500'
-  }
-
-
-  const getRandomColor = () => {
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-red-500', 'bg-purple-500', 'bg-yellow-500', 'bg-indigo-500'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
+  const batchYears = useMemo(() => Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i), [])
 
   useEffect(() => {
-    setIsVisible(true);
-  }, []);
+    const fetchStories = async () => {
+      try {
+        const [featuredResponse, topResponse] = await Promise.all([
+          fetch('https://www.pict.live/api/feed'),
+          fetch('https://www.pict.live/api/topStories'),
+        ])
+        const [featuredData, topData] = await Promise.all([featuredResponse.json(), topResponse.json()])
+        setFetchedFeaturedStories(Array.isArray(featuredData) ? featuredData : [])
+        setFetchedTopStories(Array.isArray(topData) ? topData : [])
+      } catch (error) {
+        console.error('Fetching landing stories failed:', error)
+      }
+    }
+
+    fetchStories()
+    setIsVisible(true)
+
+    document.body.classList.add('landing-dark')
+    return () => {
+      document.body.classList.remove('landing-dark')
+    }
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !(mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(event.target))) { // MODIFIED: Check if click is NOT inside mobile menu button ref
-        setIsMobileMenuOpen(false);
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        !(mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(event.target))
+      ) {
+        setIsMobileMenuOpen(false)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   useEffect(() => {
-    const colors = {};
-    fetchedFeaturedStories.forEach((story, index) => {
-      colors[story.uid] = getRandomColor();
-    });
-    fetchedTopStories.forEach((story, index) => {
-      colors[story.uid] = getRandomColor();
-    });
-    setStoryCardColors(colors);
-  }, [fetchedFeaturedStories, fetchedTopStories]);
-
-  useEffect(() => { // ADD: useEffect to handle active section based on scroll
     const handleScroll = () => {
-      const sections = navItems.map(item => document.getElementById(item.sectionId)).filter(Boolean);
-      let currentSection = 'Home'; // Default to Home
+      const sections = NAV_ITEMS.map((item) => document.getElementById(item.sectionId)).filter(Boolean)
+      let currentSection = 'Home'
 
       for (const section of sections) {
-        if (!section) continue; // Skip if section element is not found
-
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 150 && rect.bottom >= 150) { // Adjust offset as needed
-          currentSection = navItems.find(item => item.sectionId === section.id)?.label || currentSection;
-          break; // Exit loop once active section is found
+        const rect = section.getBoundingClientRect()
+        if (rect.top <= 150 && rect.bottom >= 150) {
+          currentSection = NAV_ITEMS.find((item) => item.sectionId === section.id)?.label || currentSection
+          break
         }
       }
-      setActiveSection(currentSection);
-    };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check on load
+      setActiveSection(currentSection)
+    }
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [navItems, setActiveSection]);
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
+  const uniqueStoryCount = useMemo(() => {
+    const ids = new Set()
+    fetchedFeaturedStories.forEach((story) => ids.add(story?.uid || `${story?.company}-${story?.role}`))
+    fetchedTopStories.forEach((story) => ids.add(story?.uid || `${story?.company}-${story?.role}`))
+    return ids.size
+  }, [fetchedFeaturedStories, fetchedTopStories])
 
   return (
-    <main className="min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-white/70 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex justify-between items-center">
-            <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(14,116,144,0.16),transparent_32%),radial-gradient(circle_at_86%_12%,rgba(30,64,175,0.16),transparent_35%),linear-gradient(180deg,#020617_0%,#020617_45%,#0b1120_100%)] text-slate-100">
+      <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/75 backdrop-blur-xl supports-[backdrop-filter]:bg-slate-950/60">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
+          <div className="hidden items-center justify-between lg:flex">
+            <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-100">
               <Image src={logo} alt="theInterview Logo" width={34} height={34} priority />
               <span className="text-lg">
-                the<span className="text-blue-600">Interview</span>
+                the<span className="text-cyan-300">Interview</span>
               </span>
             </Link>
 
-            <div className="flex items-center gap-1">
-              {navItems
-                .filter((i) => i.label !== "Search Experience" && i.label !== "Share Experience")
-                .map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    prefetch={true}
-                    className={[
-                      "rounded-xl px-3 py-2 text-sm font-medium transition",
-                      activeSection === item.label
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
-                    ].join(" ")}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+            <div className="flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/60 p-1">
+              {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={true}
+                  className={[
+                    'rounded-full px-3 py-2 text-sm font-medium transition',
+                    activeSection === item.label
+                      ? 'bg-cyan-400/15 text-cyan-200'
+                      : 'text-slate-300 hover:bg-white/10 hover:text-slate-100',
+                  ].join(' ')}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
 
             <div className="flex items-center gap-3">
               <Link
                 href="/search"
-                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-cyan-300/30 hover:text-white"
               >
-                <Search size={18} className="text-slate-500" />
+                <Search size={17} className="text-slate-400" />
                 Search
               </Link>
               <Link
                 href="/post"
                 prefetch={true}
-                className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-900/30 transition hover:bg-cyan-300"
               >
                 Share Experience
               </Link>
             </div>
           </div>
 
-          {/* Mobile Navigation */}
           <div className="lg:hidden">
-            <div className="flex justify-between items-center">
-              <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+            <div className="flex items-center justify-between">
+              <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-100">
                 <Image src={logo} alt="theInterview Logo" width={32} height={32} priority />
                 <span className="text-base sm:text-lg">
-                  the<span className="text-blue-600">Interview</span>
+                  the<span className="text-cyan-300">Interview</span>
                 </span>
               </Link>
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/70 text-slate-700 shadow-sm transition hover:bg-white"
-                ref={mobileMenuButtonRef} // ADD: Ref to mobile menu button
+                onClick={() => setIsMobileMenuOpen((open) => !open)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-slate-900/80 text-slate-200 transition hover:border-cyan-300/30 hover:text-cyan-100"
+                ref={mobileMenuButtonRef}
               >
-                {isMobileMenuOpen ? (
-                  <X size={20} />
-                ) : (
-                  <Menu size={20} />
-                )}
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
 
             {isMobileMenuOpen && (
               <div
-                className="absolute left-0 right-0 top-full bg-white/95 backdrop-blur-md shadow-xl border-b border-black/5"
+                className="absolute left-0 right-0 top-full border-b border-white/10 bg-slate-950/95 shadow-2xl shadow-black/60 backdrop-blur-xl"
                 ref={mobileMenuRef}
               >
-                <div className="p-3">
+                <div className="space-y-1 p-3">
                   <Link
                     href="/search"
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-100"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-white/10"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Search size={18} className="text-slate-500" />
+                    <Search size={18} className="text-slate-400" />
                     Search
                   </Link>
 
-                  {navItems
-                    .filter((i) => i.label !== "Search Experience" && i.label !== "Share Experience")
-                    .map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        prefetch={true}
-                        className={[
-                          "block rounded-xl px-3 py-2.5 text-sm font-medium transition",
-                          activeSection === item.label
-                            ? "bg-blue-50 text-blue-700"
-                            : "text-slate-800 hover:bg-slate-100",
-                        ].join(" ")}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                  {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      prefetch={true}
+                      className={[
+                        'block rounded-xl px-3 py-2.5 text-sm font-medium transition',
+                        activeSection === item.label ? 'bg-cyan-400/15 text-cyan-200' : 'text-slate-200 hover:bg-white/10',
+                      ].join(' ')}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
 
                   <Link
                     href="/post"
                     prefetch={true}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-cyan-400 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Share Experience
@@ -428,90 +392,96 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section
-        id="hero"
-        className="relative overflow-hidden bg-gradient-to-b from-[#f7f9ff] via-white to-white text-center pt-24 sm:pt-32 pb-16 px-4"
-      >
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/40 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 left-10 h-72 w-72 rounded-full bg-indigo-200/30 blur-3xl" />
+      <section id="hero" className="relative overflow-hidden px-4 pb-20 pt-28 sm:pb-24 sm:pt-36">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
+        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
 
-        <div className={`transform transition-all duration-700 ease-out ${
-          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
-        }`}>
-          {/* Ad Placement */}
-      {/* <AdComponent slot="4811519147" /> */}
+        <div
+          className={[
+            'relative mx-auto max-w-6xl text-center transition-all duration-700 ease-out',
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
+          ].join(' ')}
+        >
 
-          <div className="mx-auto max-w-3xl">
-            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/25">
-              <Image src={logo} alt="theInterview Logo" width={34} height={34} className="invert" />
+
+          <h1 className="mx-auto mt-6 max-w-4xl text-4xl font-black leading-[1.03] tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Turn interview stress into
+            <span className="block bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-200 bg-clip-text text-transparent">
+              clear preparation steps
+            </span>
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">
+            Real students share what they were asked, what worked, and what they would do differently. Prepare smarter, not
+            blindly.
+          </p>
+
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/feed"
+              prefetch={true}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-400 px-7 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-900/25 transition hover:bg-cyan-300 sm:w-auto"
+            >
+              Read Stories
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/post"
+              prefetch={true}
+              className="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-slate-900/80 px-7 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/35 hover:text-cyan-100 sm:w-auto"
+            >
+              Share Your Story
+            </Link>
+          </div>
+
+          <div className="mx-auto mt-11 grid max-w-4xl grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-4 text-left shadow-lg shadow-black/40">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Stories Live</p>
+              <p className="mt-2 text-2xl font-black text-slate-100">{uniqueStoryCount || 0}</p>
+              <p className="mt-1 text-sm text-slate-300">Community experiences in one place</p>
             </div>
-
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 leading-[1.05]">
-              Share Your <span className="text-blue-600">Interview</span>
-              <br />
-              Journey
-            </h1>
-
-            <p className="mt-5 text-base sm:text-lg text-slate-600">
-              Learn from real experiences. Share your story. Help others succeed in their next career move.
-            </p>
-
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/feed"
-                prefetch={true}
-                className="inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
-              >
-                Read Stories
-              </Link>
-              <Link
-                href="/post"
-                prefetch={true}
-                className="inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-200"
-              >
-                Share Your Story
-              </Link>
+            <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-4 text-left shadow-lg shadow-black/40">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Top Picks</p>
+              <p className="mt-2 text-2xl font-black text-slate-100">{fetchedTopStories.length}</p>
+              <p className="mt-1 text-sm text-slate-300">Most read experiences this week</p>
             </div>
+            <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-4 text-left shadow-lg shadow-black/40">
+              <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Featured</p>
+              <p className="mt-2 text-2xl font-black text-slate-100">{fetchedFeaturedStories.length}</p>
+              <p className="mt-1 text-sm text-slate-300">Freshly shared interview journeys</p>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1">
+              <ShieldCheck size={13} className="text-emerald-300" />
+              Peer verified stories
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/80 px-3 py-1">
+              <TrendingUp size={13} className="text-cyan-300" />
+              Interview trends by company
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Featured Stories */}
-      <section id="featured" className="bg-slate-50 py-14 sm:py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-              <span className="text-xl">✨</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
-              Featured Stories
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
-              Insights from top candidates at leading tech companies.
-            </p>
-            <div className="mt-4 flex justify-center">
-              <Link
-                href="/feed"
-                prefetch={true}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800"
-              >
-                View all stories <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </div>
+      <section id="featured" className="relative px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-white/10 bg-slate-950/55 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={Sparkles}
+            eyebrow="Featured"
+            title="Featured Stories"
+            description="Handpicked interview journeys from students who recently cracked top opportunities."
+            ctaHref="/feed"
+            ctaLabel="View all stories"
+          />
 
           <div className="mt-10">
             <ScrollableSection>
               {fetchedFeaturedStories.map((story, index) => (
-                <Link
-                  key={index}
-                  href={`/single/${story.uid}`}
-                  prefetch={true}
-                  className="block h-full"
-                >
-                  <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
+                <Link key={`${story?.uid || 'featured'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+                  <StoryCard story={story} />
                 </Link>
               ))}
             </ScrollableSection>
@@ -519,44 +489,36 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         </div>
       </section>
 
-      {/* Company Specific Tips Section - Renamed to Search by Company for clarity */}
-      <section id="companyspecific" className="bg-white py-14 sm:py-20 px-4">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center">
-            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-              <Search size={18} className="text-blue-600" />
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
-              Search Experiences
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
-              Browse authentic interview insights shared by alumni and peers. Refine your search to find the most relevant career guidance.
-            </p>
-          </div>
+      <section id="companyspecific" className="relative px-4 py-16 sm:py-20">
+        <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-slate-950/60 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={Search}
+            eyebrow="Search Smarter"
+            title="Find Experiences That Match Your Goal"
+            description="Filter by company, batch, or branch and jump straight to relevant interview patterns."
+          />
 
-          <div className="mt-10 space-y-6">
-            {/* Company */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+          <div className="mt-10 space-y-5">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-lg shadow-black/35 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[220px]">
+                <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-200">
                       <Building2 size={18} />
                     </div>
-                    <div className="font-semibold text-slate-900">Company</div>
+                    <p className="font-semibold text-slate-100">By Company</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Browse processes from top-tier organizations.
-                  </p>
+                  <p className="mt-2 text-sm text-slate-300">Track each company process and see where candidates got selected.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
-                  {companies.map((company) => (
+                  {COMPANIES.map((company) => (
                     <Link
                       key={company}
                       href={`/search/${company}`}
                       prefetch={true}
-                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-medium text-slate-800 shadow-sm transition hover:bg-white hover:shadow"
+                      className="rounded-xl border border-white/10 bg-slate-950/75 px-4 py-3 text-center text-sm font-medium text-slate-200 transition hover:border-cyan-300/30 hover:text-white"
                     >
                       {company}
                     </Link>
@@ -565,63 +527,52 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
               </div>
             </div>
 
-            {/* Batch year */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-lg shadow-black/35 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[220px]">
+                <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-200">
                       <GraduationCap size={18} />
                     </div>
-                    <div className="font-semibold text-slate-900">Batch Year</div>
+                    <p className="font-semibold text-slate-100">By Batch Year</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
-                    See the evolution of interviews across graduating classes.
-                  </p>
+                  <p className="mt-2 text-sm text-slate-300">Understand how trends changed year by year and prep accordingly.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-4 gap-3 sm:grid-cols-7">
-                  {batchYears.map((year) => {
-                    return (
-                      <Link
-                        key={year}
-                        href={`/search/${year}`}
-                        prefetch={true}
-                        className={[
-                          "rounded-xl px-4 py-3 text-center text-sm font-semibold shadow-sm transition",
-                          "border border-slate-200 bg-slate-50 text-slate-800 hover:bg-white hover:shadow",
-                        ].join(" ")}
-                      >
-                        {year}
-                      </Link>
-                    );
-                  })}
+                  {batchYears.map((year) => (
+                    <Link
+                      key={year}
+                      href={`/search/${year}`}
+                      prefetch={true}
+                      className="rounded-xl border border-white/10 bg-slate-950/75 px-4 py-3 text-center text-sm font-semibold text-slate-200 transition hover:border-emerald-300/30 hover:text-white"
+                    >
+                      {year}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Department */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+            <div className="rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-lg shadow-black/35 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[220px]">
+                <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-700">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-200">
                       <Blocks size={18} />
                     </div>
-                    <div className="font-semibold text-slate-900">Department</div>
+                    <p className="font-semibold text-slate-100">By Department</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Narrow down results based on your academic specialization.
-                  </p>
+                  <p className="mt-2 text-sm text-slate-300">Look at stories from your branch to focus on realistic prep paths.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
-                  {departments.map((dept) => (
+                  {DEPARTMENTS.map((dept) => (
                     <Link
                       key={dept.key}
                       href={`/search/${dept.key}`}
                       prefetch={true}
-                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-medium text-slate-800 shadow-sm transition hover:bg-white hover:shadow"
+                      className="rounded-xl border border-white/10 bg-slate-950/75 px-4 py-3 text-center text-sm font-medium text-slate-200 transition hover:border-amber-300/30 hover:text-white"
                     >
                       {dept.label}
                     </Link>
@@ -633,25 +584,20 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         </div>
       </section>
 
-      {/* Top Stories */}
-      <section id="topstories" className="bg-slate-50 py-14 sm:py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-              <span className="text-xl">🔥</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
-              Top Interview Stories
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
-              The most read and helpful interview experiences from the community.
-            </p>
-          </div>
-          <div className="mt-8">
+      <section id="topstories" className="px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-white/10 bg-slate-950/55 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={Flame}
+            eyebrow="Trending"
+            title="Top Interview Stories"
+            description="The most-read experiences from the community, ranked by what helped candidates most."
+          />
+
+          <div className="mt-10">
             <ScrollableSection>
               {fetchedTopStories.map((story, index) => (
-                <Link key={index} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
-                  <StoryCard story={story} avatarColor={storyCardColors[story.uid]} />
+                <Link key={`${story?.uid || 'top'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+                  <StoryCard story={story} />
                 </Link>
               ))}
             </ScrollableSection>
@@ -659,47 +605,39 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         </div>
       </section>
 
-      {/* Blog Section */}
-      <section className="bg-white py-14 sm:py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-              <span className="text-xl">💬</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
-              What Community Says
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
-              Real feedback from students using theInterview to prepare smarter and land their dream roles.
-            </p>
-          </div>
+      <section className="px-4 pb-16 pt-10 sm:pb-20 sm:pt-14">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-white/10 bg-slate-950/55 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={MessageSquareText}
+            eyebrow="Community Voice"
+            title="What Students Are Saying"
+            description="Feedback from candidates who used theInterview to prepare and build confidence."
+          />
 
-          <div className="mt-8">
+          <div className="mt-10">
             <ScrollableSection>
-              {blogPosts.map((post, index) => (
+              {BLOG_POSTS.map((post, index) => (
                 <article
-                  key={index}
-                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+                  key={`${post.author}-${index}`}
+                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-white/10 bg-slate-900/85 p-6 shadow-lg shadow-black/40 transition hover:-translate-y-1 hover:border-cyan-300/30"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`${post.avatarBg} flex h-11 w-11 items-center justify-center rounded-full text-white font-bold`}
+                        className={`${post.avatarBg} flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white`}
                         aria-hidden="true"
                       >
                         {post.avatar}
                       </div>
                       <div className="text-left">
-                        <div className="font-semibold text-slate-900 leading-tight">{post.author}</div>
-                        <div className="text-xs font-medium text-slate-500">Student</div>
+                        <p className="font-semibold leading-tight text-slate-100">{post.author}</p>
+                        <p className="text-xs font-medium text-slate-400">Student</p>
                       </div>
                     </div>
-                    <div className="flex text-slate-200">
-                      <Quote size={28} className="fill-slate-200" />
-                    </div>
+                    <Quote size={24} className="fill-slate-700 text-slate-700" />
                   </div>
 
-                  <p className="mt-4 text-left text-sm sm:text-base text-slate-700 italic leading-relaxed line-clamp-4">
+                  <p className="mt-4 line-clamp-4 text-left text-sm italic leading-relaxed text-slate-300 sm:text-base">
                     {post.content}
                   </p>
                 </article>
@@ -709,5 +647,5 @@ export default function Home({ featuredStories, topStories }) { // Accept fetche
         </div>
       </section>
     </main>
-  );
+  )
 }

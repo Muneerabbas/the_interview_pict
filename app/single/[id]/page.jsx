@@ -299,11 +299,7 @@ export default async function SimilarExperience({ params }) {
 
             <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-5">
               <div>
-                <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-blue-700">
-                  <Sparkles size={12} />
-                  Community Picks
-                </p>
-                <h2 className="mt-3 inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 sm:text-2xl">
+                <h2 className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 sm:text-2xl">
                   <Layers3 size={21} className="text-indigo-600" />
                   Related Experiences
                 </h2>

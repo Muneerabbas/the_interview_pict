@@ -3,7 +3,8 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
-import 'font-awesome/css/font-awesome.min.css';
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, AlertCircle, CheckCircle2, Bot, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 
 const LoadingScreen = () => (
@@ -727,292 +728,366 @@ export default function MdxEditorPage() {
 
 
   return (
-    <div className="flex flex-col bg-slate-50 min-h-screen pb-12 relative">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-12">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+      <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px]" />
+      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px]" />
       <Navbar />
       {isLoading && <LoadingScreen />}
 
       {/* Warning message for small screens */}
       {isSmallScreen && (
-        <div className="text-slate-500 text-center py-4 mt-[80px]">
-          <i className="fa fa-exclamation-circle text-red-500 mr-2"></i> Small screen detected
-          <p>For the best experience, please use a tablet or laptop.</p>
-        </div>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 flex items-center justify-center gap-2 text-amber-700 bg-amber-50 md:hidden py-3 px-4 mt-[80px] mx-4 rounded-xl border border-amber-200 shadow-sm">
+          <AlertCircle className="w-5 h-5" />
+          <p className="text-sm font-medium">For the best experience, please use a tablet or laptop.</p>
+        </motion.div>
       )}
 
-      <div className={`max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
+      <div className={`relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-6' : 'mt-[100px]'}`}>
 
-        <div className="bg-gradient-to-b from-white to-slate-50 rounded-[24px] shadow-md border border-slate-100 p-6 md:p-10 lg:p-12 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative overflow-hidden rounded-[2.5rem] border border-white/60 bg-white/70 p-6 shadow-[0_32px_80px_-12px_rgba(15,23,42,0.08)] backdrop-blur-2xl md:p-10 lg:p-12"
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent" />
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px]" />
+          <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px]" />
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 text-center tracking-tight">
-            Share Your Interview Journey
-          </h1>
-          <p className="text-slate-500 text-sm sm:text-base text-center max-w-2xl mb-8 leading-relaxed">
-            Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
-          </p>
-
-          <div className="inline-flex justify-center items-center bg-blue-50 text-blue-700 rounded-full px-5 py-2 text-xs sm:text-sm font-semibold mb-8 text-center transition hover:bg-blue-100 border border-blue-100">
-            Pro Tip: Maximize the editor for a better experience!
-          </div>
-
-          <div className="w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <p className="text-sm text-slate-700 font-medium">
-              Fill details once, then switch to AI mode for faster drafting.
-            </p>
-            <p className="text-xs text-slate-500">
-              Drafts are auto-saved every few seconds.
+          <div className="relative text-center mx-auto max-w-3xl mb-12">
+            <h1 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900">
+              Share Your Journey
+            </h1>
+            <p className="mx-auto text-base leading-relaxed text-slate-600 sm:text-md">
+              Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-2 w-full text-left">
-            <div className="relative">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Batch Year</label>
-              <div className="relative group">
-                <select
-                  value={batch}
-                  onChange={handleBatchChange}
-                  className={`w-full p-3.5 bg-white border ${errors.batch ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
-                >
-                  <option value="">Select Year</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+          <div className="mb-10 w-full animate-fade-in-up">
+            <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/50 bg-white/60 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                  <FileSignature className="h-5 w-5" />
+                </div>
+                <p className="text-sm font-semibold text-slate-700">
+                  Fill details below, then choose Manual or AI mode.
+                </p>
               </div>
-              {errors.batch && <p className="text-red-500 text-xs mt-1.5 font-medium">Year is required</p>}
-            </div>
-
-            <div className="relative">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Department</label>
-              <div className="relative group">
-                <select
-                  value={branch}
-                  onChange={handleBranchChange}
-                  className={`w-full p-3.5 bg-white border ${errors.branch ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
-                >
-                  <option value="">Select Department</option>
-                  <option value="CS">Computer Science</option>
-                  <option value="IT">Information Technology</option>
-                  <option value="EnTC">Electronics and Telecommunication</option>
-                  <option value="AIDS">Artificial Intelligence & Data Science</option>
-                  <option value="EC">Electronics and Computer</option>
-                </select>
-                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
+              <div className="flex items-center gap-2 px-2 sm:px-0">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                </span>
+                <p className="text-xs font-medium text-slate-500">Auto-saving active</p>
               </div>
-              {errors.branch && <p className="text-red-500 text-xs mt-1.5 font-medium">Branch is required</p>}
-            </div>
-
-            <div className="relative">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Company</label>
-              <div className="relative group">
-                <select
-                  value={company}
-                  onChange={handleCompanyChange}
-                  className={`w-full p-3.5 bg-white border ${errors.company ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
-                >
-                  <option value="">Select Company</option>
-                  <option value="others">Others...</option>
-                  {companies.map((comp) => (
-                    <option key={comp} value={comp}>{comp}</option>
-                  ))}
-                </select>
-                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
-              </div>
-              {company === "others" && (
-                <input
-                  type="text"
-                  onChange={handleCustomCompanyChange}
-                  placeholder="Enter Company Name"
-                  value={customCompany}
-                  className={`w-full p-3.5 bg-slate-50 border ${errors.company ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-inner mt-2 text-sm focus:outline-none focus:ring-2 transition`}
-                />
-              )}
-              {errors.company && <p className="text-red-500 text-xs mt-1.5 font-medium">Company is required</p>}
-            </div>
-
-            <div className="relative">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Role</label>
-              <div className="relative group">
-                <select
-                  value={role}
-                  onChange={handleRoleChange}
-                  className={`w-full p-3.5 bg-white border ${errors.role ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-sm focus:border-blue-400 focus:ring-2 focus:outline-none text-sm text-slate-700 appearance-none transition`}
-                >
-                  <option value="">Select Role</option>
-                  <option value="others">Others...</option>
-                  {roles.map((roleOption) => (
-                    <option key={roleOption} value={roleOption}>{roleOption}</option>
-                  ))}
-                </select>
-                <i className="fa fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none group-hover:text-slate-600 transition"></i>
-              </div>
-              {role === "others" && (
-                <input
-                  type="text"
-                  onChange={handleCustomRoleChange}
-                  placeholder="Enter Role"
-                  value={customRole}
-                  className={`w-full p-3.5 bg-slate-50 border ${errors.role ? "border-red-500 focus:ring-red-100" : "border-slate-200 focus:ring-blue-100"} rounded-xl shadow-inner mt-2 text-sm focus:outline-none focus:ring-2 transition`}
-                />
-              )}
-              {errors.role && <p className="text-red-500 text-xs mt-1.5 font-medium">Role is required</p>}
             </div>
           </div>
 
-          <hr className="w-full my-8 border-slate-100" />
-
-          {/* Success message */}
-          {successMessage && (
-            <div className="w-full bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-xl shadow-sm mb-6 flex justify-center border border-blue-100">
-              <div className="flex items-center gap-2">
-                <i className="fa fa-check-circle text-green-500 text-xl"></i>
-                <p className="font-semibold text-sm sm:text-base text-slate-800">{successMessage}</p>
+          <div className="mb-12 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Batch */}
+            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.batch ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Calendar className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Batch Year</label>
+                </div>
+                <div className="relative">
+                  <select
+                    value={batch}
+                    onChange={handleBatchChange}
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                  >
+                    <option value="">Select Year</option>
+                    {years.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                </div>
+                {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
               </div>
             </div>
-          )}
+
+            {/* Department */}
+            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.branch ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <GraduationCap className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Department</label>
+                </div>
+                <div className="relative">
+                  <select
+                    value={branch}
+                    onChange={handleBranchChange}
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                  >
+                    <option value="">Select Dept</option>
+                    <option value="CS">Computer Science</option>
+                    <option value="IT">Information Technology</option>
+                    <option value="EnTC">E&TC</option>
+                    <option value="AIDS">AI & Data Science</option>
+                    <option value="EC">Electronics & Comp</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                </div>
+                {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+              </div>
+            </div>
+
+            {/* Company */}
+            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.company ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Company</label>
+                </div>
+                <div className="relative">
+                  <select
+                    value={company}
+                    onChange={handleCompanyChange}
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                  >
+                    <option value="">Select Company</option>
+                    <option value="others">Others...</option>
+                    {companies.map((comp) => (
+                      <option key={comp} value={comp}>{comp}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                </div>
+                {company === "others" && (
+                  <motion.input
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                    type="text"
+                    onChange={handleCustomCompanyChange}
+                    placeholder="Enter Company"
+                    value={customCompany}
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                  />
+                )}
+                {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+              </div>
+            </div>
+
+            {/* Role */}
+            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.role ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Briefcase className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Role</label>
+                </div>
+                <div className="relative">
+                  <select
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                  >
+                    <option value="">Select Role</option>
+                    <option value="others">Others...</option>
+                    {roles.map((roleOption) => (
+                      <option key={roleOption} value={roleOption}>{roleOption}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                </div>
+                {role === "others" && (
+                  <motion.input
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                    type="text"
+                    onChange={handleCustomRoleChange}
+                    placeholder="Enter Role"
+                    value={customRole}
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                  />
+                )}
+                {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+              </div>
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {successMessage && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="mb-8 flex w-full justify-center rounded-2xl border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm p-4 text-[#1D1D1D] shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="text-emerald-500 w-5 h-5" />
+                  <p className="font-semibold text-sm sm:text-base text-emerald-900">{successMessage}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="w-full pb-8">
-            <div className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 p-3 sm:p-4 shadow-sm">
-              <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+            <div className="sticky top-4 z-20 mb-6 w-full rounded-2xl border border-slate-200/60 bg-white/70 p-3 shadow-lg backdrop-blur-xl sm:p-4 transition-all">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
                 {/* Toggle (Left) */}
-                <div className="flex justify-start w-full xl:w-auto">
-                  <div className="flex bg-white border border-slate-200 rounded-xl p-1 shadow-inner h-fit w-full sm:w-auto overflow-x-auto">
+                <div className="flex w-full justify-start xl:w-auto">
+                  <div className="flex relative h-[52px] w-full rounded-xl bg-slate-100/80 p-1 shadow-inner sm:w-auto">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'manual' ? 'bg-slate-900 shadow-lg text-white -translate-y-0.5' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg px-6 text-sm font-semibold transition-colors duration-300 sm:flex-none ${mode === 'manual' ? 'text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      <i className={`fa fa-pencil mt-0.5 ${mode === 'manual' ? 'text-blue-200' : 'text-blue-500'}`}></i> Manual Entry
+                      <PenLine className="w-4 h-4" /> Manual Writer
                     </button>
                     <button
                       onClick={() => handleModeChange('ai')}
-                      className={`flex-1 sm:flex-none px-5 py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center gap-2.5 font-semibold whitespace-nowrap ${mode === 'ai' ? 'bg-purple-600 shadow-lg text-white -translate-y-0.5' : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg px-6 text-sm font-semibold transition-colors duration-300 sm:flex-none ${mode === 'ai' ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      <i className={`fa fa-bolt ${mode === 'ai' ? 'text-purple-100' : 'text-purple-500'}`}></i> AI-Assisted Write
+                      <Sparkles className="w-4 h-4" /> AI Assistant
                     </button>
+                    
+                    {/* Animated pill background */}
+                    <div 
+                      className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-md transition-all duration-300 ease-out sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
+                      style={{
+                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(226, 232, 240, 0.8)'
+                      }}
+                    />
                   </div>
                 </div>
 
                 {/* Actions (Center) */}
-                <div className="flex justify-center xl:justify-start w-full xl:w-auto">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="flex w-full justify-center xl:w-auto xl:justify-start">
+                  <div className="flex w-full items-center gap-3 sm:w-auto">
                     <button
                       onClick={handleClearForm}
                       type="button"
-                      className="bg-white border border-slate-200 text-slate-700 text-sm sm:text-base font-semibold rounded-xl hover:bg-slate-100 transition-colors shadow-sm px-6 py-3 w-full sm:w-auto whitespace-nowrap"
+                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow sm:w-auto sm:text-base"
                     >
-                      Clear Form
+                      <span className="group-hover:text-red-500 transition-colors">Clear Form</span>
                     </button>
                     <button
                       onClick={handleSubmit}
                       type="button"
-                      className="bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm px-8 py-3 w-full sm:w-auto whitespace-nowrap"
+                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-[0.98] sm:w-auto sm:text-base"
                     >
-                      Submit Experience
+                      <span>Submit Post</span>
+                      <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
                     </button>
                   </div>
                 </div>
 
                 {/* Copy template button (Right) */}
-                <div className={`w-full xl:w-auto flex justify-center xl:justify-end ${mode !== 'manual' ? 'opacity-0 pointer-events-none' : ''} transition-opacity duration-200`}>
+                <div className={`flex w-full justify-center transition-all duration-300 xl:w-auto xl:justify-end ${mode !== 'manual' ? 'pointer-events-none opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                   <button
                     type="button"
                     onClick={handleCopyTemplate}
-                    className="text-blue-700 hover:text-blue-900 font-semibold transition-colors text-sm sm:text-base flex items-center gap-1.5 whitespace-nowrap bg-white border border-blue-100 rounded-xl px-4 py-3"
+                    className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 w-full px-5 py-3 text-sm font-semibold text-blue-700 transition-all hover:bg-blue-100 hover:text-blue-800 sm:w-auto sm:text-base"
                   >
-                    Copy Template <i className="fa fa-copy text-[11px] mt-0.5"></i>
+                    Copy Template <Copy className="w-4 h-4 transition-transform group-hover:scale-110" />
                   </button>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="w-full relative shadow-sm border border-slate-200 rounded-xl overflow-hidden mt-2 bg-slate-50/50">
-            {/* AI Prompt Area */}
-            {mode === 'ai' && (
-              <div className="w-full h-full min-h-[500px] flex flex-col bg-slate-50 border-t border-purple-50">
-
-                {/* Chat header */}
-                <div className="p-4 bg-white border-b border-purple-100 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
-                      <i className="fa fa-robot text-lg"></i>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-slate-900 tracking-tight" style={{ color: '#0f172a' }}>AI Writing Assistant</h3>
-                      <p className="text-xs text-slate-500">Fast & structured markdown generation</p>
+            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 backdrop-blur-xl shadow-2xl shadow-slate-200/50">
+              
+              {/* AI Prompt Area */}
+              {mode === 'ai' && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="w-full h-full min-h-[600px] flex flex-col bg-slate-50/50"
+                >
+                  {/* Chat header */}
+                  <div className="px-6 py-5 bg-white/80 backdrop-blur-md border-b border-indigo-100/50 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-600 shadow-inner border border-white">
+                        <Bot className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-800 tracking-tight">Interview AI Guide</h3>
+                        <p className="text-sm text-slate-500 font-medium">I'll help structure your experience flawlessly</p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Chat messages area */}
-                <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 min-h-[350px]">
-                  {chatMessages.map((msg, index) => (
-                    <div
-                      key={index}
-                      className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                      style={{ animation: 'chatBubbleIn 220ms ease-out' }}
-                    >
-                      <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3 ${msg.role === 'user' ? 'bg-purple-50 border border-purple-200 shadow-sm rounded-br-sm' : 'bg-white border border-slate-200 shadow-sm rounded-bl-sm'}`}>
-                        <p
-                          className={`text-sm sm:text-base whitespace-pre-wrap leading-relaxed font-semibold ${msg.role === 'user' ? 'text-slate-900' : 'text-slate-900'}`}
-                        >
-                          {msg.text}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {/* Loader for typing / processing */}
-                  {isGenerating && (
-                    <div className="flex w-full justify-start">
-                      <div className="bg-white border border-slate-200 shadow-sm rounded-br-2xl rounded-tr-2xl rounded-bl-sm px-5 py-3 flex items-center gap-3">
-                         <div className="flex items-center gap-1.5">
-                           <span className="w-2 h-2 rounded-full bg-purple-500 animate-bounce"></span>
-                           <span className="w-2 h-2 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '120ms' }}></span>
-                           <span className="w-2 h-2 rounded-full bg-purple-300 animate-bounce" style={{ animationDelay: '240ms' }}></span>
-                         </div>
-                         <p className="text-sm font-medium text-slate-700" style={{ color: '#334155' }}>AI is thinking...</p>
-                      </div>
-                    </div>
-                  )}
+                  {/* Chat messages area */}
+                  <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-8 flex flex-col gap-6 min-h-[400px] bg-[url('/grid-bg.svg')] bg-center rounded-b-xl">
+                    {chatMessages.map((msg, index) => (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={index}
+                        className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      >
+                        {msg.role !== 'user' && (
+                          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm border border-white">
+                            <Bot className="w-4 h-4 text-indigo-600" />
+                          </div>
+                        )}
+                        <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-6 py-4 shadow-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white border text-slate-800 border-slate-200/60 rounded-bl-sm'}`}>
+                          <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
+                            {msg.text}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))}
+                    
+                    {/* Loader for typing / processing */}
+                    {isGenerating && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex w-full justify-start"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm border border-white">
+                            <Bot className="w-4 h-4 text-indigo-600" />
+                        </div>
+                        <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl rounded-bl-sm px-6 py-4 flex items-center gap-3">
+                           <div className="flex items-center gap-1.5">
+                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                           </div>
+                           <p className="text-sm font-medium text-slate-500">Processing response...</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
 
-                  {/* End of messages marker removed, using container ref directly */}
-                </div>
-
-                {/* Chat input form */}
-                <div className="bg-white p-4 border-t border-slate-200">
-                  <form onSubmit={handleSendChatMessage} className="flex gap-3 max-w-4xl mx-auto w-full relative">
-                    <input
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400 text-slate-900 placeholder-slate-500 text-sm transition pr-14"
-                      style={{ color: '#0f172a' }}
-                      placeholder={chatStage === 'generating' || chatStage === 'done' ? "Generating your experience..." : "Type your answer here..."}
-                    />
-                    <button
-                      type="submit"
-                      disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700 transition disabled:opacity-50 disabled:hover:bg-purple-600 shadow-sm"
-                    >
-                      <i className="fa fa-paper-plane text-xs"></i>
-                    </button>
-                  </form>
-                </div>
+                  {/* Chat input form */}
+                  <div className="bg-white/90 backdrop-blur-md p-4 sm:p-6 border-t border-slate-200/60 rounded-b-[2rem]">
+                    <form onSubmit={handleSendChatMessage} className="flex gap-3 max-w-4xl mx-auto w-full relative">
+                      <input
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                        className="flex-1 bg-slate-50/50 border border-slate-200 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 text-slate-800 placeholder-slate-400 text-[15px] font-medium transition-all pr-16 shadow-inner"
+                        placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
+                      />
+                      <button
+                        type="submit"
+                        disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-indigo-600 shadow-sm"
+                      >
+                        <Send className="w-4 h-4 ml-0.5" />
+                      </button>
+                    </form>
+                  </div>
+                </motion.div>
+              )}
+              {/* Markdown Editor */}
+              <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
+                <ExperienceTiptapEditor
+                  value={markdown}
+                  onChange={handleMarkdownChange}
+                  minHeight={650}
+                />
               </div>
-            )}
-            {/* Markdown Editor */}
-            <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
-              <ExperienceTiptapEditor
-                value={markdown}
-                onChange={handleMarkdownChange}
-                minHeight={550}
-              />
             </div>
-          </div>
 
-        </div>
+          </div>
+        </motion.div>
       </div>
       <style jsx>{`
         @keyframes chatBubbleIn {

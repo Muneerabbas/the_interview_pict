@@ -16,9 +16,7 @@ import {
   MessageSquareText,
   Quote,
   Search,
-  ShieldCheck,
   Sparkles,
-  TrendingUp,
   X,
 } from 'lucide-react'
 
@@ -115,14 +113,10 @@ const ScrollableSection = ({ children }) => {
   )
 }
 
-const SectionHeader = ({ icon: Icon, eyebrow, title, description, ctaHref, ctaLabel }) => {
+const SectionHeader = ({ title, description, ctaHref, ctaLabel }) => {
   return (
     <div className="text-center">
-      <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">
-        <Icon size={14} />
-        {eyebrow}
-      </div>
-      <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">{title}</h2>
+      <h2 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">{title}</h2>
       <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">{description}</p>
       {ctaHref && ctaLabel && (
         <div className="mt-5">
@@ -205,7 +199,6 @@ const StoryCard = ({ story }) => {
 
 export default function Home({ featuredStories, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
   const [activeSection, setActiveSection] = useState('Home')
@@ -231,7 +224,6 @@ export default function Home({ featuredStories, topStories }) {
     }
 
     fetchStories()
-    setIsVisible(true)
 
     document.body.classList.add('landing-light')
     return () => {
@@ -274,13 +266,6 @@ export default function Home({ featuredStories, topStories }) {
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const uniqueStoryCount = useMemo(() => {
-    const ids = new Set()
-    fetchedFeaturedStories.forEach((story) => ids.add(story?.uid || `${story?.company}-${story?.role}`))
-    fetchedTopStories.forEach((story) => ids.add(story?.uid || `${story?.company}-${story?.role}`))
-    return ids.size
-  }, [fetchedFeaturedStories, fetchedTopStories])
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(34,211,238,0.14),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(59,130,246,0.12),transparent_36%),linear-gradient(180deg,#f8fafc_0%,#f8fafc_45%,#f1f5f9_100%)] text-slate-900">
@@ -396,17 +381,12 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </nav>
 
-      <section id="hero" className="relative overflow-hidden px-4 pb-20 pt-28 sm:pb-24 sm:pt-36">
+      <section id="hero" className="relative overflow-hidden px-4 pb-12 pt-24 sm:pb-14 sm:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
         <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
 
-        <div
-          className={[
-            'relative mx-auto max-w-6xl text-center transition-all duration-700 ease-out',
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
-          ].join(' ')}
-        >
+        <div className="relative mx-auto max-w-6xl text-center">
 
 
 
@@ -441,38 +421,10 @@ export default function Home({ featuredStories, topStories }) {
             </Link>
           </div>
 
-          <div className="mx-auto mt-11 grid max-w-4xl grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white/88 p-4 text-left shadow-lg shadow-slate-200/80">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Stories Live</p>
-              <p className="mt-2 text-2xl font-black text-slate-900">{uniqueStoryCount || 0}</p>
-              <p className="mt-1 text-sm text-slate-600">Community experiences in one place</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/88 p-4 text-left shadow-lg shadow-slate-200/80">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Top Picks</p>
-              <p className="mt-2 text-2xl font-black text-slate-900">{fetchedTopStories.length}</p>
-              <p className="mt-1 text-sm text-slate-600">Most read experiences this week</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/88 p-4 text-left shadow-lg shadow-slate-200/80">
-              <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Featured</p>
-              <p className="mt-2 text-2xl font-black text-slate-900">{fetchedFeaturedStories.length}</p>
-              <p className="mt-1 text-sm text-slate-600">Freshly shared interview journeys</p>
-            </div>
-          </div>
-
-          <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-2 text-xs text-slate-600">
-            <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/85 px-3 py-1">
-              <ShieldCheck size={13} className="text-emerald-600" />
-              Peer verified stories
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/85 px-3 py-1">
-              <TrendingUp size={13} className="text-cyan-600" />
-              Interview trends by company
-            </span>
-          </div>
         </div>
       </section>
 
-      <section id="featured" className="relative px-4 py-16 sm:py-20">
+      <section id="featured" className="relative px-4 py-10 sm:py-12">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
           <SectionHeader
             icon={Sparkles}
@@ -495,7 +447,7 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
-      <section id="companyspecific" className="relative px-4 py-16 sm:py-20">
+      <section id="companyspecific" className="relative px-4 py-10 sm:py-12">
         <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
         <div className="mx-auto max-w-5xl rounded-3xl border border-slate-200 bg-white/80 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
           <SectionHeader
@@ -590,7 +542,7 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
-      <section id="topstories" className="px-4 py-16 sm:py-20">
+      <section id="topstories" className="px-4 py-10 sm:py-12">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
           <SectionHeader
             icon={Flame}
@@ -611,7 +563,7 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
-      <section className="px-4 pb-16 pt-10 sm:pb-20 sm:pt-14">
+      <section className="px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
           <SectionHeader
             icon={MessageSquareText}

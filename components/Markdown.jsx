@@ -4,84 +4,13 @@ import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import {
-  BadgeCheck,
-  ClipboardCheck,
-  FileText,
-  Layers,
-  Lightbulb,
-  Sparkles,
-} from "lucide-react";
-
-const stripEmojis = (str) => {
-  if (typeof str !== "string") return str;
-  return str
-    .replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      ""
-    )
-    .trim();
-};
-
-const extractText = (children) => {
-  if (!children) return "";
-  if (typeof children === "string") return children;
-  if (Array.isArray(children)) return children.map(extractText).join(" ");
-  if (children?.props?.children) return extractText(children.props.children);
-  return "";
-};
-
-const getIconForHeading = (children, level) => {
-  const text = extractText(children).toLowerCase();
-
-  if (text.includes("interview experience")) return <Sparkles className="shrink-0 text-blue-600" size={20} />;
-  if (text.includes("shortlisting")) return <ClipboardCheck className="shrink-0 text-indigo-600" size={18} />;
-  if (text.includes("round")) return <Layers className="shrink-0 text-indigo-600" size={18} />;
-  if (text.includes("verdict") || text.includes("tip")) return <Lightbulb className="shrink-0 text-amber-500" size={18} />;
-  if (text.includes("result") || text.includes("outcome")) return <BadgeCheck className="shrink-0 text-emerald-600" size={18} />;
-  if (level === 1) return <FileText className="shrink-0 text-blue-600" size={20} />;
-  return null;
-};
-
-const cleanChildren = (children) => {
-  if (Array.isArray(children)) {
-    return children.map((child) => (typeof child === "string" ? stripEmojis(child) : child));
-  }
-  return typeof children === "string" ? stripEmojis(children) : children;
-};
 
 const MarkdownRenderer = ({ content }) => {
   const components = {
-    h1: ({ children }) => {
-      const icon = getIconForHeading(children, 1);
-      return (
-        <h1 className="mb-6 mt-2 flex items-center gap-2.5 border-b border-slate-200 pb-4 text-[1.9rem] font-black leading-tight tracking-tight text-slate-900 sm:text-[2.2rem]">
-          {icon}
-          <span>{cleanChildren(children)}</span>
-        </h1>
-      );
-    },
-    h2: ({ children }) => {
-      const icon = getIconForHeading(children, 2);
-      return (
-        <h2 className="mb-4 mt-8 flex items-center gap-2 border-b border-slate-200 pb-3 text-[1.45rem] font-extrabold leading-tight text-slate-900 sm:text-[1.6rem]">
-          {icon}
-          <span>{cleanChildren(children)}</span>
-        </h2>
-      );
-    },
-    h3: ({ children }) => {
-      const icon = getIconForHeading(children, 3);
-      return (
-        <h3 className="mb-3 mt-7 flex items-center gap-2 text-[1.15rem] font-bold leading-tight text-slate-900 sm:text-[1.25rem]">
-          {icon}
-          <span>{cleanChildren(children)}</span>
-        </h3>
-      );
-    },
-    h4: ({ children }) => (
-      <h4 className="mb-2 mt-6 text-[1rem] font-semibold leading-tight text-slate-900">{cleanChildren(children)}</h4>
-    ),
+    h1: ({ children }) => <h1 className="mb-6 mt-2 border-b border-slate-200 pb-4 text-[1.9rem] font-black leading-tight tracking-tight text-slate-900 sm:text-[2.2rem]">{children}</h1>,
+    h2: ({ children }) => <h2 className="mb-4 mt-8 border-b border-slate-200 pb-3 text-[1.45rem] font-extrabold leading-tight text-slate-900 sm:text-[1.6rem]">{children}</h2>,
+    h3: ({ children }) => <h3 className="mb-3 mt-7 text-[1.15rem] font-bold leading-tight text-slate-900 sm:text-[1.25rem]">{children}</h3>,
+    h4: ({ children }) => <h4 className="mb-2 mt-6 text-[1rem] font-semibold leading-tight text-slate-900">{children}</h4>,
     p: ({ children }) => <p className="mb-5 text-[15px] leading-8 text-slate-700 sm:text-base">{children}</p>,
     strong: ({ children }) => <strong className="font-semibold text-slate-900">{children}</strong>,
     em: ({ children }) => <em className="font-medium text-slate-700">{children}</em>,

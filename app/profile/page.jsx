@@ -8,10 +8,13 @@ import Login from '../../components/Login';
 import ProfileCard from '../../components/Card';
 import ProfileAvatar from '../../components/ProfileAvatar';
 
-const LoadingScreen = () => ( // LoadingScreen component - Ensure this is exactly the same as in HomePage
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+const LoadingScreen = () => (
+  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm">
+    <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/95 px-6 py-4 shadow-[0_20px_50px_rgba(15,23,42,0.2)]">
+      <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+      <span className="text-sm font-semibold text-slate-700">Processing...</span>
     </div>
+  </div>
 );
 
 const ProfilePage = () => {
@@ -57,156 +60,167 @@ const ProfilePage = () => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="flex items-center space-x-2 text-blue-600">
-          <Loader2 className="animate-spin" size={24} />
-          <span className="text-xl font-medium">Loading...</span>
+      <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)]">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+        <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl" />
+        <div className="relative flex min-h-screen items-center justify-center">
+          <div className="flex items-center gap-2 rounded-2xl border border-blue-100 bg-white/85 px-6 py-4 text-blue-600 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+            <Loader2 className="animate-spin" size={24} />
+            <span className="text-xl font-medium">Loading...</span>
+          </div>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)]">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+        <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl" />
         <Navbar />
 
-        {globalLoading && <LoadingScreen />} {/* ADDED: LoadingScreen component here */}
+        {globalLoading && <LoadingScreen />}
 
-        <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-violet-500/10">
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="max-w-5xl mx-auto px-4 py-8">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden">
-                    <ProfileAvatar
-                      src={profile_pic}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="flex-1 text-center md:text-left space-y-3">
-                  <h1 className="text-3xl font-bold text-[#1D1D1D]">{name}</h1>
-                  <div className="flex items-center justify-center md:justify-start gap-2 text-[#1D1D1D] bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                    <Mail size={16} className="text-blue-600" />
-                    <span>{email}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-[#F0F2F5]/80 backdrop-blur-sm" />
-          <div className="relative bg-white rounded-2xl shadow-xl p-8 max-w-md w-full mx-4">
-            <Login />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-      <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <div className="relative h-96 bg-gradient-to-r from-blue-600/10 to-violet-500/10 mt-2 md:mt-1">
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="max-w-5xl mx-auto px-4 w-full">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="relative group">
-                <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
+        <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-24 sm:px-6">
+          <div className="rounded-3xl border border-slate-200/80 bg-white/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8">
+            <div className="flex flex-col items-center gap-6 md:flex-row">
+              <div className="relative">
+                <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-[0_12px_28px_rgba(15,23,42,0.15)]">
                   <ProfileAvatar
                     src={profile_pic}
                     alt="Profile"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
-              <div className="flex-1 text-center md:text-left space-y-3">
-                <h1 className="text-3xl font-bold text-[#1D1D1D]">{name}</h1>
-                <div className="flex items-center justify-center md:justify-start gap-2 text-[#1D1D1D] bg-white/80 px-4 py-2 rounded-full shadow-sm">
+              <div className="flex-1 space-y-3 text-center md:text-left">
+                <h1 className="text-3xl font-bold text-slate-900">{name}</h1>
+                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-slate-700 shadow-sm md:justify-start">
                   <Mail size={16} className="text-blue-600" />
                   <span>{email}</span>
                 </div>
-                <p className="text-sm text-slate-600 max-w-xl">
-                  Track your interview posts and keep helping juniors prepare better.
+                <p className="text-sm text-slate-600">
+                  Sign in to manage your interview experiences and keep helping juniors prepare better.
                 </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {globalLoading && <LoadingScreen />} {/* UPDATED: Replaced existing loading UI with LoadingScreen */}
-
-      <div className="max-w-5xl mx-auto px-4 pb-12 mt-8">
-        <div className="flex items-center justify-between mb-6 gap-4">
-          <div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1D1D1D]">
-              Your Experiences
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Total: <span className="font-semibold text-slate-700">{posts.length}</span>
-            </p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-slate-900/25 backdrop-blur-sm" />
+          <div className="relative mx-4 w-full max-w-md rounded-2xl border border-slate-200/80 bg-white/95 p-8 shadow-[0_20px_48px_rgba(15,23,42,0.18)]">
+            <Login />
           </div>
-          {posts.length > 0 && !loadingPosts && (
-            <Link href="/post">
-              <button className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-600/90 transition-colors duration-300 shadow-sm text-xs sm:text-sm font-medium">
-                <PlusCircle size={16} />
-                <span className="text-xs sm:text-sm">Share Experience</span>
-              </button>
-            </Link>
-          )}
         </div>
+      </main>
+    );
+  }
 
-        {loadingPosts ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex items-center space-x-2 text-blue-600">
-              <Loader2 className="animate-spin" size={24} />
-              <span>Loading experiences...</span>
-            </div>
-          </div>
-        ) : posts.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
-            <div className="max-w-2xl mx-auto text-center">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-600 flex items-center justify-center mb-5 border border-blue-100">
-                <PlusCircle size={28} />
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">No experiences shared yet</h3>
-              <p className="text-sm sm:text-base text-slate-500 mb-7">
-                Your interview story can help juniors prepare smarter. Start with your most recent process and add practical tips.
-              </p>
-              <div className="flex justify-center">
-                <Link href="/post">
-                  <button className="inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-7 sm:py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-300 shadow-sm text-sm font-semibold">
-                    <PlusCircle size={17} />
-                    <span>Share Your First Experience</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="grid gap-5">
-            {posts.map((post) => (
-              <div key={post.uid} className="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-                <ProfileCard
-                  profile={post}
-                  edit={true}
-                  deletePost={true}
-                  setGlobalLoading={setGlobalLoading}
-                  disableCardClick={true}
+  return (
+    <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+      <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl" />
+
+      <Navbar />
+      <div className="relative mx-auto mt-2 max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
+        <div className="rounded-3xl border border-slate-200/80 bg-white/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8">
+          <div className="flex flex-col items-center gap-6 md:flex-row">
+            <div className="relative group">
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-[0_12px_28px_rgba(15,23,42,0.15)] transition-transform duration-300 group-hover:scale-105">
+                <ProfileAvatar
+                  src={profile_pic}
+                  alt="Profile"
+                  className="h-full w-full object-cover"
                 />
               </div>
-            ))}
+            </div>
+            <div className="flex-1 space-y-3 text-center md:text-left">
+              <h1 className="text-3xl font-bold text-slate-900">{name}</h1>
+              <div className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-slate-700 shadow-sm md:justify-start">
+                <Mail size={16} className="text-blue-600" />
+                <span>{email}</span>
+              </div>
+              <p className="max-w-xl text-sm text-slate-600">
+                Track your interview posts and keep helping juniors prepare better.
+              </p>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+
+      {globalLoading && <LoadingScreen />}
+
+      <div className="relative mx-auto mt-8 max-w-6xl px-4 pb-14 sm:px-6">
+        <section className="rounded-3xl border border-slate-200/80 bg-white/88 p-5 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6">
+          <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl">
+                Your Experiences
+              </h2>
+              <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                Total: <span className="font-semibold text-slate-700">{posts.length}</span>
+              </p>
+            </div>
+            {posts.length > 0 && !loadingPosts && (
+              <Link href="/post">
+                <button className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:-translate-y-[0.5px] hover:from-blue-700 hover:to-indigo-700 sm:px-5 sm:py-2.5 sm:text-sm">
+                  <PlusCircle size={16} />
+                  <span className="text-xs sm:text-sm">Share Experience</span>
+                </button>
+              </Link>
+            )}
+          </div>
+
+          {loadingPosts ? (
+            <div className="flex items-center justify-center py-10">
+              <div className="flex items-center gap-2 rounded-full border border-blue-100 bg-white px-5 py-2.5 text-blue-600 shadow-sm">
+                <Loader2 className="animate-spin" size={20} />
+                <span className="text-sm font-semibold">Loading experiences...</span>
+              </div>
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+              <div className="mx-auto max-w-2xl text-center">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-600">
+                  <PlusCircle size={28} />
+                </div>
+                <h3 className="mb-2 text-xl font-bold text-slate-900 sm:text-2xl">No experiences shared yet</h3>
+                <p className="mb-7 text-sm text-slate-500 sm:text-base">
+                  Your interview story can help juniors prepare smarter. Start with your most recent process and add practical tips.
+                </p>
+                <div className="flex justify-center">
+                  <Link href="/post">
+                    <button className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:-translate-y-[0.5px] hover:from-blue-700 hover:to-indigo-700 sm:px-7 sm:py-3">
+                      <PlusCircle size={17} />
+                      <span>Share Your First Experience</span>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-5">
+              {posts.map((post) => (
+                <div key={post.uid} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+                  <ProfileCard
+                    profile={post}
+                    edit={true}
+                    deletePost={true}
+                    setGlobalLoading={setGlobalLoading}
+                    disableCardClick={true}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
   );
 };
 

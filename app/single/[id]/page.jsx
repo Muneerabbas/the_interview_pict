@@ -293,23 +293,30 @@ export default async function SimilarExperience({ params }) {
             </footer>
           </article>
 
-          <section className="mt-10 rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-[0_10px_28px_rgba(15,23,42,0.06)] sm:p-8">
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8">
+            <div className="pointer-events-none absolute -left-20 -top-16 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-indigo-200/30 blur-3xl" />
+
+            <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-5">
               <div>
-                <h2 className="inline-flex items-center gap-2 text-xl font-bold text-slate-900 sm:text-2xl">
-                  <Layers3 size={22} className="text-indigo-600" />
+                <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-blue-700">
+                  <Sparkles size={12} />
+                  Community Picks
+                </p>
+                <h2 className="mt-3 inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 sm:text-2xl">
+                  <Layers3 size={21} className="text-indigo-600" />
                   Related Experiences
                 </h2>
                 <p className="mt-1 text-sm text-slate-500">
                   Explore similar interview stories from other candidates.
                 </p>
               </div>
-              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
+              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
                 {articles.length} posts
               </span>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="relative grid gap-5 sm:grid-cols-2">
               {articles.map((article) => (
                 <ArticleCard key={article.uid} article={article} />
               ))}

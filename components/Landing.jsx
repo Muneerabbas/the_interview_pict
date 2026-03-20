@@ -284,27 +284,29 @@ export default function Home({ featuredStories, topStories }) {
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(34,211,238,0.14),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(59,130,246,0.12),transparent_36%),linear-gradient(180deg,#f8fafc_0%,#f8fafc_45%,#f1f5f9_100%)] text-slate-900">
-      <nav className="fixed top-0 z-50 w-full border-b border-slate-200 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4">
+      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
           <div className="hidden items-center justify-between lg:flex">
-            <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
-              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority />
-              <span className="text-lg">
-                the<span className="text-cyan-600">Interview</span>
+            <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all">
+              <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105">
+                <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
+              </div>
+              <span className="text-xl font-bold">
+                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
               </span>
             </Link>
 
-            <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-white/70 p-1">
+            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/75 p-1.5 shadow-sm backdrop-blur-sm">
               {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   prefetch={true}
                   className={[
-                    'rounded-full px-3 py-2 text-sm font-medium transition',
+                    'rounded-xl px-3.5 py-2 text-sm font-semibold transition',
                     activeSection === item.label
-                      ? 'bg-cyan-500/15 text-cyan-700'
-                      : 'text-slate-600 hover:bg-cyan-50 hover:text-slate-900',
+                      ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 shadow-sm'
+                      : 'text-slate-600 hover:bg-cyan-50/80 hover:text-slate-900',
                   ].join(' ')}
                 >
                   {item.label}
@@ -315,7 +317,7 @@ export default function Home({ featuredStories, topStories }) {
             <div className="flex items-center gap-3">
               <Link
                 href="/search"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-cyan-300/30 hover:text-slate-900"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900"
               >
                 <Search size={17} className="text-slate-500" />
                 Search
@@ -323,7 +325,7 @@ export default function Home({ featuredStories, topStories }) {
               <Link
                 href="/post"
                 prefetch={true}
-                className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/70 transition hover:bg-cyan-300"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/80 transition hover:-translate-y-[0.5px] hover:from-cyan-300 hover:to-sky-300"
               >
                 Share Experience
               </Link>
@@ -332,15 +334,17 @@ export default function Home({ featuredStories, topStories }) {
 
           <div className="lg:hidden">
             <div className="flex items-center justify-between">
-              <Link href="/" prefetch={true} className="flex items-center gap-2 font-semibold tracking-tight text-slate-900">
-                <Image src={logo} alt="theInterview Logo" width={32} height={32} priority />
-                <span className="text-base sm:text-lg">
-                  the<span className="text-cyan-600">Interview</span>
+              <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900">
+                <div className="rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-sm ring-1 ring-slate-900/5">
+                  <Image src={logo} alt="theInterview Logo" width={32} height={32} priority className="rounded-[10px]" />
+                </div>
+                <span className="text-base font-bold sm:text-lg">
+                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>
                 </span>
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen((open) => !open)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-white/85 text-slate-700 transition hover:border-cyan-300/30 hover:text-cyan-700"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700"
                 ref={mobileMenuButtonRef}
               >
                 {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -349,13 +353,13 @@ export default function Home({ featuredStories, topStories }) {
 
             {isMobileMenuOpen && (
               <div
-                className="absolute left-0 right-0 top-full border-b border-slate-200 bg-white/95 shadow-2xl shadow-slate-300/70 backdrop-blur-xl"
+                className="absolute left-0 right-0 top-full border-b border-slate-200/80 bg-white/95 shadow-[0_18px_36px_rgba(15,23,42,0.14)] backdrop-blur-xl"
                 ref={mobileMenuRef}
               >
                 <div className="space-y-1 p-3">
                   <Link
                     href="/search"
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-white/10"
+                    className="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-cyan-200/60 hover:bg-cyan-50/60"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Search size={18} className="text-slate-500" />
@@ -368,8 +372,8 @@ export default function Home({ featuredStories, topStories }) {
                       href={item.href}
                       prefetch={true}
                       className={[
-                        'block rounded-xl px-3 py-2.5 text-sm font-medium transition',
-                        activeSection === item.label ? 'bg-cyan-500/15 text-cyan-700' : 'text-slate-700 hover:bg-cyan-50',
+                        'block rounded-xl px-3 py-2.5 text-sm font-semibold transition',
+                        activeSection === item.label ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700' : 'text-slate-700 hover:bg-cyan-50',
                       ].join(' ')}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -380,7 +384,7 @@ export default function Home({ featuredStories, topStories }) {
                   <Link
                     href="/post"
                     prefetch={true}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-cyan-400 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/70 transition hover:from-cyan-300 hover:to-sky-300"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Share Experience

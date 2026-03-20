@@ -85,34 +85,34 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 w-full z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 shadow-sm"
+        className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
           {/* Brand */}
           <Link
             href="/"
-            className="group flex items-center gap-2.5 font-semibold tracking-tight transition-all active:scale-95 text-slate-900"
+            className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95"
           >
-            <div className="relative flex items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5 transition-transform group-hover:scale-105">
-              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-xl" />
+            <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105">
+              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
             </div>
-            <span className="text-lg sm:text-xl font-bold">
-              the<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
+            <span className="text-lg font-bold sm:text-xl">
+              the<span className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
             </span>
           </Link>
 
           {/* Desktop: search + links */}
-          <div className="hidden lg:flex flex-1 items-center justify-center px-8">
+          <div className="hidden flex-1 items-center justify-center px-8 lg:flex">
             <form onSubmit={handleSearch} className="w-full max-w-2xl">
-              <div className="relative group">
+              <div className="group relative">
                 <Search
                   size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-blue-500"
                 />
                 <input
                   type="text"
                   value={searchText}
-                  className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/50 py-2.5 pl-11 pr-28 text-sm shadow-inner transition-all duration-300 outline-none placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                  className="w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-28 text-sm shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   onChange={(e) => setSearchText(e.target.value)}
                   placeholder="Search for"
                 />
@@ -136,7 +136,7 @@ export default function Navbar() {
 
                 <button
                   type="submit"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl bg-blue-600 px-4 py-1.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:-translate-y-[0.5px] hover:shadow-blue-500/30 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all duration-300 hover:-translate-y-[0.5px] hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/35 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 >
                   Search
                 </button>
@@ -145,16 +145,16 @@ export default function Navbar() {
           </div>
 
           {/* Desktop: nav items + auth */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm lg:flex">
             {navItems.map(({ href, label, Icon }) => (
               <Link
                 key={href}
                 href={href}
                 className={[
-                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition-all active:scale-95",
+                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-all active:scale-95",
                   isActive(href)
-                    ? "bg-indigo-50/80 text-blue-700"
-                    : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900",
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm"
+                    : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900",
                 ].join(" ")
               }
               >
@@ -166,12 +166,12 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <div className="ml-2 h-8 w-px bg-slate-200/80" />
+            <div className="ml-1 h-8 w-px bg-slate-200/80" />
 
             {session ? (
               <button
                 onClick={handleLogout}
-                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition-all active:scale-95 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-200"
+                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200"
               >
                 <LogOut size={16} />
                 Logout
@@ -179,7 +179,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={handleLogin}
-                className="ml-2 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-lg hover:-translate-y-[0.5px] active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                className="ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300"
               >
                 <LogIn size={16} />
                 Login
@@ -191,14 +191,14 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => router.push("/search")}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
               aria-label="Search"
             >
               <Search size={20} />
             </button>
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/60 bg-white/80 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
             >
@@ -229,7 +229,7 @@ export default function Navbar() {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="fixed left-0 right-0 top-[68px] z-50 mx-auto w-full max-w-7xl px-4 lg:hidden"
             >
-              <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-xl shadow-2xl shadow-slate-900/10 supports-[backdrop-filter]:bg-white/90">
+              <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90">
                 <div className="p-4">
                   <form onSubmit={handleSearch}>
                     <div className="relative group">
@@ -240,7 +240,7 @@ export default function Navbar() {
                       <input
                         type="text"
                         value={searchText}
-                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 focus:bg-white py-3 pl-11 pr-4 text-sm shadow-inner transition-all duration-300 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 py-3 pl-11 pr-4 text-sm shadow-inner outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                         onChange={(e) => setSearchText(e.target.value)}
                         placeholder="Search for companies or roles..."
                         autoFocus
@@ -248,7 +248,7 @@ export default function Navbar() {
                     </div>
                     <button
                       type="submit"
-                      className="mt-3 w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all hover:bg-blue-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      className="mt-3 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
                       Search
                     </button>
@@ -261,9 +261,9 @@ export default function Navbar() {
                       key={href}
                       href={href}
                       className={[
-                        "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all active:scale-[0.98]",
+                        "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all active:scale-[0.98]",
                         isActive(href)
-                          ? "bg-indigo-50/80 text-blue-700"
+                          ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
                       ].join(" ")}
                     >
@@ -277,7 +277,7 @@ export default function Navbar() {
                   {session ? (
                     <button
                       onClick={handleLogout}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 py-3 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-200"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 py-3 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-200"
                     >
                       <LogOut size={16} />
                       Logout
@@ -285,7 +285,7 @@ export default function Navbar() {
                   ) : (
                     <button
                       onClick={handleLogin}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300"
                     >
                       <LogIn size={16} />
                       Login

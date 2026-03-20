@@ -164,7 +164,8 @@ export default async function SimilarExperience({ params }) {
             </div>
           </div>
 
-          <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm">
+          <div className="grid gap-6 lg:grid-cols-[1fr_240px]">
+            <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm">
             <header className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/60 px-4 py-6 pr-14 sm:px-8 sm:py-8 sm:pr-8 lg:px-10">
               <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl" />
               <ShareButton id={id} data={data} />
@@ -231,67 +232,66 @@ export default async function SimilarExperience({ params }) {
               </div>
             </header>
 
-            <div className="grid gap-6 px-4 py-5 sm:px-8 sm:py-7 lg:grid-cols-[minmax(0,1fr)_240px] lg:px-10">
-              <section>
-                <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
-                    <FileText size={13} className="text-slate-500" />
-                    Detailed Walkthrough
-                  </div>
-                  <span className="text-xs font-medium text-slate-500">Structured candidate perspective</span>
+            <section className="px-4 py-5 sm:px-8 sm:py-7 lg:px-10">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                  <FileText size={13} className="text-slate-500" />
+                  Detailed Walkthrough
                 </div>
+                <span className="text-xs font-medium text-slate-500">Structured candidate perspective</span>
+              </div>
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                  <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3">
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <Layers3 size={15} className="text-slate-600" />
-                      Experience Details
-                    </span>
-                  </div>
-                  <div className="bg-white px-1 sm:px-2">
-                    <div className="prose sm:prose-lg max-w-none text-slate-700">
-                      <MarkdownRenderer content={data?.exp_text || ""} />
-                    </div>
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <Layers3 size={15} className="text-slate-600" />
+                    Experience Details
+                  </span>
+                </div>
+                <div className="bg-white px-1 sm:px-2">
+                  <div className="prose sm:prose-lg max-w-none text-slate-700">
+                    <MarkdownRenderer content={data?.exp_text || ""} />
                   </div>
                 </div>
-              </section>
-
-              <aside className="space-y-3 lg:sticky lg:top-24 lg:h-fit">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">At a Glance</p>
-                  <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                    <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
-                      <span>Company</span>
-                      <span className="font-semibold">{data?.company}</span>
-                    </li>
-                    <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
-                      <span>Role</span>
-                      <span className="font-semibold">{data?.role}</span>
-                    </li>
-                    <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
-                      <span>Reads</span>
-                      <span className="font-semibold">{data?.views}</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-600 to-indigo-700 p-4 text-white shadow-[0_8px_24px_rgba(37,99,235,0.24)]">
-                  <p className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.1em] text-blue-100">
-                    <BadgeCheck size={13} />
-                    Community Verified
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-blue-50">
-                    Compare this story with related experiences below to spot repeated interview patterns.
-                  </p>
-                </div>
-              </aside>
-            </div>
+              </div>
+            </section>
 
             <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
               <p>Reads: {data?.views}</p>
               <p>Shared on theInterview community feed</p>
             </footer>
           </article>
+
+            <aside className="space-y-3 lg:sticky lg:top-24 lg:h-fit">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">At a Glance</p>
+                <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                  <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
+                    <span>Company</span>
+                    <span className="font-semibold">{data?.company}</span>
+                  </li>
+                  <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
+                    <span>Role</span>
+                    <span className="font-semibold">{data?.role}</span>
+                  </li>
+                  <li className="inline-flex w-full items-center justify-between rounded-lg bg-white px-3 py-2">
+                    <span>Reads</span>
+                    <span className="font-semibold">{data?.views}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-600 to-indigo-700 p-4 text-white shadow-[0_8px_24px_rgba(37,99,235,0.24)]">
+                <p className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.1em] text-blue-100">
+                  <BadgeCheck size={13} />
+                  Community Verified
+                </p>
+                <p className="mt-2 text-sm leading-6 text-blue-50">
+                  Compare this story with related experiences below to spot repeated interview patterns.
+                </p>
+              </div>
+            </aside>
+          </div>
 
           <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8">
             <div className="pointer-events-none absolute -left-20 -top-16 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl" />

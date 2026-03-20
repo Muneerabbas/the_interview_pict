@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import logo from '../public/icon.svg'
+import { CanvasText } from "@/components/ui/canvas-text";
 import {
   ArrowRight,
   Blocks,
@@ -19,6 +20,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
@@ -388,20 +390,37 @@ export default function Home({ featuredStories, topStories }) {
 
         <div className="relative mx-auto max-w-6xl text-center">
 
+<h2
+        className={cn(
+          "group relative mx-auto mt-4 max-w-2xl text-left text-4xl leading-20 font-bold tracking-tight text-balance text-neutral-600 sm:text-5xl md:text-6xl xl:text-7xl dark:text-neutral-700",
+        )}
+      >
+        The{" "}
+        <CanvasText
+          text="Interview"
+          backgroundClassName="bg-blue-600 dark:bg-blue-700"
+          colors={[
+            "rgba(0, 153, 255, 1)",
+            "rgba(0, 153, 255, 0.9)",
+            "rgba(0, 153, 255, 0.8)",
+            "rgba(0, 153, 255, 0.7)",
+            "rgba(0, 153, 255, 0.6)",
+            "rgba(0, 153, 255, 0.5)",
+            "rgba(0, 153, 255, 0.4)",
+            "rgba(0, 153, 255, 0.3)",
+            "rgba(0, 153, 255, 0.2)",
+            "rgba(0, 153, 255, 0.1)",
+          ]}
+          lineGap={4}
+          animationDuration={20}
+        />
+        {" "}Room 
+      </h2>
 
 
+        
 
-          <h1 className="mx-auto mt-6 max-w-4xl text-4xl font-black leading-[1.03] tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
-            Turn interview stress into
-            <span className="block bg-gradient-to-r from-cyan-500 via-emerald-500 to-amber-500 bg-clip-text text-transparent">
-              clear preparation steps
-            </span>
-          </h1>
-
-          <p className="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
-            Real students share what they were asked, what worked, and what they would do differently. Prepare smarter, not
-            blindly.
-          </p>
+        
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

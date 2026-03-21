@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo from '../public/icon.svg'
 import { CanvasText } from "@/components/ui/canvas-text";
+import TypingSentence from "@/components/TypingSentence";
 import {
   ArrowRight,
   Blocks,
@@ -392,7 +393,7 @@ export default function Home({ featuredStories, topStories }) {
 
 <h2
         className={cn(
-          "group relative mx-auto mt-4 max-w-2xl text-left text-4xl leading-20 font-bold tracking-tight text-balance text-neutral-600 sm:text-5xl md:text-6xl xl:text-7xl dark:text-neutral-700",
+          "group relative mx-auto mt-4 max-w-2xl text-center text-4xl leading-20 font-bold tracking-tight text-balance text-neutral-600 sm:text-5xl md:text-6xl xl:text-7xl dark:text-neutral-700",
         )}
       >
         The{" "}
@@ -416,11 +417,7 @@ export default function Home({ featuredStories, topStories }) {
         />
         {" "}Room 
       </h2>
-
-
-        
-
-        
+          <TypingSentence />
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

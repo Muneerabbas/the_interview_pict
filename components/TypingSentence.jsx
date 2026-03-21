@@ -13,6 +13,10 @@ export default function TypingSentence() {
   const [phase, setPhase] = useState("typing");
 
   const currentWord = useMemo(() => WORDS[wordIndex], [wordIndex]);
+  const longestWord = useMemo(
+    () => WORDS.reduce((longest, word) => (word.length > longest.length ? word : longest), ""),
+    []
+  );
 
   useEffect(() => {
     let timeoutId;
@@ -45,14 +49,17 @@ export default function TypingSentence() {
 
   return (
     <div className="mt-5 w-full px-2 sm:px-0">
-      <p className="mx-auto max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 sm:text-lg md:text-xl">
+      <p className="mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 sm:min-h-[2.4rem] sm:text-lg md:text-xl">
         Turn interview stress into preparation that feels{" "}
-        <span className="inline-flex min-w-[9ch] items-center justify-start font-semibold text-blue-700">
-          {typedWord}
-          <span
-            aria-hidden="true"
-            className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700"
-          />
+        <span className="relative inline-block align-baseline text-left font-semibold text-blue-700">
+          <span className="invisible select-none">{longestWord}</span>
+          <span className="absolute inset-0 inline-flex items-center">
+            {typedWord}
+            <span
+              aria-hidden="true"
+              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700"
+            />
+          </span>
         </span>
         .
       </p>

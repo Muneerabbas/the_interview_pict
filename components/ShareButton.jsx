@@ -1,10 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Share2, Facebook, Twitter, Clipboard, X, Instagram, Linkedin } from 'lucide-react';
 
 export default function ShareButton({ id, data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [message1, setMessage1] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const articleUrl = `https://www.pict.live/single/${id}`;
   const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
@@ -80,8 +86,8 @@ export default function ShareButton({ id, data }) {
 
       <div className="relative">
         {/* Modal for Share Options */}
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
+        {mounted && isModalOpen && createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
             <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
               {/* Close Button */}
               <button
@@ -140,15 +146,17 @@ export default function ShareButton({ id, data }) {
                 </button>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
-        {isModalOpen && message1 && (
+        {mounted && isModalOpen && message1 && createPortal(
           <div
-            className="fixed bottom-24 left-1/2 z-50 flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn"
+            className="fixed bottom-24 left-1/2 z-[100] flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn"
           >
             <Clipboard className="h-5 w-5 text-blue-700" />
             <span className="text-center">{message1}</span>
-          </div>
+          </div>,
+          document.body
         )}
       </div>
     </>

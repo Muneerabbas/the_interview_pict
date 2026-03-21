@@ -270,7 +270,7 @@ export default function Home({ featuredStories, topStories }) {
   }, [])
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(34,211,238,0.14),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(59,130,246,0.12),transparent_36%),linear-gradient(180deg,#f8fafc_0%,#f8fafc_45%,#f1f5f9_100%)] text-slate-900">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.18),transparent_36%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] text-slate-900">
       <nav className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
           <div className="hidden items-center justify-between lg:flex">
@@ -385,7 +385,7 @@ export default function Home({ featuredStories, topStories }) {
 
       <section id="hero" className="relative overflow-hidden px-4 pb-12 pt-24 sm:pb-14 sm:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
-        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-emerald-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
 
         <div className="relative mx-auto max-w-6xl text-center">

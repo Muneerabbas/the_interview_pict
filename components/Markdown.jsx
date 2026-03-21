@@ -4,6 +4,7 @@ import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import CloudinaryImage from "@/components/CloudinaryImage";
 
 const MarkdownRenderer = ({ content }) => {
   const components = {
@@ -78,14 +79,24 @@ const MarkdownRenderer = ({ content }) => {
     tr: ({ children }) => <tr className="border-t border-slate-200">{children}</tr>,
     th: ({ children }) => <th className="px-3 py-2 text-left font-semibold text-slate-800">{children}</th>,
     td: ({ children }) => <td className="px-3 py-2 text-slate-700">{children}</td>,
-    img: ({ src, alt }) => (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={src || ""}
-        alt={alt || "Markdown image"}
-        className="my-6 max-h-[420px] w-full rounded-xl border border-slate-200 object-cover"
-      />
-    ),
+    img: ({ src, alt }) => {
+      if (typeof src === "string" && src.includes("res.cloudinary.com")) {
+        return (
+          <CloudinaryImage
+            src={src}
+            alt={alt || "Article image"}
+          />
+        );
+      }
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src || ""}
+          alt={alt || "Markdown image"}
+          className="my-6 max-h-[420px] w-full rounded-xl border border-slate-200 object-cover"
+        />
+      );
+    },
   };
 
   return (

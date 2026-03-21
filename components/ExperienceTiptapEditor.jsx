@@ -57,7 +57,7 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint";
 import { useWindowSize } from "@/hooks/use-window-size";
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import { handleImageUpload, MAX_FILE_SIZE, extractCloudinaryUrls, deleteCloudinaryImage } from "@/lib/tiptap-utils";
 
 import "@/components/experience-tiptap-editor.scss";
 
@@ -145,6 +145,8 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
   const toolbarRef = useRef(null);
   const initialHtml = useMemo(() => toEditorHtml(value), []);
 
+  const cloudinaryUrlsRef = useRef(extractCloudinaryUrls(initialHtml));
+
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
@@ -184,7 +186,21 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
     ],
     content: initialHtml,
     onUpdate: ({ editor: instance }) => {
-      onChange?.(instance.getHTML());
+      const html = instance.getHTML();
+
+      // Detect removed Cloudinary images and delete them from storage
+      const prevUrls = cloudinaryUrlsRef.current;
+      const nextUrls = extractCloudinaryUrls(html);
+
+      prevUrls.forEach((url) => {
+        if (!nextUrls.has(url)) {
+          // Image was removed or replaced — delete from Cloudinary
+          deleteCloudinaryImage(url);
+        }
+      });
+
+      cloudinaryUrlsRef.current = nextUrls;
+      onChange?.(html);
     },
   });
 
@@ -219,8 +235,8 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
           style={
             isMobile
               ? {
-                  bottom: `calc(100% - ${height - rect.y}px)`,
-                }
+                bottom: `calc(100% - ${height - rect.y}px)`,
+              }
               : undefined
           }
         >

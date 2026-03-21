@@ -86,7 +86,7 @@ export default async function SimilarExperience({ params }) {
       ...expDataResponse,
       profile_pic: expDataResponse?.profile_pic?.replace(/"/g, "") || "",
       name: expDataResponse?.name?.replace(/"/g, "") || "Anonymous Candidate",
-      exp_text: expDataResponse?.exp_text?.replace(/"/g, "") || "",
+      exp_text: expDataResponse?.exp_text || "",
       branch: expDataResponse?.branch || "Branch not shared",
       batch: expDataResponse?.batch || "",
       company: expDataResponse?.company || "Company not shared",
@@ -166,101 +166,101 @@ export default async function SimilarExperience({ params }) {
 
           <div className="grid gap-6 lg:grid-cols-[1fr_240px]">
             <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm">
-            <header className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/60 px-4 py-6 pr-14 sm:px-8 sm:py-8 sm:pr-8 lg:px-10">
-              <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl" />
-              <ShareButton id={id} data={data} />
+              <header className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/60 px-4 py-6 pr-14 sm:px-8 sm:py-8 sm:pr-8 lg:px-10">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl" />
+                <ShareButton id={id} data={data} />
 
-              <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-md sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-                  <ProfileAvatar
-                    src={data?.profile_pic}
-                    alt={`${data?.name}'s profile picture`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+                <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-md sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+                    <ProfileAvatar
+                      src={data?.profile_pic}
+                      alt={`${data?.name}'s profile picture`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
 
-                <div className="min-w-0 flex-1">
-                  <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
-                    <FileText size={13} />
-                    Interview Experience
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
+                      <FileText size={13} />
+                      Interview Experience
+                    </p>
 
-                  <h1 className="mt-3 text-[24px] font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                    {data?.name}
-                  </h1>
+                    <h1 className="mt-3 text-[24px] font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                      {data?.name}
+                    </h1>
 
-                  <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-600">
-                    <UserRound size={15} className="text-slate-500" />
-                    {data?.role} interview at {data?.company}
-                  </p>
+                    <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-600">
+                      <UserRound size={15} className="text-slate-500" />
+                      {data?.role} interview at {data?.company}
+                    </p>
 
-                  <div className="mt-4 grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2">
-                    <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-                      <GraduationCap size={14} className="text-indigo-600" />
-                      <span className="truncate">
-                        {data?.branch} {data?.batch}
+                    <div className="mt-4 grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2">
+                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                        <GraduationCap size={14} className="text-indigo-600" />
+                        <span className="truncate">
+                          {data?.branch} {data?.batch}
+                        </span>
+                      </div>
+
+                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                        <Building2 size={14} className="text-indigo-600" />
+                        <span className="truncate">{data?.company}</span>
+                      </div>
+
+                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                        <Briefcase size={14} className="text-indigo-600" />
+                        <span className="truncate">{data?.role}</span>
+                      </div>
+
+                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                        <Eye size={14} className="text-indigo-600" />
+                        <span className="truncate">{data?.views} Reads</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <time className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600">
+                        <CalendarDays size={14} className="text-slate-500" />
+                        <span className="whitespace-normal">{data?.date ? formatLongDate(data.date) : "Date unavailable"}</span>
+                      </time>
+                      <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
+                        <Sparkles size={13} />
+                        ~{readMinutes} min read
                       </span>
                     </div>
-
-                    <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-                      <Building2 size={14} className="text-indigo-600" />
-                      <span className="truncate">{data?.company}</span>
-                    </div>
-
-                    <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-                      <Briefcase size={14} className="text-indigo-600" />
-                      <span className="truncate">{data?.role}</span>
-                    </div>
-
-                    <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-                      <Eye size={14} className="text-indigo-600" />
-                      <span className="truncate">{data?.views} Reads</span>
-                    </div>
                   </div>
+                </div>
+              </header>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <time className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600">
-                      <CalendarDays size={14} className="text-slate-500" />
-                      <span className="whitespace-normal">{data?.date ? formatLongDate(data.date) : "Date unavailable"}</span>
-                    </time>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                      <Sparkles size={13} />
-                      ~{readMinutes} min read
+              <section className="px-4 py-5 sm:px-8 sm:py-7 lg:px-10">
+                <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <FileText size={13} className="text-slate-500" />
+                    Detailed Walkthrough
+                  </div>
+                  <span className="text-xs font-medium text-slate-500">Structured candidate perspective</span>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <Layers3 size={15} className="text-slate-600" />
+                      Experience Details
                     </span>
                   </div>
-                </div>
-              </div>
-            </header>
-
-            <section className="px-4 py-5 sm:px-8 sm:py-7 lg:px-10">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  <FileText size={13} className="text-slate-500" />
-                  Detailed Walkthrough
-                </div>
-                <span className="text-xs font-medium text-slate-500">Structured candidate perspective</span>
-              </div>
-
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3">
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <Layers3 size={15} className="text-slate-600" />
-                    Experience Details
-                  </span>
-                </div>
-                <div className="bg-white px-1 sm:px-2">
-                  <div className="prose sm:prose-lg max-w-none text-slate-700">
-                    <MarkdownRenderer content={data?.exp_text || ""} />
+                  <div className="bg-white px-1 sm:px-2">
+                    <div className="prose sm:prose-lg max-w-none text-slate-700">
+                      <MarkdownRenderer content={data?.exp_text || ""} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-              <p>Reads: {data?.views}</p>
-              <p>Shared on theInterview community feed</p>
-            </footer>
-          </article>
+              <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                <p>Reads: {data?.views}</p>
+                <p>Shared on theInterview community feed</p>
+              </footer>
+            </article>
 
             <aside className="space-y-3 lg:sticky lg:top-24 lg:h-fit">
               <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">

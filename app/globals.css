@@ -1,6 +1,27 @@
 @import '../styles/_variables.scss';
 @import '../styles/_keyframe-animations.scss';
 
+/* Shimmer skeleton for Cloudinary image blur-loading */
+@keyframes shimmer {
+  0% {
+    background-position: -600px 0;
+  }
+
+  100% {
+    background-position: 600px 0;
+  }
+}
+
+.img-shimmer {
+  background: linear-gradient(90deg,
+      #e2e8f0 25%,
+      #f1f5f9 50%,
+      #e2e8f0 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 0.75rem;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,72 +30,95 @@
   .text-foreground {
     color: hsl(var(--foreground));
   }
+
   .bg-background {
     background-color: hsl(var(--background));
   }
+
   .bg-card {
     background-color: hsl(var(--card));
   }
+
   .text-card-foreground {
     color: hsl(var(--card-foreground));
   }
+
   .bg-popover {
     background-color: hsl(var(--popover));
   }
+
   .text-popover-foreground {
     color: hsl(var(--popover-foreground));
   }
+
   .text-primary {
     color: hsl(var(--primary));
   }
+
   .bg-primary {
     background-color: hsl(var(--primary));
   }
+
   .text-primary-foreground {
     color: hsl(var(--primary-foreground));
   }
+
   .bg-primary-foreground {
     background-color: hsl(var(--primary-foreground));
   }
+
   .bg-secondary {
     background-color: hsl(var(--secondary));
   }
+
   .text-secondary-foreground {
     color: hsl(var(--secondary-foreground));
   }
+
   .bg-muted {
     background-color: hsl(var(--muted));
   }
+
   .text-muted-foreground {
     color: hsl(var(--muted-foreground));
   }
+
   .bg-accent {
     background-color: hsl(var(--accent));
   }
+
   .text-accent-foreground {
     color: hsl(var(--accent-foreground));
   }
+
   .bg-destructive {
     background-color: hsl(var(--destructive));
   }
+
   .text-destructive-foreground {
     color: hsl(var(--destructive-foreground));
   }
+
   .border-border {
     border-color: hsl(var(--border));
   }
+
   .bg-input {
     background-color: hsl(var(--input));
   }
+
   .ring-ring {
     --tw-ring-color: hsl(var(--ring));
   }
+
   .outline-ring {
     outline-color: hsl(var(--ring));
   }
+
   .outline-ring\/50 {
     outline-color: hsl(var(--ring) / 0.5);
   }
+
   .font-sans {
     font-family: var(--font-sans);
   }
@@ -96,6 +140,7 @@ body.landing-light {
     opacity: 0;
     transform: translateY(26px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -103,21 +148,25 @@ body.landing-light {
 }
 
 @keyframes teamFloat {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0);
   }
+
   50% {
     transform: translate3d(0, -18px, 0);
   }
 }
 
 @keyframes teamPulseDot {
+
   0%,
   100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.35);
     opacity: 0.72;
@@ -153,6 +202,7 @@ body.landing-light {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(-10px);
@@ -164,6 +214,7 @@ body.landing-light {
     opacity: 0;
     transform: translateY(10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -193,6 +244,7 @@ input::placeholder {
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);
   }
+
   :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -227,6 +279,7 @@ input::placeholder {
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
   }
+
   .dark {
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
@@ -260,12 +313,15 @@ input::placeholder {
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
   }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }

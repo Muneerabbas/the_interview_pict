@@ -9,14 +9,18 @@ import {
   Clock,
   Eye,
   GraduationCap,
+  Heart,
   Quote,
   Sparkles,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import ProfileAvatar from "./ProfileAvatar";
 
 const stripMarkdown = (value = "") => {
   return value
-    .replace(/<[^>]*>/g, " ")
+    .replace(/<[^>]*>?/g, " ")
+    .replace(/https?:\/\/[^\s"'<>]+/g, "")
     .replace(/!\[.*?\]\(.*?\)/g, "")
     .replace(/\[(.*?)\]\(.*?\)/g, "$1")
     .replace(/`{1,3}[^`]*`{1,3}/g, "")
@@ -27,6 +31,41 @@ const stripMarkdown = (value = "") => {
 };
 
 const FeedCard = ({ profile, width = "w-full" }) => {
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email;
+
+  const [likes, setLikes] = useState(profile?.likes || []);
+  const isLiked = userEmail && likes.includes(userEmail);
+
+  const handleLike = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!session) {
+      alert("Please login to like this experience!");
+      return;
+    }
+
+    const newLikes = isLiked
+      ? likes.filter((email) => email !== userEmail)
+      : [...likes, userEmail];
+
+    setLikes(newLikes);
+
+    try {
+      const res = await fetch("/api/like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: profile.uid, email: userEmail }),
+      });
+      if (!res.ok) throw new Error("Failed to like");
+    } catch (err) {
+      console.error(err);
+      // Revert on error
+      setLikes(likes);
+    }
+  };
+
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
   const companyName = profile?.company || "Company not shared";
@@ -95,9 +134,25 @@ const FeedCard = ({ profile, width = "w-full" }) => {
             </div>
           </div>
 
-          <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
-            <Eye size={13} />
-            {totalViews}
+          <div className="flex items-center gap-2">
+            <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
+              <Eye size={13} />
+              {totalViews}
+            </div>
+
+            <button
+              onClick={handleLike}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold transition-all duration-200 ${isLiked
+                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm"
+                : "border-slate-200 bg-white text-slate-500 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500"
+                }`}
+            >
+              <Heart
+                size={13}
+                className={`transition-transform duration-200 ${isLiked ? "scale-110 fill-pink-500" : "group-hover/heart:scale-110"}`}
+              />
+              {likes.length}
+            </button>
           </div>
         </div>
 

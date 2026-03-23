@@ -19,6 +19,7 @@ import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
 import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import LikeButton from "@/components/LikeButton";
 
 const revalidateTime = 3000;
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
@@ -211,9 +212,12 @@ export default async function SimilarExperience({ params }) {
                         <span className="truncate">{data?.role}</span>
                       </div>
 
-                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
-                        <Eye size={14} className="text-indigo-600" />
-                        <span className="truncate">{data?.views} Reads</span>
+                      <div className="flex min-w-0 items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                        <div className="flex items-center gap-2 truncate">
+                          <Eye size={14} className="text-indigo-600" />
+                          <span className="truncate">{data?.views} Reads</span>
+                        </div>
+                        <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
                       </div>
                     </div>
 

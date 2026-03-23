@@ -12,6 +12,7 @@ const collection = db.collection("experience");
   console.log("Connected to MongoDB");
 })();
 
+export const dynamic = "force-dynamic";
 export async function GET(req) {
   try {
     // Get `uid` from query parameters

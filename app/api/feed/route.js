@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
+export const dynamic = "force-dynamic";
 export async function GET(req) {
   try {
     const page = parseInt(req.nextUrl.searchParams.get("page") || "0", 10);

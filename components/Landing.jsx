@@ -20,17 +20,19 @@ import {
   Search,
   Sparkles,
   X,
+  Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
-  { href: '/about', label: 'About Us', sectionId: 'about' },
+  { href: '/companies', label: 'Companies', sectionId: 'companies' },
   { href: '/feed', label: 'Feed', sectionId: 'feed' },
   { href: '#featured', label: 'Featured Stories', sectionId: 'featured' },
   { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' },
   { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' },
   { href: '/post', label: 'Share Experience', sectionId: 'share' },
+  { href: '/about', label: 'About Us', sectionId: 'about' },
 ]
 
 const BLOG_POSTS = [
@@ -620,6 +622,21 @@ export default function Home({ featuredStories, topStories }) {
           </div>
         </div>
       </section>
+      <section className="px-4 pb-20 pt-4">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Help the Community</h2>
+          <p className="mt-3 text-slate-600 max-w-lg mx-auto">Don't see a company listed in the directory? Add it to help others find relevant interview histories.</p>
+          <div className="mt-8 flex justify-center">
+            <Link 
+              href="/add-company" 
+              className="inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition-all hover:-translate-y-[1px] hover:from-black hover:to-slate-900 focus:outline-none ring-offset-2 ring-slate-900 focus:ring-2"
+            >
+              <Plus size={18} /> Add a Company
+            </Link>
+          </div>
+        </div>
+      </section>
+
     </main>
   )
 }

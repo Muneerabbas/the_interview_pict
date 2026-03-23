@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   List,
+  Building2,
 } from "lucide-react";
 import { useSession, signOut, signIn } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,6 +71,7 @@ export default function Navbar() {
   const navItems = useMemo(
     () => [
       { href: "/", label: "Home", Icon: Home },
+      { href: "/companies", label: "Companies", Icon: Building2 },
       { href: "/feed", label: "Feed", Icon: List },
       { href: "/post", label: "Post", Icon: FileText },
       { href: "/profile", label: "Profile", Icon: User },

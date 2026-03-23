@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileAvatar from "./ProfileAvatar";
 
 const stripMarkdown = (value = "") => {
@@ -35,6 +35,12 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   const userEmail = session?.user?.email;
 
   const [likes, setLikes] = useState(profile?.likes || []);
+
+  // Synchronize state with props when the feed data refreshes
+  useEffect(() => {
+    setLikes(profile?.likes || []);
+  }, [profile?.likes]);
+
   const isLiked = userEmail && likes.includes(userEmail);
 
   const handleLike = async (e) => {

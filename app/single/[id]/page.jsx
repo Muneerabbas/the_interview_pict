@@ -21,7 +21,7 @@ import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import LikeButton from "@/components/LikeButton";
 
-const revalidateTime = 3000;
+const revalidateTime = 3600;
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
 
 export async function generateMetadata({ params }) {

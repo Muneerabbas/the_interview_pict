@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
 
@@ -8,8 +8,25 @@ export default function LikeButton({ id, initialLikes = [], className = "" }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
 
-    const [likes, setLikes] = useState(initialLikes);
-    const isLiked = userEmail && likes.includes(userEmail);
+    const [likes, setLikes] = useState(Array.isArray(initialLikes) ? initialLikes : []);
+    const isLiked = userEmail && Array.isArray(likes) && likes.includes(userEmail);
+
+    useEffect(() => {
+        setLikes(initialLikes);
+
+        const fetchLatest = async () => {
+            try {
+                const res = await fetch(`/api/exp?uid=${id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.likes) setLikes(data.likes);
+                }
+            } catch (err) {
+                console.error("Failed to sync likes:", err);
+            }
+        };
+        fetchLatest();
+    }, [initialLikes, id]);
 
     const handleLike = async () => {
         if (!session) {
@@ -32,7 +49,7 @@ export default function LikeButton({ id, initialLikes = [], className = "" }) {
             if (!res.ok) throw new Error("Failed to like");
         } catch (err) {
             console.error(err);
-            // Revert on error
+
             setLikes(likes);
         }
     };

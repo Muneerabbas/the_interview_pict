@@ -13,7 +13,9 @@ export default function ShareButton({ id, data }) {
   }, []);
 
   const articleUrl = `https://www.pict.live/single/${id}`;
-  const articleDescription = `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`;
+  const articleDescription = data?.name
+    ? `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`
+    : `Read this interview experience on theInterview.`;
   const message = `${articleDescription} \n${articleUrl}`;
   const encodedMessage = encodeURIComponent(message);
 
@@ -64,7 +66,7 @@ export default function ShareButton({ id, data }) {
     window.open(shareUrl, '_blank');
     setIsModalOpen(false);
   };
-  
+
   // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
@@ -109,7 +111,7 @@ export default function ShareButton({ id, data }) {
                   <Share2 size={18} />
                   WhatsApp
                 </button>
-                
+
                 <button
                   onClick={handleLinkedInShare}
                   className="flex items-center gap-2 rounded-lg p-2 text-[#0077B5] transition-colors hover:bg-slate-100"
@@ -135,7 +137,7 @@ export default function ShareButton({ id, data }) {
                   <Twitter size={18} />
                   Twitter
                 </button>
-               
+
                 <button
                   onClick={handleInstagramShare}
                   className="flex items-center gap-2 rounded-lg p-2 text-[#E1306C] transition-colors hover:bg-slate-100"

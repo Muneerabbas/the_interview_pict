@@ -16,6 +16,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import ProfileAvatar from "./ProfileAvatar";
+import { useAuthModal } from "@/components/AuthModalProvider";
 
 const stripMarkdown = (value = "") => {
   return value
@@ -32,6 +33,7 @@ const stripMarkdown = (value = "") => {
 
 const FeedCard = ({ profile, width = "w-full" }) => {
   const { data: session } = useSession();
+  const { openAuthModal } = useAuthModal();
   const userEmail = session?.user?.email;
 
   const [likes, setLikes] = useState(profile?.likes || []);
@@ -48,7 +50,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
     e.stopPropagation();
 
     if (!session) {
-      alert("Please login to like this experience!");
+      openAuthModal();
       return;
     }
 

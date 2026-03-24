@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
 import Footer from "../components/Footer";
+import { AuthModalProvider } from "../components/AuthModalProvider";
 
 export default function Providers({ children }) {
   const pathname = usePathname();
@@ -15,7 +16,9 @@ export default function Providers({ children }) {
 
   return (
     <>
-      <SessionProvider>{children}</SessionProvider>
+      <SessionProvider>
+        <AuthModalProvider>{children}</AuthModalProvider>
+      </SessionProvider>
       {!isSearchPage && !isAboutPage && <Footer isLandingPage={pathname === "/"} />}
       <GoogleAnalytics gaId="G-EBQQJCL50P" />
       <SpeedInsights />
@@ -23,4 +26,3 @@ export default function Providers({ children }) {
     </>
   );
 }
-

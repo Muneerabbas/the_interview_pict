@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
+import { useAuthModal } from "@/components/AuthModalProvider";
 
 export default function LikeButton({ id, initialLikes = [], className = "" }) {
     const { data: session } = useSession();
     const userEmail = session?.user?.email;
+    const { openAuthModal } = useAuthModal();
 
     const [likes, setLikes] = useState(Array.isArray(initialLikes) ? initialLikes : []);
     const isLiked = userEmail && Array.isArray(likes) && likes.includes(userEmail);
@@ -30,7 +32,7 @@ export default function LikeButton({ id, initialLikes = [], className = "" }) {
 
     const handleLike = async () => {
         if (!session) {
-            alert("Please login to like this experience!");
+            openAuthModal();
             return;
         }
 

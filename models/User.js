@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-// Define the User schema
 const userSchema = new mongoose.Schema(
   {
     gmail: {
       type: String,
       required: true,
-      unique: true,  // Ensure unique Gmail addresses
+      unique: true,
+      lowercase: true,
       trim: true,
     },
     name: {
@@ -16,16 +16,27 @@ const userSchema = new mongoose.Schema(
     },
     profilePic_Url: {
       type: String,
-      required: false,  // Profile pic is optional
+      required: false,
+      trim: true,
+    },
+    image: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    profile_pic: {
+      type: String,
+      required: false,
       trim: true,
     },
   },
   {
-    timestamps: true,  // Automatically create createdAt and updatedAt fields
+    timestamps: true,
+    collection: "user",
   }
 );
 
-// Create the User model
-const User = mongoose.model('User', userSchema);
+userSchema.index({ gmail: 1 }, { unique: true });
 
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import MarkdownRenderer from "@/components/Markdown";
 import Navbar from "@/components/Navbar";
 import {
@@ -20,6 +21,17 @@ import ShareButton from "@/components/ShareButton";
 import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import LikeButton from "@/components/LikeButton";
+
+const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
+  ssr: true,
+  loading: () => (
+    <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-7">
+      <div className="mb-4 h-7 w-52 animate-pulse rounded-lg bg-slate-200" />
+      <div className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100" />
+      <div className="mt-3 h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100" />
+    </section>
+  ),
+});
 
 const revalidateTime = 3600;
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
@@ -111,6 +123,8 @@ export default async function SimilarExperience({ params }) {
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
   const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
+  const experienceObjectId =
+    typeof data?._id === "string" ? data._id : data?._id?.$oid ? data._id.$oid : String(data?._id || "");
 
   return (
     <>
@@ -286,12 +300,20 @@ export default async function SimilarExperience({ params }) {
               </span>
             </div>
 
-            <div className="relative grid gap-5 sm:grid-cols-2">
+            <div className="relative -mx-1 flex gap-4 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
               {articles.map((article) => (
-                <ArticleCard key={article.uid} article={article} />
+                <div key={article.uid} className="w-[86vw] max-w-[360px] min-w-[280px] shrink-0 sm:w-[360px]">
+                  <ArticleCard article={article} />
+                </div>
               ))}
             </div>
           </section>
+
+          <CommentsSection
+            experienceId={experienceObjectId}
+            companyName={data?.company}
+            articleAuthorName={data?.name}
+          />
         </div>
 
         <div className="h-[20px]" />

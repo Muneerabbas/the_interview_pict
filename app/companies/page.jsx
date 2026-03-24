@@ -2,31 +2,33 @@ import React from "react";
 import connectToDatabase from "@/lib/mongoose";
 import Company from "@/models/Company";
 import Navbar from "@/components/Navbar";
-import { ArrowRight, Building2, Globe, MapPin, Tag } from "lucide-react";
+import { ArrowRight, Building2, MapPin } from "lucide-react";
 import Link from "next/link";
-import { MongoClient } from "mongodb";
-import Image from "next/image";
+import mongoose from "mongoose";
 
-// Ensure this page fetches freshly or ISR.
-export const dynamic = "force-dynamic";
+// Cache page output for faster navigation while keeping data reasonably fresh.
+export const revalidate = 300;
 
 export default async function CompaniesDirectory() {
     await connectToDatabase();
-    const client = new MongoClient(process.env.MONGODB_URI);
-
-    // Fetch companies sorted by most recently created
-    const companies = await Company.find({}).sort({ createdAt: -1 }).lean();
-
-    const db = client.db("int-exp");
+    const db = mongoose.connection.db;
     const expCol = db.collection("experience");
-    
-    // Dynamically calculate interviews per company
-    const stats = await expCol.aggregate([
-        { $group: { _id: { $toLower: "$company" }, count: { $sum: 1 } } }
-    ]).toArray();
+
+    const [companies, stats] = await Promise.all([
+        Company.find({})
+            .select("name slug about logo location tags createdAt")
+            .sort({ createdAt: -1 })
+            .lean(),
+        expCol
+            .aggregate([
+                { $match: { company: { $type: "string", $ne: "" } } },
+                { $group: { _id: { $toLower: "$company" }, count: { $sum: 1 } } }
+            ])
+            .toArray(),
+    ]);
 
     const countsMap = {};
-    stats.forEach(s => {
+    stats.forEach((s) => {
         if (s._id) countsMap[s._id] = s.count;
     });
 

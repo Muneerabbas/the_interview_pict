@@ -36,7 +36,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.index({ gmail: 1 }, { unique: true });
-
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { github, atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CloudinaryImage from "@/components/CloudinaryImage";
 
 const MarkdownRenderer = ({ content }) => {
@@ -65,7 +65,7 @@ const MarkdownRenderer = ({ content }) => {
             </div>
             <SyntaxHighlighter
               language={match?.[1] || "text"}
-              style={isDarkMode ? atomOneDark : github}
+              style={isDarkMode ? oneDark : prism}
               customStyle={{
                 margin: 0,
                 borderRadius: 0,

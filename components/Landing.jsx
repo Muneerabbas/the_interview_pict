@@ -248,8 +248,8 @@ export default function Home({ featuredStories, topStories }) {
     const fetchStories = async () => {
       try {
         const [featuredResponse, topResponse] = await Promise.all([
-          fetch('https://www.pict.live/api/feed'),
-          fetch('https://www.pict.live/api/topStories'),
+          fetch('/api/feed'),
+          fetch('/api/topStories'),
         ])
         const [featuredData, topData] = await Promise.all([featuredResponse.json(), topResponse.json()])
         setFetchedFeaturedStories(Array.isArray(featuredData) ? featuredData : [])

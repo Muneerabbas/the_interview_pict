@@ -24,6 +24,53 @@ function initialsFromName(name) {
   return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
 }
 
+function updateMetaOnCreate(prevMeta, type) {
+  const nextType = type && prevMeta.countsByType[type] !== undefined ? type : "general";
+  return {
+    ...prevMeta,
+    totalComments: (prevMeta.totalComments || 0) + 1,
+    countsByType: {
+      ...prevMeta.countsByType,
+      [nextType]: (prevMeta.countsByType[nextType] || 0) + 1,
+    },
+  };
+}
+
+function addReplyToTree(nodes, parentId, replyComment) {
+  let inserted = false;
+
+  const nextNodes = nodes.map((node) => {
+    if (node.id === parentId) {
+      inserted = true;
+      const nextReplies = Array.isArray(node.replies) ? [...node.replies, replyComment] : [replyComment];
+      return {
+        ...node,
+        replyCount: (node.replyCount || 0) + 1,
+        nestedCount: (node.nestedCount || 0) + 1,
+        replies: nextReplies,
+      };
+    }
+
+    if (!Array.isArray(node.replies) || node.replies.length === 0) {
+      return node;
+    }
+
+    const childResult = addReplyToTree(node.replies, parentId, replyComment);
+    if (childResult.inserted) {
+      inserted = true;
+      return {
+        ...node,
+        nestedCount: (node.nestedCount || 0) + 1,
+        replies: childResult.nodes,
+      };
+    }
+
+    return node;
+  });
+
+  return { nodes: nextNodes, inserted };
+}
+
 export default function CommentsSection({ experienceId, companyName, articleAuthorName }) {
   const { data: session } = useSession();
   const isAuthenticated = Boolean(session?.user);
@@ -131,8 +178,16 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         }
         throw new Error(json?.error || "Failed to post comment");
       }
+      const created = json?.comment;
+      if (created && !created.parentCommentId) {
+        setComments((prev) => {
+          if (sort === "oldest") return [...prev, created];
+          if (sort === "top") return [...prev, created];
+          return [created, ...prev];
+        });
+        setMeta((prev) => updateMetaOnCreate(prev, created.type));
+      }
       setComposeText("");
-      await loadComments();
     } catch (err) {
       setError(err.message || "Failed to post comment");
     } finally {
@@ -169,9 +224,13 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         }
         throw new Error(json?.error || "Failed to post reply");
       }
+      const createdReply = json?.comment;
+      if (createdReply?.parentCommentId) {
+        setComments((prev) => addReplyToTree(prev, createdReply.parentCommentId, createdReply).nodes);
+        setMeta((prev) => updateMetaOnCreate(prev, createdReply.type));
+      }
       setReplyDrafts((prev) => ({ ...prev, [parent.id]: "" }));
       setExpanded((prev) => ({ ...prev, [parent.id]: true }));
-      await loadComments();
     } catch (err) {
       setError(err.message || "Failed to post reply");
     } finally {

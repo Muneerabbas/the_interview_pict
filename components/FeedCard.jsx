@@ -179,12 +179,12 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50/80 p-3 sm:p-4">
-          <div className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 sm:text-xs">
-            <Quote size={13} />
+        <div className="mt-4 rounded-[14px] sm:rounded-2xl border border-slate-100 bg-slate-50/80 p-2.5 sm:p-4">
+          <div className="mb-1.5 sm:mb-2 inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-xs">
+            <Quote size={12} className="sm:w-[13px] sm:h-[13px]" />
             Experience Snapshot
           </div>
-          <p className="text-sm leading-relaxed text-slate-700 sm:text-[15px] sm:leading-7">{previewText}</p>
+          <p className="line-clamp-2 sm:line-clamp-4 text-[13px] leading-[1.6] text-slate-600 sm:text-[15px] sm:leading-7 sm:text-slate-700">{previewText}</p>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 sm:mt-5">

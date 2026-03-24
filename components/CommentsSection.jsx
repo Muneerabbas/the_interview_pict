@@ -123,7 +123,14 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Failed to post comment");
+      if (!res.ok) {
+        if (res.status === 401) {
+          openAuthModal();
+          setError("Please sign in to comment");
+          return;
+        }
+        throw new Error(json?.error || "Failed to post comment");
+      }
       setComposeText("");
       await loadComments();
     } catch (err) {
@@ -154,7 +161,14 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Failed to post reply");
+      if (!res.ok) {
+        if (res.status === 401) {
+          openAuthModal();
+          setError("Please sign in to reply");
+          return;
+        }
+        throw new Error(json?.error || "Failed to post reply");
+      }
       setReplyDrafts((prev) => ({ ...prev, [parent.id]: "" }));
       setExpanded((prev) => ({ ...prev, [parent.id]: true }));
       await loadComments();

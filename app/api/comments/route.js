@@ -100,6 +100,42 @@ async function resolveAuthorId(token) {
   return null;
 }
 
+async function resolveOrCreateAuthorId(token) {
+  const existingAuthorId = await resolveAuthorId(token);
+  if (existingAuthorId) return existingAuthorId;
+
+  const email = typeof token?.email === "string" ? token.email.trim().toLowerCase() : "";
+  if (!email) return null;
+
+  const name =
+    typeof token?.name === "string" && token.name.trim().length > 0
+      ? token.name.trim()
+      : email.split("@")[0] || "User";
+  const image = typeof token?.picture === "string" ? token.picture : null;
+
+  const upserted = await User.findOneAndUpdate(
+    { gmail: email },
+    {
+      $set: {
+        name,
+        ...(image ? { image, profile_pic: image, profilePic_Url: image } : {}),
+      },
+      $setOnInsert: {
+        gmail: email,
+      },
+    },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true,
+    }
+  )
+    .select("_id")
+    .lean();
+
+  return upserted?._id ? String(upserted._id) : null;
+}
+
 function serializeAuthor(author) {
   if (!author || typeof author !== "object") return null;
 
@@ -383,7 +419,7 @@ export async function POST(req) {
     const parentCommentId = body?.parentCommentId || null;
     const text = typeof body?.text === "string" ? body.text.trim() : "";
     const type = typeof body?.type === "string" ? body.type.trim() : "general";
-    const authorId = await resolveAuthorId(token);
+    const authorId = await resolveOrCreateAuthorId(token);
 
     if (!authorId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

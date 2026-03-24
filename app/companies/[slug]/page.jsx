@@ -20,7 +20,6 @@ export default async function CompanyDetails({ params }) {
     }
     const db = client.db("int-exp");
     const experience = db.collection("experience");
-    console.log(company, 'comppppp')
     const experiences = await experience.find({
         company: company.name
     }).toArray();

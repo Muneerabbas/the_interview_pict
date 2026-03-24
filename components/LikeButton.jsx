@@ -60,8 +60,8 @@ export default function LikeButton({ id, initialLikes = [], className = "" }) {
         <button
             onClick={handleLike}
             className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-bold transition-all duration-200 ${isLiked
-                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm"
-                : "border-slate-200 bg-white text-slate-600 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500"
+                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/40 dark:bg-pink-950/35 dark:text-pink-300"
+                : "border-slate-200 bg-white text-slate-600 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-pink-500/40 dark:hover:bg-pink-950/35 dark:hover:text-pink-300"
                 } ${className}`}
         >
             <Heart

@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, AlertCircle, CheckCircle2, Bot, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 
-const LoadingScreen = () => (
-  <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
-    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+const LoadingScreen = ({ isDarkMode = false }) => (
+  <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/60" : "bg-gray-500/50"}`}>
+    <div className={`h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 ${isDarkMode ? "border-cyan-300" : "border-blue-500"}`}></div>
   </div>
 );
 
@@ -123,7 +123,7 @@ def merge(left, right):
 Be as detailed as possible, and replace the placeholders with your actual interview details.`;
 
 
-export default function MdxEditorPage() {
+export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, showThemeToggle = false }) {
   const [successMessage, setSuccessMessage] = useState('');
   const { data: session } = useSession();
   const [markdown, setMarkdown] = useState("");
@@ -728,17 +728,17 @@ export default function MdxEditorPage() {
 
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-12">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px]" />
-      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px]" />
-      <Navbar />
-      {isLoading && <LoadingScreen />}
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-12 dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
+      <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px] dark:bg-sky-500/20" />
+      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px] dark:bg-indigo-500/20" />
+      <Navbar showThemeToggle={showThemeToggle} isDarkMode={isDarkMode} onToggleDarkMode={onToggleDarkMode} />
+      {isLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
       {/* Warning message for small screens */}
       {isSmallScreen && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 flex items-center justify-center gap-2 text-slate-700 bg-white/60 backdrop-blur-3xl md:hidden py-3 px-4 mt-[80px] mx-4 rounded-[20px] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-          <AlertCircle className="w-[18px] h-[18px] text-indigo-500" />
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 mx-4 mt-[80px] flex items-center justify-center gap-2 rounded-[20px] border border-white/60 bg-white/60 px-4 py-3 text-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/80 dark:bg-slate-900/80 dark:text-slate-200 md:hidden">
+          <AlertCircle className="h-[18px] w-[18px] text-indigo-500 dark:text-cyan-300" />
           <p className="text-[13px] font-bold tracking-tight">Best experienced on a tablet or laptop.</p>
         </motion.div>
       )}
@@ -749,28 +749,28 @@ export default function MdxEditorPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl sm:rounded-[2.5rem] sm:p-8 md:p-10 lg:p-12"
+          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/70 dark:bg-slate-900/70 dark:shadow-[0_14px_36px_rgba(2,6,23,0.65)] sm:rounded-[2.5rem] sm:p-8 md:p-10 lg:p-12"
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent" />
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px]" />
-          <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px]" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent dark:from-cyan-900/20 dark:via-blue-900/15" />
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px] dark:bg-cyan-500/15" />
+          <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px] dark:bg-indigo-500/15" />
 
           <div className="relative text-center mx-auto max-w-3xl mb-8 sm:mb-12">
-            <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl mb-3 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 leading-tight">
+            <h1 className="mb-3 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-6 sm:text-5xl lg:text-6xl">
               Share Your Journey
             </h1>
-            <p className="mx-auto text-[13px] leading-relaxed text-slate-600 sm:text-base px-1 sm:px-0">
+            <p className="mx-auto px-1 text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 sm:px-0 sm:text-base">
               Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
             </p>
           </div>
 
           <div className="mb-8 w-full animate-fade-in-up">
-            <div className="flex flex-col gap-3 rounded-[20px] sm:rounded-2xl border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-lg sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 rounded-[20px] border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-lg dark:border-slate-700 dark:bg-slate-900/75 sm:rounded-2xl sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-blue-100/80 text-blue-600">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-blue-100/80 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">
                   <FileSignature className="h-5 w-5" />
                 </div>
-                <p className="text-[13px] sm:text-sm font-bold text-slate-700">
+                <p className="text-[13px] font-bold text-slate-700 dark:text-slate-200 sm:text-sm">
                   Fill details below, then choose Manual or AI mode.
                 </p>
               </div>
@@ -779,48 +779,48 @@ export default function MdxEditorPage() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
                 </span>
-                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-500">Auto-saving</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:text-xs">Auto-saving</p>
               </div>
             </div>
           </div>
 
           <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Batch */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Batch Year</label>
+                  <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
                 </div>
                 <div className="relative">
                   <select
                     value={batch}
                     onChange={handleBatchChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
+                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
                   >
                     <option value="">Select Year</option>
                     {years.map((year) => (
                       <option key={year} value={year}>{year}</option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
                 {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
               </div>
             </div>
 
             {/* Department */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Department</label>
+                  <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
                 </div>
                 <div className="relative">
                   <select
                     value={branch}
                     onChange={handleBranchChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
+                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
                   >
                     <option value="">Select Dept</option>
                     <option value="CS">Computer Science</option>
@@ -829,24 +829,24 @@ export default function MdxEditorPage() {
                     <option value="AIDS">AI & Data Science</option>
                     <option value="EC">Electronics & Comp</option>
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
                 {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
               </div>
             </div>
 
             {/* Company */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Company</label>
+                  <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Company</label>
                 </div>
                 <div className="relative">
                   <select
                     value={company}
                     onChange={handleCompanyChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
+                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
                   >
                     <option value="">Select Company</option>
                     <option value="others">Others...</option>
@@ -854,7 +854,7 @@ export default function MdxEditorPage() {
                       <option key={comp} value={comp}>{comp}</option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
                 {company === "others" && (
                   <motion.input
@@ -864,7 +864,7 @@ export default function MdxEditorPage() {
                     onChange={handleCustomCompanyChange}
                     placeholder="Enter Company"
                     value={customCompany}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                   />
                 )}
                 {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
@@ -872,17 +872,17 @@ export default function MdxEditorPage() {
             </div>
 
             {/* Role */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Briefcase className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Role</label>
+                  <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Role</label>
                 </div>
                 <div className="relative">
                   <select
                     value={role}
                     onChange={handleRoleChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
+                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
                   >
                     <option value="">Select Role</option>
                     <option value="others">Others...</option>
@@ -890,7 +890,7 @@ export default function MdxEditorPage() {
                       <option key={roleOption} value={roleOption}>{roleOption}</option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none group-hover:text-slate-600 transition" />
+                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
                 {role === "others" && (
                   <motion.input
@@ -900,7 +900,7 @@ export default function MdxEditorPage() {
                     onChange={handleCustomRoleChange}
                     placeholder="Enter Role"
                     value={customRole}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                   />
                 )}
                 {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
@@ -914,37 +914,37 @@ export default function MdxEditorPage() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="mb-8 flex w-full justify-center rounded-2xl border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm p-4 text-[#1D1D1D] shadow-sm"
+                className="mb-8 flex w-full justify-center rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-[#1D1D1D] shadow-sm backdrop-blur-sm dark:border-emerald-500/35 dark:bg-emerald-950/35 dark:text-slate-100"
               >
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="text-emerald-500 w-5 h-5" />
-                  <p className="font-semibold text-sm sm:text-base text-emerald-900">{successMessage}</p>
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500 dark:text-emerald-300" />
+                  <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200 sm:text-base">{successMessage}</p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
           <div className="w-full pb-8">
-            <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] sm:rounded-2xl border border-white/60 bg-white/50 p-2.5 sm:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all">
+            <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] border border-white/60 bg-white/50 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:rounded-2xl sm:p-3">
               <div className="flex flex-col gap-2.5 xl:flex-row xl:items-center xl:justify-between">
                 {/* Toggle (Left) */}
                 <div className="flex w-full justify-start xl:w-auto">
-                  <div className="flex relative h-[46px] sm:h-[52px] w-full rounded-xl bg-slate-100/60 p-1 shadow-inner border border-white/40 sm:w-auto">
+                  <div className="relative flex h-[46px] w-full rounded-xl border border-white/40 bg-slate-100/60 p-1 shadow-inner dark:border-slate-700 dark:bg-slate-800/85 sm:h-[52px] sm:w-auto">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg sm:px-6 text-[13px] sm:text-sm font-bold transition-colors duration-300 sm:flex-none ${mode === 'manual' ? 'text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'manual' ? 'text-slate-800 dark:text-slate-100' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
                       <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
                     </button>
                     <button
                       onClick={() => handleModeChange('ai')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg sm:px-6 text-[13px] sm:text-sm font-bold transition-colors duration-300 sm:flex-none ${mode === 'ai' ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
                       <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
                     </button>
                     
                     {/* Animated pill background */}
                     <div 
-                      className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
+                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out dark:bg-slate-900 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
                       style={{
                         border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.1)' : '1px solid rgba(226, 232, 240, 0.4)'
                       }}
@@ -957,14 +957,14 @@ export default function MdxEditorPage() {
                     <button
                       onClick={handleClearForm}
                       type="button"
-                      className="group flex w-[35%] sm:w-auto items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md"
+                      className="group flex w-[35%] items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-900 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                     >
                       <span className="group-hover:text-red-500 transition-colors">Clear</span>
                     </button>
                     <button
                       onClick={handleSubmit}
                       type="button"
-                      className="group flex w-[65%] sm:w-auto items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 sm:px-8 sm:py-3 text-[13px] sm:text-sm font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95"
+                      className="group flex w-[65%] items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95 dark:bg-cyan-600 dark:text-slate-950 dark:shadow-cyan-950/45 dark:hover:bg-cyan-500 sm:w-auto sm:px-8 sm:py-3 sm:text-sm"
                     >
                       <span>Submit Post</span>
                       <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
@@ -977,37 +977,37 @@ export default function MdxEditorPage() {
                   <button
                     type="button"
                     onClick={handleCopyTemplate}
-                    className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 w-full px-4 py-2.5 sm:px-5 sm:py-3 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 sm:w-auto sm:text-sm"
+                    className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
                   >
                     Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
                   </button>
                 </div>
               </div>
             </div>
-            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 backdrop-blur-xl shadow-2xl shadow-slate-200/50">
+            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/75 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)]">
               
               {/* AI Prompt Area */}
               {mode === 'ai' && (
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="w-full h-full min-h-[600px] flex flex-col bg-slate-50/50"
+                  className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/50 dark:bg-slate-900/80"
                 >
                   {/* Chat header */}
-                  <div className="px-6 py-5 bg-white/80 backdrop-blur-md border-b border-indigo-100/50 flex items-center justify-between">
+                  <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/80 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/90">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-600 shadow-inner border border-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 shadow-inner dark:border-slate-700 dark:from-cyan-950/40 dark:to-blue-950/40 dark:text-cyan-300">
                         <Bot className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-800 tracking-tight">Interview AI Guide</h3>
-                        <p className="text-sm text-slate-500 font-medium">I'll help structure your experience flawlessly</p>
+                        <h3 className="text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">Interview AI Guide</h3>
+                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">I'll help structure your experience flawlessly</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Chat messages area */}
-                  <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-8 flex flex-col gap-6 min-h-[400px] bg-[url('/grid-bg.svg')] bg-center rounded-b-xl">
+                   <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-none sm:p-8">
                     {chatMessages.map((msg, index) => (
                       <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -1017,11 +1017,11 @@ export default function MdxEditorPage() {
                         className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         {msg.role !== 'user' && (
-                          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm border border-white">
+                          <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
                             <Bot className="w-4 h-4 text-indigo-600" />
                           </div>
                         )}
-                        <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-6 py-4 shadow-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white border text-slate-800 border-slate-200/60 rounded-bl-sm'}`}>
+                        <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/60 bg-white text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'}`}>
                           <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
                             {msg.text}
                           </p>
@@ -1036,30 +1036,30 @@ export default function MdxEditorPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex w-full justify-start"
                       >
-                        <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mr-3 mt-1 shadow-sm border border-white">
-                            <Bot className="w-4 h-4 text-indigo-600" />
-                        </div>
-                        <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl rounded-bl-sm px-6 py-4 flex items-center gap-3">
+                         <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
+                             <Bot className="w-4 h-4 text-indigo-600" />
+                         </div>
+                         <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/60 bg-white px-6 py-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
                            <div className="flex items-center gap-1.5">
                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
                            </div>
-                           <p className="text-sm font-medium text-slate-500">Processing response...</p>
-                        </div>
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Processing response...</p>
+                         </div>
                       </motion.div>
                     )}
                   </div>
 
                   {/* Chat input form */}
-                  <div className="bg-white/90 backdrop-blur-md p-4 sm:p-6 border-t border-slate-200/60 rounded-b-[2rem]">
+                  <div className="rounded-b-[2rem] border-t border-slate-200/60 bg-white/90 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/90 sm:p-6">
                     <form onSubmit={handleSendChatMessage} className="flex gap-3 max-w-4xl mx-auto w-full relative">
                       <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="flex-1 bg-slate-50/50 border border-slate-200 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 text-slate-800 placeholder-slate-400 text-[15px] font-medium transition-all pr-16 shadow-inner"
+                        className="flex-1 rounded-2xl border border-slate-200 bg-slate-50/50 px-6 py-4 pr-16 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                         placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
                       />
                       <button

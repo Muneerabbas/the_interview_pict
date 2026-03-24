@@ -98,17 +98,17 @@ const Login = () => {
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />
       </div>
     );
   }
 
   return (
     <div className="flex items-center justify-center min-h-[300px] sm:min-h-[400px] px-4 sm:p-8">
-      <div className="w-full max-w-[320px] sm:max-w-md backdrop-blur-lg bg-white/30 p-6 sm:p-8 rounded-2xl shadow-lg border border-white/20">
+      <div className="w-full max-w-[320px] sm:max-w-md backdrop-blur-lg bg-white/30 p-6 sm:p-8 rounded-2xl shadow-lg border border-white/20 dark:border-slate-700 dark:bg-slate-900/70">
         {session ? (
           <div className="flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />
           </div>
         ) : (
           <div className="flex flex-col items-center space-y-6 sm:space-y-8">
@@ -116,16 +116,16 @@ const Login = () => {
               <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-[#8B77F9] bg-clip-text text-transparent">
                 Welcome
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 px-2 sm:px-4">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-300 px-2 sm:px-4">
                 Sign in to share and view interview experiences
               </p>
             </div>
 
             <button
               onClick={handleGoogleSignIn}
-              className="group relative w-full bg-white text-gray-700 rounded-xl py-2.5 sm:py-3 px-4 sm:px-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+              className="group relative w-full bg-white text-gray-700 rounded-xl py-2.5 sm:py-3 px-4 sm:px-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 dark:bg-slate-900 dark:text-slate-200 dark:border dark:border-slate-700"
             >
-              <div className="absolute inset-0 w-full h-full rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className="absolute inset-0 w-full h-full rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 opacity-0 group-hover:opacity-100 transition-all duration-300 dark:from-cyan-950/35 dark:to-blue-950/35"></div>
               <div className="relative flex items-center justify-center space-x-2 sm:space-x-3">
                 <svg
                   className="w-4 h-4 sm:w-5 sm:h-5"
@@ -144,11 +144,11 @@ const Login = () => {
             </button>
 
             <div className="w-full flex items-center justify-center space-x-2">
-              <div className="h-px w-12 sm:w-16 bg-gray-300"></div>
-              <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">
+              <div className="h-px w-12 sm:w-16 bg-gray-300 dark:bg-slate-700"></div>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 whitespace-nowrap">
                 Protected by Google
               </span>
-              <div className="h-px w-12 sm:w-16 bg-gray-300"></div>
+              <div className="h-px w-12 sm:w-16 bg-gray-300 dark:bg-slate-700"></div>
             </div>
           </div>
         )}

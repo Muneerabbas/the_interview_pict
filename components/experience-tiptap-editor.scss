@@ -22,10 +22,28 @@
   padding: 2.5rem 2.75rem 3.25rem;
   line-height: 1.7;
   font-size: 1.02rem;
+  color: #0f172a;
 }
 
 .experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror:focus {
   outline: none;
+}
+
+.dark .experience-editor-shell {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.dark .experience-editor-toolbar {
+  border-bottom-color: #334155;
+}
+
+.dark .experience-editor-content {
+  background: #0f172a;
+}
+
+.dark .experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror {
+  color: #e2e8f0;
 }
 
 @media (max-width: 768px) {

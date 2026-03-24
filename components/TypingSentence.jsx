@@ -49,15 +49,15 @@ export default function TypingSentence() {
 
   return (
     <div className="mt-5 w-full px-2 sm:px-0">
-      <p className="mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 sm:min-h-[2.4rem] sm:text-lg md:text-xl">
+      <p className="mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 dark:text-slate-300 sm:min-h-[2.4rem] sm:text-lg md:text-xl">
         Turn interview stress into preparation that feels{" "}
-        <span className="relative inline-block align-baseline text-left font-semibold text-blue-700">
+        <span className="relative inline-block align-baseline text-left font-semibold text-blue-700 dark:text-cyan-300">
           <span className="invisible select-none">{longestWord}</span>
           <span className="absolute inset-0 inline-flex items-center">
             {typedWord}
             <span
               aria-hidden="true"
-              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700"
+              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700 dark:bg-cyan-300"
             />
           </span>
         </span>

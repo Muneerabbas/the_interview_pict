@@ -16,9 +16,11 @@ import {
   GraduationCap,
   Menu,
   MessageSquareText,
+  Moon,
   Quote,
   Search,
   Sparkles,
+  Sun,
   X,
   Plus,
 } from 'lucide-react'
@@ -94,7 +96,7 @@ const ScrollableSection = ({ children }) => {
     <div className="relative">
       <button
         onClick={() => scroll('left')}
-        className="absolute -left-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-600 shadow-lg shadow-slate-200/80 transition hover:border-cyan-300/40 hover:text-cyan-700 sm:inline-flex"
+        className="absolute -left-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-600 shadow-lg shadow-slate-200/80 transition hover:border-cyan-300/40 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-300 dark:shadow-slate-900/60 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:inline-flex"
         aria-label="Scroll left"
       >
         <ChevronLeft size={18} />
@@ -109,7 +111,7 @@ const ScrollableSection = ({ children }) => {
 
       <button
         onClick={() => scroll('right')}
-        className="absolute -right-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-600 shadow-lg shadow-slate-200/80 transition hover:border-cyan-300/40 hover:text-cyan-700 sm:inline-flex"
+        className="absolute -right-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-600 shadow-lg shadow-slate-200/80 transition hover:border-cyan-300/40 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-300 dark:shadow-slate-900/60 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:inline-flex"
         aria-label="Scroll right"
       >
         <ChevronRight size={18} />
@@ -121,14 +123,14 @@ const ScrollableSection = ({ children }) => {
 const SectionHeader = ({ title, description, ctaHref, ctaLabel }) => {
   return (
     <div className="text-center">
-      <h2 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">{title}</h2>
-      <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">{description}</p>
+      <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">{title}</h2>
+      <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-400 sm:text-base">{description}</p>
       {ctaHref && ctaLabel && (
         <div className="mt-5">
           <Link
             href={ctaHref}
             prefetch={true}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 transition hover:text-cyan-800"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 transition hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200"
           >
             {ctaLabel}
             <ArrowRight size={15} />
@@ -162,7 +164,7 @@ const StoryCard = ({ story }) => {
   const avatarColor = getAvatarColor(seed)
 
   return (
-    <article className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-lg shadow-slate-200/80 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:shadow-cyan-200/80">
+    <article className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-lg shadow-slate-200/80 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:shadow-cyan-200/80 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 dark:hover:border-cyan-500/40 dark:hover:shadow-cyan-950/60">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
@@ -172,14 +174,14 @@ const StoryCard = ({ story }) => {
             {story?.company?.charAt(0)?.toUpperCase() || 'T'}
           </div>
           <div className="min-w-0 text-left">
-            <p className="truncate text-sm font-semibold leading-tight text-slate-900">{story?.company || 'Top Company'}</p>
-            <p className="truncate text-xs font-medium text-slate-500">{story?.role || 'Interview Experience'}</p>
+            <p className="truncate text-sm font-semibold leading-tight text-slate-900 dark:text-slate-100">{story?.company || 'Top Company'}</p>
+            <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-400">{story?.role || 'Interview Experience'}</p>
           </div>
         </div>
-        <Quote size={24} className="fill-slate-700 text-slate-700" />
+        <Quote size={24} className="fill-slate-700 text-slate-700 dark:fill-slate-300 dark:text-slate-300" />
       </div>
 
-      <div className="mt-4 space-y-2 text-left text-sm italic leading-relaxed text-slate-600 sm:text-base">
+      <div className="mt-4 space-y-2 text-left text-sm italic leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
         {bullets.length > 0 ? (
           bullets.map((bullet, index) => (
             <p key={index} className="line-clamp-2">
@@ -191,9 +193,9 @@ const StoryCard = ({ story }) => {
         )}
       </div>
 
-      <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-4">
-        <span className="text-xs font-medium text-slate-500">{story?.views ?? 0} views</span>
-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-700">
+      <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-4 dark:border-slate-700">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{story?.views ?? 0} views</span>
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-700 dark:text-cyan-300">
           Read story
           <ChevronRight size={14} />
         </span>
@@ -204,14 +206,38 @@ const StoryCard = ({ story }) => {
 
 export default function Home({ featuredStories, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
   const [activeSection, setActiveSection] = useState('Home')
 
   const mobileMenuRef = useRef(null)
   const mobileMenuButtonRef = useRef(null)
+  const didHydrateThemeRef = useRef(false)
 
   const batchYears = useMemo(() => Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i), [])
+
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev)
+  }
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initialDarkMode = storedTheme ? storedTheme === 'dark' : prefersDark
+
+    setIsDarkMode(initialDarkMode)
+    document.documentElement.classList.toggle('dark', initialDarkMode)
+    document.body.classList.toggle('landing-light', !initialDarkMode)
+    didHydrateThemeRef.current = true
+  }, [])
+
+  useEffect(() => {
+    if (!didHydrateThemeRef.current) return
+    document.documentElement.classList.toggle('dark', isDarkMode)
+    document.body.classList.toggle('landing-light', !isDarkMode)
+    window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
+  }, [isDarkMode])
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -230,7 +256,6 @@ export default function Home({ featuredStories, topStories }) {
 
     fetchStories()
 
-    document.body.classList.add('landing-light')
     return () => {
       document.body.classList.remove('landing-light')
     }
@@ -273,12 +298,12 @@ export default function Home({ featuredStories, topStories }) {
   }, [])
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.18),transparent_36%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] text-slate-900">
-      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.18),transparent_36%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] text-slate-900 dark:bg-[radial-gradient(circle_at_14%_14%,rgba(56,189,248,0.16),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(99,102,241,0.2),transparent_36%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#111827_100%)] dark:text-slate-100">
+      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/80 dark:shadow-[0_10px_30px_rgba(2,6,23,0.55)]">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
           <div className="hidden items-center justify-between lg:flex">
-            <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all">
-              <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105">
+            <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all dark:text-slate-100">
+              <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
                 <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
               </div>
               <span className="text-xl font-bold">
@@ -286,7 +311,7 @@ export default function Home({ featuredStories, topStories }) {
               </span>
             </Link>
 
-            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/75 p-1.5 shadow-sm backdrop-blur-sm">
+            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/75 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/75">
               {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
                 <Link
                   key={item.href}
@@ -295,8 +320,8 @@ export default function Home({ featuredStories, topStories }) {
                   className={[
                     'rounded-xl px-3.5 py-2 text-sm font-semibold transition',
                     activeSection === item.label
-                      ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 shadow-sm'
-                      : 'text-slate-600 hover:bg-cyan-50/80 hover:text-slate-900',
+                      ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300 dark:shadow-cyan-950/30'
+                      : 'text-slate-600 hover:bg-cyan-50/80 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/80 dark:hover:text-slate-100',
                   ].join(' ')}
                 >
                   {item.label}
@@ -305,17 +330,26 @@ export default function Home({ featuredStories, topStories }) {
             </div>
 
             <div className="flex items-center gap-3">
+              <button
+                onClick={toggleTheme}
+                type="button"
+                aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+                title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/80 bg-white/85 text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
+              >
+                {isDarkMode ? <Sun size={17} className="text-amber-500" /> : <Moon size={17} className="text-slate-600" />}
+              </button>
               <Link
                 href="/search"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
               >
-                <Search size={17} className="text-slate-500" />
+                <Search size={17} className="text-slate-500 dark:text-slate-400" />
                 Search
               </Link>
               <Link
                 href="/post"
                 prefetch={true}
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/80 transition hover:-translate-y-[0.5px] hover:from-cyan-300 hover:to-sky-300"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/80 transition hover:-translate-y-[0.5px] hover:from-cyan-300 hover:to-sky-300 dark:shadow-cyan-950/40"
               >
                 Share Experience
               </Link>
@@ -324,35 +358,45 @@ export default function Home({ featuredStories, topStories }) {
 
           <div className="lg:hidden">
             <div className="flex items-center justify-between">
-              <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900">
-                <div className="rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-sm ring-1 ring-slate-900/5">
+              <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                <div className="rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-sm ring-1 ring-slate-900/5 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
                   <Image src={logo} alt="theInterview Logo" width={32} height={32} priority className="rounded-[10px]" />
                 </div>
                 <span className="text-base font-bold sm:text-lg">
                   the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>
                 </span>
               </Link>
-              <button
-                onClick={() => setIsMobileMenuOpen((open) => !open)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700"
-                ref={mobileMenuButtonRef}
-              >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleTheme}
+                  type="button"
+                  aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+                >
+                  {isDarkMode ? <Sun size={18} className="text-amber-500" /> : <Moon size={18} className="text-slate-600" />}
+                </button>
+                <button
+                  onClick={() => setIsMobileMenuOpen((open) => !open)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+                  ref={mobileMenuButtonRef}
+                >
+                  {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
             </div>
 
             {isMobileMenuOpen && (
               <div
-                className="absolute left-0 right-0 top-full border-b border-slate-200/80 bg-white/95 shadow-[0_18px_36px_rgba(15,23,42,0.14)] backdrop-blur-xl"
+                className="absolute left-0 right-0 top-full border-b border-slate-200/80 bg-white/95 shadow-[0_18px_36px_rgba(15,23,42,0.14)] backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_18px_36px_rgba(2,6,23,0.65)]"
                 ref={mobileMenuRef}
               >
                 <div className="space-y-1 p-3">
                   <Link
                     href="/search"
-                    className="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-cyan-200/60 hover:bg-cyan-50/60"
+                    className="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-cyan-200/60 hover:bg-cyan-50/60 dark:text-slate-200 dark:hover:border-cyan-500/30 dark:hover:bg-slate-800/80"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Search size={18} className="text-slate-500" />
+                    <Search size={18} className="text-slate-500 dark:text-slate-400" />
                     Search
                   </Link>
 
@@ -363,7 +407,9 @@ export default function Home({ featuredStories, topStories }) {
                       prefetch={true}
                       className={[
                         'block rounded-xl px-3 py-2.5 text-sm font-semibold transition',
-                        activeSection === item.label ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700' : 'text-slate-700 hover:bg-cyan-50',
+                        activeSection === item.label
+                          ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300'
+                          : 'text-slate-700 hover:bg-cyan-50 dark:text-slate-200 dark:hover:bg-slate-800/80',
                       ].join(' ')}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -374,7 +420,7 @@ export default function Home({ featuredStories, topStories }) {
                   <Link
                     href="/post"
                     prefetch={true}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/70 transition hover:from-cyan-300 hover:to-sky-300"
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/70 transition hover:from-cyan-300 hover:to-sky-300 dark:shadow-cyan-950/40"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Share Experience
@@ -387,15 +433,15 @@ export default function Home({ featuredStories, topStories }) {
       </nav>
 
       <section id="hero" className="relative overflow-hidden px-4 pb-12 pt-24 sm:pb-14 sm:pt-28">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
-        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
-        <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
+        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl dark:bg-blue-500/25" />
+        <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl dark:bg-cyan-500/25" />
 
         <div className="relative mx-auto max-w-6xl text-center">
 
 <h2
         className={cn(
-          "group relative mx-auto mt-4 max-w-2xl text-center text-4xl leading-20 font-bold tracking-tight text-balance text-neutral-600 sm:text-5xl md:text-6xl xl:text-7xl dark:text-neutral-700",
+          "group relative mx-auto mt-4 max-w-2xl text-center text-4xl leading-20 font-bold tracking-tight text-balance text-slate-700 sm:text-5xl md:text-6xl xl:text-7xl dark:text-slate-100",
         )}
       >
         The{" "}
@@ -425,7 +471,7 @@ export default function Home({ featuredStories, topStories }) {
             <Link
               href="/feed"
               prefetch={true}
-              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-cyan-400 px-2 py-3 text-[13px] font-semibold text-slate-950 shadow-lg shadow-cyan-200/70 transition hover:bg-cyan-300 sm:flex-none sm:gap-2 sm:px-7 sm:text-sm"
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-cyan-400 px-2 py-3 text-[13px] font-semibold text-slate-950 shadow-lg shadow-cyan-200/70 transition hover:bg-cyan-300 dark:shadow-cyan-950/40 sm:flex-none sm:gap-2 sm:px-7 sm:text-sm"
             >
               <span className="truncate whitespace-nowrap">Read Stories</span>
               <ArrowRight className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
@@ -433,7 +479,7 @@ export default function Home({ featuredStories, topStories }) {
             <Link
               href="/post"
               prefetch={true}
-              className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-300 bg-white/85 px-2 py-3 text-[13px] font-semibold text-slate-900 transition hover:border-cyan-300/35 hover:text-cyan-700 sm:flex-none sm:px-7 sm:text-sm"
+              className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-300 bg-white/85 px-2 py-3 text-[13px] font-semibold text-slate-900 transition hover:border-cyan-300/35 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-100 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:flex-none sm:px-7 sm:text-sm"
             >
               <span className="truncate whitespace-nowrap">Share Your Story</span>
             </Link>
@@ -443,7 +489,7 @@ export default function Home({ featuredStories, topStories }) {
       </section>
 
       <section id="featured" className="relative px-4 py-10 sm:py-12">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
             icon={Sparkles}
             eyebrow="Featured"
@@ -466,8 +512,8 @@ export default function Home({ featuredStories, topStories }) {
       </section>
 
       <section id="companyspecific" className="relative px-4 py-10 sm:py-12">
-        <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="mx-auto max-w-5xl rounded-3xl border border-slate-200 bg-white/80 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+        <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl dark:bg-amber-500/15" />
+        <div className="mx-auto max-w-5xl rounded-3xl border border-slate-200 bg-white/80 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
             icon={Search}
             eyebrow="Search Smarter"
@@ -476,16 +522,16 @@ export default function Home({ featuredStories, topStories }) {
           />
 
           <div className="mt-10 space-y-5">
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 sm:p-6">
+            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-700">
                       <Building2 size={18} />
                     </div>
-                    <p className="font-semibold text-slate-900">By Company</p>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Company</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">Track each company process and see where candidates got selected.</p>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Track each company process and see where candidates got selected.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
@@ -494,7 +540,7 @@ export default function Home({ featuredStories, topStories }) {
                       key={company}
                       href={`/search/${company}`}
                       prefetch={true}
-                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-medium text-slate-700 transition hover:border-cyan-300/30 hover:text-slate-900"
+                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-medium text-slate-700 transition hover:border-cyan-300/30 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
                     >
                       {company}
                     </Link>
@@ -503,16 +549,16 @@ export default function Home({ featuredStories, topStories }) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 sm:p-6">
+            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-200">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
                       <GraduationCap size={18} />
                     </div>
-                    <p className="font-semibold text-slate-900">By Batch Year</p>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Batch Year</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">Understand how trends changed year by year and prep accordingly.</p>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Understand how trends changed year by year and prep accordingly.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-4 gap-3 sm:grid-cols-7">
@@ -521,7 +567,7 @@ export default function Home({ featuredStories, topStories }) {
                       key={year}
                       href={`/search/${year}`}
                       prefetch={true}
-                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:border-emerald-300/30 hover:text-slate-900"
+                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:border-emerald-300/30 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-200 dark:hover:border-emerald-500/40 dark:hover:text-slate-100"
                     >
                       {year}
                     </Link>
@@ -530,16 +576,16 @@ export default function Home({ featuredStories, topStories }) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 sm:p-6">
+            <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="sm:max-w-[230px]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-200">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300">
                       <Blocks size={18} />
                     </div>
-                    <p className="font-semibold text-slate-900">By Department</p>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Department</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">Look at stories from your branch to focus on realistic prep paths.</p>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Look at stories from your branch to focus on realistic prep paths.</p>
                 </div>
 
                 <div className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
@@ -548,7 +594,7 @@ export default function Home({ featuredStories, topStories }) {
                       key={dept.key}
                       href={`/search/${dept.key}`}
                       prefetch={true}
-                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-medium text-slate-700 transition hover:border-amber-300/30 hover:text-slate-900"
+                      className="rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-center text-sm font-medium text-slate-700 transition hover:border-amber-300/30 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-200 dark:hover:border-amber-500/40 dark:hover:text-slate-100"
                     >
                       {dept.label}
                     </Link>
@@ -561,7 +607,7 @@ export default function Home({ featuredStories, topStories }) {
       </section>
 
       <section id="topstories" className="px-4 py-10 sm:py-12">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
             icon={Flame}
             eyebrow="Trending"
@@ -582,7 +628,7 @@ export default function Home({ featuredStories, topStories }) {
       </section>
 
       <section className="px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm sm:px-8 sm:py-11">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
             icon={MessageSquareText}
             eyebrow="Community Voice"
@@ -595,7 +641,7 @@ export default function Home({ featuredStories, topStories }) {
               {BLOG_POSTS.map((post, index) => (
                 <article
                   key={`${post.author}-${index}`}
-                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-lg shadow-slate-200/80 transition hover:-translate-y-1 hover:border-cyan-300/30"
+                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-lg shadow-slate-200/80 transition hover:-translate-y-1 hover:border-cyan-300/30 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 dark:hover:border-cyan-500/40"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -606,14 +652,14 @@ export default function Home({ featuredStories, topStories }) {
                         {post.avatar}
                       </div>
                       <div className="text-left">
-                        <p className="font-semibold leading-tight text-slate-900">{post.author}</p>
-                        <p className="text-xs font-medium text-slate-500">Student</p>
+                        <p className="font-semibold leading-tight text-slate-900 dark:text-slate-100">{post.author}</p>
+                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Student</p>
                       </div>
                     </div>
-                    <Quote size={24} className="fill-slate-700 text-slate-700" />
+                    <Quote size={24} className="fill-slate-700 text-slate-700 dark:fill-slate-300 dark:text-slate-300" />
                   </div>
 
-                  <p className="mt-4 line-clamp-4 text-left text-sm italic leading-relaxed text-slate-600 sm:text-base">
+                  <p className="mt-4 line-clamp-4 text-left text-sm italic leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
                     {post.content}
                   </p>
                 </article>
@@ -624,8 +670,8 @@ export default function Home({ featuredStories, topStories }) {
       </section>
       <section className="px-4 pb-20 pt-4">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Help the Community</h2>
-          <p className="mt-3 text-slate-600 max-w-lg mx-auto">Don't see a company listed in the directory? Add it to help others find relevant interview histories.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">Help the Community</h2>
+          <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-lg mx-auto">Don't see a company listed in the directory? Add it to help others find relevant interview histories.</p>
           <div className="mt-8 flex justify-center">
             <Link 
               href="/add-company" 

@@ -79,7 +79,7 @@ export default function ShareButton({ id, data }) {
           handleCopyToClipboard();
           setIsModalOpen(true);
         }}
-        className="absolute right-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
+        className="absolute right-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
         aria-label="Share article"
       >
         <Share2 size={16} />
@@ -89,23 +89,23 @@ export default function ShareButton({ id, data }) {
       <div className="relative">
         {/* Modal for Share Options */}
         {mounted && isModalOpen && createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4">
-            <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4 dark:bg-black/60">
+            <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-900">
               {/* Close Button */}
               <button
                 onClick={closeModal}
-                className="absolute right-3 top-3 text-slate-500 transition-colors hover:text-slate-700"
+                className="absolute right-3 top-3 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                 aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
-              <h2 className="mb-4 text-center text-lg font-bold text-slate-900">Share this Article</h2>
+              <h2 className="mb-4 text-center text-lg font-bold text-slate-900 dark:text-slate-100">Share this Article</h2>
 
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleWhatsAppShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#25D366] transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#25D366] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                   aria-label="Share on WhatsApp"
                 >
                   <Share2 size={18} />
@@ -114,7 +114,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleLinkedInShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#0077B5] transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#0077B5] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                   aria-label="Share on LinkedIn"
                 >
                   <Linkedin size={18} />
@@ -123,7 +123,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleFacebookShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-blue-600 transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-2 rounded-lg p-2 text-blue-600 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                   aria-label="Share on Facebook"
                 >
                   <Facebook size={18} />
@@ -131,7 +131,7 @@ export default function ShareButton({ id, data }) {
                 </button>
                 <button
                   onClick={handleTwitterShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#1DA1F2] transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#1DA1F2] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                   aria-label="Share on Twitter"
                 >
                   <Twitter size={18} />
@@ -140,7 +140,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleInstagramShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#E1306C] transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-2 rounded-lg p-2 text-[#E1306C] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                   aria-label="Share on Instagram"
                 >
                   <Instagram size={18} />
@@ -153,9 +153,9 @@ export default function ShareButton({ id, data }) {
         )}
         {mounted && isModalOpen && message1 && createPortal(
           <div
-            className="fixed bottom-24 left-1/2 z-[100] flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn"
+            className="fixed bottom-24 left-1/2 z-[100] flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn dark:border-cyan-500/35 dark:bg-cyan-950/45 dark:text-slate-100"
           >
-            <Clipboard className="h-5 w-5 text-blue-700" />
+            <Clipboard className="h-5 w-5 text-blue-700 dark:text-cyan-300" />
             <span className="text-center">{message1}</span>
           </div>,
           document.body

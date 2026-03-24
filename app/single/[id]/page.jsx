@@ -127,6 +127,7 @@ export default async function SimilarExperience({ params }) {
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
   const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
+  const isToday = data?.date && new Date(data.date).toDateString() === new Date().toDateString();
   const experienceObjectId =
     typeof data?._id === "string" ? data._id : data?._id?.$oid ? data._id.$oid : String(data?._id || "");
 
@@ -160,170 +161,157 @@ export default async function SimilarExperience({ params }) {
       />
 
       <SingleExperienceThemeShell>
-        <div className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_12%_14%,rgba(125,211,252,0.24),transparent_30%),radial-gradient(circle_at_88%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f3f6fb_55%,#edf2f8_100%)] dark:bg-[radial-gradient(circle_at_12%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_88%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
+        <div className="relative min-h-screen overflow-x-clip bg-[#f8fbff] dark:bg-[#020617]">
+          <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_12%_14%,rgba(125,211,252,0.24),transparent_30%),radial-gradient(circle_at_88%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f3f6fb_55%,#edf2f8_100%)] dark:bg-[radial-gradient(circle_at_12%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_88%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]" />
+          <div className="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-24 sm:px-6 sm:pb-16 lg:px-8">
-          <div className="pointer-events-none absolute -left-24 top-28 h-72 w-72 rounded-full bg-blue-300/20 blur-3xl dark:bg-blue-500/20" />
-          <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-cyan-300/20 blur-3xl dark:bg-cyan-500/20" />
+          <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 pt-24 sm:px-6 sm:pb-16 lg:px-8">
+            <div className="pointer-events-none absolute -left-24 top-28 h-72 w-72 rounded-full bg-blue-300/20 blur-3xl dark:bg-blue-500/20" />
+            <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-cyan-300/20 blur-3xl dark:bg-cyan-500/20" />
 
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <Link
-              href="/feed"
-              prefetch={true}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
-            >
-              <ArrowLeft size={16} />
-              Back to feed
-            </Link>
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300">
-              <Compass size={13} />
-              Single Experience
-            </div>
-          </div>
-
-          <div className="grid gap-6">
-            <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
-              <header className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/60 px-4 py-6 pr-14 dark:border-slate-700 dark:from-slate-900 dark:to-blue-950/35 sm:px-8 sm:py-8 sm:pr-8 lg:px-10">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
-                <ShareButton id={id} data={data} />
-
-                <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-md dark:border-slate-900 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-                    <ProfileAvatar
-                      src={data?.profile_pic}
-                      alt={`${data?.name}'s profile picture`}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300">
-                      <FileText size={13} />
-                      Interview Experience
-                    </p>
-
-                    <h1 className="mt-3 text-[24px] font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl lg:text-4xl">
-                      {data?.name}
-                    </h1>
-
-                    <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300">
-                      <UserRound size={15} className="text-slate-500 dark:text-slate-400" />
-                      {data?.role} interview at {data?.company}
-                    </p>
-
-                    <div className="mt-4 grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2">
-                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                        <GraduationCap size={14} className="text-indigo-600 dark:text-cyan-300" />
-                        <span className="truncate">
-                          {data?.branch} {data?.batch}
-                        </span>
-                      </div>
-
-                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                        <Building2 size={14} className="text-indigo-600 dark:text-cyan-300" />
-                        <span className="truncate">{data?.company}</span>
-                      </div>
-
-                      <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                        <Briefcase size={14} className="text-indigo-600 dark:text-cyan-300" />
-                        <span className="truncate">{data?.role}</span>
-                      </div>
-
-                      <div className="flex min-w-0 items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                        <div className="flex items-center gap-2 truncate">
-                          <Eye size={14} className="text-indigo-600 dark:text-cyan-300" />
-                          <span className="truncate">{data?.views} Reads</span>
-                        </div>
-                        <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
-                      </div>
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <time className="inline-flex max-w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                        <CalendarDays size={14} className="text-slate-500 dark:text-slate-400" />
-                        <span className="whitespace-normal">{data?.date ? formatLongDate(data.date) : "Date unavailable"}</span>
-                      </time>
-                      <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-500/35 dark:bg-emerald-950/35 dark:text-emerald-300">
-                        <Sparkles size={13} />
-                        ~{readMinutes} min read
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </header>
-
-              <section className="px-4 py-5 sm:px-8 sm:py-7 lg:px-10">
-                <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                    <FileText size={13} className="text-slate-500 dark:text-slate-400" />
-                    Detailed Walkthrough
-                  </div>
-                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Structured candidate perspective</span>
-                </div>
-
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-                  <div className="border-b border-slate-200 bg-slate-50/80 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/85">
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
-                      <Layers3 size={15} className="text-slate-600 dark:text-slate-400" />
-                      Experience Details
-                    </span>
-                  </div>
-                  <div className="bg-white px-1 dark:bg-slate-900 sm:px-2">
-                    <div className="mx-auto w-full max-w-[900px] text-slate-700 dark:text-slate-300">
-                      <MarkdownRenderer content={data?.exp_text || ""} />
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-                <p>Reads: {data?.views}</p>
-                <p>Shared on theInterview community feed</p>
-              </footer>
-            </article>
-
-          </div>
-
-          <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/90 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-8">
-            <div className="pointer-events-none absolute -left-20 -top-16 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl dark:bg-sky-500/18" />
-            <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-500/18" />
-
-            <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-5 dark:border-slate-700/80">
-              <div>
-                <h2 className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
-                  <Layers3 size={21} className="text-indigo-600 dark:text-cyan-300" />
-                  Related Experiences
-                </h2>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  Explore similar interview stories from other candidates.
-                </p>
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <Link
+                href="/feed"
+                prefetch={true}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+              >
+                <ArrowLeft size={16} />
+                Back to feed
+              </Link>
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300">
+                <Compass size={13} />
+                Single Experience
               </div>
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                {articles.length} posts
-              </span>
             </div>
 
-            <div className="relative -mx-1 flex gap-4 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
-              {articles.map((article) => (
-                <div key={article.uid} className="w-[86vw] max-w-[360px] min-w-[280px] shrink-0 sm:w-[360px]">
-                  <ArticleCard article={article} />
+            <div className="grid gap-6">
+              <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
+                <header className="relative overflow-hidden border-b border-slate-100/80 bg-gradient-to-br from-slate-50/50 to-blue-50/30 px-4 py-8 pr-14 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-blue-950/20 sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
+                  <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
+                  <ShareButton id={id} data={data} />
+
+                  <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26">
+                      <ProfileAvatar
+                        src={data?.profile_pic}
+                        alt={`${data?.name}'s profile picture`}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-blue-700 dark:bg-cyan-500/10 dark:text-cyan-300">
+                          Interview Experience
+                        </span>
+                        {isToday && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+                            <Sparkles size={11} />
+                            Fresh
+                          </span>
+                        )}
+                      </div>
+
+                      <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
+                        {data?.name}
+                      </h1>
+
+                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+                        <div className="flex items-center gap-1.5">
+                          <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
+                          <span className="text-slate-900 dark:text-slate-200 font-bold">{data?.company}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Briefcase size={15} className="text-blue-600 dark:text-cyan-300" />
+                          <span>{data?.role}</span>
+                        </div>
+                      </div>
+
+                      {/* Header Meta: Flattened Inline Row */}
+                      <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
+                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                          <GraduationCap size={13} />
+                          {data?.branch} {data?.batch}
+                        </div>
+                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                          <CalendarDays size={13} />
+                          {data?.date ? formatLongDate(data.date) : "Date unavailable"}
+                        </div>
+                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                          <Eye size={13} />
+                          {data?.views} reads
+                        </div>
+                        <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+                          <span className="text-[13px]">✦</span>
+                          {readMinutes} min read
+                        </div>
+                        <div className="ml-auto inline-flex items-center gap-2">
+                          <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </header>
+
+                <section className="px-4 py-8 sm:px-8 sm:py-10 lg:px-12">
+                  <div className="mx-auto w-full max-w-[720px] text-slate-700 dark:text-slate-300">
+                    <MarkdownRenderer content={data?.exp_text || ""} />
+                  </div>
+                </section>
+
+                <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                  <p>Reads: {data?.views}</p>
+                  <p>Shared on theInterview community feed</p>
+                </footer>
+              </article>
+
+            </div>
+
+            <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/90 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-8">
+              <div className="pointer-events-none absolute -left-20 -top-16 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl dark:bg-sky-500/18" />
+              <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-500/18" />
+
+              <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-5 dark:border-slate-700/80">
+                <div>
+                  <h2 className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+                    <Layers3 size={21} className="text-indigo-600 dark:text-cyan-300" />
+                    Related Experiences
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    Explore similar interview stories from other candidates.
+                  </p>
                 </div>
-              ))}
-            </div>
-          </section>
+                <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                  {articles.length} posts
+                </span>
+              </div>
 
-          <CommentsSection
-            experienceId={experienceObjectId}
-            companyName={data?.company}
-            articleAuthorName={data?.name}
-          />
+              <div
+                className="relative -mx-1 flex gap-5 overflow-x-auto px-1 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                style={{
+                  WebkitMaskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
+                  maskImage: 'linear-gradient(to right, black 88%, transparent 100%)'
+                }}
+              >
+                {articles.map((article) => (
+                  <div key={article.uid} className="w-[85vw] max-w-[340px] min-w-[280px] shrink-0 sm:w-[340px]">
+                    <ArticleCard article={article} />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <CommentsSection
+              experienceId={experienceObjectId}
+              companyName={data?.company}
+              articleAuthorName={data?.name}
+            />
+          </div>
+
+          <div className="h-[20px]" />
         </div>
 
-        <div className="h-[20px]" />
-      </div>
-
-      <ScrollViewTracker id={id} />
+        <ScrollViewTracker id={id} />
       </SingleExperienceThemeShell>
     </>
   );

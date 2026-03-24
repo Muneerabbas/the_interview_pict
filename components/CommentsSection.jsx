@@ -474,24 +474,26 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         </button>
       </div>
 
-      <div className="relative rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/70 sm:p-4">
-        <div className="mb-2 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Tag as:</span>
-          {meta.uiConfig.allowedTypes.map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => setComposeType(type)}
-              className={cn(
-                "rounded-full border px-3 py-1 text-xs font-semibold transition",
-                composeType === type
-                  ? "border-blue-300 bg-blue-50 text-blue-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300"
-                  : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
-              )}
-            >
-              {TYPE_META[type]?.label || type}
-            </button>
-          ))}
+      <div className="relative rounded-2xl border border-slate-200/60 bg-slate-50/50 p-4 transition-all focus-within:border-blue-400/50 focus-within:bg-white focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:border-slate-700/50 dark:bg-slate-800/40 dark:focus-within:border-cyan-500/30 dark:focus-within:bg-slate-900/40">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Tag as:</span>
+          <div className="flex flex-wrap gap-1.5">
+            {meta.uiConfig.allowedTypes.map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setComposeType(type)}
+                className={cn(
+                  "rounded-lg border px-2.5 py-1 text-[11px] font-bold transition-all duration-200",
+                  composeType === type
+                    ? "border-blue-500 bg-blue-50/50 text-blue-700 dark:border-blue-400 dark:bg-blue-950/40 dark:text-blue-300"
+                    : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-600"
+                )}
+              >
+                {TYPE_META[type]?.label || type}
+              </button>
+            ))}
+          </div>
         </div>
         <textarea
           value={composeText}
@@ -505,24 +507,25 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
               ? `Ask a doubt, share a tip, or discuss your experience at ${companyName || "this company"}...`
               : "Sign in to add your comment"
           }
-          className="min-h-[90px] w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700 outline-none ring-blue-500 transition focus:border-blue-300 focus:ring-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/30"
+          className="min-h-[100px] w-full resize-none border-none bg-transparent p-0 text-[14px] leading-relaxed text-slate-700 placeholder:text-slate-400 focus:outline-none dark:text-slate-200"
         />
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <span className="text-xs text-slate-400 dark:text-slate-500">
-            {composeText.length}/{meta.uiConfig.maxCommentLength || 1000}
+        <div className="mt-2 flex items-center justify-between gap-2 border-t border-slate-100 pt-3 dark:border-slate-700/50">
+          <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500">
+            {composeText.length}/{meta.uiConfig.maxCommentLength || 1000} characters
           </span>
           <button
             type="button"
             onClick={submitComment}
             disabled={posting || !composeText.trim()}
-            className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700"
+            className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700"
           >
+            <Send size={14} />
             Post
           </button>
         </div>
       </div>
 
-      <div className="relative mt-4 flex flex-wrap items-center gap-2 border-b border-slate-200 pb-4 dark:border-slate-700">
+      <div className="relative mt-8 flex flex-wrap items-center gap-6 border-b border-slate-100 dark:border-slate-700/80">
         {[
           { key: "all", label: "All" },
           { key: "doubt", label: "Doubts" },
@@ -536,10 +539,10 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
             type="button"
             onClick={() => setFilter(item.key)}
             className={cn(
-              "rounded-full border px-3 py-1 text-xs font-semibold transition",
+              "relative pb-3 text-[13px] font-bold transition-all duration-200",
               filter === item.key
-                ? "border-blue-300 bg-blue-50 text-blue-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300"
-                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+                ? "text-blue-700 dark:text-cyan-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-600 dark:after:bg-cyan-500"
+                : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
             )}
           >
             {item.label}
@@ -547,18 +550,23 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         ))}
       </div>
 
-      {error ? <p className="mt-4 text-sm text-rose-600">{error}</p> : null}
+      {error ? <p className="mt-4 text-sm text-rose-600 font-medium">{error}</p> : null}
 
       {loading ? (
-        <div className="mt-4 space-y-3">
+        <div className="mt-6 space-y-4">
           {[0, 1, 2].map((n) => (
-            <div key={n} className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800" />
+            <div key={n} className="h-28 animate-pulse rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-700/50 dark:bg-slate-800/40" />
           ))}
         </div>
       ) : filteredComments.length === 0 ? (
-        <p className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-          No comments yet. Start the discussion.
-        </p>
+        <div className="mt-12 flex flex-col items-center justify-center py-10 text-center opacity-80">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800/50">
+            <MessageSquare size={28} className="text-slate-300 dark:text-slate-600" />
+          </div>
+          <p className="max-w-[180px] text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+            No comments yet.<br />Start the discussion.
+          </p>
+        </div>
       ) : (
         <div className="relative mt-4 space-y-3">{filteredComments.map((item) => renderComment(item))}</div>
       )}

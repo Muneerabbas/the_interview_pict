@@ -156,7 +156,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
   const [totalRounds, setTotalRounds] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
-  
+
   const [chatAnswers, setChatAnswers] = useState({
     eligibility: "",
     applicationRoute: "",
@@ -528,30 +528,30 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
     try {
       const roundsList = finalAnswers.roundDetails.join("\n\n");
       const finalPayload = {
-         company: company === 'others' ? customCompany : company || "Not specified",
-         role: role === 'others' ? customRole : role || "Not specified",
-         batch: batch || "Not specified",
-         branch: branch || "Not specified",
-         shortlisting: finalAnswers.eligibility,
-         eligibility: finalAnswers.eligibility,
-         applicationRoute: finalAnswers.applicationRoute,
-         rounds: finalAnswers.roundsText,
-         topics: roundsList, // Condensed from the round loop
-         timeline: finalAnswers.timeline,
-         difficulty: finalAnswers.difficulty,
-         keyTopics: finalAnswers.keyTopics,
-         codingSpecifics: finalAnswers.codingSpecifics,
-         interviewFocus: finalAnswers.interviewFocus,
-         projectDeepDive: finalAnswers.projectDeepDive,
-         hrBehavioral: finalAnswers.hrBehavioral,
-         unexpected: finalAnswers.unexpected,
-         mistakesToAvoid: finalAnswers.mistakesToAvoid,
-         prepStrategy: finalAnswers.prepStrategy,
-         sevenDayPlan: finalAnswers.sevenDayPlan,
-         offerDetails: finalAnswers.offerDetails,
-         verdictAndTips: finalAnswers.verdictAndTips
+        company: company === 'others' ? customCompany : company || "Not specified",
+        role: role === 'others' ? customRole : role || "Not specified",
+        batch: batch || "Not specified",
+        branch: branch || "Not specified",
+        shortlisting: finalAnswers.eligibility,
+        eligibility: finalAnswers.eligibility,
+        applicationRoute: finalAnswers.applicationRoute,
+        rounds: finalAnswers.roundsText,
+        topics: roundsList, // Condensed from the round loop
+        timeline: finalAnswers.timeline,
+        difficulty: finalAnswers.difficulty,
+        keyTopics: finalAnswers.keyTopics,
+        codingSpecifics: finalAnswers.codingSpecifics,
+        interviewFocus: finalAnswers.interviewFocus,
+        projectDeepDive: finalAnswers.projectDeepDive,
+        hrBehavioral: finalAnswers.hrBehavioral,
+        unexpected: finalAnswers.unexpected,
+        mistakesToAvoid: finalAnswers.mistakesToAvoid,
+        prepStrategy: finalAnswers.prepStrategy,
+        sevenDayPlan: finalAnswers.sevenDayPlan,
+        offerDetails: finalAnswers.offerDetails,
+        verdictAndTips: finalAnswers.verdictAndTips
       };
-      
+
       const res = await fetch("/api/ai-generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -565,37 +565,37 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
         throw new Error("No text returned from API");
       }
     } catch (error) {
-       console.error("Error generating from API:", error);
-       setMarkdown("## Error generating markdown. Please try again or switch to manual.");
+      console.error("Error generating from API:", error);
+      setMarkdown("## Error generating markdown. Please try again or switch to manual.");
     } finally {
-       setIsGenerating(false);
-       setTimeout(() => {
-          setMode('manual');
-          // Reset chat completely for next time
-          setChatStage('eligibility');
-          setTotalRounds(0);
-          setCurrentRound(1);
-          setChatAnswers({
-            eligibility: "",
-            applicationRoute: "",
-            roundsText: "",
-            roundDetails: [],
-            timeline: "",
-            difficulty: "",
-            keyTopics: "",
-            codingSpecifics: "",
-            interviewFocus: "",
-            projectDeepDive: "",
-            hrBehavioral: "",
-            unexpected: "",
-            mistakesToAvoid: "",
-            prepStrategy: "",
-            sevenDayPlan: "",
-            offerDetails: "",
-            verdictAndTips: ""
-          });
-          setChatMessages([{ role: 'assistant', text: initialMessage }]);
-       }, 2000);
+      setIsGenerating(false);
+      setTimeout(() => {
+        setMode('manual');
+        // Reset chat completely for next time
+        setChatStage('eligibility');
+        setTotalRounds(0);
+        setCurrentRound(1);
+        setChatAnswers({
+          eligibility: "",
+          applicationRoute: "",
+          roundsText: "",
+          roundDetails: [],
+          timeline: "",
+          difficulty: "",
+          keyTopics: "",
+          codingSpecifics: "",
+          interviewFocus: "",
+          projectDeepDive: "",
+          hrBehavioral: "",
+          unexpected: "",
+          mistakesToAvoid: "",
+          prepStrategy: "",
+          sevenDayPlan: "",
+          offerDetails: "",
+          verdictAndTips: ""
+        });
+        setChatMessages([{ role: 'assistant', text: initialMessage }]);
+      }, 2000);
     }
   };
 
@@ -615,102 +615,102 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
       let newAnswers = { ...chatAnswers };
 
       if (chatStage === 'eligibility') {
-         newAnswers.eligibility = userMsg;
-         newStage = 'application_route';
-         nextAssistantMsg = "Great. How did you apply (on campus, referral, off-campus) and when did the process start?";
-      } 
+        newAnswers.eligibility = userMsg;
+        newStage = 'application_route';
+        nextAssistantMsg = "Great. How did you apply (on campus, referral, off-campus) and when did the process start?";
+      }
       else if (chatStage === 'application_route') {
-         newAnswers.applicationRoute = userMsg;
-         newStage = 'rounds_count';
-         nextAssistantMsg = "Nice. How many interview rounds were there in total? (e.g. 3)";
+        newAnswers.applicationRoute = userMsg;
+        newStage = 'rounds_count';
+        nextAssistantMsg = "Nice. How many interview rounds were there in total? (e.g. 3)";
       }
       else if (chatStage === 'rounds_count') {
-         newAnswers.roundsText = userMsg;
-         // Parse how many rounds out of their answer string
-         const match = userMsg.match(/\d+/);
-         const num = match ? parseInt(match[0], 10) : 1;
-         const clampedNum = Math.min(Math.max(num, 1), 10); // cap max rounds at 10
-         setTotalRounds(clampedNum);
-         setCurrentRound(1);
-         newStage = 'round_loop';
-         nextAssistantMsg = `Alright, ${clampedNum} round(s) it is. Let's break down Round 1. What type of round was it (e.g. OA, Technical, HR) and what were the main questions or tasks?`;
+        newAnswers.roundsText = userMsg;
+        // Parse how many rounds out of their answer string
+        const match = userMsg.match(/\d+/);
+        const num = match ? parseInt(match[0], 10) : 1;
+        const clampedNum = Math.min(Math.max(num, 1), 10); // cap max rounds at 10
+        setTotalRounds(clampedNum);
+        setCurrentRound(1);
+        newStage = 'round_loop';
+        nextAssistantMsg = `Alright, ${clampedNum} round(s) it is. Let's break down Round 1. What type of round was it (e.g. OA, Technical, HR) and what were the main questions or tasks?`;
       }
       else if (chatStage === 'round_loop') {
-         newAnswers.roundDetails = [...newAnswers.roundDetails, `Round ${currentRound}: ${userMsg}`];
-         
-         if (currentRound < totalRounds) {
-            const nextRound = currentRound + 1;
-            setCurrentRound(nextRound);
-            nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what type of round was it and what did they ask?`;
-         } else {
-            newStage = 'timeline';
-            nextAssistantMsg = "Thanks! What was the timeline like (days between rounds + approximate duration of each round)?";
-         }
+        newAnswers.roundDetails = [...newAnswers.roundDetails, `Round ${currentRound}: ${userMsg}`];
+
+        if (currentRound < totalRounds) {
+          const nextRound = currentRound + 1;
+          setCurrentRound(nextRound);
+          nextAssistantMsg = `Awesome. Now for Round ${nextRound}, what type of round was it and what did they ask?`;
+        } else {
+          newStage = 'timeline';
+          nextAssistantMsg = "Thanks! What was the timeline like (days between rounds + approximate duration of each round)?";
+        }
       }
       else if (chatStage === 'timeline') {
-         newAnswers.timeline = userMsg;
-         newStage = 'difficulty';
-         nextAssistantMsg = "How difficult was each round (easy/medium/hard) and why?";
+        newAnswers.timeline = userMsg;
+        newStage = 'difficulty';
+        nextAssistantMsg = "How difficult was each round (easy/medium/hard) and why?";
       }
       else if (chatStage === 'difficulty') {
-         newAnswers.difficulty = userMsg;
-         newStage = 'key_topics';
-         nextAssistantMsg = "Which topics were asked the most (DSA, DBMS, OS, CN, OOP, core subjects, etc.)?";
+        newAnswers.difficulty = userMsg;
+        newStage = 'key_topics';
+        nextAssistantMsg = "Which topics were asked the most (DSA, DBMS, OS, CN, OOP, core subjects, etc.)?";
       }
       else if (chatStage === 'key_topics') {
-         newAnswers.keyTopics = userMsg;
-         newStage = 'coding_specifics';
-         nextAssistantMsg = "Share coding specifics: question patterns, expected approach, constraints, and any optimizations discussed.";
+        newAnswers.keyTopics = userMsg;
+        newStage = 'coding_specifics';
+        nextAssistantMsg = "Share coding specifics: question patterns, expected approach, constraints, and any optimizations discussed.";
       }
       else if (chatStage === 'coding_specifics') {
-         newAnswers.codingSpecifics = userMsg;
-         newStage = 'interview_focus';
-         nextAssistantMsg = "What did interviewers focus on more: problem-solving, fundamentals, projects, communication, or all equally?";
+        newAnswers.codingSpecifics = userMsg;
+        newStage = 'interview_focus';
+        nextAssistantMsg = "What did interviewers focus on more: problem-solving, fundamentals, projects, communication, or all equally?";
       }
       else if (chatStage === 'interview_focus') {
-         newAnswers.interviewFocus = userMsg;
-         newStage = 'project_deep_dive';
-         nextAssistantMsg = "Any project deep-dive questions (architecture, trade-offs, scalability, debugging)?";
+        newAnswers.interviewFocus = userMsg;
+        newStage = 'project_deep_dive';
+        nextAssistantMsg = "Any project deep-dive questions (architecture, trade-offs, scalability, debugging)?";
       }
       else if (chatStage === 'project_deep_dive') {
-         newAnswers.projectDeepDive = userMsg;
-         newStage = 'hr_behavioral';
-         nextAssistantMsg = "What HR/behavioral questions came up, and which answers worked well for you?";
+        newAnswers.projectDeepDive = userMsg;
+        newStage = 'hr_behavioral';
+        nextAssistantMsg = "What HR/behavioral questions came up, and which answers worked well for you?";
       }
       else if (chatStage === 'hr_behavioral') {
-         newAnswers.hrBehavioral = userMsg;
-         newStage = 'unexpected';
-         nextAssistantMsg = "Any surprise or tricky moments, and how did you handle them?";
+        newAnswers.hrBehavioral = userMsg;
+        newStage = 'unexpected';
+        nextAssistantMsg = "Any surprise or tricky moments, and how did you handle them?";
       }
       else if (chatStage === 'unexpected') {
-         newAnswers.unexpected = userMsg;
-         newStage = 'mistakes';
-         nextAssistantMsg = "What common mistakes should juniors avoid in this process?";
+        newAnswers.unexpected = userMsg;
+        newStage = 'mistakes';
+        nextAssistantMsg = "What common mistakes should juniors avoid in this process?";
       }
       else if (chatStage === 'mistakes') {
-         newAnswers.mistakesToAvoid = userMsg;
-         newStage = 'prep_strategy';
-         nextAssistantMsg = "What preparation strategy/resources helped most (platforms, sheets, mock interviews, timelines)?";
+        newAnswers.mistakesToAvoid = userMsg;
+        newStage = 'prep_strategy';
+        nextAssistantMsg = "What preparation strategy/resources helped most (platforms, sheets, mock interviews, timelines)?";
       }
       else if (chatStage === 'prep_strategy') {
-         newAnswers.prepStrategy = userMsg;
-         newStage = 'seven_day_plan';
-         nextAssistantMsg = "If someone has only 7 days, what should they prioritize day-wise or topic-wise?";
+        newAnswers.prepStrategy = userMsg;
+        newStage = 'seven_day_plan';
+        nextAssistantMsg = "If someone has only 7 days, what should they prioritize day-wise or topic-wise?";
       }
       else if (chatStage === 'seven_day_plan') {
-         newAnswers.sevenDayPlan = userMsg;
-         newStage = 'offer_details';
-         nextAssistantMsg = "Optional: share offer details if comfortable (role type, location, package range). You can type 'skip' too.";
+        newAnswers.sevenDayPlan = userMsg;
+        newStage = 'offer_details';
+        nextAssistantMsg = "Optional: share offer details if comfortable (role type, location, package range). You can type 'skip' too.";
       }
       else if (chatStage === 'offer_details') {
-         newAnswers.offerDetails = userMsg;
-         newStage = 'verdict';
-         nextAssistantMsg = "Finally, what was the final verdict (Selected/Rejected/Waitlisted), and your top tips for future students?";
+        newAnswers.offerDetails = userMsg;
+        newStage = 'verdict';
+        nextAssistantMsg = "Finally, what was the final verdict (Selected/Rejected/Waitlisted), and your top tips for future students?";
       }
       else if (chatStage === 'verdict') {
-         newAnswers.verdictAndTips = userMsg;
-         newStage = 'generating';
-         nextAssistantMsg = "All done! Give me a second while I format your experience perfectly using AI...";
+        newAnswers.verdictAndTips = userMsg;
+        newStage = 'generating';
+        nextAssistantMsg = "All done! Give me a second while I format your experience perfectly using AI...";
       }
 
       setChatAnswers(newAnswers);
@@ -719,8 +719,8 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
       setIsGenerating(false);
 
       if (newStage === 'generating') {
-         setChatStage('done');
-         generateFromAPI(newAnswers); // Calls API
+        setChatStage('done');
+        generateFromAPI(newAnswers); // Calls API
       }
     }, 600);
   };
@@ -745,7 +745,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
 
       <div className={`relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -759,7 +759,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
             <h1 className="mb-3 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-6 sm:text-5xl lg:text-6xl">
               Share Your Journey
             </h1>
-            <p className="mx-auto px-1 text-[13px] leading-relaxed text-slate-600 dark:text-slate-300 sm:px-0 sm:text-base">
+            <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
               Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
             </p>
           </div>
@@ -805,7 +805,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
-                {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+                {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
 
@@ -831,7 +831,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
                 </div>
-                {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+                {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
 
@@ -867,7 +867,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                     className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                   />
                 )}
-                {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+                {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
 
@@ -903,14 +903,14 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                     className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                   />
                 )}
-                {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Required</p>}
+                {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
           </div>
 
           <AnimatePresence>
             {successMessage && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -941,10 +941,10 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                     >
                       <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
                     </button>
-                    
+
                     {/* Animated pill background */}
-                    <div 
-                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out dark:bg-slate-900 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
+                    <div
+                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out dark:bg-slate-900 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`}
                       style={{
                         border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.1)' : '1px solid rgba(226, 232, 240, 0.4)'
                       }}
@@ -985,10 +985,10 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
               </div>
             </div>
             <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/75 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)]">
-              
+
               {/* AI Prompt Area */}
               {mode === 'ai' && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/50 dark:bg-slate-900/80"
@@ -1007,7 +1007,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                   </div>
 
                   {/* Chat messages area */}
-                   <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-none sm:p-8">
+                  <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-none sm:p-8">
                     {chatMessages.map((msg, index) => (
                       <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -1028,25 +1028,25 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                         </div>
                       </motion.div>
                     ))}
-                    
+
                     {/* Loader for typing / processing */}
                     {isGenerating && (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="flex w-full justify-start"
                       >
-                         <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
-                             <Bot className="w-4 h-4 text-indigo-600" />
-                         </div>
-                         <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/60 bg-white px-6 py-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                           <div className="flex items-center gap-1.5">
-                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
-                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
-                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
-                           </div>
-                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Processing response...</p>
-                         </div>
+                        <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
+                          <Bot className="w-4 h-4 text-indigo-600" />
+                        </div>
+                        <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/60 bg-white px-6 py-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                          <div className="flex items-center gap-1.5">
+                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                          </div>
+                          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Processing response...</p>
+                        </div>
                       </motion.div>
                     )}
                   </div>

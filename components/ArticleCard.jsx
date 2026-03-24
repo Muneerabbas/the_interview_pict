@@ -32,25 +32,14 @@ const ArticleCard = ({ article }) => {
             <h3 className="truncate text-base font-bold text-slate-900 dark:text-slate-100">
               {displayName}
             </h3>
-            <p className="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">Interview Experience</p>
-
-            <div className="mt-3 grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
-              <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50/85 px-2.5 py-1.5 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300">
-                <Building2 size={13} className="text-blue-600 dark:text-cyan-300" />
-                <span className="truncate">{company || "Company not shared"}</span>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50/85 px-2.5 py-1.5 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300">
-                <Briefcase size={13} className="text-blue-600 dark:text-cyan-300" />
-                <span className="truncate">{role || "Role not shared"}</span>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50/85 px-2.5 py-1.5 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300">
-                <GraduationCap size={13} className="text-blue-600 dark:text-cyan-300" />
-                <span className="truncate">{branch} {batch}</span>
-              </div>
-              <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50/85 px-2.5 py-1.5 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300">
-                <CalendarDays size={13} className="text-blue-600 dark:text-cyan-300" />
-                <span className="truncate">{formattedDate}</span>
-              </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px] font-medium text-slate-500 dark:text-slate-400">
+              <span className="truncate">{company}</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="truncate">{role}</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="truncate">{branch} {batch}</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="truncate">{formattedDate}</span>
             </div>
           </div>
         </div>

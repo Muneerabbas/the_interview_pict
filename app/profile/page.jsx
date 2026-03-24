@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Mail, PlusCircle, Loader2 } from 'lucide-react';
+import { Mail, PlusCircle, Loader2, FileText, CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
@@ -131,7 +131,8 @@ const ProfilePage = () => {
         <div className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/88 dark:bg-slate-800/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
           <div className="flex flex-col items-center gap-6 md:flex-row">
             <div className="relative group">
-              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.15)] transition-all duration-300 group-hover:scale-105">
+              {/* Ring highlight on avatar */}
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white ring-2 ring-blue-500/40 dark:border-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.15)] transition-all duration-300 group-hover:scale-105 dark:ring-blue-400/30">
                 <ProfileAvatar
                   src={profile_pic}
                   alt="Profile"
@@ -143,7 +144,20 @@ const ProfilePage = () => {
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white transition-colors duration-500">{name}</h1>
               <div className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white/85 dark:bg-slate-800 px-4 py-2 text-slate-700 dark:text-slate-300 shadow-sm md:justify-start transition-colors duration-500">
                 <Mail size={16} className="text-blue-600 dark:text-blue-400" />
-                <span>{email}</span>
+                <span className="text-sm">{email.replace(/(?<=.{2}).(?=[^@]*@)/g, '•')}</span>
+              </div>
+              {/* Meta chips */}
+              <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+                {!loadingPosts && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:border-blue-800/50 dark:bg-blue-950/40 dark:text-blue-300">
+                    <FileText size={12} />
+                    {posts.length} {posts.length === 1 ? 'Experience' : 'Experiences'}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+                  <CalendarDays size={12} />
+                  Member since {new Date().getFullYear()}
+                </span>
               </div>
               <p className="max-w-xl text-sm text-slate-600 dark:text-slate-400 transition-colors duration-500">
                 Track your interview posts and keep helping juniors prepare better.
@@ -160,11 +174,14 @@ const ProfilePage = () => {
           <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4 transition-colors duration-500">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white sm:text-xl md:text-2xl transition-colors duration-500">
-                Your Experiences
+                Your Experiences{!loadingPosts && posts.length > 0 && <span className="ml-2 text-base font-semibold text-blue-600 dark:text-blue-400">({posts.length})</span>}
               </h2>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 sm:text-sm transition-colors duration-500">
-                Total: <span className="font-semibold text-slate-700 dark:text-slate-300">{posts.length}</span>
-              </p>
+              {/* BUG FIX: only show count when done loading */}
+              {!loadingPosts && (
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 sm:text-sm transition-colors duration-500">
+                  Total: <span className="font-semibold text-slate-700 dark:text-slate-300">{posts.length}</span>
+                </p>
+              )}
             </div>
             {posts.length > 0 && !loadingPosts && (
               <Link href="/post">
@@ -186,8 +203,8 @@ const ProfilePage = () => {
           ) : posts.length === 0 ? (
             <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm sm:p-10 transition-colors duration-500">
               <div className="mx-auto max-w-2xl text-center">
-                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-100 dark:border-blue-900/50 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 text-blue-600 dark:text-blue-400 transition-colors duration-500">
-                  <PlusCircle size={28} />
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-100 dark:border-blue-900/50 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 text-blue-600 dark:text-blue-400 transition-colors duration-500">
+                  <FileText size={24} />
                 </div>
                 <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white sm:text-2xl transition-colors duration-500">No experiences shared yet</h3>
                 <p className="mb-7 text-sm text-slate-500 dark:text-slate-400 sm:text-base transition-colors duration-500">
@@ -195,7 +212,7 @@ const ProfilePage = () => {
                 </p>
                 <div className="flex justify-center">
                   <Link href="/post">
-                    <button className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:-translate-y-[0.5px] hover:from-blue-700 hover:to-indigo-700 sm:px-7 sm:py-3">
+                    <button className="inline-flex items-center gap-2.5 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-300 hover:-translate-y-[0.5px] hover:bg-blue-700 active:scale-95 sm:px-7">
                       <PlusCircle size={17} />
                       <span>Share Your First Experience</span>
                     </button>

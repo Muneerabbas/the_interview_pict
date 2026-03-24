@@ -166,7 +166,7 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300"
                     : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/90 dark:hover:text-slate-100",
                 ].join(" ")
-              }
+                }
               >
                 <Icon
                   size={18}

@@ -99,25 +99,25 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   return (
     <Link
       href={readPath}
-      className={`${width} group relative mx-auto block overflow-hidden rounded-3xl border border-slate-200/85 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_42px_rgba(37,99,235,0.16)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_38px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_48px_rgba(8,145,178,0.22)]`}
+      className={`${width} group relative mx-auto block overflow-hidden rounded-2xl border border-slate-200/85 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]`}
       prefetch={true}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_92%_8%,rgba(59,130,246,0.12),transparent_42%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-[radial-gradient(circle_at_92%_8%,rgba(34,211,238,0.2),transparent_46%)]" />
-      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500" />
+      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <div className="relative p-4 sm:p-6">
-        <div className="flex flex-col items-start justify-between gap-4 border-b border-slate-100 pb-4 dark:border-slate-700/80 sm:flex-row sm:items-center">
-          <div className="flex w-full min-w-0 items-center gap-3 sm:w-auto">
-            <div className="relative shrink-0">
+      <div className="relative p-4 sm:p-5">
+        {/* Header Row: Avatar + Info (Left) | Stats (Right) */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="relative shrink-0 mt-0.5">
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
               {profilePic ? (
                 <ProfileAvatar
                   src={profilePic}
                   alt="Profile"
-                  className="relative z-10 h-12 w-12 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 sm:h-14 sm:w-14"
+                  className="relative z-10 h-11 w-11 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12"
                 />
               ) : (
-                <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-700 text-lg font-bold text-white ring-2 ring-white dark:ring-slate-900 sm:h-14 sm:w-14 sm:text-xl">
+                <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-700 text-base font-bold text-white ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12 sm:text-lg">
                   {profileName.charAt(0).toUpperCase() || "S"}
                 </div>
               )}
@@ -127,36 +127,50 @@ const FeedCard = ({ profile, width = "w-full" }) => {
               <h2 className="line-clamp-1 text-base font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[17px]">
                 {profileName || "Anonymous Candidate"}
               </h2>
-              <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:gap-2 sm:text-xs">
-                <span className="inline-flex items-center gap-1">
-                  <Clock size={12} className="text-slate-400 dark:text-slate-500" />
-                  {formattedDate}
-                </span>
+              <div className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:text-xs">
+                <Clock size={11} className="text-slate-400 dark:text-slate-500" />
+                {formattedDate}
                 {isToday && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300 sm:text-[11px]">
-                    <Sparkles size={10} />
+                  <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+                    <Sparkles size={9} />
                     Fresh
                   </span>
                 )}
               </div>
+
+              {/* Tags: Tucked directly beneath Info */}
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                <div className="ui-tag ui-tag-company inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+                  <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
+                  <span className="truncate">{companyName}</span>
+                </div>
+                <div className="ui-tag ui-tag-role inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+                  <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />
+                  <span className="truncate">{roleName}</span>
+                </div>
+                <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+                  <GraduationCap size={11} strokeWidth={2.5} className="shrink-0" />
+                  <span className="truncate">{branchAndBatch}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
-            <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-              <Eye size={13} />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200/60 bg-slate-50/50 px-2 py-0.5 text-[11px] font-semibold text-slate-500 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400">
+              <Eye size={12} />
               {totalViews}
             </div>
 
             <button
               onClick={handleLike}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold transition-all duration-200 ${isLiked
-                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/45 dark:bg-pink-950/35 dark:text-pink-300"
-                : "border-slate-200 bg-white text-slate-500 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-pink-500/45 dark:hover:bg-pink-950/30 dark:hover:text-pink-300"
+              className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold transition-all duration-200 ${isLiked
+                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/35 dark:bg-pink-950/25 dark:text-pink-300"
+                : "border-slate-200/60 bg-white text-slate-400 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500 dark:border-slate-700/50 dark:bg-slate-900/40 dark:text-slate-500 dark:hover:border-pink-500/35 dark:hover:text-pink-300"
                 }`}
             >
               <Heart
-                size={13}
+                size={12}
                 className={`transition-transform duration-200 ${isLiked ? "scale-110 fill-pink-500" : "group-hover/heart:scale-110"}`}
               />
               {likes.length}
@@ -164,41 +178,30 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <div className="inline-flex max-w-full items-center gap-1.5 rounded-xl border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300">
-            <Building2 size={13} strokeWidth={2.5} className="shrink-0" />
-            <span className="truncate">{companyName}</span>
-          </div>
-          <div className="inline-flex max-w-full items-center gap-1.5 rounded-xl border border-violet-100 bg-violet-50 px-3 py-1.5 text-xs font-bold text-violet-700 dark:border-violet-500/35 dark:bg-violet-950/35 dark:text-violet-300">
-            <Briefcase size={13} strokeWidth={2.5} className="shrink-0" />
-            <span className="truncate">{roleName}</span>
-          </div>
-          <div className="inline-flex max-w-full items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            <GraduationCap size={13} strokeWidth={2.5} className="shrink-0" />
-            <span className="truncate">{branchAndBatch}</span>
-          </div>
-        </div>
-
-        <div className="mt-4 rounded-[14px] border border-slate-100 bg-slate-50/80 p-2.5 dark:border-slate-700 dark:bg-slate-800/80 sm:rounded-2xl sm:p-4">
-          <div className="mb-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400 sm:mb-2 sm:text-[11px] sm:text-xs">
-            <Quote size={12} className="sm:w-[13px] sm:h-[13px]" />
+        {/* Content Zone: Experience Snapshot */}
+        <div className="mt-4">
+          <div className="mb-0.5 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500 opacity-60">
             Experience Snapshot
           </div>
-          <p className="line-clamp-2 text-[13px] leading-[1.6] text-slate-600 dark:text-slate-300 sm:line-clamp-4 sm:text-[15px] sm:leading-7 sm:text-slate-700">{previewText}</p>
+          <div className="border-l-3 border-blue-600 pl-4 transition-colors group-hover:border-blue-500 dark:border-blue-500/60 dark:group-hover:border-blue-400">
+            <p className="line-clamp-3 text-[14px] leading-[1.65] text-slate-600 dark:text-slate-300">
+              {previewText}
+            </p>
+          </div>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 dark:border-slate-700/80 sm:mt-5">
-          <div className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500 sm:text-xs">
-            <ArrowUpRight size={14} />
-            {readTime} min read
+        {/* Footer Row: Read Time | Action Link */}
+        <div className="mt-4 flex items-center justify-between gap-3 sm:mt-4.5">
+          <div className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-400/80 dark:text-slate-500/80">
+            ✦ {readTime} MIN READ
           </div>
-          <div className="inline-flex items-center text-[13px] font-bold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200 sm:text-sm">
+          <div className="inline-flex items-center text-[12.5px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
             <span>Read full experience</span>
-            <ChevronRight size={16} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1 sm:ml-1" />
+            <ChevronRight size={15} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
           </div>
         </div>
       </div>
-    </Link>
+    </Link >
   );
 };
 

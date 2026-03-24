@@ -33,11 +33,8 @@ export default function TeamMemberCard({
 
   return (
     <article
-      style={{ minHeight, backgroundColor: "#0f172a" }}
-      className={[
-        "group relative isolate w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/70 bg-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_90px_rgba(15,23,42,0.24)]",
-        featured ? "min-h-[22rem]" : "min-h-[28rem]",
-      ].join(" ")}
+      style={{ minHeight: "26rem", backgroundColor: "#0f172a" }}
+      className="group relative isolate w-full max-w-[20rem] overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_90px_rgba(15,23,42,0.28)]"
     >
       <div className="absolute inset-0">
         <Image
@@ -52,23 +49,16 @@ export default function TeamMemberCard({
         />
       </div>
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.08)_0%,rgba(15,23,42,0.28)_35%,rgba(2,6,23,0.92)_100%)]" />
-      <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.35),transparent_70%)] opacity-0 transition duration-500 group-hover:opacity-100" />
+      {/* Stronger gradient — ensures name is always readable */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.05)_0%,rgba(15,23,42,0.35)_40%,rgba(2,6,23,0.97)_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.25),transparent_70%)] opacity-0 transition duration-500 group-hover:opacity-100" />
 
       <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-7">
         <div className="translate-y-4 transition duration-500 group-hover:translate-y-0">
-          <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.24em] text-sky-100">
-            Team
-          </div>
-          <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">
+          <h3 className="text-xl font-semibold tracking-tight text-white">
             {name}
           </h3>
-          {!!hoverDetail && (
-            <p className="mt-1 max-w-xs text-xs font-medium tracking-wide text-sky-100/80 transition duration-500 group-hover:text-sky-100">
-              {hoverDetail}
-            </p>
-          )}
-          <p className="mt-2 max-w-xs text-sm leading-6 text-slate-200">
+          <p className="mt-1 max-w-xs text-[13px] leading-5 text-slate-300">
             {subtitle}
           </p>
         </div>

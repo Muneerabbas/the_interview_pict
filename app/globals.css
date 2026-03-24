@@ -124,12 +124,95 @@
   }
 }
 
-body {
-  font-size: 15.5px;
-  line-height: 1.7;
-  letter-spacing: 0.01em;
-  font-weight: 400;
+/* ============================================================
+   DESIGN TOKENS — Global UI Polish
+   ============================================================ */
+:root {
+  /* Typography */
+  --ui-font-size-body: 15.5px;
+  --ui-line-height-body: 1.7;
+  --ui-letter-spacing: 0.01em;
+  --ui-line-height-heading: 1.15;
+  --ui-letter-spacing-heading: -0.01em;
+
+  /* Text Colors (light) */
+  --ui-text-primary: #111827;
+  /* replaces pure #000 */
+  --ui-text-secondary: #374151;
+  --ui-text-muted: #6B7280;
+
+  /* Light Mode backgrounds */
+  --ui-bg-app: #F4F6FB;
+  /* main page background */
+  --ui-bg-card: #FFFFFF;
+  /* card surfaces */
+  --ui-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.07), 0 6px 18px rgba(15, 23, 42, 0.05);
+
+  /* Accent Blue */
+  --ui-accent: #2563EB;
+  --ui-accent-hover: #1D4ED8;
+
+  /* Light borders */
+  --ui-border: rgba(37, 39, 45, 0.10);
 }
+
+/* Dark mode overrides */
+.dark {
+  --ui-text-primary: #F1F5F9;
+  /* replaces pure #FFF */
+  --ui-text-secondary: #CBD5E1;
+  --ui-text-muted: #94A3B8;
+
+  --ui-bg-app: #0D1117;
+  --ui-bg-card: #1C2230;
+  --ui-shadow-card: 0 1px 4px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+
+  --ui-border: #2A3347;
+}
+
+/* ============================================================
+   GLOBAL TYPOGRAPHY
+   ============================================================ */
+body {
+  font-size: var(--ui-font-size-body);
+  line-height: var(--ui-line-height-body);
+  letter-spacing: var(--ui-letter-spacing);
+  font-weight: 400;
+  color: var(--ui-text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--ui-line-height-heading);
+  letter-spacing: var(--ui-letter-spacing-heading);
+  color: var(--ui-text-primary);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
+/* Secondary labels (e.g. badges, captions) */
+label,
+caption,
+figcaption,
+.text-secondary-label {
+  font-weight: 500;
+  color: var(--ui-text-secondary);
+}
+
 
 body.landing-light {
   background-color: #f8fafc;
@@ -352,4 +435,113 @@ small {
   html {
     @apply font-sans;
   }
+}
+
+/* ============================================================
+   CARD UTILITIES
+   ============================================================ */
+.ui-card {
+  border-radius: 15px;
+  padding: 22px;
+  background-color: var(--ui-bg-card, #ffffff);
+  border: 1px solid var(--ui-border, rgba(37, 39, 45, 0.10));
+  box-shadow: var(--ui-shadow-card, 0 1px 3px rgba(15, 23, 42, 0.07), 0 6px 18px rgba(15, 23, 42, 0.05));
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+/* 3‑px top accent bar (blue → teal) */
+.ui-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563EB, #0891b2);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 15px 15px 0 0;
+}
+
+.ui-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.08), 0 16px 36px rgba(15, 23, 42, 0.1);
+}
+
+.ui-card:hover::before {
+  opacity: 1;
+}
+
+/* ============================================================
+   TAG / CHIP UTILITIES
+   ============================================================ */
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Company tag — blue tint */
+.ui-tag-company {
+  background-color: rgba(37, 99, 235, 0.10);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
+/* Role tag — neutral */
+.ui-tag-role {
+  background-color: rgba(100, 116, 139, 0.10);
+  color: #475569;
+  border-color: rgba(100, 116, 139, 0.20);
+}
+
+/* Batch/year tag — teal tint */
+.ui-tag-batch {
+  background-color: rgba(8, 145, 178, 0.10);
+  color: #0e7490;
+  border-color: rgba(8, 145, 178, 0.22);
+}
+
+/* Dark mode overrides */
+.dark .ui-tag-company {
+  background-color: rgba(37, 99, 235, 0.18);
+  color: #93c5fd;
+  border-color: rgba(37, 99, 235, 0.34);
+}
+
+.dark .ui-tag-role {
+  background-color: rgba(100, 116, 139, 0.18);
+  color: #94a3b8;
+  border-color: rgba(100, 116, 139, 0.30);
+}
+
+
+/* ============================================================
+   GLOBAL GRID BACKGROUND — reduced to 2-5% opacity
+   ============================================================ */
+/* Soften all bg-grid patterns sitewide: override the inline opacity
+   by targeting the pointer-events-none overlay divs. */
+.grid-quiet {
+  opacity: 0.03;
+}
+
+.dark .grid-quiet {
+  opacity: 0.06;
+}
+
+/* Auto-apply to the standard grid pattern divs across all pages */
+[class*="bg-[linear-gradient(to_right,rgba(148,163,184,0.18)"] {
+  --tw-bg-opacity: 1;
+  opacity: 0.35 !important;
+}
+
+[class*="bg-[linear-gradient(to_right,rgba(51,65,85,0.45)"] {
+  opacity: 0.45 !important;
 }

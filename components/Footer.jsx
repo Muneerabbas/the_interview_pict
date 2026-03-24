@@ -54,7 +54,7 @@ export default function Footer({ isLandingPage = false }) {
       {/* Decorative background blurs */}
       <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-blue-100/50 blur-[120px] dark:bg-cyan-900/20" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-indigo-100/50 blur-[120px] dark:bg-indigo-900/20" />
-      
+
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
           {/* Brand & Socials (takes more space) */}
@@ -76,12 +76,12 @@ export default function Footer({ isLandingPage = false }) {
                 { icon: Linkedin, href: "#" },
                 { icon: Instagram, href: "#" }
               ].map((social, idx) => (
-                <a 
-                  key={idx} 
-                  href={social.href} 
+                <a
+                  key={idx}
+                  href={social.href}
                   className="group flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-cyan-300"
                 >
-                  <social.icon size={18} className="transition-transform group-hover:scale-110" />
+                  <social.icon size={20} className="transition-transform group-hover:scale-110" />
                 </a>
               ))}
             </div>
@@ -122,7 +122,7 @@ export default function Footer({ isLandingPage = false }) {
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-cyan-300 dark:group-hover:bg-slate-700">
                   <MapPin size={16} />
                 </div>
-                <span className="leading-relaxed">PICT, Pune, <br/>Maharashtra 411045</span>
+                <span className="leading-relaxed">PICT, Pune, <br />Maharashtra 411045</span>
               </a>
               <a
                 href="mailto:hello@theinterview.com"
@@ -131,7 +131,10 @@ export default function Footer({ isLandingPage = false }) {
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-cyan-300 dark:group-hover:bg-slate-700">
                   <Mail size={16} />
                 </div>
-                <span>hello@theinterview.com</span>
+                <span className="relative overflow-hidden">
+                  hello@theinterview.com
+                  <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-cyan-300"></span>
+                </span>
               </a>
             </div>
           </div>

@@ -131,27 +131,28 @@ const Aboutus = () => {
               <div className="absolute bg-blue-100 rounded-full w-12 h-12 opacity-40 animate-bubble4" style={{ bottom: '-10%', left: '30%' }} />
               {/* Added Bubbles */}
               <div className="absolute bg-blue-100 rounded-full w-20 h-20 opacity-40 animate-bubble2" style={{ top: '30%', left: '20%', animationDelay: '2s' }} />
-              <div className="absolute bg-blue-100 rounded-full w-10 h-10 opacity-40 animate-bubble1" style={{ bottom: '25%', left: '5%' , animationDelay: '4s'}} />
+              <div className="absolute bg-blue-100 rounded-full w-10 h-10 opacity-40 animate-bubble1" style={{ bottom: '25%', left: '5%', animationDelay: '4s' }} />
               <div className="absolute bg-blue-100 rounded-full w-18 h-18 opacity-40 animate-bubble3" style={{ top: '5%', right: '30%', animationDelay: '3s' }} />
             </div>
 
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center relative z-20">Our Story</h2>
-            <div className="space-y-5 text-gray-700 relative z-20">
-              <p className="leading-relaxed text-lg">
-                We all know that preparing for job interviews can be a daunting task <span role="img" aria-label="grimacing face">😬</span>. But what if there was a way to make it a little easier <span role="img" aria-label="slightly smiling face">🙂</span>? That's when the idea for our website came to life <span role="img" aria-label="light bulb">💡</span>.
+            <div className="mx-auto max-w-[640px] space-y-5 text-gray-700 relative z-20">
+              <p className="text-[16px] leading-[1.75]">
+                We all know that preparing for job interviews can be a daunting task 😬. But what if there was a way to make it a little easier? That's when the idea for our website came to life 💡.
               </p>
-              <p className="leading-relaxed text-lg">
-                As we navigated through our own job search journeys, we realized one thing: there was a huge gap <span role="img" aria-label="warning">⚠️</span> in resources that focused on real, firsthand interview experiences. Sure, you can find advice on how to answer questions, but what about the actual experience? What's the atmosphere like? What kind of questions do companies ask? What should you expect during the process?
+              <p className="text-[16px] leading-[1.75]">
+                As we navigated through our own job search journeys, we realized one thing: there was a huge gap in resources that focused on real, firsthand interview experiences. Sure, you can find advice on how to answer questions, but what about the actual experience? What's the atmosphere like? What kind of questions do companies ask? What should you expect during the process?
               </p>
-              <p className="leading-relaxed text-lg">
-                So, we decided to create a platform where people could share their unique interview experiences—no filters, no sugarcoating <span role="img" aria-label="no filter">🚫</span>.
+              <p className="text-[16px] leading-[1.75]">
+                So, we decided to create a platform where people could share their unique interview experiences—no filters, no sugarcoating 🚫.
               </p>
-              <p className="leading-relaxed text-lg">
-                Through our website, we hope to build a community of people supporting each other <span role="img" aria-label="people holding hands">🤝</span>, sharing knowledge, and making the interview process a little less intimidating <span role="img" aria-label="relieved face">😌</span>. Because we believe that understanding the process is just as important as preparing the answers.
+              <p className="text-[16px] leading-[1.75]">
+                Through our website, we hope to build a community of people supporting each other 🤝, sharing knowledge, and making the interview process a little less intimidating. Because we believe that understanding the process is just as important as preparing the answers.
               </p>
-              <p className="leading-relaxed text-lg font-semibold text-center mt-4">
-                By the students for the students <span role="img" aria-label="student">🧑‍🎓</span> <span role="img" aria-label="student">🧑‍🎓</span>
-              </p>
+              {/* Pull-quote tagline */}
+              <blockquote className="border-l-4 border-blue-500 bg-blue-50 pl-4 py-2 pr-3 rounded-r-xl mt-6">
+                <p className="text-[16px] leading-[1.75] font-semibold italic text-blue-800">By the students, for the students 🧑‍🎓</p>
+              </blockquote>
             </div>
           </section>
         </div>

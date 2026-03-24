@@ -1,18 +1,37 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { github, atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import CloudinaryImage from "@/components/CloudinaryImage";
 
 const MarkdownRenderer = ({ content }) => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+    checkTheme();
+
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"]
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const components = {
-    h1: ({ children }) => <h1 className="mb-6 mt-2 border-b border-slate-200 pb-4 text-[1.9rem] font-black leading-tight tracking-tight text-slate-900 dark:border-slate-700 dark:text-slate-100 sm:text-[2.2rem]">{children}</h1>,
-    h2: ({ children }) => <h2 className="mb-4 mt-8 border-b border-slate-200 pb-3 text-[1.45rem] font-extrabold leading-tight text-slate-900 dark:border-slate-700 dark:text-slate-100 sm:text-[1.6rem]">{children}</h2>,
-    h3: ({ children }) => <h3 className="mb-3 mt-7 text-[1.15rem] font-bold leading-tight text-slate-900 dark:text-slate-100 sm:text-[1.25rem]">{children}</h3>,
-    h4: ({ children }) => <h4 className="mb-2 mt-6 text-[1rem] font-semibold leading-tight text-slate-900 dark:text-slate-100">{children}</h4>,
-    p: ({ children }) => <p className="mb-5 text-[15px] leading-8 text-slate-700 dark:text-slate-300 sm:text-base">{children}</p>,
+    h1: ({ children }) => <h1 className="mb-6 mt-2 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
+    h2: ({ children }) => <h2 className="mb-3 mt-12 text-[1.35rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
+    h3: ({ children }) => <h3 className="mb-2 mt-8 text-[1.125rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
+    h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
+    p: ({ children }) => <p className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</p>,
     strong: ({ children }) => <strong className="font-semibold text-slate-900 dark:text-slate-100">{children}</strong>,
     em: ({ children }) => <em className="font-medium text-slate-700 dark:text-slate-300">{children}</em>,
     a: ({ href, children }) => (
@@ -25,11 +44,11 @@ const MarkdownRenderer = ({ content }) => {
         {children}
       </a>
     ),
-    ul: ({ children }) => <ul className="mb-5 list-disc space-y-2 pl-6 text-slate-700 marker:text-blue-500 dark:text-slate-300 dark:marker:text-cyan-300">{children}</ul>,
+    ul: ({ children }) => <ul className="mb-6 list-disc space-y-2 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:text-blue-500 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ul>,
     ol: ({ children }) => (
-      <ol className="mb-5 list-decimal space-y-2 pl-6 text-slate-700 marker:font-semibold marker:text-blue-600 dark:text-slate-300 dark:marker:text-cyan-300">{children}</ol>
+      <ol className="mb-6 list-decimal space-y-2 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:font-semibold marker:text-blue-600 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ol>
     ),
-    li: ({ children }) => <li className="leading-7">{children}</li>,
+    li: ({ children }) => <li className="leading-[1.75]">{children}</li>,
     blockquote: ({ children }) => (
       <blockquote className="my-6 rounded-xl border-l-4 border-blue-500 bg-blue-50/70 px-4 py-3 text-slate-700 dark:border-cyan-400 dark:bg-cyan-950/30 dark:text-slate-300">
         <div className="text-[15px] leading-7 sm:text-base">{children}</div>
@@ -40,20 +59,22 @@ const MarkdownRenderer = ({ content }) => {
       if (!inline) {
         const lang = match?.[1] || "code";
         return (
-          <div className="my-6 overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
-            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+          <div className="my-6 overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-800">
+            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
               {lang}
             </div>
             <SyntaxHighlighter
               language={match?.[1] || "text"}
-              style={github}
+              style={isDarkMode ? atomOneDark : github}
               customStyle={{
                 margin: 0,
                 borderRadius: 0,
-                background: "#f8fafc",
+                background: "transparent",
                 padding: "14px 16px",
-                fontSize: "13px",
+                fontSize: "13.5px",
+                lineHeight: "1.6",
               }}
+              className={isDarkMode ? "!bg-[#0f172a]" : "!bg-[#f8fafc]"}
               showLineNumbers
               {...props}
             >
@@ -100,7 +121,7 @@ const MarkdownRenderer = ({ content }) => {
   };
 
   return (
-    <div className="markdown-container mx-auto max-w-[900px] px-2 pb-2 sm:px-3">
+    <div className="markdown-container mx-auto max-w-[700px] px-2 pb-2 sm:px-4">
       <ReactMarkdown components={components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
         {content}
       </ReactMarkdown>

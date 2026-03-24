@@ -11,9 +11,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const LoadingScreen = ({ isDarkMode }) => (
   <div
-    className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center backdrop-blur-sm ${
-      isDarkMode ? "bg-slate-950/80" : "bg-white/80"
-    }`}
+    className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center backdrop-blur-sm ${isDarkMode ? "bg-slate-950/80" : "bg-white/80"
+      }`}
   >
     <Loader2 className={`h-10 w-10 animate-spin ${isDarkMode ? "text-cyan-300" : "text-blue-600"}`} />
   </div>
@@ -102,24 +101,42 @@ export default function HomePage() {
   };
 
   return (
-    <main
-      className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] pt-5 font-sans dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)] md:pt-20"
-    >
+    <main className="relative min-h-screen overflow-x-clip font-sans bg-transparent">
+      {/* Fixed Premium Background Layer */}
+      <div className="fixed inset-0 -z-30 bg-[#f8fbff] dark:bg-[#020617]">
+        {/* Base Gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]" />
+      </div>
+
+      {/* Glow Layer */}
+      <div className="fixed inset-0 -z-20 pointer-events-none">
+        <div className="absolute left-[-140px] top-24 h-[400px] w-[400px] rounded-full bg-sky-300/20 blur-[120px] dark:bg-sky-500/15" />
+        <div className="absolute right-[-120px] top-[320px] h-[400px] w-[400px] rounded-full bg-indigo-300/20 blur-[120px] dark:bg-indigo-500/15" />
+      </div>
+
+      {/* Grid layer - matching Companies tab style */}
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]"
+        style={{
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
+          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
+        }}
+      />
+
+      {/* Center Reading Track */}
+      <div className="fixed inset-y-0 left-1/2 w-full max-w-[800px] -translate-x-1/2 -z-10 bg-slate-100/10 dark:bg-slate-900/20 pointer-events-none" />
+
       <Navbar showThemeToggle isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode((prev) => !prev)} />
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
 
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-500/20" />
-      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-500/20" />
-
-      <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6">
+      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
         <div className="mb-6 flex justify-end">
           <Link
             href="/post"
             onClick={handleShareExperienceClick}
             prefetch={true}
             scroll={false}
-            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 hover:shadow-blue-600/30 dark:bg-cyan-500 dark:shadow-cyan-900/40 dark:hover:bg-cyan-400"
+            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/35 transition hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-blue-500/50 active:scale-95 dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400"
           >
             <Send className="h-4 w-4" />
             Post Your Story
@@ -133,13 +150,13 @@ export default function HomePage() {
               <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">Latest Experiences</h2>
               <p className="text-sm text-slate-500 dark:text-slate-400">Newest stories first, with live loading.</p>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:border-emerald-500/35 dark:bg-emerald-950/30 dark:text-emerald-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-teal-300/60 bg-teal-500 px-3 py-1 text-xs font-semibold text-white shadow-sm dark:border-teal-400/40 dark:bg-teal-600">
               <Sparkles className="h-3.5 w-3.5" />
               Community powered
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {pageLoading && page === 0 && profiles.length === 0 ? (
               skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
             ) : (

@@ -729,7 +729,7 @@ export default function MdxEditorPage() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-12">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
       <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px]" />
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px]" />
       <Navbar />
@@ -737,40 +737,40 @@ export default function MdxEditorPage() {
 
       {/* Warning message for small screens */}
       {isSmallScreen && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 flex items-center justify-center gap-2 text-amber-700 bg-amber-50 md:hidden py-3 px-4 mt-[80px] mx-4 rounded-xl border border-amber-200 shadow-sm">
-          <AlertCircle className="w-5 h-5" />
-          <p className="text-sm font-medium">For the best experience, please use a tablet or laptop.</p>
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 flex items-center justify-center gap-2 text-slate-700 bg-white/60 backdrop-blur-3xl md:hidden py-3 px-4 mt-[80px] mx-4 rounded-[20px] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+          <AlertCircle className="w-[18px] h-[18px] text-indigo-500" />
+          <p className="text-[13px] font-bold tracking-tight">Best experienced on a tablet or laptop.</p>
         </motion.div>
       )}
 
-      <div className={`relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-6' : 'mt-[100px]'}`}>
+      <div className={`relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[2.5rem] border border-white/60 bg-white/70 p-6 shadow-[0_32px_80px_-12px_rgba(15,23,42,0.08)] backdrop-blur-2xl md:p-10 lg:p-12"
+          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl sm:rounded-[2.5rem] sm:p-8 md:p-10 lg:p-12"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent" />
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px]" />
           <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px]" />
 
-          <div className="relative text-center mx-auto max-w-3xl mb-12">
-            <h1 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900">
+          <div className="relative text-center mx-auto max-w-3xl mb-8 sm:mb-12">
+            <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl mb-3 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 leading-tight">
               Share Your Journey
             </h1>
-            <p className="mx-auto text-base leading-relaxed text-slate-600 sm:text-md">
+            <p className="mx-auto text-[13px] leading-relaxed text-slate-600 sm:text-base px-1 sm:px-0">
               Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
             </p>
           </div>
 
-          <div className="mb-10 w-full animate-fade-in-up">
-            <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/50 bg-white/60 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-8 w-full animate-fade-in-up">
+            <div className="flex flex-col gap-3 rounded-[20px] sm:rounded-2xl border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-lg sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-blue-100/80 text-blue-600">
                   <FileSignature className="h-5 w-5" />
                 </div>
-                <p className="text-sm font-semibold text-slate-700">
+                <p className="text-[13px] sm:text-sm font-bold text-slate-700">
                   Fill details below, then choose Manual or AI mode.
                 </p>
               </div>
@@ -779,15 +779,15 @@ export default function MdxEditorPage() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
                 </span>
-                <p className="text-xs font-medium text-slate-500">Auto-saving active</p>
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-500">Auto-saving</p>
               </div>
             </div>
           </div>
 
-          <div className="mb-12 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Batch */}
-            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.batch ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
-              <div className="p-5">
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Batch Year</label>
@@ -796,7 +796,7 @@ export default function MdxEditorPage() {
                   <select
                     value={batch}
                     onChange={handleBatchChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
                   >
                     <option value="">Select Year</option>
                     {years.map((year) => (
@@ -810,8 +810,8 @@ export default function MdxEditorPage() {
             </div>
 
             {/* Department */}
-            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.branch ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
-              <div className="p-5">
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <GraduationCap className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Department</label>
@@ -820,7 +820,7 @@ export default function MdxEditorPage() {
                   <select
                     value={branch}
                     onChange={handleBranchChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
                   >
                     <option value="">Select Dept</option>
                     <option value="CS">Computer Science</option>
@@ -836,8 +836,8 @@ export default function MdxEditorPage() {
             </div>
 
             {/* Company */}
-            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.company ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
-              <div className="p-5">
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Company</label>
@@ -846,7 +846,7 @@ export default function MdxEditorPage() {
                   <select
                     value={company}
                     onChange={handleCompanyChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
                   >
                     <option value="">Select Company</option>
                     <option value="others">Others...</option>
@@ -872,8 +872,8 @@ export default function MdxEditorPage() {
             </div>
 
             {/* Role */}
-            <div className={`group relative rounded-2xl border-2 transition-all duration-300 ${errors.role ? "border-red-300 bg-red-50/50" : "border-transparent bg-white shadow-sm hover:shadow-md hover:border-blue-100"}`}>
-              <div className="p-5">
+            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white"}`}>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Briefcase className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">Role</label>
@@ -882,7 +882,7 @@ export default function MdxEditorPage() {
                   <select
                     value={role}
                     onChange={handleRoleChange}
-                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm font-medium text-slate-700 transition focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 cursor-pointer"
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 cursor-pointer shadow-inner"
                   >
                     <option value="">Select Role</option>
                     <option value="others">Others...</option>
@@ -923,50 +923,48 @@ export default function MdxEditorPage() {
               </motion.div>
             )}
           </AnimatePresence>
-
           <div className="w-full pb-8">
-            <div className="sticky top-4 z-20 mb-6 w-full rounded-2xl border border-slate-200/60 bg-white/70 p-3 shadow-lg backdrop-blur-xl sm:p-4 transition-all">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] sm:rounded-2xl border border-white/60 bg-white/50 p-2.5 sm:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all">
+              <div className="flex flex-col gap-2.5 xl:flex-row xl:items-center xl:justify-between">
                 {/* Toggle (Left) */}
                 <div className="flex w-full justify-start xl:w-auto">
-                  <div className="flex relative h-[52px] w-full rounded-xl bg-slate-100/80 p-1 shadow-inner sm:w-auto">
+                  <div className="flex relative h-[46px] sm:h-[52px] w-full rounded-xl bg-slate-100/60 p-1 shadow-inner border border-white/40 sm:w-auto">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg px-6 text-sm font-semibold transition-colors duration-300 sm:flex-none ${mode === 'manual' ? 'text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg sm:px-6 text-[13px] sm:text-sm font-bold transition-colors duration-300 sm:flex-none ${mode === 'manual' ? 'text-slate-800' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      <PenLine className="w-4 h-4" /> Manual Writer
+                      <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
                     </button>
                     <button
                       onClick={() => handleModeChange('ai')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg px-6 text-sm font-semibold transition-colors duration-300 sm:flex-none ${mode === 'ai' ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg sm:px-6 text-[13px] sm:text-sm font-bold transition-colors duration-300 sm:flex-none ${mode === 'ai' ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      <Sparkles className="w-4 h-4" /> AI Assistant
+                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
                     </button>
                     
                     {/* Animated pill background */}
                     <div 
-                      className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-md transition-all duration-300 ease-out sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
+                      className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`} 
                       style={{
-                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(226, 232, 240, 0.8)'
+                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.1)' : '1px solid rgba(226, 232, 240, 0.4)'
                       }}
                     />
                   </div>
                 </div>
 
-                {/* Actions (Center) */}
-                <div className="flex w-full justify-center xl:w-auto xl:justify-start">
-                  <div className="flex w-full items-center gap-3 sm:w-auto">
+                <div className="flex w-full flex-row gap-2.5 justify-center xl:w-auto xl:justify-start">
+                  <div className="flex w-full items-center gap-2.5 sm:gap-3 sm:w-auto">
                     <button
                       onClick={handleClearForm}
                       type="button"
-                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow sm:w-auto sm:text-base"
+                      className="group flex w-[35%] sm:w-auto items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-sm font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md"
                     >
-                      <span className="group-hover:text-red-500 transition-colors">Clear Form</span>
+                      <span className="group-hover:text-red-500 transition-colors">Clear</span>
                     </button>
                     <button
                       onClick={handleSubmit}
                       type="button"
-                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-[0.98] sm:w-auto sm:text-base"
+                      className="group flex w-[65%] sm:w-auto items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 sm:px-8 sm:py-3 text-[13px] sm:text-sm font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95"
                     >
                       <span>Submit Post</span>
                       <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
@@ -975,18 +973,17 @@ export default function MdxEditorPage() {
                 </div>
 
                 {/* Copy template button (Right) */}
-                <div className={`flex w-full justify-center transition-all duration-300 xl:w-auto xl:justify-end ${mode !== 'manual' ? 'pointer-events-none opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+                <div className={`hidden sm:flex w-full justify-center transition-all duration-300 xl:w-auto xl:justify-end ${mode !== 'manual' ? 'pointer-events-none opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                   <button
                     type="button"
                     onClick={handleCopyTemplate}
-                    className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 w-full px-5 py-3 text-sm font-semibold text-blue-700 transition-all hover:bg-blue-100 hover:text-blue-800 sm:w-auto sm:text-base"
+                    className="group flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 w-full px-4 py-2.5 sm:px-5 sm:py-3 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 sm:w-auto sm:text-sm"
                   >
-                    Copy Template <Copy className="w-4 h-4 transition-transform group-hover:scale-110" />
+                    Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
                   </button>
                 </div>
               </div>
             </div>
-
             <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 backdrop-blur-xl shadow-2xl shadow-slate-200/50">
               
               {/* AI Prompt Area */}

@@ -387,7 +387,7 @@ export default function Home({ featuredStories, topStories }) {
       </nav>
 
       <section id="hero" className="relative overflow-hidden px-4 pb-12 pt-24 sm:pb-14 sm:pt-28">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)]" />
         <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl" />
 
@@ -421,21 +421,21 @@ export default function Home({ featuredStories, topStories }) {
       </h2>
           <TypingSentence />
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-row items-center justify-center gap-2 sm:gap-3">
             <Link
               href="/feed"
               prefetch={true}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-cyan-400 px-7 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-200/70 transition hover:bg-cyan-300 sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-cyan-400 px-2 py-3 text-[13px] font-semibold text-slate-950 shadow-lg shadow-cyan-200/70 transition hover:bg-cyan-300 sm:flex-none sm:gap-2 sm:px-7 sm:text-sm"
             >
-              Read Stories
-              <ArrowRight size={16} />
+              <span className="truncate whitespace-nowrap">Read Stories</span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
             </Link>
             <Link
               href="/post"
               prefetch={true}
-              className="inline-flex w-full items-center justify-center rounded-full border border-slate-300 bg-white/85 px-7 py-3 text-sm font-semibold text-slate-900 transition hover:border-cyan-300/35 hover:text-cyan-700 sm:w-auto"
+              className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-300 bg-white/85 px-2 py-3 text-[13px] font-semibold text-slate-900 transition hover:border-cyan-300/35 hover:text-cyan-700 sm:flex-none sm:px-7 sm:text-sm"
             >
-              Share Your Story
+              <span className="truncate whitespace-nowrap">Share Your Story</span>
             </Link>
           </div>
 

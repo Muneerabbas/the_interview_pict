@@ -154,6 +154,7 @@ function serializeCommentNode(comment, viewerId = null) {
   const upvotes = Array.isArray(comment.upvotes) ? comment.upvotes.map((id) => String(id)) : [];
   const authorId = comment.author?._id ? String(comment.author._id) : null;
   const hasUpvoted = viewerId ? upvotes.includes(String(viewerId)) : false;
+  const isOwnComment = Boolean(viewerId && authorId && String(viewerId) === authorId);
 
   return {
     id: String(comment._id),
@@ -168,8 +169,8 @@ function serializeCommentNode(comment, viewerId = null) {
     upvotesCount: upvotes.length,
     hasUpvoted,
     canReply: comment.depth < MAX_COMMENT_DEPTH,
-    canResolve: comment.type === "doubt" && !comment.isResolved && Boolean(viewerId),
-    isOwnComment: Boolean(viewerId && authorId && String(viewerId) === authorId),
+    canResolve: comment.type === "doubt" && isOwnComment,
+    isOwnComment,
     author: serializeAuthor(comment.author),
     companyTag: null,
     timeAgo: getTimeAgo(comment.createdAt),
@@ -511,5 +512,71 @@ export async function POST(req) {
     );
   } catch (error) {
     return NextResponse.json({ error: "Failed to post comment" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  await connectToDatabase();
+
+  try {
+    const token = await getAuthToken(req);
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const viewerId = await resolveOrCreateAuthorId(token);
+    if (!viewerId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await parseJsonBody(req);
+    if (!body) {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const commentId = body?.commentId;
+    const action = body?.action;
+
+    if (!commentId || !mongoose.Types.ObjectId.isValid(commentId)) {
+      return NextResponse.json({ error: "Valid commentId is required" }, { status: 400 });
+    }
+    if (!["resolve", "unresolve"].includes(action)) {
+      return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+    }
+
+    const comment = await Comment.findById(commentId).select("_id author type isResolved").lean();
+    if (!comment) {
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
+    if (String(comment.author) !== String(viewerId)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    if (comment.type !== "doubt") {
+      return NextResponse.json({ error: "Only doubt comments can be resolved" }, { status: 400 });
+    }
+
+    const nextResolved = action === "resolve";
+    const updated = await Comment.findByIdAndUpdate(
+      commentId,
+      { $set: { isResolved: nextResolved } },
+      { new: true }
+    )
+      .select("_id isResolved")
+      .lean();
+
+    return NextResponse.json(
+      {
+        success: true,
+        comment: {
+          id: String(updated._id),
+          isResolved: Boolean(updated.isResolved),
+        },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to update comment" }, { status: 500 });
   }
 }

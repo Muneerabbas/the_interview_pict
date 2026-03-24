@@ -8,14 +8,9 @@ export default function SingleExperienceThemeShell({ children }) {
   const [themeHydrated, setThemeHydrated] = useState(false);
 
   useEffect(() => {
-    const storedSingleTheme = window.localStorage.getItem("single-theme");
     const storedGlobalTheme = window.localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialDarkMode = storedSingleTheme
-      ? storedSingleTheme === "dark"
-      : storedGlobalTheme
-        ? storedGlobalTheme === "dark"
-        : prefersDark;
+    const initialDarkMode = storedGlobalTheme ? storedGlobalTheme === "dark" : prefersDark;
 
     setIsDarkMode(initialDarkMode);
     setThemeHydrated(true);
@@ -24,7 +19,6 @@ export default function SingleExperienceThemeShell({ children }) {
   useEffect(() => {
     if (!themeHydrated) return;
     document.documentElement.classList.toggle("dark", isDarkMode);
-    window.localStorage.setItem("single-theme", isDarkMode ? "dark" : "light");
     window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode, themeHydrated]);
 

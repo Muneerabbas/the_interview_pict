@@ -71,6 +71,21 @@ function addReplyToTree(nodes, parentId, replyComment) {
   return { nodes: nextNodes, inserted };
 }
 
+function updateResolvedInTree(nodes, commentId, isResolved) {
+  return nodes.map((node) => {
+    if (node.id === commentId) {
+      return { ...node, isResolved };
+    }
+    if (!Array.isArray(node.replies) || node.replies.length === 0) {
+      return node;
+    }
+    return {
+      ...node,
+      replies: updateResolvedInTree(node.replies, commentId, isResolved),
+    };
+  });
+}
+
 export default function CommentsSection({ experienceId, companyName, articleAuthorName }) {
   const { data: session } = useSession();
   const isAuthenticated = Boolean(session?.user);
@@ -90,6 +105,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   const [composeType, setComposeType] = useState("general");
   const [composeText, setComposeText] = useState("");
   const [posting, setPosting] = useState(false);
+  const [resolvingId, setResolvingId] = useState("");
   const [replyDrafts, setReplyDrafts] = useState({});
   const [expanded, setExpanded] = useState({});
   const [postingReplyId, setPostingReplyId] = useState("");
@@ -173,7 +189,6 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();
-          setError("Please sign in to comment");
           return;
         }
         throw new Error(json?.error || "Failed to post comment");
@@ -212,14 +227,13 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           experienceId,
           parentCommentId: parent.id,
           text: value,
-          type: parent.type || "general",
+          type: "general",
         }),
       });
       const json = await res.json();
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();
-          setError("Please sign in to reply");
           return;
         }
         throw new Error(json?.error || "Failed to post reply");
@@ -238,7 +252,52 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     }
   };
 
+  const toggleResolved = async (item) => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+    if (resolvingId) return;
+
+    setResolvingId(item.id);
+    setError("");
+    try {
+      const action = item.isResolved ? "unresolve" : "resolve";
+      const res = await fetch("/api/comments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          commentId: item.id,
+          action,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        if (res.status === 401) {
+          openAuthModal();
+          return;
+        }
+        throw new Error(json?.error || "Failed to update status");
+      }
+
+      const nextResolved = Boolean(json?.comment?.isResolved);
+      setComments((prev) => updateResolvedInTree(prev, item.id, nextResolved));
+      setMeta((prev) => {
+        const delta = nextResolved ? (item.isResolved ? 0 : 1) : item.isResolved ? -1 : 0;
+        return {
+          ...prev,
+          resolvedCount: Math.max(0, (prev.resolvedCount || 0) + delta),
+        };
+      });
+    } catch (err) {
+      setError(err.message || "Failed to update status");
+    } finally {
+      setResolvingId("");
+    }
+  };
+
   const renderComment = (item, level = 0) => {
+    const isReply = level > 0;
     const typeMeta = TYPE_META[item.type] || TYPE_META.general;
     const repliesOpen = Boolean(expanded[item.id]);
     const hasReplies = (item.replyCount || 0) > 0;
@@ -249,23 +308,38 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       String(articleAuthorName).trim().toLowerCase() === String(item.author.name).trim().toLowerCase();
 
     return (
-      <div key={item.id} className={cn("rounded-2xl border border-slate-200/80 bg-white/95 p-4 dark:border-slate-700/80 dark:bg-slate-900/90 sm:p-5", level > 0 && "mt-3")}>
-        <div className="flex gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+      <div
+        key={item.id}
+        className={cn(
+          "border border-slate-200/80 bg-white/95 dark:border-slate-700/80 dark:bg-slate-900/90",
+          isReply ? "mt-2 rounded-xl p-3" : "rounded-2xl p-4 sm:p-5"
+        )}
+      >
+        <div className={cn("flex", isReply ? "gap-2.5" : "gap-3")}>
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-full bg-slate-100 font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+              isReply ? "h-7 w-7 text-[10px]" : "h-9 w-9 text-xs"
+            )}
+          >
             {authorInitials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{item.author?.name || "Anonymous"}</span>
+            <div className={cn("flex flex-wrap items-center", isReply ? "mb-1.5 gap-1.5" : "mb-2 gap-2")}>
+              <span className={cn("font-semibold text-slate-900 dark:text-slate-100", isReply ? "text-xs" : "text-sm")}>
+                {item.author?.name || "Anonymous"}
+              </span>
               {isArticleAuthor ? (
                 <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">Author</span>
               ) : null}
               {item.author?.batch ? (
                 <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">{item.author.batch}</span>
               ) : null}
-              <span className={cn("rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide", typeMeta.badgeClass)}>
-                {typeMeta.label}
-              </span>
+              {!isReply ? (
+                <span className={cn("rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide", typeMeta.badgeClass)}>
+                  {typeMeta.label}
+                </span>
+              ) : null}
               {item.isResolved ? (
                 <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700 dark:bg-emerald-950/35 dark:text-emerald-300">
                   <CheckCircle2 size={10} />
@@ -275,9 +349,16 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
               <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">{item.timeAgo || ""}</span>
             </div>
 
-            <p className="whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-slate-300">{item.text}</p>
+            <p
+              className={cn(
+                "whitespace-pre-wrap text-slate-700 dark:text-slate-300",
+                isReply ? "text-xs leading-5" : "text-sm leading-6"
+              )}
+            >
+              {item.text}
+            </p>
 
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+            <div className={cn("flex flex-wrap items-center text-xs", isReply ? "mt-2 gap-2" : "mt-3 gap-3")}>
               <button
                 type="button"
                 onClick={() => toggleLikeLocal(item.id)}
@@ -310,10 +391,21 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                   {repliesOpen ? "Hide replies" : `View ${item.replyCount} repl${item.replyCount === 1 ? "y" : "ies"}`}
                 </button>
               ) : null}
+              {item.canResolve ? (
+                <button
+                  type="button"
+                  onClick={() => toggleResolved(item)}
+                  disabled={resolvingId === item.id}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700 hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-emerald-500/35 dark:bg-emerald-950/35 dark:text-emerald-300"
+                >
+                  <CheckCircle2 size={12} />
+                  {item.isResolved ? "Mark unresolved" : "Mark resolved"}
+                </button>
+              ) : null}
             </div>
 
             {(repliesOpen || hasReplies) && item.canReply ? (
-              <div className="mt-3 flex items-center gap-2">
+              <div className={cn("flex items-center gap-2", isReply ? "mt-2" : "mt-3")}>
                 <input
                   value={replyDrafts[item.id] || ""}
                   onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [item.id]: e.target.value }))}
@@ -328,13 +420,19 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                   }}
                   readOnly={!isAuthenticated}
                   placeholder="Add a reply..."
-                  className="h-9 w-full rounded-full border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none ring-blue-500 transition focus:border-blue-300 focus:ring-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/30"
+                  className={cn(
+                    "w-full rounded-full border border-slate-200 bg-white px-3 text-slate-700 outline-none ring-blue-500 transition focus:border-blue-300 focus:ring-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/30",
+                    isReply ? "h-8 text-xs" : "h-9 text-sm"
+                  )}
                 />
                 <button
                   type="button"
                   onClick={() => submitReply(item)}
                   disabled={postingReplyId === item.id || !(replyDrafts[item.id] || "").trim()}
-                  className="inline-flex h-9 items-center gap-1 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700"
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700",
+                    isReply ? "h-8" : "h-9"
+                  )}
                 >
                   <Send size={12} />
                   Send
@@ -430,6 +528,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           { key: "doubt", label: "Doubts" },
           { key: "tip", label: "Tips" },
           { key: "experience", label: "Experiences" },
+          { key: "general", label: "General" },
           { key: "resolved", label: "Resolved" },
         ].map((item) => (
           <button

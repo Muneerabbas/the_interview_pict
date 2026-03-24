@@ -51,7 +51,7 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
       document.cookie = `${cookieName}=; max-age=0; path=/`;
     });
     sessionStorage.clear();
-    localStorage.clear();
+    // Preserve UI preferences like theme while clearing auth/session state.
   };
 
   const handleLogout = async () => {

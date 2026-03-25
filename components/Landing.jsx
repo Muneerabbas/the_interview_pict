@@ -438,7 +438,7 @@ export default function Home({ featuredStories, topStories }) {
       </nav>
 
       <section id="hero" className="relative overflow-hidden px-4 pt-28 pb-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#EFF3FF_0%,#F4F6FB_55%,transparent_80%),linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:auto,46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_34%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)] dark:bg-[size:46px_46px]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#EFF3FF_0%,#F4F6FB_55%,transparent_80%),linear-gradient(to_right,rgba(148,163,184,0.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.3)_1px,transparent_1px)] bg-[size:auto,46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)] dark:bg-[size:46px_46px]" />
         <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl dark:bg-blue-500/25" />
         <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl dark:bg-cyan-500/25" />
 

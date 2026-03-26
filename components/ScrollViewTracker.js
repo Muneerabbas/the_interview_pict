@@ -9,16 +9,16 @@ export default function ScrollViewTracker({ id }) {
     const handleScroll = async () => {
       if (!viewCountSent) {
         try {
-          const apiUrl = `/api/exp?uid=${id}`; // Directly call /api/exp with uid
+          const apiUrl = `/api/view`;
 
           const response = await fetch(apiUrl, {
-            method: 'GET', // Use GET to match your /api/exp endpoint
-            // headers: { 'Content-Type': 'application/json' }, // GET requests usually don't need Content-Type
-            // No body needed for GET
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id }),
           });
 
           if (!response.ok) {
-            console.error("Error sending view count to /api/exp:", response.status, response.statusText);
+            console.error("Error sending view count to /api/view:", response.status, response.statusText);
             // Optionally handle error, maybe retry or display a message
           } else {
             setViewCountSent(true);

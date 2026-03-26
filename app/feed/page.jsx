@@ -2,9 +2,10 @@
 
 import Navbar from "../../components/Navbar";
 import FeedCard from "../../components/FeedCard";
+import FeedHero from "../../components/FeedHero";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { ArrowUpRight, Loader2, Send, Sparkles } from "lucide-react";
+import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,34 +23,51 @@ export default function HomePage() {
   const [profiles, setProfiles] = useState([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 10;
+  const [activeTab, setActiveTab] = useState("latest"); // 'latest' or 'trending'
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [themeHydrated, setThemeHydrated] = useState(false);
 
+  const isFetchingRef = useRef(false);
   const observer = useRef();
   const lastProfileElementRef = useCallback(
     (node) => {
       if (pageLoading) return;
       if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMoreProfiles) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
+
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMoreProfiles && !isFetchingRef.current) {
+            isFetchingRef.current = true;
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        { rootMargin: "400px" } // Load even earlier
+      );
+
       if (node) observer.current.observe(node);
     },
     [pageLoading, hasMoreProfiles]
   );
 
-  const fetchProfiles = async (pageNumber, limit) => {
+  const fetchProfiles = useCallback(async (pageNumber, limit, sort) => {
     setPageLoading(true);
+    isFetchingRef.current = true;
     try {
-      const response = await axios.get(`/api/feed?page=${pageNumber}&itemsPerPage=${limit}`);
+      const url = `/api/feed?page=${pageNumber}&itemsPerPage=${limit}&sort=${sort}`;
+      const response = await axios.get(url);
+
+      // Safety check: only update state if this request matches the current active tab
+      if (sort !== activeTab) return;
+
       if (response.data && response.data.length > 0) {
         setProfiles((prev) => {
-          const uniqueProfiles = [...new Map(prev.concat(response.data).map((item) => [item._id, item])).values()];
+          const incoming = response.data;
+          // If it's page 0, we don't need to concat
+          if (pageNumber === 0) return incoming;
+          const uniqueProfiles = [...new Map(prev.concat(incoming).map((item) => [item._id, item])).values()];
           return uniqueProfiles;
         });
         if (response.data.length < limit) {
@@ -57,7 +75,7 @@ export default function HomePage() {
         }
       } else {
         setHasMoreProfiles(false);
-        if (pageNumber === 0 && response.data.length === 0) {
+        if (pageNumber === 0) {
           setProfiles([]);
         }
       }
@@ -66,13 +84,30 @@ export default function HomePage() {
       setHasMoreProfiles(false);
     } finally {
       setPageLoading(false);
+      isFetchingRef.current = false;
     }
-  };
+  }, [activeTab]);
+
+  const prevTabRef = useRef(activeTab);
 
   useEffect(() => {
-    setHasMoreProfiles(true);
-    fetchProfiles(page, itemsPerPage);
-  }, [page, itemsPerPage]);
+    const isTabChange = prevTabRef.current !== activeTab;
+
+    if (isTabChange) {
+      prevTabRef.current = activeTab;
+      setProfiles([]);
+      setPage(0);
+      setHasMoreProfiles(true);
+      // If page is already 0, setPage(0) won't trigger a re-render/effect
+      // So we manually call fetchProfiles for page 0
+      if (page === 0) {
+        fetchProfiles(0, itemsPerPage, activeTab);
+      }
+    } else {
+      // Normal pagination or initial load where page is 0
+      fetchProfiles(page, itemsPerPage, activeTab);
+    }
+  }, [page, activeTab, fetchProfiles, itemsPerPage]);
 
   useEffect(() => {
     const storedFeedTheme = window.localStorage.getItem("feed-theme");
@@ -130,7 +165,8 @@ export default function HomePage() {
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
-        <div className="mb-6 flex justify-end">
+        {/* Post Button Row */}
+        <div className="mb-8 flex justify-end">
           <Link
             href="/post"
             onClick={handleShareExperienceClick}
@@ -144,15 +180,51 @@ export default function HomePage() {
           </Link>
         </div>
 
+        {/* Hero Section */}
+        <FeedHero isDarkMode={isDarkMode} />
+
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">Latest Experiences</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Newest stories first, with live loading.</p>
+          {/* Header & Tabs */}
+          <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 sm:text-2xl">Interview Feed</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Discover experiences from top candidates.</p>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-teal-300/60 bg-teal-500 px-3 py-1 text-xs font-semibold text-white shadow-sm dark:border-teal-400/40 dark:bg-teal-600">
+                <Sparkles className="h-3.5 w-3.5" />
+                Community powered
+              </div>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-teal-300/60 bg-teal-500 px-3 py-1 text-xs font-semibold text-white shadow-sm dark:border-teal-400/40 dark:bg-teal-600">
-              <Sparkles className="h-3.5 w-3.5" />
-              Community powered
+
+            {/* Tab Switcher */}
+            <div className="flex gap-6">
+              <button
+                onClick={() => setActiveTab("latest")}
+                className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "latest"
+                  ? "text-blue-600 dark:text-cyan-400"
+                  : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  }`}
+              >
+                <Clock size={16} />
+                Latest
+                {activeTab === "latest" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab("trending")}
+                className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "trending"
+                  ? "text-blue-600 dark:text-cyan-400"
+                  : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  }`}
+              >
+                <Zap size={16} />
+                Trending
+                {activeTab === "trending" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -160,27 +232,39 @@ export default function HomePage() {
             {pageLoading && page === 0 && profiles.length === 0 ? (
               skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
             ) : (
-              <AnimatePresence>
-                {profiles.map((profile, index) => {
-                  const shouldObserve = profiles.length === index + 2;
-                  return (
-                    <motion.div
-                      key={profile._id}
-                      ref={shouldObserve ? lastProfileElementRef : null}
-                      initial={{ opacity: 0, y: 24 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.42, delay: (index % 8) * 0.04 }}
-                    >
-                      <FeedCard profile={profile} width="w-full" />
-                    </motion.div>
-                  );
-                })}
+              <AnimatePresence mode="popLayout">
+                {profiles.map((profile, index) => (
+                  <motion.div
+                    key={profile._id + activeTab}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.35, delay: (index % 10) * 0.03 }}
+                  >
+                    <FeedCard profile={profile} width="w-full" />
+                  </motion.div>
+                ))}
               </AnimatePresence>
+            )}
+
+            {/* Sentinel for Intersection Observer */}
+            <div ref={lastProfileElementRef} className="h-4 w-full" />
+
+            {profiles.length === 0 && !pageLoading && (
+              <div className="py-12 text-center">
+                <p className="text-slate-500 dark:text-slate-400 font-medium italic">No stories found for this category.</p>
+                <button
+                  onClick={() => { setActiveTab("latest") }}
+                  className="mt-4 text-sm font-bold text-blue-600 hover:underline dark:text-cyan-400"
+                >
+                  Clear all filters
+                </button>
+              </div>
             )}
           </div>
 
           <div className="mt-12 flex flex-col items-center space-y-4 pb-2">
-            {pageLoading && page !== 0 && (
+            {pageLoading && (
               <div className="flex items-center space-x-3 rounded-full border border-indigo-100 bg-white px-6 py-3 text-indigo-600 shadow-sm dark:border-cyan-500/30 dark:bg-slate-900 dark:text-cyan-300">
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <span className="text-sm font-semibold">Loading more experiences...</span>
@@ -192,22 +276,6 @@ export default function HomePage() {
                 <div className="h-[1px] flex-1 bg-slate-200 dark:bg-slate-700" />
                 <span className="px-4 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">You have reached the end</span>
                 <div className="h-[1px] flex-1 bg-slate-200 dark:bg-slate-700" />
-              </div>
-            )}
-
-            {!pageLoading && !hasMoreProfiles && profiles.length === 0 && page === 0 && (
-              <div className="w-full rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                <p className="text-lg font-semibold text-slate-700 dark:text-slate-200">No experiences posted yet.</p>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Start the feed by sharing your own interview story.</p>
-                <Link
-                  href="/post"
-                  onClick={handleShareExperienceClick}
-                  prefetch={true}
-                  scroll={false}
-                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 dark:bg-cyan-500 dark:hover:bg-cyan-400"
-                >
-                  Share the first story
-                </Link>
               </div>
             )}
           </div>

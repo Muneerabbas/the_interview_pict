@@ -22,12 +22,8 @@ export async function GET(req) {
       return NextResponse.json({ message: "Missing `uid` query parameter" }, { status: 400 });
     }
 
-    // Fetch document & increment views in one atomic operation
-    const data = await collection.findOneAndUpdate(
-      { uid },
-      { $inc: { views: 1 } }, // Increment views
-      { returnDocument: "after" } // Return updated document
-    );
+    // Fetch document (View increment moved to /api/view)
+    const data = await collection.findOne({ uid });
 
     if (!data) {
       return NextResponse.json({ message: "Document not found" }, { status: 404 });

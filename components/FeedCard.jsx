@@ -110,17 +110,12 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           <div className="flex min-w-0 items-start gap-3">
             <div className="relative shrink-0 mt-0.5">
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
-              {profilePic ? (
-                <ProfileAvatar
-                  src={profilePic}
-                  alt="Profile"
-                  className="relative z-10 h-11 w-11 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12"
-                />
-              ) : (
-                <div className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-700 text-base font-bold text-white ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12 sm:text-lg">
-                  {profileName.charAt(0).toUpperCase() || "S"}
-                </div>
-              )}
+              <ProfileAvatar
+                src={profilePic}
+                name={profileName}
+                alt={profileName}
+                className="relative z-10 h-11 w-11 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12"
+              />
             </div>
 
             <div className="min-w-0 flex-1">

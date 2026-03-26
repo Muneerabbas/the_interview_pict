@@ -11,7 +11,6 @@ import {
   Eye,
   FileText,
   GraduationCap,
-  Layers3,
   Sparkles,
   UserRound,
 } from "lucide-react";
@@ -33,26 +32,55 @@ const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
   ),
 });
 
+import { cache } from "react";
+
+import SimilarExperienceClient from "@/components/SimilarExperienceClient";
+
 const revalidateTime = 3600;
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
 
+// Memoized data fetcher to prevent duplicate hits during metadata & page render
+const getExperienceData = cache(async (id) => {
+  try {
+    const [expResponse, feedResponse] = await Promise.all([
+      fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
+      fetch(`${baseUrl}/api/feed`, { next: { revalidate: revalidateTime } }),
+    ]);
+
+    if (!expResponse.ok) return { data: null, articles: [] };
+
+    const expData = await expResponse.json();
+    const feedData = await feedResponse.json();
+
+    const data = {
+      ...expData,
+      profile_pic: expData?.profile_pic?.replace(/"/g, "") || "",
+      name: expData?.name?.replace(/"/g, "") || "Anonymous Candidate",
+      exp_text: expData?.exp_text || "",
+      branch: expData?.branch || "Branch not shared",
+      batch: expData?.batch || "",
+      company: expData?.company || "Company not shared",
+      role: expData?.role || "Role not shared",
+      views: Number(expData?.views) || 0,
+    };
+
+    const articles = (feedData || [])
+      .filter((article) => article.uid !== id)
+      .filter((article, index, arr) => arr.findIndex((a) => a.uid === article.uid) === index)
+      .slice(0, 8);
+
+    return { data, articles };
+  } catch (error) {
+    console.error("Data fetch error:", error);
+    return { data: null, articles: [] };
+  }
+});
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
+  const { data } = await getExperienceData(id);
 
   const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
-  let data = {};
-
-  try {
-    const response = await fetch(`${metadataBaseUrl}/api/exp?uid=${id}`, {
-      next: { revalidate: revalidateTime },
-    });
-
-    if (response.ok) {
-      data = await response.json();
-    }
-  } catch (error) {
-    console.error("Metadata fetch error:", error);
-  }
 
   return {
     title: `${data?.company || "theInterview"} Interview Experience`,
@@ -73,8 +101,17 @@ export default async function SimilarExperience({ params }) {
     );
   }
 
-  let data = null;
-  let articles = [];
+  const { data, articles } = await getExperienceData(id);
+
+  if (!data) {
+    return (
+      <SingleExperienceThemeShell>
+        <div className="mx-auto mt-24 max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-lg text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+          Failed to load experience.
+        </div>
+      </SingleExperienceThemeShell>
+    );
+  }
 
   const formatLongDate = (date) => {
     const parsed = new Date(date);
@@ -86,43 +123,6 @@ export default async function SimilarExperience({ params }) {
       day: "numeric",
     });
   };
-
-  try {
-    const [expResponse, feedResponse] = await Promise.all([
-      fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
-      fetch(`${baseUrl}/api/feed`, { next: { revalidate: revalidateTime } }),
-    ]);
-
-    const expDataResponse = await expResponse.json();
-    const feedDataResponse = await feedResponse.json();
-
-    data = {
-      ...expDataResponse,
-      profile_pic: expDataResponse?.profile_pic?.replace(/"/g, "") || "",
-      name: expDataResponse?.name?.replace(/"/g, "") || "Anonymous Candidate",
-      exp_text: expDataResponse?.exp_text || "",
-      branch: expDataResponse?.branch || "Branch not shared",
-      batch: expDataResponse?.batch || "",
-      company: expDataResponse?.company || "Company not shared",
-      role: expDataResponse?.role || "Role not shared",
-      views: Number(expDataResponse?.views) || 0,
-    };
-
-    articles = (feedDataResponse || [])
-      .filter((article) => article.uid !== id)
-      .filter((article, index, arr) => arr.findIndex((a) => a.uid === article.uid) === index)
-      .slice(0, 8);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return (
-      <SingleExperienceThemeShell>
-        <div className="mx-auto mt-24 max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-lg text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-          Failed to load experience.
-        </div>
-      </SingleExperienceThemeShell>
-    );
-  }
-
   const articleUrl = `${baseUrl}/single/${id}`;
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
   const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
@@ -267,39 +267,7 @@ export default async function SimilarExperience({ params }) {
 
             </div>
 
-            <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/92 p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/90 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-8">
-              <div className="pointer-events-none absolute -left-20 -top-16 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl dark:bg-sky-500/18" />
-              <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-500/18" />
-
-              <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-5 dark:border-slate-700/80">
-                <div>
-                  <h2 className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
-                    <Layers3 size={21} className="text-indigo-600 dark:text-cyan-300" />
-                    Related Experiences
-                  </h2>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    Explore similar interview stories from other candidates.
-                  </p>
-                </div>
-                <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                  {articles.length} posts
-                </span>
-              </div>
-
-              <div
-                className="relative -mx-1 flex gap-5 overflow-x-auto px-1 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-                style={{
-                  WebkitMaskImage: 'linear-gradient(to right, black 88%, transparent 100%)',
-                  maskImage: 'linear-gradient(to right, black 88%, transparent 100%)'
-                }}
-              >
-                {articles.map((article) => (
-                  <div key={article.uid} className="w-[85vw] max-w-[340px] min-w-[280px] shrink-0 sm:w-[340px]">
-                    <ArticleCard article={article} />
-                  </div>
-                ))}
-              </div>
-            </section>
+            <SimilarExperienceClient articles={articles} />
 
             <CommentsSection
               experienceId={experienceObjectId}

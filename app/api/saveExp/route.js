@@ -20,7 +20,7 @@ const backup = db.collection("backup");
 
 export async function POST(req) {
   try {
-    const { exp_text, company, branch, batch, profile_pic, name, role,email} = await req.json();
+    const { exp_text, company, branch, batch, profile_pic, name, role, email } = await req.json();
     if (!exp_text || !company || !name) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
@@ -40,18 +40,41 @@ export async function POST(req) {
     // Save experience to DB
     const now = new Date().toISOString();
     const result = await experience.insertOne({
-      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,email
+      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
     });
     const bc = await backup.insertOne({
-      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role,email
+      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
     });
+
+    // Sync with Company collection
+    try {
+      const companySlug = slugify(company, { lower: true, strict: true });
+      await db.collection("company").updateOne(
+        { name: company },
+        {
+          $inc: { "stats.interviewsCount": 1 },
+          $setOnInsert: {
+            slug: companySlug,
+            about: `Company ${company} interview experience details.`,
+            tags: ["Interview"],
+            "stats.reviewsCount": 0,
+            "stats.rating": 5
+          }
+        },
+        { upsert: true }
+      );
+    } catch (companyError) {
+      console.error("Failed to sync company state:", companyError);
+      // Non-blocking error
+    }
 
     if (!result.acknowledged) {
       return NextResponse.json({ message: "Failed to save experience" }, { status: 500 });
     }
 
-     // Send acknowledgment email
-     await sendAcknowledgmentEmail(name, email, uid);
+    // Send acknowledgment email
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+    await sendAcknowledgmentEmail(name, email, uid, siteUrl);
 
     return NextResponse.json({ message: "Experience saved successfully", uid }, { status: 200 });
   } catch (error) {
@@ -60,11 +83,11 @@ export async function POST(req) {
   }
 }
 
-async function sendAcknowledgmentEmail(name, email,uid) {
+async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
   try {
     console.log("📩 Preparing to send email to:", email); // Debug log
 
-    const postUrl = uid; // Replace with your actual website URL
+    const postUrl = `${siteUrl}/single/${uid}`;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -82,14 +105,14 @@ async function sendAcknowledgmentEmail(name, email,uid) {
         <p>Hello ${name},</p>
         <p>We truly appreciate you for taking the time to share your interview experience on our platform! 🙌</p>
         <p>Your insights will be incredibly helpful for the next batch of candidates preparing for their placements.</p>
-        <p>Here’s your post: <a href="https://www.pict.live/single/${postUrl}" target="_blank">${postUrl}</a></p>
+        <p>Here’s your post: <a href="${postUrl}" target="_blank">${postUrl}</a></p>
         <p>You can edit or delete your post anytime to keep it updated!</p>
         <br>
         <p>Best Regards,</p>
         <p><strong>theInterview Team</strong></p>
       `,
     };
-    
+
 
     console.log("📤 Sending email..."); // Debug log
     await transporter.sendMail(mailOptions);

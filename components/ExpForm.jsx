@@ -211,6 +211,14 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
           setBranch(draftData.branch || "");
           setCompany(draftData.company || "");
           setRole(draftData.role || "");
+          // Load AI state
+          if (draftData.chatAnswers) setChatAnswers(draftData.chatAnswers);
+          if (draftData.chatStage) setChatStage(draftData.chatStage);
+          if (draftData.chatMessages && draftData.chatMessages.length > 0) {
+            setChatMessages(draftData.chatMessages);
+          }
+          if (draftData.totalRounds) setTotalRounds(draftData.totalRounds);
+          if (draftData.currentRound) setCurrentRound(draftData.currentRound);
         }
       } catch (error) {
         console.error("Error loading draft:", error);
@@ -446,18 +454,20 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
 
   useEffect(() => {
     if (session?.user?.email) {
-      // Check if the markdown is equal to the dummy text, don't save if it is
-
       saveDraft({
         exp_text: markdown,
         batch,
         branch,
         company,
         role,
+        chatAnswers,
+        chatStage,
+        chatMessages,
+        totalRounds,
+        currentRound,
       });
-
     }
-  }, [markdown, batch, branch, company, role, saveDraft, session?.user?.email]);
+  }, [markdown, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
 
   const handleCopyTemplate = () => {

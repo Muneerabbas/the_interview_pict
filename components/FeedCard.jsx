@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
 
@@ -32,6 +33,7 @@ const stripMarkdown = (value = "") => {
 };
 
 const FeedCard = ({ profile, width = "w-full" }) => {
+  const router = useRouter();
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
   const userEmail = session?.user?.email;
@@ -74,7 +76,8 @@ const FeedCard = ({ profile, width = "w-full" }) => {
     }
   };
 
-  const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
+  const rawProfilePic = profile?.profile_pic || profile?.image || profile?.profilePic_Url || "";
+  const profilePic = typeof rawProfilePic === 'string' ? rawProfilePic.replace(/"/g, "") : "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
   const companyName = profile?.company || "Company not shared";
   const roleName = profile?.role || "Role not shared";
@@ -96,6 +99,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   const totalViews = Number(profile?.views) || 0;
   const readTime = Math.max(1, Math.round(previewText.split(/\s+/).filter(Boolean).length / 180));
 
+
   return (
     <Link
       href={readPath}
@@ -107,7 +111,10 @@ const FeedCard = ({ profile, width = "w-full" }) => {
       <div className="relative p-4 sm:p-5">
         {/* Header Row: Avatar + Info (Left) | Stats (Right) */}
         <div className="flex items-start justify-between gap-4">
-          <div className="flex min-w-0 items-start gap-3">
+          <div
+            className="flex min-w-0 items-start gap-3"
+            aria-label={`View experience by ${profileName || "user"}`}
+          >
             <div className="relative shrink-0 mt-0.5">
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
               <ProfileAvatar

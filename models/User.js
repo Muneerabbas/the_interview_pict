@@ -45,6 +45,72 @@ const userSchema = new mongoose.Schema(
         default: {},
       },
     },
+    headline: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    about: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    college: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    branch: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    batch: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    role: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    currentCompany: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    skills: {
+      type: [String],
+      default: [],
+    },
+    socialLinks: {
+      linkedin: { type: String, default: "" },
+      twitter: { type: String, default: "" },
+      facebook: { type: String, default: "" },
+      leetcode: { type: String, default: "" },
+      codeforces: { type: String, default: "" },
+      codechef: { type: String, default: "" },
+      youtube: { type: String, default: "" },
+      instagram: { type: String, default: "" },
+      custom: [
+        {
+          name: { type: String, default: "" },
+          url: { type: String, default: "" },
+        },
+      ],
+    },
   },
   {
     timestamps: true,

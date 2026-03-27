@@ -44,6 +44,7 @@ const ProfileAvatar = ({ src, alt, className, name }) => {
         <img
           src={src}
           alt={alt}
+          referrerPolicy="no-referrer"
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}

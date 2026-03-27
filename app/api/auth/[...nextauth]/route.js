@@ -8,7 +8,7 @@ const AUTH_SECRET =
     ? "local-dev-auth-secret-change-me"
     : undefined);
 
-const authOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,

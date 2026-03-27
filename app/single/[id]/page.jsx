@@ -54,7 +54,7 @@ const getExperienceData = cache(async (id) => {
 
     const data = {
       ...expData,
-      profile_pic: expData?.profile_pic?.replace(/"/g, "") || "",
+      profile_pic: expData?.profile_pic ? String(expData.profile_pic).replace(/"/g, "") : null,
       name: expData?.name?.replace(/"/g, "") || "Anonymous Candidate",
       exp_text: expData?.exp_text || "",
       branch: expData?.branch || "Branch not shared",
@@ -126,6 +126,7 @@ export default async function SimilarExperience({ params }) {
   const articleUrl = `${baseUrl}/single/${id}`;
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
   const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
+  const publicProfilePath = data?.email ? `/profile/public/${encodeURIComponent(data.email)}` : null;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
   const isToday = data?.date && new Date(data.date).toDateString() === new Date().toDateString();
   const experienceObjectId =
@@ -191,13 +192,28 @@ export default async function SimilarExperience({ params }) {
                   <ShareButton id={id} data={data} />
 
                   <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26">
-                      <ProfileAvatar
-                        src={data?.profile_pic}
-                        alt={`${data?.name}'s profile picture`}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
+                    {publicProfilePath ? (
+                      <Link
+                        href={publicProfilePath}
+                        className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg transition hover:scale-[1.02] dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26"
+                        aria-label={`View ${data?.name || "user"} profile`}
+                      >
+                        <ProfileAvatar
+                          src={data?.profile_pic}
+                          alt={`${data?.name}'s profile picture`}
+                          name={data?.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </Link>
+                    ) : (
+                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26">
+                        <ProfileAvatar
+                          src={data?.profile_pic}
+                          alt={`${data?.name}'s profile picture`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
 
                     <div className="min-w-0 flex-1">
                       <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -212,9 +228,18 @@ export default async function SimilarExperience({ params }) {
                         )}
                       </div>
 
-                      <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
-                        {data?.name}
-                      </h1>
+                      {publicProfilePath ? (
+                        <Link
+                          href={publicProfilePath}
+                          className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition hover:text-blue-700 dark:text-slate-100 dark:hover:text-cyan-300 lg:text-4xl"
+                        >
+                          {data?.name}
+                        </Link>
+                      ) : (
+                        <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
+                          {data?.name}
+                        </h1>
+                      )}
 
                       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
                         <div className="flex items-center gap-1.5">

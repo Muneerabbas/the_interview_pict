@@ -104,6 +104,12 @@ const ProfileCard = ({
     }
   };
 
+  const handleProfileHeaderClick = (e) => {
+    e.stopPropagation();
+    if (!profile?.email) return;
+    router.push(`/profile/public/${encodeURIComponent(profile.email)}`);
+  };
+
   return (
     <div
       onClick={handleCardClick}
@@ -140,7 +146,18 @@ const ProfileCard = ({
 
       <div className="p-3 flex flex-col h-full">
         {/* Header Section */}
-        <div className="flex items-start gap-2 pb-2 border-b border-gray-200 dark:border-slate-700 transition-colors duration-300">
+        <div
+          onClick={handleProfileHeaderClick}
+          className="flex items-start gap-2 pb-2 border-b border-gray-200 dark:border-slate-700 transition-colors duration-300 cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              handleProfileHeaderClick(e);
+            }
+          }}
+          aria-label={`View ${profileName || "user"} profile`}
+        >
           {/* Profile Image */}
           <div className="flex-shrink-0">
             <div className="w-12 h-12 sm:w-20 sm:h-20">

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+import { resolveProfileImage, resolveProfileName } from "../../../lib/utils";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -53,19 +54,36 @@ export async function GET(req) {
     pipeline.push({ $skip: page * itemsPerPage });
     pipeline.push({ $limit: itemsPerPage });
 
+    // Join with user collection to get latest profile data
     pipeline.push(
       {
+        $lookup: {
+          from: "user",
+          localField: "email",
+          foreignField: "gmail",
+          as: "author_info"
+        }
+      },
+      {
+        $addFields: {
+          author: { $arrayElemAt: ["$author_info", 0] }
+        }
+      },
+      {
         $project: {
-          trendingScore: 0 // Exclude internal score
+          trendingScore: 0,
+          author_info: 0
         }
       }
     );
 
     const feed = await experience.aggregate(pipeline).toArray();
 
-    // Map date to string for JSON safety
+    // Map for high-fidelity resolution and JSON safety
     const finalFeed = feed.map(item => ({
       ...item,
+      profile_pic: resolveProfileImage({ ...item, ...item.author }),
+      name: resolveProfileName({ ...item, ...item.author }),
       date: item.date ? new Date(item.date).toString() : new Date().toString()
     }));
 

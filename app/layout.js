@@ -1,6 +1,6 @@
 // app/layout.js
 import { Inter, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./globals.scss";
 import Providers from "./providers";
 
 // Custom fonts setup

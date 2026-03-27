@@ -75,13 +75,16 @@ export default function CompaniesDirectoryClient({ companies = [], countsMap = {
               <Link
                 href={`/companies/${company?.slug}`}
                 key={company._id}
-                className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/60 bg-white/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(37,99,235,0.08)] dark:border-slate-700/70 dark:bg-slate-900/70 dark:shadow-[0_14px_34px_rgba(2,6,23,0.6)] dark:hover:shadow-[0_18px_42px_rgba(8,145,178,0.2)]"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/85 bg-white p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]"
               >
+                <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-cyan-950/20 dark:to-transparent" />
 
                 <div className="relative z-10 mb-4 flex items-start gap-4">
+                  <div className="relative shrink-0 mt-0.5">
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
                   {company.logo ? (
-                    <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[11px] border-[1.5px] border-slate-200/80 bg-white p-1 shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border-slate-700 dark:bg-slate-900">
+                    <div className="relative z-10 flex h-12 w-12 items-center justify-center overflow-hidden rounded-[12px] bg-white p-1.5 ring-2 ring-white shadow-sm transition-transform duration-300 group-hover:scale-105 dark:bg-slate-950 dark:ring-slate-800">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={company.logo}
@@ -91,10 +94,11 @@ export default function CompaniesDirectoryClient({ companies = [], countsMap = {
                       />
                     </div>
                   ) : (
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[11px] border-[1.5px] border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 text-lg font-bold text-blue-600 shadow-inner transition-transform duration-300 group-hover:scale-105 dark:border-slate-700 dark:from-cyan-900/40 dark:to-blue-900/40 dark:text-cyan-300">
+                    <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-[12px] ring-2 ring-white bg-gradient-to-br from-blue-50 to-indigo-50 text-xl font-bold text-blue-600 shadow-inner transition-transform duration-300 group-hover:scale-105 dark:from-cyan-900/40 dark:to-blue-900/40 dark:text-cyan-300 dark:bg-slate-950 dark:ring-slate-800">
                       {(company?.name?.charAt(0) || "C").toUpperCase()}
                     </div>
                   )}
+                  </div>
 
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate text-[17px] font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-cyan-300">

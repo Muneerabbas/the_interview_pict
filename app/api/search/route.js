@@ -17,29 +17,38 @@ async function main(search_text, page = 1) {
   
   const skip = (page - 1) * 10;
   
-  const result = await experience
-  .aggregate([
-    {
-      $search: {
-        index: "main",
-        compound: {
-          should: [
-            { text: { query: search_text, path: "company", score: { boost: { value: 8 } }} },
-            { text: { query: search_text, path: "role", score: { boost: { value: 6 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "name", score: { boost: { value: 20 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "branch", score: { boost: { value: 10 } }, fuzzy: {} } },
-            { text: { query: search_text, path: "batch", score: { boost: { value: 20 } }} },  // Increased boost
-            { text: { query: search_text, path: "exp_text", score: { boost: { value: 2 } }, fuzzy: {} } }
-          ]
-        }
-      }
-    },
-    { $skip: skip },
-    { $limit: 10 }
-  ])
-  .toArray();
+  const isDefault = search_text === "Himanshu-Nilay-Neeraj";
+  const queryText = isDefault ? "" : search_text;
 
-    
+  let query = {};
+  if (!isDefault) {
+    // For robust matching, split query by space and match ALL terms (AND logic across terms)
+    const terms = queryText.trim().split(/\s+/).filter(Boolean);
+    if (terms.length > 0) {
+      const conditions = terms.map(term => {
+        const regexStr = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return {
+          $or: [
+            { company: { $regex: regexStr, $options: 'i' } },
+            { role: { $regex: regexStr, $options: 'i' } },
+            { name: { $regex: regexStr, $options: 'i' } },
+            { branch: { $regex: regexStr, $options: 'i' } },
+            { batch: { $regex: regexStr, $options: 'i' } },
+            { exp_text: { $regex: regexStr, $options: 'i' } }
+          ]
+        };
+      });
+      query = { $and: conditions };
+    }
+  }
+
+  const result = await experience
+    .find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(10)
+    .toArray();
+
   return result;
 }
 

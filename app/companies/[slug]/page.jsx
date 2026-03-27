@@ -7,7 +7,7 @@ import { ArrowLeft, Building2, Globe, MapPin, Tag } from "lucide-react";
 import Link from "next/link";
 import { MongoClient } from "mongodb";
 import ArticleCard from "@/components/ArticleCard";
-import Navbar from "@/components/Navbar";
+import ClientThemeNavbar from "@/components/ClientThemeNavbar";
 
 export default async function CompanyDetails({ params }) {
     await connectToDatabase();
@@ -28,7 +28,7 @@ export default async function CompanyDetails({ params }) {
 
     return (
         <div className="relative min-h-screen w-full overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-            <Navbar />
+            <ClientThemeNavbar />
             {/* Background elements (matching list view) */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />

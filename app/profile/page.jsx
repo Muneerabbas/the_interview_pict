@@ -22,7 +22,8 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const profile_pic = session?.user?.image;
+  const profile_pic_raw = session?.user?.image || profileData?.profile_pic || profileData?.image || "";
+  const profile_pic = typeof profile_pic_raw === 'string' ? profile_pic_raw.replace(/"/g, "") : "";
   const name = session?.user?.name || "John Doe";
   const email = session?.user?.email || "john.doe@example.com";
   const [globalLoading, setGlobalLoading] = useState(false);

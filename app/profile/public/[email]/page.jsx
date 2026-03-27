@@ -52,7 +52,7 @@ async function getPublicProfile(email) {
     const profile = {
       name: userData?.name || (first?.name ? String(first.name).replace(/"/g, "") : "Anonymous Candidate"),
       email,
-      profilePic: userData?.profile_pic || (first?.profile_pic ? String(first.profile_pic).replace(/"/g, "") : null),
+      profilePic: userData?.profile_pic || userData?.image || userData?.profilePic_Url || (first?.profile_pic ? String(first.profile_pic).replace(/"/g, "") : null),
       branch: userData?.branch || first?.branch || "Branch not shared",
       batch: userData?.batch || first?.batch || "",
       role: userData?.role || first?.role || "Role not shared",

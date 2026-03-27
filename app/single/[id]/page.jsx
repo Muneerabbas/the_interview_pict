@@ -54,7 +54,7 @@ const getExperienceData = cache(async (id) => {
 
     const data = {
       ...expData,
-      profile_pic: expData?.profile_pic ? String(expData.profile_pic).replace(/"/g, "") : null,
+      profile_pic: (expData?.profile_pic || expData?.image || expData?.profilePic_Url) ? String(expData.profile_pic || expData.image || expData.profilePic_Url).replace(/"/g, "") : null,
       name: expData?.name?.replace(/"/g, "") || "Anonymous Candidate",
       exp_text: expData?.exp_text || "",
       branch: expData?.branch || "Branch not shared",

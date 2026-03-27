@@ -540,13 +540,53 @@ export async function PATCH(req) {
     if (!commentId || !mongoose.Types.ObjectId.isValid(commentId)) {
       return NextResponse.json({ error: "Valid commentId is required" }, { status: 400 });
     }
-    if (!["resolve", "unresolve"].includes(action)) {
+    if (!["resolve", "unresolve", "toggle-upvote"].includes(action)) {
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
 
-    const comment = await Comment.findById(commentId).select("_id author type isResolved").lean();
+    const comment = await Comment.findById(commentId)
+      .select("_id author type isResolved upvotes")
+      .lean();
     if (!comment) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
+    if (action === "toggle-upvote") {
+      if (String(comment.author) === String(viewerId)) {
+        return NextResponse.json({ error: "You cannot like your own comment" }, { status: 400 });
+      }
+
+      const hasUpvoted = Array.isArray(comment.upvotes)
+        ? comment.upvotes.some((id) => String(id) === String(viewerId))
+        : false;
+
+      const updated = await Comment.findByIdAndUpdate(
+        commentId,
+        hasUpvoted
+          ? {
+              $pull: { upvotes: viewerId },
+              $set: { updatedAt: new Date() },
+            }
+          : {
+              $addToSet: { upvotes: viewerId },
+              $set: { updatedAt: new Date() },
+            },
+        { new: true }
+      )
+        .select("_id upvotes")
+        .lean();
+
+      return NextResponse.json(
+        {
+          success: true,
+          comment: {
+            id: String(updated._id),
+            hasUpvoted: !hasUpvoted,
+            upvotesCount: Array.isArray(updated.upvotes) ? updated.upvotes.length : 0,
+          },
+        },
+        { status: 200 }
+      );
     }
 
     if (String(comment.author) !== String(viewerId)) {

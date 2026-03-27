@@ -17,6 +17,8 @@ export async function POST(req) {
         const experience = db.collection("experience");
 
 
+        const now = new Date();
+
         await experience.updateOne(
             { uid: id },
             [
@@ -28,7 +30,8 @@ export async function POST(req) {
                                 { $setDifference: ["$likes", [email]] },
                                 { $concatArrays: [{ $ifNull: ["$likes", []] }, [email]] }
                             ]
-                        }
+                        },
+                        likesUpdatedAt: now,
                     }
                 }
             ]

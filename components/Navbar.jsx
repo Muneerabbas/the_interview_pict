@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -21,11 +21,20 @@ import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import logo from "../public/icon.svg";
+import NotificationsMenu from "./NotificationsMenu";
+import { useAuthModal } from "./AuthModalProvider";
 
 export default function Navbar({ showThemeToggle = false, isDarkMode = false, onToggleDarkMode }) {
   const { data: session } = useSession();
+  const { openAuthModal } = useAuthModal();
   const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const desktopNotificationsRef = useRef(null);
+  const mobileNotificationsRef = useRef(null);
 
   const texts = ["Company", "Batch", "Role", "Candidate"];
   const [index, setIndex] = useState(0);
@@ -43,7 +52,59 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
   // Close mobile menu on route change.
   useEffect(() => {
     setIsMenuOpen(false);
+    setNotificationsOpen(false);
   }, [pathname]);
+
+  const loadNotifications = useCallback(async () => {
+    if (!session?.user?.email) {
+      setNotifications([]);
+      setUnreadNotifications(0);
+      return;
+    }
+
+    setNotificationsLoading(true);
+    try {
+      const res = await fetch("/api/notifications", { cache: "no-store" });
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json?.error || "Failed to fetch notifications");
+      }
+
+      setNotifications(Array.isArray(json.notifications) ? json.notifications : []);
+      setUnreadNotifications(Number(json.unreadCount) || 0);
+    } catch (error) {
+      console.error("Failed to load notifications:", error);
+    } finally {
+      setNotificationsLoading(false);
+    }
+  }, [session?.user?.email]);
+
+  useEffect(() => {
+    if (!session?.user?.email) {
+      setNotifications([]);
+      setUnreadNotifications(0);
+      setNotificationsOpen(false);
+      return undefined;
+    }
+
+    loadNotifications();
+    const intervalId = window.setInterval(loadNotifications, 60000);
+    return () => window.clearInterval(intervalId);
+  }, [loadNotifications, session?.user?.email]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const clickedDesktopMenu = desktopNotificationsRef.current?.contains(event.target);
+      const clickedMobileMenu = mobileNotificationsRef.current?.contains(event.target);
+
+      if (!clickedDesktopMenu && !clickedMobileMenu) {
+        setNotificationsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const clearAllSessionData = () => {
     document.cookie.split(";").forEach((cookie) => {
@@ -75,6 +136,35 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
       onToggleDarkMode();
     }
   };
+
+  const handleNotificationsToggle = useCallback(async () => {
+    if (!session?.user) {
+      openAuthModal();
+      return;
+    }
+
+    const nextOpen = !notificationsOpen;
+    setNotificationsOpen(nextOpen);
+
+    if (nextOpen && unreadNotifications > 0) {
+      setUnreadNotifications(0);
+      try {
+        const res = await fetch("/api/notifications", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to mark notifications as read");
+        }
+      } catch (error) {
+        console.error("Failed to mark notifications as read:", error);
+        loadNotifications();
+      }
+    }
+  }, [loadNotifications, notificationsOpen, openAuthModal, session?.user, unreadNotifications]);
 
   const navItems = useMemo(
     () => [
@@ -176,6 +266,20 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
               </Link>
             ))}
 
+            {session ? (
+              <div ref={desktopNotificationsRef}>
+                <NotificationsMenu
+                  isOpen={notificationsOpen}
+                  isLoading={notificationsLoading}
+                  unreadCount={unreadNotifications}
+                  notifications={notifications}
+                  onToggle={handleNotificationsToggle}
+                  onClose={() => setNotificationsOpen(false)}
+                  buttonClassName="relative ml-1 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:-translate-y-[0.5px] hover:border-blue-300/50 hover:text-blue-700 active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+                />
+              </div>
+            ) : null}
+
             {showThemeToggle && (
               <button
                 onClick={handleThemeToggle}
@@ -227,6 +331,20 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
                 {isDarkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
               </button>
             )}
+            {session ? (
+              <div ref={mobileNotificationsRef}>
+                <NotificationsMenu
+                  isOpen={notificationsOpen}
+                  isLoading={notificationsLoading}
+                  unreadCount={unreadNotifications}
+                  notifications={notifications}
+                  onToggle={handleNotificationsToggle}
+                  onClose={() => setNotificationsOpen(false)}
+                  panelClassName="right-0"
+                  buttonClassName="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+                />
+              </div>
+            ) : null}
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
               className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"

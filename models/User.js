@@ -29,6 +29,22 @@ const userSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    notificationState: {
+      lastCheckedAt: {
+        type: Date,
+        default: null,
+      },
+      postLikesSeen: {
+        type: Map,
+        of: Number,
+        default: {},
+      },
+      commentLikesSeen: {
+        type: Map,
+        of: Number,
+        default: {},
+      },
+    },
   },
   {
     timestamps: true,

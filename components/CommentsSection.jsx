@@ -86,6 +86,35 @@ function updateResolvedInTree(nodes, commentId, isResolved) {
   });
 }
 
+function updateUpvoteInTree(nodes, commentId, nextHasUpvoted, nextUpvotesCount = null) {
+  return nodes.map((node) => {
+    if (node.id === commentId) {
+      const previousHasUpvoted = Boolean(node.hasUpvoted);
+      const resolvedHasUpvoted = Boolean(nextHasUpvoted);
+      const fallbackCount = Math.max(
+        0,
+        (node.upvotesCount || 0) + (resolvedHasUpvoted === previousHasUpvoted ? 0 : resolvedHasUpvoted ? 1 : -1)
+      );
+
+      return {
+        ...node,
+        hasUpvoted: resolvedHasUpvoted,
+        upvotesCount:
+          typeof nextUpvotesCount === "number" ? Math.max(0, nextUpvotesCount) : fallbackCount,
+      };
+    }
+
+    if (!Array.isArray(node.replies) || node.replies.length === 0) {
+      return node;
+    }
+
+    return {
+      ...node,
+      replies: updateUpvoteInTree(node.replies, commentId, nextHasUpvoted, nextUpvotesCount),
+    };
+  });
+}
+
 export default function CommentsSection({ experienceId, companyName, articleAuthorName }) {
   const { data: session } = useSession();
   const isAuthenticated = Boolean(session?.user);
@@ -106,10 +135,11 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   const [composeText, setComposeText] = useState("");
   const [posting, setPosting] = useState(false);
   const [resolvingId, setResolvingId] = useState("");
+  const [likingCommentId, setLikingCommentId] = useState("");
   const [replyDrafts, setReplyDrafts] = useState({});
   const [expanded, setExpanded] = useState({});
   const [postingReplyId, setPostingReplyId] = useState("");
-  const [liked, setLiked] = useState({});
+  const [highlightedCommentId, setHighlightedCommentId] = useState("");
 
   const loadComments = useCallback(async () => {
     if (!experienceId) {
@@ -147,23 +177,81 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     loadComments();
   }, [loadComments]);
 
+  useEffect(() => {
+    const syncHashTarget = () => {
+      if (typeof window === "undefined") return;
+      const hash = window.location.hash || "";
+      setHighlightedCommentId(hash.startsWith("#comment-") ? hash.replace("#comment-", "") : "");
+    };
+
+    syncHashTarget();
+    window.addEventListener("hashchange", syncHashTarget);
+    return () => window.removeEventListener("hashchange", syncHashTarget);
+  }, []);
+
+  useEffect(() => {
+    if (!highlightedCommentId || loading) return;
+
+    const target = document.getElementById(`comment-${highlightedCommentId}`);
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [comments, highlightedCommentId, loading]);
+
   const filteredComments = useMemo(() => {
     if (filter === "all") return comments;
     if (filter === "resolved") return comments.filter((item) => item.isResolved);
     return comments.filter((item) => item.type === filter);
   }, [comments, filter]);
 
-  const toggleLikeLocal = (commentId) => {
+  const toggleCommentLike = async (item) => {
     if (!isAuthenticated) {
       openAuthModal();
       return;
     }
-    setLiked((prev) => ({ ...prev, [commentId]: !prev[commentId] }));
-  };
 
-  const upvoteCountDisplay = (item) => {
-    const delta = liked[item.id] ? 1 : 0;
-    return Math.max(0, (item.upvotesCount || 0) + delta);
+    if (likingCommentId) return;
+
+    const previousHasUpvoted = Boolean(item.hasUpvoted);
+    const previousUpvotesCount = Number(item.upvotesCount) || 0;
+
+    setLikingCommentId(item.id);
+    setComments((prev) => updateUpvoteInTree(prev, item.id, !previousHasUpvoted));
+
+    try {
+      const res = await fetch("/api/comments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          commentId: item.id,
+          action: "toggle-upvote",
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        if (res.status === 401) {
+          openAuthModal();
+          return;
+        }
+        throw new Error(json?.error || "Failed to like comment");
+      }
+
+      setComments((prev) =>
+        updateUpvoteInTree(
+          prev,
+          item.id,
+          Boolean(json?.comment?.hasUpvoted),
+          Number(json?.comment?.upvotesCount) || 0
+        )
+      );
+    } catch (err) {
+      setError(err.message || "Failed to like comment");
+      setComments((prev) =>
+        updateUpvoteInTree(prev, item.id, previousHasUpvoted, previousUpvotesCount)
+      );
+    } finally {
+      setLikingCommentId("");
+    }
   };
 
   const submitComment = async () => {
@@ -310,9 +398,13 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     return (
       <div
         key={item.id}
+        id={`comment-${item.id}`}
         className={cn(
           "border border-slate-200/80 bg-white/95 dark:border-slate-700/80 dark:bg-slate-900/90",
-          isReply ? "mt-2 rounded-xl p-3" : "rounded-2xl p-4 sm:p-5"
+          isReply ? "mt-2 rounded-xl p-3 scroll-mt-28" : "rounded-2xl p-4 scroll-mt-28 sm:p-5",
+          highlightedCommentId === item.id
+            ? "ring-2 ring-blue-300 dark:ring-cyan-400/60"
+            : ""
         )}
       >
         <div className={cn("flex", isReply ? "gap-2.5" : "gap-3")}>
@@ -361,16 +453,18 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
             <div className={cn("flex flex-wrap items-center text-xs", isReply ? "mt-2 gap-2" : "mt-3 gap-3")}>
               <button
                 type="button"
-                onClick={() => toggleLikeLocal(item.id)}
+                onClick={() => toggleCommentLike(item)}
+                disabled={likingCommentId === item.id}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium transition",
-                  liked[item.id]
+                  item.hasUpvoted
                     ? "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300"
-                    : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                    : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+                  likingCommentId === item.id ? "cursor-not-allowed opacity-70" : ""
                 )}
               >
                 <Heart size={12} />
-                {upvoteCountDisplay(item)} helpful
+                {item.upvotesCount || 0} helpful
               </button>
               {item.canReply ? (
                 <button

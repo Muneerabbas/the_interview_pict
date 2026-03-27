@@ -7,11 +7,12 @@ import Navbar from '../../components/Navbar';
 import Login from '../../components/Login';
 import ProfileCard from '../../components/Card';
 import ProfileAvatar from '../../components/ProfileAvatar';
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import ShareProfileButton from '../../components/ShareProfileButton';
 
 const LoadingScreen = () => (
   <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 dark:bg-slate-900/60 backdrop-blur-sm transition-colors duration-500">
-    <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/95 dark:bg-slate-800/95 px-6 py-4 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500">
+    <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 dark:border-700/80 bg-white/95 dark:bg-slate-800/95 px-6 py-4 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500">
       <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
       <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Processing...</span>
     </div>
@@ -22,9 +23,6 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const profile_pic_raw = session?.user?.image || profileData?.profile_pic || profileData?.image || "";
-  const profile_pic = typeof profile_pic_raw === 'string' ? profile_pic_raw.replace(/"/g, "") : "";
-  const name = session?.user?.name || "John Doe";
   const email = session?.user?.email || "john.doe@example.com";
   const [globalLoading, setGlobalLoading] = useState(false);
 
@@ -51,6 +49,9 @@ const ProfilePage = () => {
     currentCompany: '',
     views: 0
   });
+
+  const profile_pic = resolveProfileImage({ ...profileData, image: session?.user?.image });
+  const name = resolveProfileName({ ...profileData, name: session?.user?.name });
   const [isEditing, setIsEditing] = useState(false);
   const [editingField, setEditingField] = useState(null); // 'headline', 'about', 'skills', 'education', 'social'
   const [editingSocialField, setEditingSocialField] = useState(null); // 'linkedin', 'twitter', etc.
@@ -242,7 +243,7 @@ const ProfilePage = () => {
           <div className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/88 dark:bg-slate-800/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
             <div className="flex flex-col items-center gap-6 md:flex-row">
               <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.15)]">
-                <ProfileAvatar src={profile_pic} alt="Profile" className="h-full w-full object-cover" />
+                <ProfileAvatar src={profile_pic} alt="Profile" name={name} className="h-full w-full object-cover" />
               </div>
               <div className="flex-1 space-y-3 text-center md:text-left">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{name}</h1>

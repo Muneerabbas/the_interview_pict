@@ -14,9 +14,9 @@ async function main(search_text, page = 1) {
   console.log("Connected to MongoDB");
   const db = client.db("int-exp");
   const experience = db.collection("experience");
-  
+
   const skip = (page - 1) * 10;
-  
+
   const isDefault = search_text === "Himanshu-Nilay-Neeraj";
   const queryText = isDefault ? "" : search_text;
 
@@ -56,11 +56,11 @@ export async function GET(req) {
   try {
     const search = req.nextUrl.searchParams.get("search");
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
-    
+
     if (!search) {
       return NextResponse.json({ message: "Search query is required" }, { status: 400 });
     }
-    
+
     const result = await main(search, page);
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {

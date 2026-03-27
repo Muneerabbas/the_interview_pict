@@ -4,6 +4,8 @@ import { CheckCircle2, Heart, MessageSquare, Reply, Send, SlidersHorizontal } fr
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useAuthModal } from "@/components/AuthModalProvider";
+import ProfileAvatar from "@/components/ProfileAvatar";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const TYPE_META = {
   doubt: { label: "Doubt", badgeClass: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/35 dark:text-amber-300 dark:border-amber-500/35" },
@@ -408,13 +410,13 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         )}
       >
         <div className={cn("flex", isReply ? "gap-2.5" : "gap-3")}>
-          <div
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-full bg-slate-100 font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-              isReply ? "h-7 w-7 text-[10px]" : "h-9 w-9 text-xs"
-            )}
-          >
-            {authorInitials}
+          <div className={cn("shrink-0 overflow-hidden rounded-full shadow-sm ring-1 ring-slate-100 dark:ring-slate-800", isReply ? "h-7 w-7" : "h-9 w-9")}>
+            <ProfileAvatar
+              src={resolveProfileImage(item.author)}
+              name={resolveProfileName(item.author)}
+              alt={item.author?.name || "User"}
+              className="h-full w-full object-cover"
+            />
           </div>
           <div className="min-w-0 flex-1">
             <div className={cn("flex flex-wrap items-center", isReply ? "mb-1.5 gap-1.5" : "mb-2 gap-2")}>

@@ -23,6 +23,7 @@ export async function GET(req) {
       return NextResponse.json({ message: "Missing `uid` query parameter" }, { status: 400 });
     }
 
+    // Fetch document and join with user info to get fresh profile image/data
     const pipeline = [
       { $match: { uid } },
       {

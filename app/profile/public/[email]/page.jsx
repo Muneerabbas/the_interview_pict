@@ -22,6 +22,8 @@ import Navbar from "@/components/Navbar";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import ArticleCard from "@/components/ArticleCard";
 import ShareProfileButton from "@/components/ShareProfileButton";
+import ProfileViewTracker from "@/components/ProfileViewTracker";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -50,9 +52,9 @@ async function getPublicProfile(email) {
 
     const first = posts[0];
     const profile = {
-      name: userData?.name || (first?.name ? String(first.name).replace(/"/g, "") : "Anonymous Candidate"),
+      name: resolveProfileName({ ...first, ...userData }),
       email,
-      profilePic: userData?.profile_pic || userData?.image || userData?.profilePic_Url || (first?.profile_pic ? String(first.profile_pic).replace(/"/g, "") : null),
+      profilePic: resolveProfileImage({ ...first, ...userData }),
       branch: userData?.branch || first?.branch || "Branch not shared",
       batch: userData?.batch || first?.batch || "",
       role: userData?.role || first?.role || "Role not shared",
@@ -108,6 +110,7 @@ export default async function PublicProfilePage({ params }) {
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 dark:bg-indigo-500/10 blur-3xl transition-colors duration-500" />
 
       <Navbar />
+      <ProfileViewTracker email={profile?.email} />
 
       <div className="relative mx-auto mt-2 max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
         <div className="mb-4">

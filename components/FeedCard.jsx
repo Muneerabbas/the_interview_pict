@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const stripMarkdown = (value = "") => {
   return value
@@ -76,9 +77,8 @@ const FeedCard = ({ profile, width = "w-full" }) => {
     }
   };
 
-  const rawProfilePic = profile?.profile_pic || profile?.image || profile?.profilePic_Url || "";
-  const profilePic = typeof rawProfilePic === 'string' ? rawProfilePic.replace(/"/g, "") : "";
-  const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const profilePic = resolveProfileImage(profile);
+  const profileName = resolveProfileName(profile);
   const companyName = profile?.company || "Company not shared";
   const roleName = profile?.role || "Role not shared";
   const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();

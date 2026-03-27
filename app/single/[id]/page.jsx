@@ -10,15 +10,19 @@ import {
   Compass,
   Eye,
   FileText,
-  GraduationCap,
-  Sparkles,
-  UserRound,
+  Clock,
+  Share2,
+  Globe,
+  Heart,
+  ThumbsUp,
+  GraduationCap
 } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
 import ShareButton from "@/components/ShareButton";
 import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import LikeButton from "@/components/LikeButton";
 
 const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
@@ -54,8 +58,8 @@ const getExperienceData = cache(async (id) => {
 
     const data = {
       ...expData,
-      profile_pic: (expData?.profile_pic || expData?.image || expData?.profilePic_Url) ? String(expData.profile_pic || expData.image || expData.profilePic_Url).replace(/"/g, "") : null,
-      name: expData?.name?.replace(/"/g, "") || "Anonymous Candidate",
+      profile_pic: resolveProfileImage(expData),
+      name: resolveProfileName(expData),
       exp_text: expData?.exp_text || "",
       branch: expData?.branch || "Branch not shared",
       batch: expData?.batch || "",
@@ -210,6 +214,7 @@ export default async function SimilarExperience({ params }) {
                         <ProfileAvatar
                           src={data?.profile_pic}
                           alt={`${data?.name}'s profile picture`}
+                          name={data?.name}
                           className="h-full w-full object-cover"
                         />
                       </div>

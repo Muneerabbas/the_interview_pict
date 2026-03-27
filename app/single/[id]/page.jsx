@@ -24,6 +24,7 @@ import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import LikeButton from "@/components/LikeButton";
+import PostCompanyActions from "@/components/PostCompanyActions";
 
 const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
   ssr: true,
@@ -256,6 +257,13 @@ export default async function SimilarExperience({ params }) {
                           <span>{data?.role}</span>
                         </div>
                       </div>
+
+                      <PostCompanyActions
+                        companyName={data?.company}
+                        experienceUid={id}
+                        authorEmail={typeof data?.email === "string" ? data.email : ""}
+                        className="mt-3"
+                      />
 
                       {/* Header Meta: Flattened Inline Row */}
                       <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">

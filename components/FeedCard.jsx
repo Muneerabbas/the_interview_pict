@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  ArrowUpRight,
   Briefcase,
   Building2,
   ChevronRight,
@@ -10,7 +10,7 @@ import {
   Eye,
   GraduationCap,
   Heart,
-  Quote,
+  Pencil,
   Sparkles,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { companySlugFromName } from "@/lib/companySlug";
 
 const stripMarkdown = (value = "") => {
   return value
@@ -34,6 +35,7 @@ const stripMarkdown = (value = "") => {
 };
 
 const FeedCard = ({ profile, width = "w-full" }) => {
+  const router = useRouter();
   const router = useRouter();
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
@@ -83,6 +85,15 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   const roleName = profile?.role || "Role not shared";
   const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
   const readPath = `/single/${profile?.uid || profile?._id}`;
+  const editPath = profile?.uid ? `/edit/${profile.uid}` : null;
+  const companySlug = companySlugFromName(companyName);
+  const authorEmail = profile?.email ? String(profile.email) : "";
+  const isOwner =
+    userEmail &&
+    authorEmail &&
+    userEmail.toLowerCase() === authorEmail.toLowerCase();
+
+  const openPost = () => router.push(readPath);
 
   const dateObj = profile?.date ? new Date(profile.date) : null;
   const hasDate = dateObj && !Number.isNaN(dateObj.getTime());
@@ -101,10 +112,17 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
 
   return (
-    <Link
-      href={readPath}
-      className={`${width} group relative mx-auto block overflow-hidden rounded-2xl border border-slate-200/85 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]`}
-      prefetch={true}
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={openPost}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPost();
+        }
+      }}
+      className={`${width} group relative mx-auto block cursor-pointer overflow-hidden rounded-2xl border border-slate-200/85 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]`}
     >
       <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -141,10 +159,45 @@ const FeedCard = ({ profile, width = "w-full" }) => {
               </div>
 
               {/* Tags: Tucked directly beneath Info */}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                <div className="ui-tag ui-tag-company inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 py-0.5 pl-2 pr-1 text-[10.5px]">
                   <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
-                  <span className="truncate">{companyName}</span>
+                  {companySlug ? (
+                    <Link
+                      href={`/companies/${companySlug}`}
+                      prefetch={true}
+                      onClick={(e) => e.stopPropagation()}
+                      className="truncate font-semibold hover:underline"
+                    >
+                      {companyName}
+                    </Link>
+                  ) : (
+                    <span className="truncate">{companyName}</span>
+                  )}
+                  {companySlug && (
+                    <Link
+                      href={`/edit-company/${companySlug}`}
+                      prefetch={true}
+                      onClick={(e) => e.stopPropagation()}
+                      title="Edit company details"
+                      className="ml-0.5 inline-flex shrink-0 items-center gap-0.5 rounded px-1 py-0.5 text-[10px] font-bold text-blue-700 hover:bg-blue-50 dark:text-cyan-300 dark:hover:bg-slate-800"
+                    >
+                      <Pencil size={10} strokeWidth={2.5} />
+                      <span className="hidden sm:inline">Edit company</span>
+                    </Link>
+                  )}
+                  {isOwner && editPath && (
+                    <Link
+                      href={editPath}
+                      prefetch={true}
+                      onClick={(e) => e.stopPropagation()}
+                      title="Edit post details"
+                      className="ml-0.5 inline-flex shrink-0 items-center gap-0.5 rounded px-1 py-0.5 text-[10px] font-bold text-blue-700 hover:bg-blue-50 dark:text-cyan-300 dark:hover:bg-slate-800"
+                    >
+                      <Pencil size={10} strokeWidth={2.5} />
+                      <span className="hidden sm:inline">Edit</span>
+                    </Link>
+                  )}
                 </div>
                 <div className="ui-tag ui-tag-role inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
                   <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />
@@ -203,7 +256,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           </div>
         </div>
       </div>
-    </Link >
+    </div>
   );
 };
 

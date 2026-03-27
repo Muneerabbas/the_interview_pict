@@ -3,7 +3,7 @@ import connectToDatabase from "@/lib/mongoose";
 import Company from "@/models/Company";
 
 import { notFound } from "next/navigation";
-import { ArrowLeft, Building2, Globe, MapPin, Tag } from "lucide-react";
+import { ArrowLeft, Building2, Globe, MapPin, Pencil, Tag } from "lucide-react";
 import Link from "next/link";
 import { MongoClient } from "mongodb";
 import ArticleCard from "@/components/ArticleCard";
@@ -46,6 +46,13 @@ export default async function CompanyDetails({ params }) {
                 >
                     <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
                     Back to Companies
+                </Link>
+                <Link
+                    href={`/edit-company/${company.slug}`}
+                    className="ml-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+                >
+                    <Pencil size={13} />
+                    Edit Company
                 </Link>
 
                 {/* Company Header */}

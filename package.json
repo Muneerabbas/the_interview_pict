@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev --turbo",
     "build": "next build --webpack",
-    "start": "next start"
+    "start": "next start",
+    "seed:companies": "node scripts/seed-post-companies.mjs",
+    "seed:companies:dry": "node scripts/seed-post-companies.mjs --dry-run --limit=5"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",

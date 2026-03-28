@@ -212,7 +212,7 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
                 <input
                   type="text"
                   value={searchText}
-                  className="w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-28 text-sm text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
+                  className="w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-12 text-sm text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
                   onChange={(e) => setSearchText(e.target.value)}
                   placeholder="Search for"
                 />
@@ -236,9 +236,10 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
 
                 <button
                   type="submit"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all duration-300 hover:-translate-y-[0.5px] hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/35 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  aria-label="Submit search"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 transition-colors duration-300 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/35 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 >
-                  Search
+                  <Search size={16} strokeWidth={2.5} />
                 </button>
               </div>
             </form>
@@ -397,7 +398,7 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
                     </div>
                     <button
                       type="submit"
-                      className="mt-3 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      className="mt-3 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
                       Search
                     </button>

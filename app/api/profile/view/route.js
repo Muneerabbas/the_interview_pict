@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+import redis from "@/lib/redis";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -21,8 +22,13 @@ export async function POST(req) {
         );
 
         if (result.matchedCount === 0) {
-
             return NextResponse.json({ message: "User not found" }, { status: 404 });
+        }
+
+        // Invalidate cache
+        if (redis) {
+            const cacheKey = `user_profile_data:${email}`;
+            await redis.del(cacheKey);
         }
 
         return NextResponse.json({ success: true });

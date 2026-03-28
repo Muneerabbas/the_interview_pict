@@ -3,6 +3,8 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import User from "@/models/User";
 import connectToDatabase from "@/lib/mongoose";
+import { fetchWithCache } from "@/lib/cache";
+import redis from "@/lib/redis";
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
@@ -14,7 +16,12 @@ export async function GET(req) {
 
     try {
         await connectToDatabase();
-        const user = await User.findOne({ gmail: email });
+
+        const cacheKey = `user_profile_data:${email}`;
+        const user = await fetchWithCache(cacheKey, 3600, async () => {
+            return await User.findOne({ gmail: email });
+        });
+
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
@@ -58,6 +65,12 @@ export async function POST(req) {
             { $set: updateData },
             { new: true, upsert: true }
         );
+
+        // Invalidate cache
+        if (redis) {
+            const cacheKey = `user_profile_data:${userEmail}`;
+            await redis.del(cacheKey);
+        }
 
         return NextResponse.json({ message: "Profile updated successfully", user }, { status: 200 });
     } catch (error) {

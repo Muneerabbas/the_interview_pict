@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
@@ -35,7 +34,6 @@ const stripMarkdown = (value = "") => {
 };
 
 const FeedCard = ({ profile, width = "w-full" }) => {
-  const router = useRouter();
   const router = useRouter();
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();

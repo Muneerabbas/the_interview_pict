@@ -26,16 +26,12 @@
   .tiptap-resizable-image-frame img {
     display: block;
     border-radius: var(--tt-radius-xs, 0.25rem);
-    outline: 0.125rem solid transparent;
+    outline: none;
   }
 
   .tiptap-resizable-image.is-selected .tiptap-resizable-image-frame {
     border-color: var(--tt-brand-color-500);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-  }
-
-  .tiptap-resizable-image.is-selected .tiptap-resizable-image-frame img {
-    outline-color: rgba(59, 130, 246, 0.5);
   }
 
   .tiptap-image-handle {
@@ -121,7 +117,7 @@
 
   > img:not([data-type="emoji"] img) {
     margin: 2rem 0;
-    outline: 0.125rem solid transparent;
+    outline: none;
     border-radius: var(--tt-radius-xs, 0.25rem);
   }
 

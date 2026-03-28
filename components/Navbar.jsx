@@ -24,7 +24,9 @@ import logo from "../public/icon.svg";
 import NotificationsMenu from "./NotificationsMenu";
 import { useAuthModal } from "./AuthModalProvider";
 
-export default function Navbar({ showThemeToggle = false, isDarkMode = false, onToggleDarkMode }) {
+import { useTheme } from "next-themes";
+
+export default function Navbar({ showThemeToggle = false }) {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
   const [searchText, setSearchText] = useState("");
@@ -35,6 +37,15 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const desktopNotificationsRef = useRef(null);
   const mobileNotificationsRef = useRef(null);
+
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDarkMode = mounted && resolvedTheme === "dark";
 
   const texts = ["Company", "Batch", "Role", "Candidate"];
   const [index, setIndex] = useState(0);
@@ -132,9 +143,7 @@ export default function Navbar({ showThemeToggle = false, isDarkMode = false, on
   };
 
   const handleThemeToggle = () => {
-    if (typeof onToggleDarkMode === "function") {
-      onToggleDarkMode();
-    }
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   const handleNotificationsToggle = useCallback(async () => {

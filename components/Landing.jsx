@@ -25,6 +25,7 @@ import {
   Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTheme } from "next-themes"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
@@ -211,38 +212,29 @@ const StoryCard = ({ story }) => {
 
 export default function Home({ featuredStories, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const { resolvedTheme, setTheme } = useTheme()
+  const [mountedTheme, setMountedTheme] = useState(false)
+  useEffect(() => setMountedTheme(true), [])
+  const isDarkMode = mountedTheme && resolvedTheme === 'dark'
+
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
   const [activeSection, setActiveSection] = useState('Home')
 
   const mobileMenuRef = useRef(null)
   const mobileMenuButtonRef = useRef(null)
-  const didHydrateThemeRef = useRef(false)
 
   const batchYears = useMemo(() => Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i), [])
 
   const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev)
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }
 
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initialDarkMode = storedTheme ? storedTheme === 'dark' : prefersDark
-
-    setIsDarkMode(initialDarkMode)
-    document.documentElement.classList.toggle('dark', initialDarkMode)
-    document.body.classList.toggle('landing-light', !initialDarkMode)
-    didHydrateThemeRef.current = true
-  }, [])
-
-  useEffect(() => {
-    if (!didHydrateThemeRef.current) return
-    document.documentElement.classList.toggle('dark', isDarkMode)
-    document.body.classList.toggle('landing-light', !isDarkMode)
-    window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
-  }, [isDarkMode])
+    if (mountedTheme) {
+      document.body.classList.toggle('landing-light', resolvedTheme !== 'dark')
+    }
+  }, [resolvedTheme, mountedTheme])
 
   useEffect(() => {
     const fetchStories = async () => {

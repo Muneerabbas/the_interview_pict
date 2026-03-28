@@ -6,33 +6,10 @@ import { ArrowRight, Building2, MapPin } from "lucide-react";
 import Link from "next/link";
 
 export default function CompaniesDirectoryClient({ companies = [], countsMap = {} }) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [themeHydrated, setThemeHydrated] = useState(false);
-
-  useEffect(() => {
-    const storedCompaniesTheme = window.localStorage.getItem("companies-theme");
-    const storedGlobalTheme = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialDarkMode = storedCompaniesTheme
-      ? storedCompaniesTheme === "dark"
-      : storedGlobalTheme
-        ? storedGlobalTheme === "dark"
-        : prefersDark;
-
-    setIsDarkMode(initialDarkMode);
-    setThemeHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!themeHydrated) return;
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    window.localStorage.setItem("companies-theme", isDarkMode ? "dark" : "light");
-    window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode, themeHydrated]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <Navbar showThemeToggle isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode((prev) => !prev)} />
+      <Navbar showThemeToggle />
 
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />

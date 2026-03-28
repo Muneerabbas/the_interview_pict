@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, AlertCircle, CheckCircle2, Bot, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 import postCompanies from "@/data/post-companies.json";
+import { useTheme } from "next-themes";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
   <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/60" : "bg-gray-500/50"}`}>
@@ -124,7 +125,12 @@ def merge(left, right):
 Be as detailed as possible, and replace the placeholders with your actual interview details.`;
 
 
-export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, showThemeToggle = false }) {
+export default function MdxEditorPage({ showThemeToggle = false }) {
+  const { resolvedTheme } = useTheme();
+  const [mountedTheme, setMountedTheme] = useState(false);
+  useEffect(() => setMountedTheme(true), []);
+  const isDarkMode = mountedTheme && resolvedTheme === "dark";
+
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const { data: session } = useSession();
@@ -749,7 +755,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
       <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px] dark:bg-sky-500/20" />
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px] dark:bg-indigo-500/20" />
-      <Navbar showThemeToggle={showThemeToggle} isDarkMode={isDarkMode} onToggleDarkMode={onToggleDarkMode} />
+      <Navbar showThemeToggle={showThemeToggle} />
       {isLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
       {/* Warning message for small screens */}

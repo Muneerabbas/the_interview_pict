@@ -9,6 +9,7 @@ import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock } from "lucide-react"
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 
 const LoadingScreen = ({ isDarkMode }) => (
   <div
@@ -27,8 +28,11 @@ export default function HomePage() {
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [themeHydrated, setThemeHydrated] = useState(false);
+
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDarkMode = mounted && resolvedTheme === "dark";
 
   const isFetchingRef = useRef(false);
   const observer = useRef();
@@ -109,26 +113,6 @@ export default function HomePage() {
     }
   }, [page, activeTab, fetchProfiles, itemsPerPage]);
 
-  useEffect(() => {
-    const storedFeedTheme = window.localStorage.getItem("feed-theme");
-    const storedGlobalTheme = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialDarkMode = storedFeedTheme
-      ? storedFeedTheme === "dark"
-      : storedGlobalTheme
-        ? storedGlobalTheme === "dark"
-        : prefersDark;
-    setIsDarkMode(initialDarkMode);
-    setThemeHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!themeHydrated) return;
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    window.localStorage.setItem("feed-theme", isDarkMode ? "dark" : "light");
-    window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode, themeHydrated]);
-
   const skeletonCards = Array.from({ length: 3 });
 
   const handleShareExperienceClick = () => {
@@ -161,7 +145,7 @@ export default function HomePage() {
       {/* Center Reading Track */}
       <div className="fixed inset-y-0 left-1/2 w-full max-w-[800px] -translate-x-1/2 -z-10 bg-slate-100/10 dark:bg-slate-900/20 pointer-events-none" />
 
-      <Navbar showThemeToggle isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode((prev) => !prev)} />
+      <Navbar showThemeToggle />
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">

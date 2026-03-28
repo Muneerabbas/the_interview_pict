@@ -9,29 +9,6 @@ import { Loader2, FileText } from "lucide-react";
 
 export default function Post() {
   const { data: session, status } = useSession();
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [themeHydrated, setThemeHydrated] = useState(false);
-
-  useEffect(() => {
-    const storedPostTheme = window.localStorage.getItem("post-theme");
-    const storedGlobalTheme = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialDarkMode = storedPostTheme
-      ? storedPostTheme === "dark"
-      : storedGlobalTheme
-        ? storedGlobalTheme === "dark"
-        : prefersDark;
-
-    setIsDarkMode(initialDarkMode);
-    setThemeHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!themeHydrated) return;
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    window.localStorage.setItem("post-theme", isDarkMode ? "dark" : "light");
-    window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode, themeHydrated]);
 
   // Lock or unlock scroll when the login overlay is shown
   useEffect(() => {
@@ -70,11 +47,7 @@ export default function Post() {
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-500/20" />
 
       {!session && (
-        <Navbar
-          showThemeToggle
-          isDarkMode={isDarkMode}
-          onToggleDarkMode={() => setIsDarkMode((prev) => !prev)}
-        />
+        <Navbar showThemeToggle />
       )}
       <div className="relative min-h-screen">
         {!session ? (
@@ -103,11 +76,7 @@ export default function Post() {
         ) : (
           // Content when the user is logged in
           <div className="relative min-h-screen">
-            <MdxEditorPage
-              isDarkMode={isDarkMode}
-              onToggleDarkMode={() => setIsDarkMode((prev) => !prev)}
-              showThemeToggle
-            />
+            <MdxEditorPage showThemeToggle />
             <div className="pb-[400px] sm:pb-[110px] md:pb-[300px]"></div>
           </div>
         )}

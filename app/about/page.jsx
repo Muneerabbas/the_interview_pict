@@ -14,28 +14,8 @@ import Navbar from "../../components/Navbar";
 
 export default function Aboutus() {
   const storyRef = useRef(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [themeHydrated, setThemeHydrated] = useState(false);
 
-  useEffect(() => {
-    const storedFeedTheme = window.localStorage.getItem("feed-theme");
-    const storedGlobalTheme = window.localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialDarkMode = storedFeedTheme
-      ? storedFeedTheme === "dark"
-      : storedGlobalTheme
-        ? storedGlobalTheme === "dark"
-        : prefersDark;
-    setIsDarkMode(initialDarkMode);
-    setThemeHydrated(true);
-  }, []);
 
-  useEffect(() => {
-    if (!themeHydrated) return;
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    window.localStorage.setItem("feed-theme", isDarkMode ? "dark" : "light");
-    window.localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-  }, [isDarkMode, themeHydrated]);
 
   const scrollToStory = () => {
     storyRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -64,7 +44,7 @@ export default function Aboutus() {
         }}
       />
 
-      <Navbar showThemeToggle isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode((prev) => !prev)} />
+      <Navbar showThemeToggle />
 
       {/* First Screen */}
       <div className='min-h-screen flex flex-col relative pt-16'>

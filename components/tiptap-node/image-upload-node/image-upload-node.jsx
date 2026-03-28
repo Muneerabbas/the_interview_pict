@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { NodeViewWrapper } from "@tiptap/react"
 import { Button } from "@/components/tiptap-ui-primitive/button"
 import { CloseIcon } from "@/components/tiptap-icons/close-icon"
@@ -233,52 +233,51 @@ const ImageUploadPreview = ({
   fileItem,
   onRemove,
 }) => {
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const sizes = ["Bytes", "KB", "MB", "GB"]
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-  }
+  const [objectUrl, setObjectUrl] = useState(null)
+
+  useEffect(() => {
+    if (fileItem.file && fileItem.file.type.startsWith("image/")) {
+      const url = URL.createObjectURL(fileItem.file)
+      setObjectUrl(url)
+      return () => URL.revokeObjectURL(url)
+    }
+  }, [fileItem.file])
 
   return (
-    <div className="tiptap-image-upload-preview">
-      {fileItem.status === "uploading" && (
-        <div
-          className="tiptap-image-upload-progress"
-          style={{ width: `${fileItem.progress}%` }} />
-      )}
-      <div className="tiptap-image-upload-preview-content">
-        <div className="tiptap-image-upload-file-info">
-          <div className="tiptap-image-upload-file-icon">
-            <CloudUploadIcon />
-          </div>
-          <div className="tiptap-image-upload-details">
-            <span className="tiptap-image-upload-text">
-              {fileItem.file.name}
-            </span>
-            <span className="tiptap-image-upload-subtext">
-              {formatFileSize(fileItem.file.size)}
-            </span>
-          </div>
-        </div>
-        <div className="tiptap-image-upload-actions">
+    <div className="tiptap-image-upload-article-preview">
+      {objectUrl ? (
+        <div className="tiptap-image-upload-article-image-container">
+          <img src={objectUrl} alt="Preview" className="tiptap-image-upload-article-image" />
           {fileItem.status === "uploading" && (
-            <span className="tiptap-image-upload-progress-text">
-              {fileItem.progress}%
-            </span>
+            <div className="tiptap-image-upload-article-overlay">
+              <div className="tiptap-image-upload-article-progress-container">
+                <div
+                  className="tiptap-image-upload-article-progress-bar"
+                  style={{ width: `${fileItem.progress}%` }}
+                />
+              </div>
+              <span className="tiptap-image-upload-article-status">
+                Uploading... {fileItem.progress}%
+              </span>
+            </div>
           )}
-          <Button
+          <button
             type="button"
-            variant="ghost"
+            className="tiptap-image-upload-article-remove"
             onClick={(e) => {
               e.stopPropagation()
               onRemove()
-            }}>
+            }}
+          >
             <CloseIcon className="tiptap-button-icon" />
-          </Button>
+          </button>
         </div>
-      </div>
+      ) : (
+        <div className="tiptap-image-upload-article-fallback">
+          <CloudUploadIcon />
+          <span>{fileItem.file.name}</span>
+        </div>
+      )}
     </div>
   );
 }

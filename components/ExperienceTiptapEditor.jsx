@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Image } from "@tiptap/extension-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Typography } from "@tiptap/extension-typography";
@@ -22,6 +21,7 @@ import {
 } from "@/components/tiptap-ui-primitive/toolbar";
 
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
+import { ResizableImage } from "@/components/tiptap-node/image-node/resizable-image-extension";
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss";
 import "@/components/tiptap-node/code-block-node/code-block-node.scss";
@@ -138,7 +138,7 @@ const MobileToolbarContent = ({ type, onBack }) => (
   </>
 );
 
-export default function ExperienceTiptapEditor({ value = "", onChange, minHeight = 550 }) {
+export default function ExperienceTiptapEditor({ value = "", onChange, onError, minHeight = 550 }) {
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState("main");
@@ -171,7 +171,7 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
-      Image,
+      ResizableImage,
       Typography,
       Superscript,
       Subscript,
@@ -181,7 +181,10 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
         maxSize: MAX_FILE_SIZE,
         limit: 3,
         upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
+        onError: (error) => {
+          console.error("Upload failed:", error);
+          onError?.(error.message || "Upload failed");
+        },
       }),
     ],
     content: initialHtml,
@@ -214,6 +217,10 @@ export default function ExperienceTiptapEditor({ value = "", onChange, minHeight
 
     const nextHtml = toEditorHtml(value);
     const currentHtml = editor.getHTML();
+
+    // Keep deletion tracking in sync with externally loaded content
+    // (e.g. drafts fetched after first render).
+    cloudinaryUrlsRef.current = extractCloudinaryUrls(nextHtml);
 
     if (nextHtml !== currentHtml) {
       editor.commands.setContent(nextHtml || "<p></p>", false);

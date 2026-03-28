@@ -126,6 +126,7 @@ Be as detailed as possible, and replace the placeholders with your actual interv
 
 export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, showThemeToggle = false }) {
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const { data: session } = useSession();
   const [markdown, setMarkdown] = useState("");
   const [batch, setBatch] = useState("");
@@ -365,6 +366,11 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
       ...prevErrors,
       markdown: validateField('markdown', value || ""),
     }));
+  };
+
+  const handleEditorError = (msg) => {
+    setErrorMessage(msg);
+    setTimeout(() => setErrorMessage(''), 5000); // Clear error after 5s
   };
 
   const handleSubmit = async () => {
@@ -922,15 +928,31 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
           <AnimatePresence>
             {successMessage && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="mb-8 flex w-full justify-center rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-[#1D1D1D] shadow-sm backdrop-blur-sm dark:border-emerald-500/35 dark:bg-emerald-950/35 dark:text-slate-100"
+                initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(16,185,129,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-emerald-300 sm:px-8"
               >
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500 dark:text-emerald-300" />
-                  <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200 sm:text-base">{successMessage}</p>
-                </div>
+                <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+                <p className="text-sm font-bold text-slate-900 dark:text-emerald-200 sm:text-base">{successMessage}</p>
+              </motion.div>
+            )}
+
+            {errorMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(244,63,94,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-rose-300 sm:px-8"
+              >
+                <AlertCircle className="h-6 w-6 text-rose-500" />
+                <p className="text-sm font-bold text-slate-900 dark:text-rose-200 sm:text-base">{errorMessage}</p>
+                <button onClick={() => setErrorMessage('')} className="ml-2 rounded-lg p-1 hover:bg-rose-500/10 transition-colors">
+                  <span className="sr-only">Close</span>
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -1089,6 +1111,7 @@ export default function MdxEditorPage({ isDarkMode = false, onToggleDarkMode, sh
                 <ExperienceTiptapEditor
                   value={markdown}
                   onChange={handleMarkdownChange}
+                  onError={handleEditorError}
                   minHeight={650}
                 />
               </div>

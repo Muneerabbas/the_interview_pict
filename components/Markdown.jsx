@@ -100,12 +100,15 @@ const MarkdownRenderer = ({ content }) => {
     tr: ({ children }) => <tr className="border-t border-slate-200 dark:border-slate-700">{children}</tr>,
     th: ({ children }) => <th className="px-3 py-2 text-left font-semibold text-slate-800 dark:text-slate-200">{children}</th>,
     td: ({ children }) => <td className="px-3 py-2 text-slate-700 dark:text-slate-300">{children}</td>,
-    img: ({ src, alt }) => {
+    img: ({ src, alt, width, height, style }) => {
       if (typeof src === "string" && src.includes("res.cloudinary.com")) {
         return (
           <CloudinaryImage
             src={src}
             alt={alt || "Article image"}
+            width={width}
+            height={height}
+            style={style}
           />
         );
       }
@@ -114,7 +117,10 @@ const MarkdownRenderer = ({ content }) => {
         <img
           src={src || ""}
           alt={alt || "Markdown image"}
-          className="my-6 max-h-[420px] w-full rounded-xl border border-slate-200 object-cover dark:border-slate-700"
+          width={width}
+          height={height}
+          style={style}
+          className="my-6 block max-w-full h-auto rounded-xl border border-slate-200 object-contain dark:border-slate-700"
         />
       );
     },

@@ -1,40 +1,35 @@
-import { NextResponse } from 'next/server';
-import cloudinary from '@/lib/cloudinary';
+import cloudinary from "@/lib/cloudinary";
 
-export async function POST(request) {
+export async function POST(req) {
   try {
-    const data = await request.formData();
-    const file = data.get('file');
+    // eslint-disable-next-line no-unused-vars
+    const body = await req.json().catch(() => ({}));
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
-    }
+    const timestamp = Math.floor(Date.now() / 1000);
 
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'File must be an image' }, { status: 400 });
-    }
+    // Keep signed params exactly aligned with what the client submits.
+    // Use string values to avoid boolean normalization mismatches.
+    const paramsToSign = {
+      folder: "interview-pict/articles",
+      timestamp: String(timestamp),
+    };
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64 = `data:${file.type};base64,${buffer.toString('base64')}`;
+    const signature = cloudinary.utils.api_sign_request(
+      paramsToSign,
+      process.env.CLOUDINARY_API_SECRET
+    );
 
-    const result = await cloudinary.uploader.upload(base64, {
-      folder: 'interview-pict/articles',
-      eager: [{ width: 20, quality: 10 }],
-      eager_async: false,
+    return Response.json({
+      timestamp,
+      signature,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+      folder: paramsToSign.folder,
     });
-
-    const blurUrl = result.eager?.[0]?.secure_url ?? null;
-
-    return NextResponse.json({
-      success: true,
-      url: result.secure_url,
-      blur_url: blurUrl,
-      public_id: result.public_id,
-    });
-
   } catch (error) {
-    console.error('Cloudinary upload error:', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    return Response.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 }

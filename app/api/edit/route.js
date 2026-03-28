@@ -13,20 +13,22 @@ const cacheInvalidationKeys = [
 
 function invalidateAfterEdit(email) {
     const keys = [...cacheInvalidationKeys];
-    if (email) keys.push(`profile_posts_${encodeURIComponent(email)}`);
-
-    if (!redis) return;
-    if (redis.status === "wait") {
-        redis.connect().catch(() => {});
+    if (email) {
+        keys.push(`profile_posts_${encodeURIComponent(email)}`);
+        keys.push(`public_profile_full:${email}`);
+        keys.push(`user_profile_data:${email}`);
     }
 
-    redis.del(...keys).catch((err) => {
+    if (!redis) return;
+
+    // @upstash/redis del() can take multiple keys or an array
+    redis.del(keys).catch((err) => {
         console.warn("[cache] invalidate failed:", err?.message || err);
     });
 }
 
 export async function PUT(req) {
-    const { uid, exp_text, company, branch, batch, role,email} = await req.json();
+    const { uid, exp_text, company, branch, batch, role, email } = await req.json();
 
     try {
         await client.connect();
@@ -36,18 +38,18 @@ export async function PUT(req) {
         const db = client.db("int-exp");
 
         // Access a collection
-        const experience = db.collection("experience");   
+        const experience = db.collection("experience");
 
         // Find the document with the provided id and update it
         const result = await experience.updateOne(
-            { uid,email }, // Use ObjectId for MongoDB IDs
-            { 
+            { uid, email }, // Use ObjectId for MongoDB IDs
+            {
                 $set: {
-                    exp_text, 
-                    company, 
-                    branch, 
-                    batch, 
-                    role, 
+                    exp_text,
+                    company,
+                    branch,
+                    batch,
+                    role,
                     updated_at: new Date().toString() // Optional: to track when the record was updated
                 }
             }
@@ -61,7 +63,7 @@ export async function PUT(req) {
 
         console.log(result);
 
-        return NextResponse.json({ message: "Experience updated successfully" ,uid}, { status: 200 });
+        return NextResponse.json({ message: "Experience updated successfully", uid }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });
     }

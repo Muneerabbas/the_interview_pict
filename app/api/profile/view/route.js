@@ -27,8 +27,10 @@ export async function POST(req) {
 
         // Invalidate cache
         if (redis) {
-            const cacheKey = `user_profile_data:${email}`;
-            await redis.del(cacheKey);
+            await redis.del([
+                `user_profile_data:${email}`,
+                `public_profile_full:${email}`
+            ]);
         }
 
         return NextResponse.json({ success: true });

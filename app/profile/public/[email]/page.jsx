@@ -24,61 +24,69 @@ import ArticleCard from "@/components/ArticleCard";
 import ShareProfileButton from "@/components/ShareProfileButton";
 import ProfileViewTracker from "@/components/ProfileViewTracker";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { fetchWithCache } from "@/lib/cache";
+import redis from "@/lib/redis";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
 async function getPublicProfile(email) {
-  try {
-    await client.connect();
-    const db = client.db("int-exp");
-    const experience = db.collection("experience");
-    const userCollection = db.collection("user");
+  const cacheKey = `public_profile_full:${email}`;
 
-    const posts = await experience.find({ email }).sort({ date: -1 }).toArray();
-    // Get user statistics and profile info
-    const userData = await userCollection.findOneAndUpdate(
-      { gmail: email },
-      { $inc: { views: 1 } },
-      { returnDocument: 'after' }
-    );
+  return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
+    try {
+      await client.connect();
+      const db = client.db("int-exp");
+      const experience = db.collection("experience");
+      const userCollection = db.collection("user");
 
-    if (!userData && (!posts || posts.length === 0)) {
+      const posts = await experience.find({ email }).sort({ date: -1 }).toArray();
+
+      // Get user statistics and profile info
+      // Note: Views are incremented only on cache miss or separately
+      const userData = await userCollection.findOneAndUpdate(
+        { gmail: email },
+        { $inc: { views: 1 } },
+        { returnDocument: 'after' }
+      );
+
+      if (!userData && (!posts || posts.length === 0)) {
+        return { posts: [], stats: null, profile: null };
+      }
+
+      const totalReads = posts.reduce((sum, item) => sum + (Number(item?.views) || 0), 0);
+      const totalLikes = posts.reduce((sum, item) => sum + (Array.isArray(item?.likes) ? item.likes.length : 0), 0);
+      const companies = new Set(posts.map((item) => item.company).filter(Boolean));
+
+      const first = posts[0];
+      const profile = {
+        name: resolveProfileName({ ...first, ...userData }),
+        email,
+        profilePic: resolveProfileImage({ ...first, ...userData }),
+        branch: userData?.branch || first?.branch || "Branch not shared",
+        batch: userData?.batch || first?.batch || "",
+        role: userData?.role || first?.role || "Role not shared",
+        college: userData?.college || "",
+        currentCompany: userData?.currentCompany || "",
+        headline: userData?.headline || "",
+        about: userData?.about || "",
+        views: userData?.views || 0,
+        skills: userData?.skills || [],
+        socialLinks: userData?.socialLinks || { custom: [] }
+      };
+
+      const stats = {
+        posts: posts.length,
+        reads: totalReads,
+        likes: totalLikes,
+        companies: companies.size,
+      };
+
+      return { posts, stats, profile };
+    } catch (error) {
+      console.error("Public profile fetch error:", error);
       return { posts: [], stats: null, profile: null };
     }
-
-    const totalReads = posts.reduce((sum, item) => sum + (Number(item?.views) || 0), 0);
-    const totalLikes = posts.reduce((sum, item) => sum + (Array.isArray(item?.likes) ? item.likes.length : 0), 0);
-    const companies = new Set(posts.map((item) => item.company).filter(Boolean));
-
-    const first = posts[0];
-    const profile = {
-      name: resolveProfileName({ ...first, ...userData }),
-      email,
-      profilePic: resolveProfileImage({ ...first, ...userData }),
-      branch: userData?.branch || first?.branch || "Branch not shared",
-      batch: userData?.batch || first?.batch || "",
-      role: userData?.role || first?.role || "Role not shared",
-      college: userData?.college || "",
-      currentCompany: userData?.currentCompany || "",
-      headline: userData?.headline || "",
-      about: userData?.about || "",
-      views: userData?.views || 0,
-      skills: userData?.skills || [],
-      socialLinks: userData?.socialLinks || { custom: [] }
-    };
-
-    const stats = {
-      posts: posts.length,
-      reads: totalReads,
-      likes: totalLikes,
-      companies: companies.size,
-    };
-
-    return { posts, stats, profile };
-  } catch (error) {
-    console.error("Public profile fetch error:", error);
-    return { posts: [], stats: null, profile: null };
-  }
+  });
 }
 
 export default async function PublicProfilePage({ params }) {

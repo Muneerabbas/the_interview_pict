@@ -21,14 +21,16 @@ const cacheInvalidationKeys = [
 
 function invalidateAfterWrite(email) {
   const keys = [...cacheInvalidationKeys];
-  if (email) keys.push(`profile_posts_${encodeURIComponent(email)}`);
-
-  if (!redis) return;
-  if (redis.status === "wait") {
-    redis.connect().catch(() => {});
+  if (email) {
+    keys.push(`profile_posts_${encodeURIComponent(email)}`);
+    keys.push(`public_profile_full:${email}`);
+    keys.push(`user_profile_data:${email}`);
   }
 
-  redis.del(...keys).catch((err) => {
+  if (!redis) return;
+
+  // @upstash/redis del() can take multiple keys or an array
+  redis.del(keys).catch((err) => {
     console.warn("[cache] invalidate failed:", err?.message || err);
   });
 }

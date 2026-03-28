@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
+import redis from "@/lib/redis";
 
 
 // Create a persistent MongoDB connection
@@ -11,6 +12,26 @@ const db = client.db("int-exp");
 const experience = db.collection("experience");
 const user = db.collection("user");
 const backup = db.collection("backup");
+
+
+const cacheInvalidationKeys = [
+  "feed_page_0_limit_10",
+  "top_stories_page_0",
+];
+
+function invalidateAfterWrite(email) {
+  const keys = [...cacheInvalidationKeys];
+  if (email) keys.push(`profile_posts_${encodeURIComponent(email)}`);
+
+  if (!redis) return;
+  if (redis.status === "wait") {
+    redis.connect().catch(() => {});
+  }
+
+  redis.del(...keys).catch((err) => {
+    console.warn("[cache] invalidate failed:", err?.message || err);
+  });
+}
 
 // Ensure MongoDB is connected
 (async () => {
@@ -71,6 +92,8 @@ export async function POST(req) {
     if (!result.acknowledged) {
       return NextResponse.json({ message: "Failed to save experience" }, { status: 500 });
     }
+
+    invalidateAfterWrite(email);
 
     // Send acknowledgment email
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";

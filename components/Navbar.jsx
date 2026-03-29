@@ -99,8 +99,33 @@ export default function Navbar({ showThemeToggle = false }) {
     }
 
     loadNotifications();
-    const intervalId = window.setInterval(loadNotifications, 60000);
-    return () => window.clearInterval(intervalId);
+    let intervalId = null;
+
+    const setupPolling = () => {
+      if (intervalId) {
+        window.clearInterval(intervalId);
+      }
+      if (document.visibilityState === "visible") {
+        intervalId = window.setInterval(loadNotifications, 60000);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        loadNotifications();
+      }
+      setupPolling();
+    };
+
+    setupPolling();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      if (intervalId) {
+        window.clearInterval(intervalId);
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [loadNotifications, session?.user?.email]);
 
   useEffect(() => {

@@ -237,22 +237,14 @@ export default function Home({ featuredStories, topStories }) {
   }, [resolvedTheme, mountedTheme])
 
   useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const [featuredResponse, topResponse] = await Promise.all([
-          fetch('/api/feed'),
-          fetch('/api/topStories'),
-        ])
-        const [featuredData, topData] = await Promise.all([featuredResponse.json(), topResponse.json()])
-        setFetchedFeaturedStories(Array.isArray(featuredData) ? featuredData : [])
-        setFetchedTopStories(Array.isArray(topData) ? topData : [])
-      } catch (error) {
-        console.error('Fetching landing stories failed:', error)
-      }
-    }
+    setFetchedFeaturedStories(Array.isArray(featuredStories) ? featuredStories : [])
+  }, [featuredStories])
 
-    fetchStories()
+  useEffect(() => {
+    setFetchedTopStories(Array.isArray(topStories) ? topStories : [])
+  }, [topStories])
 
+  useEffect(() => {
     return () => {
       document.body.classList.remove('landing-light')
     }
@@ -688,4 +680,3 @@ export default function Home({ featuredStories, topStories }) {
     </main>
   )
 }
-

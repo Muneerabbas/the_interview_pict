@@ -47,15 +47,15 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
 const getExperienceData = cache(async (id) => {
   try {
-    const [expResponse, feedResponse] = await Promise.all([
+    const [expResponse, relatedResponse] = await Promise.all([
       fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
-      fetch(`${baseUrl}/api/feed`, { next: { revalidate: revalidateTime } }),
+      fetch(`${baseUrl}/api/topStories?itemsPerPage=12`, { next: { revalidate: revalidateTime } }),
     ]);
 
     if (!expResponse.ok) return { data: null, articles: [] };
 
     const expData = await expResponse.json();
-    const feedData = await feedResponse.json();
+    const relatedData = relatedResponse.ok ? await relatedResponse.json() : [];
 
     const data = {
       ...expData,
@@ -69,7 +69,7 @@ const getExperienceData = cache(async (id) => {
       views: Number(expData?.views) || 0,
     };
 
-    const articles = (feedData || [])
+    const articles = (relatedData || [])
       .filter((article) => article.uid !== id)
       .filter((article, index, arr) => arr.findIndex((a) => a.uid === article.uid) === index)
       .slice(0, 8);

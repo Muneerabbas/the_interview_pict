@@ -2,14 +2,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import ProfileCard from "../../../components/Card";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { useParams, useRouter } from "next/navigation";
 import { Loader2, ArrowLeft, Search } from "lucide-react";
 import ClientThemeNavbar from "@/components/ClientThemeNavbar";
 
-const SearchPage = ({ params }) => {
+const SearchPage = () => {
   const router = useRouter();
-  const { search } = React.use(params);
+  const params = useParams();
+  const rawSearchParam = params?.search;
+  const search = Array.isArray(rawSearchParam) ? rawSearchParam[0] : rawSearchParam;
   
   const decodedSearch = search ? decodeURIComponent(search) : "";
   const initialSearchText = decodedSearch === "Himanshu-Nilay-Neeraj" ? "" : decodedSearch;

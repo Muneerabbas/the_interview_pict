@@ -11,6 +11,9 @@ import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
+const FEED_CACHE_PREFIX = "feed_state_v1";
+const getFeedCacheKey = (tab) => `${FEED_CACHE_PREFIX}:${tab}`;
+
 const LoadingScreen = ({ isDarkMode }) => (
   <div
     className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center backdrop-blur-sm ${isDarkMode ? "bg-slate-950/80" : "bg-white/80"
@@ -28,6 +31,7 @@ export default function HomePage() {
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
+  const [tabReady, setTabReady] = useState(false);
 
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -35,6 +39,7 @@ export default function HomePage() {
   const isDarkMode = mounted && resolvedTheme === "dark";
 
   const isFetchingRef = useRef(false);
+  const skipNextFetchRef = useRef(false);
   const observer = useRef();
   const lastProfileElementRef = useCallback(
     (node) => {
@@ -92,26 +97,95 @@ export default function HomePage() {
     }
   }, [activeTab]);
 
-  const prevTabRef = useRef(activeTab);
-
   useEffect(() => {
-    const isTabChange = prevTabRef.current !== activeTab;
+    if (typeof window === "undefined") return;
 
-    if (isTabChange) {
-      prevTabRef.current = activeTab;
+    let restored = false;
+    try {
+      const cached = sessionStorage.getItem(getFeedCacheKey(activeTab));
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        const cachedProfiles = Array.isArray(parsed?.profiles) ? parsed.profiles : [];
+        const cachedPage = Number.isFinite(Number(parsed?.page)) ? Number(parsed.page) : 0;
+
+        setProfiles(cachedProfiles);
+        setPage(cachedPage);
+        setHasMoreProfiles(parsed?.hasMoreProfiles ?? true);
+        skipNextFetchRef.current = cachedProfiles.length > 0;
+        restored = true;
+
+        if (Number.isFinite(parsed?.scrollY)) {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: parsed.scrollY, behavior: "auto" });
+          });
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to restore feed cache:", error);
+    }
+
+    if (!restored) {
       setProfiles([]);
       setPage(0);
       setHasMoreProfiles(true);
-      // If page is already 0, setPage(0) won't trigger a re-render/effect
-      // So we manually call fetchProfiles for page 0
-      if (page === 0) {
-        fetchProfiles(0, itemsPerPage, activeTab);
-      }
-    } else {
-      // Normal pagination or initial load where page is 0
-      fetchProfiles(page, itemsPerPage, activeTab);
+      skipNextFetchRef.current = false;
     }
-  }, [page, activeTab, fetchProfiles, itemsPerPage]);
+
+    setTabReady(true);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!tabReady) return;
+    if (skipNextFetchRef.current) {
+      skipNextFetchRef.current = false;
+      return;
+    }
+    fetchProfiles(page, itemsPerPage, activeTab);
+  }, [tabReady, page, activeTab, fetchProfiles, itemsPerPage]);
+
+  useEffect(() => {
+    if (!tabReady || typeof window === "undefined") return;
+    try {
+      sessionStorage.setItem(
+        getFeedCacheKey(activeTab),
+        JSON.stringify({
+          profiles,
+          page,
+          hasMoreProfiles,
+          scrollY: window.scrollY,
+        })
+      );
+    } catch (error) {
+      console.warn("Failed to persist feed cache:", error);
+    }
+  }, [profiles, page, hasMoreProfiles, activeTab, tabReady]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const saveScroll = () => {
+      try {
+        const cached = sessionStorage.getItem(getFeedCacheKey(activeTab));
+        if (!cached) return;
+        const parsed = JSON.parse(cached);
+        sessionStorage.setItem(
+          getFeedCacheKey(activeTab),
+          JSON.stringify({
+            ...parsed,
+            scrollY: window.scrollY,
+          })
+        );
+      } catch (error) {
+        console.warn("Failed to update feed scroll cache:", error);
+      }
+    };
+
+    window.addEventListener("pagehide", saveScroll);
+    return () => {
+      saveScroll();
+      window.removeEventListener("pagehide", saveScroll);
+    };
+  }, [activeTab]);
 
   const skeletonCards = Array.from({ length: 3 });
 
@@ -219,7 +293,7 @@ export default function HomePage() {
               <AnimatePresence mode="popLayout">
                 {profiles.map((profile, index) => (
                   <motion.div
-                    key={profile._id + activeTab}
+                    key={profile._id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}

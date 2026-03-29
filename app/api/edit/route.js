@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
+import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 
 const { MongoClient, ObjectId } = require('mongodb');
 
 // Create a new MongoClient
 const client = new MongoClient(process.env.MONGODB_URI);
 
-const cacheInvalidationKeys = [
-    "feed_page_0_limit_10",
-    "top_stories_page_0",
-];
+const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 
 function invalidateAfterEdit(email) {
     const keys = [...cacheInvalidationKeys];

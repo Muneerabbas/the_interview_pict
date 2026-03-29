@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+import redis from "@/lib/redis";
+import { buildFeedCacheKey } from "@/lib/feedCache";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -23,6 +25,16 @@ export async function POST(req) {
 
         if (result.matchedCount === 0) {
             return NextResponse.json({ message: "Not found" }, { status: 404 });
+        }
+
+        if (redis) {
+            redis.del([
+                buildFeedCacheKey({ page: 0, itemsPerPage: 10, sort: "trending" }),
+                buildFeedCacheKey({ page: 0, itemsPerPage: 6, sort: "trending" }),
+                "top_stories_page_0",
+            ]).catch((err) => {
+                console.warn("[cache] invalidate failed:", err?.message || err);
+            });
         }
 
         return NextResponse.json({ success: true });

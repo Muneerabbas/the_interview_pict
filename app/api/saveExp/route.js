@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
+import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 
 
 // Create a persistent MongoDB connection
@@ -14,10 +15,7 @@ const user = db.collection("user");
 const backup = db.collection("backup");
 
 
-const cacheInvalidationKeys = [
-  "feed_page_0_limit_10",
-  "top_stories_page_0",
-];
+const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 
 function invalidateAfterWrite(email) {
   const keys = [...cacheInvalidationKeys];

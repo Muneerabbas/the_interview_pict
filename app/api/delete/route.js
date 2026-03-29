@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import redis from "@/lib/redis";
+import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 
 // Persistent MongoDB connection
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -8,10 +9,7 @@ const database = client.db("int-exp");
 const collection = database.collection("experience");
 
 
-const cacheInvalidationKeys = [
-  "feed_page_0_limit_10",
-  "top_stories_page_0",
-];
+const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 
 function invalidateAfterDelete(email) {
   const keys = [...cacheInvalidationKeys];

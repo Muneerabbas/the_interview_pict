@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { fetchWithCache } from "@/lib/cache";
+import { buildFeedCacheKey, FEED_SORT_TRENDING, normalizeFeedSort } from "@/lib/feedCache";
 import { getMongoDb } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
@@ -10,11 +11,14 @@ export async function GET(req) {
     const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
     const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10);
     const companyFilter = req.nextUrl.searchParams.get("company");
+    const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
 
-    const cacheKeyBase = `feed_page_${page}_limit_${itemsPerPage}`;
-    const cacheKey = companyFilter
-      ? `${cacheKeyBase}_company_${encodeURIComponent(companyFilter)}`
-      : cacheKeyBase;
+    const cacheKey = buildFeedCacheKey({
+      page,
+      itemsPerPage,
+      sort,
+      company: companyFilter,
+    });
 
     const data = await fetchWithCache(cacheKey, 60, async () => {
       const db = await getMongoDb();
@@ -27,7 +31,12 @@ export async function GET(req) {
       }
 
       pipeline.push(
-        { $sort: { date: -1 } },
+        {
+          $sort:
+            sort === FEED_SORT_TRENDING
+              ? { views: -1, date: -1 }
+              : { date: -1 },
+        },
         { $skip: page * itemsPerPage },
         { $limit: itemsPerPage },
         {

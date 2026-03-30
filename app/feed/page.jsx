@@ -224,7 +224,7 @@ export default function HomePage() {
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
         {/* Post Button Row */}
-        <div className="mb-8 flex justify-end">
+        <div className="mb-8 mt-3 flex justify-end sm:mt-5">
           <Link
             href="/post"
             onClick={handleShareExperienceClick}

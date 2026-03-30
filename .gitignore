@@ -3,3 +3,5 @@ node_modules/
 .env.local
 *.log
 .next/
+.next_stale_*/
+.next_stale*/

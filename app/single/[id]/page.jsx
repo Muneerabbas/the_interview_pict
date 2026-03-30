@@ -15,7 +15,8 @@ import {
   Globe,
   Heart,
   ThumbsUp,
-  GraduationCap
+  GraduationCap,
+  Sparkles
 } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
@@ -23,6 +24,7 @@ import ShareButton from "@/components/ShareButton";
 import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { getServerOrigin } from "@/lib/serverOrigin";
 import LikeButton from "@/components/LikeButton";
 import PostCompanyActions from "@/components/PostCompanyActions";
 
@@ -41,15 +43,14 @@ import { cache } from "react";
 
 import SimilarExperienceClient from "@/components/SimilarExperienceClient";
 
-const revalidateTime = 3600;
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+const revalidateTime = 60;
 
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
-const getExperienceData = cache(async (id) => {
+const getExperienceData = cache(async (id, baseUrl) => {
   try {
     const [expResponse, relatedResponse] = await Promise.all([
-      fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
-      fetch(`${baseUrl}/api/topStories?itemsPerPage=12`, { next: { revalidate: revalidateTime } }),
+      fetch(`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
+      fetch(`${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
     ]);
 
     if (!expResponse.ok) return { data: null, articles: [] };
@@ -83,19 +84,19 @@ const getExperienceData = cache(async (id) => {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const { data } = await getExperienceData(id);
-
-  const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+  const baseUrl = await getServerOrigin();
+  const { data } = await getExperienceData(id, baseUrl);
 
   return {
     title: `${data?.company || "theInterview"} Interview Experience`,
     description: `Read ${data?.name || "a candidate"}'s interview experience at ${data?.company || "a top company"}.`,
-    metadataBase: new URL(metadataBaseUrl),
+    metadataBase: new URL(baseUrl),
   };
 }
 
 export default async function SimilarExperience({ params }) {
   const { id } = await params;
+  const baseUrl = await getServerOrigin();
   if (!id) {
     return (
       <SingleExperienceThemeShell>
@@ -106,7 +107,7 @@ export default async function SimilarExperience({ params }) {
     );
   }
 
-  const { data, articles } = await getExperienceData(id);
+  const { data, articles } = await getExperienceData(id, baseUrl);
 
   if (!data) {
     return (
@@ -130,7 +131,7 @@ export default async function SimilarExperience({ params }) {
   };
   const articleUrl = `${baseUrl}/single/${id}`;
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
-  const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
+  const profilePicUrl = data?.profile_pic || `${baseUrl}/app_icon.png`;
   const publicProfilePath = data?.email ? `/profile/public/${encodeURIComponent(data.email)}` : null;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
   const isToday = data?.date && new Date(data.date).toDateString() === new Date().toDateString();
@@ -155,7 +156,7 @@ export default async function SimilarExperience({ params }) {
             name: "theInterview",
             logo: {
               "@type": "ImageObject",
-              url: `${baseUrl}/icon.png`,
+              url: `${baseUrl}/app_icon.png`,
             },
           },
           description: articleDescription,

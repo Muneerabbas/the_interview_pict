@@ -25,6 +25,7 @@ const ProfileCard = ({
 
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const articleId = profile?.uid || profile?._id?.toString?.() || profile?._id || "";
 
   const formattedDate = new Date(profile.date).toLocaleString("en-US", {
     weekday: "long",
@@ -39,10 +40,11 @@ const ProfileCard = ({
 
   const handleReadMore = (e) => {
     e.stopPropagation();
+    if (!articleId) return;
     console.log("ProfileCard: handleReadMore START");
     setGlobalLoading(true);
     console.log("ProfileCard: setGlobalLoading(true) called from ReadMore");
-    router.push(`/single/${profile.uid}`);
+    router.push(`/single/${articleId}`);
     console.log("ProfileCard: router.push called from ReadMore");
     console.log("ProfileCard: handleReadMore END");
   };
@@ -94,11 +96,11 @@ const ProfileCard = ({
   };
 
   const handleCardClick = () => {
-    if (!disableCardClick) {
+    if (!disableCardClick && articleId) {
       console.log("ProfileCard: handleCardClick START");
       setGlobalLoading(true);
       console.log("ProfileCard: setGlobalLoading(true) called from CardClick");
-      router.push(`/single/${profile.uid}`);
+      router.push(`/single/${articleId}`);
       console.log("ProfileCard: router.push called from CardClick");
       console.log("ProfileCard: handleCardClick END");
     }

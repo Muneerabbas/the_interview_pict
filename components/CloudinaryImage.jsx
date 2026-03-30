@@ -38,7 +38,6 @@ export default function CloudinaryImage({ src, alt = "Image", className = "", wi
                 height={2400}
                 crop="limit"
                 sizes="100vw"
-                placeholder="blur"
                 className="block max-w-full h-auto object-contain"
                 style={style}
                 onError={() => setError(true)}

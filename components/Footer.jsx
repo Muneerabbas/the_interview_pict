@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../public/app_icon.png";
 import {
   Mail,
   Heart,
@@ -60,11 +62,11 @@ export default function Footer({ isLandingPage = false }) {
           {/* Brand & Socials (takes more space) */}
           <div className="lg:col-span-4 space-y-6">
             <Link href="/" className="inline-flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/20 dark:shadow-blue-950/40">
-                <span className="font-bold text-lg">ti</span>
+              <div className="flex items-center justify-center transition-transform hover:scale-105">
+                <Image src={logo} alt="theInterview Logo" width={38} height={38} priority />
               </div>
               <span className="text-xl">
-                the<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-extrabold">Interview</span>
+                the<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-extrabold">Interview</span>Room
               </span>
             </Link>
             <p className="max-w-sm text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
@@ -74,7 +76,7 @@ export default function Footer({ isLandingPage = false }) {
               {[
                 { icon: Twitter, href: "#" },
                 { icon: Linkedin, href: "#" },
-                { icon: Instagram, href: "#" }
+                { icon: Instagram, href: "https://www.instagram.com/theinterviewroom.in/" }
               ].map((social, idx) => (
                 <a
                   key={idx}
@@ -125,14 +127,14 @@ export default function Footer({ isLandingPage = false }) {
                 <span className="leading-relaxed">PICT, Pune, <br />Maharashtra 411045</span>
               </a>
               <a
-                href="mailto:hello@theinterview.com"
+                href="mailto:theinterviewroom.in@gmail.com"
                 className="group flex items-center gap-4 text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-cyan-300 dark:group-hover:bg-slate-700">
                   <Mail size={16} />
                 </div>
                 <span className="relative overflow-hidden">
-                  hello@theinterview.com
+                  theinterviewroom.in@gmail.com
                   <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-cyan-300"></span>
                 </span>
               </a>

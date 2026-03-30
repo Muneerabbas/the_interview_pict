@@ -1,31 +1,32 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
+import { getMongoDb } from "@/lib/mongodb";
 import { resolveProfileImage, resolveProfileName } from "../../../lib/utils";
-
-// Create a persistent MongoDB client
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const collection = db.collection("experience");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
+    const db = await getMongoDb();
+    const collection = db.collection("experience");
     const uid = req.nextUrl.searchParams.get("uid");
 
     if (!uid) {
       return NextResponse.json({ message: "Missing `uid` query parameter" }, { status: 400 });
     }
 
+    const isObjectId = mongoose.Types.ObjectId.isValid(uid);
+    const matchStage = isObjectId
+      ? {
+          $match: {
+            $or: [{ uid }, { _id: new mongoose.Types.ObjectId(uid) }],
+          },
+        }
+      : { $match: { uid } };
+
     // Fetch document and join with user info to get fresh profile image/data
     const pipeline = [
-      { $match: { uid } },
+      matchStage,
       {
         $lookup: {
           from: "user",

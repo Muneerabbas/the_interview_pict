@@ -11,7 +11,7 @@ import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
-const FEED_CACHE_PREFIX = "feed_state_v1";
+const FEED_CACHE_PREFIX = "feed_state_v2";
 const getFeedCacheKey = (tab) => `${FEED_CACHE_PREFIX}:${tab}`;
 
 const LoadingScreen = ({ isDarkMode }) => (

@@ -1,18 +1,11 @@
 // api/search/route.js
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { getMongoDb } from "@/lib/mongodb";
 
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-  throw new Error("MONGODB_URI is not set in environment variables");
-}
-
-const client = new MongoClient(uri);
+export const dynamic = "force-dynamic";
 
 async function main(search_text, page = 1) {
-  await client.connect();
-  console.log("Connected to MongoDB");
-  const db = client.db("int-exp");
+  const db = await getMongoDb();
   const experience = db.collection("experience");
 
   const skip = (page - 1) * 10;

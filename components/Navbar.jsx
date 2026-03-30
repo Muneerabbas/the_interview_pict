@@ -20,7 +20,7 @@ import {
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import logo from "../public/icon.svg";
+import logo from "../public/app_icon.png";
 import NotificationsMenu from "./NotificationsMenu";
 import { useAuthModal } from "./AuthModalProvider";
 
@@ -228,9 +228,9 @@ export default function Navbar({ showThemeToggle = false }) {
             className="group flex min-w-0 items-center gap-2 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
           >
             <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-100/10 dark:shadow-[0_8px_22px_rgba(2,6,23,0.55)]">
-              <Image src={logo} alt="theInterview Logo" width={32} height={32} priority className="rounded-[10px]" />
+              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
             </div>
-            <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
+            <span className="text-lg font-bold sm:text-xl">
               the<span className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
             </span>
           </Link>

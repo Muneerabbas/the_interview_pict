@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import logo from '../public/icon.svg'
+import logo from '../public/app_icon.png'
 import { CanvasText } from "@/components/ui/canvas-text";
 import TypingSentence from "@/components/TypingSentence";
 import {
@@ -144,6 +144,7 @@ const SectionHeader = ({ title, description, ctaHref, ctaLabel }) => {
 
 const StoryCard = ({ story }) => {
   let plainText = story?.exp_text || ''
+  plainText = plainText.replace(/<[^>]*>?/g, ' ') /* Strip HTML tags inserted by rich text editors */
   plainText = plainText.replace(/\*\*|__/g, '')
   plainText = plainText.replace(/\*/g, '')
   plainText = plainText.replace(/_/g, '')
@@ -237,11 +238,21 @@ export default function Home({ featuredStories, topStories }) {
   }, [resolvedTheme, mountedTheme])
 
   useEffect(() => {
-    setFetchedFeaturedStories(Array.isArray(featuredStories) ? featuredStories : [])
+    if (Array.isArray(featuredStories)) {
+      const shuffled = [...featuredStories].sort(() => Math.random() - 0.5);
+      setFetchedFeaturedStories(shuffled);
+    } else {
+      setFetchedFeaturedStories([]);
+    }
   }, [featuredStories])
 
   useEffect(() => {
-    setFetchedTopStories(Array.isArray(topStories) ? topStories : [])
+    if (Array.isArray(topStories)) {
+      const shuffled = [...topStories].sort(() => Math.random() - 0.5);
+      setFetchedTopStories(shuffled);
+    } else {
+      setFetchedTopStories([]);
+    }
   }, [topStories])
 
   useEffect(() => {
@@ -292,11 +303,11 @@ export default function Home({ featuredStories, topStories }) {
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
           <div className="hidden items-center justify-between lg:flex">
             <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all dark:text-slate-100">
-              <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
-                <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
+              <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
+                <Image src={logo} alt="theInterview Logo" width={46} height={46} priority />
               </div>
               <span className="text-xl font-bold">
-                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
+                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
               </span>
             </Link>
 
@@ -338,7 +349,7 @@ export default function Home({ featuredStories, topStories }) {
               <Link
                 href="/post"
                 prefetch={true}
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/80 transition hover:-translate-y-[0.5px] hover:from-cyan-300 hover:to-sky-300 dark:shadow-cyan-950/40"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/30 transition hover:-translate-y-[0.5px] hover:from-blue-500 hover:to-indigo-400 dark:shadow-indigo-500/20"
               >
                 Share Experience
               </Link>
@@ -348,11 +359,11 @@ export default function Home({ featuredStories, topStories }) {
           <div className="lg:hidden">
             <div className="flex items-center justify-between">
               <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                <div className="rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-sm ring-1 ring-slate-900/5 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
-                  <Image src={logo} alt="theInterview Logo" width={32} height={32} priority className="rounded-[10px]" />
+                <div className="relative flex items-center justify-center transition-transform">
+                  <Image src={logo} alt="theInterview Logo" width={42} height={42} priority />
                 </div>
                 <span className="text-base font-bold sm:text-lg">
-                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>
+                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>Room
                 </span>
               </Link>
               <div className="flex items-center gap-2">
@@ -409,7 +420,7 @@ export default function Home({ featuredStories, topStories }) {
                   <Link
                     href="/post"
                     prefetch={true}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-cyan-200/70 transition hover:from-cyan-300 hover:to-sky-300 dark:shadow-cyan-950/40"
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/30 transition hover:from-blue-500 hover:to-indigo-400 dark:shadow-indigo-500/20"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Share Experience
@@ -427,13 +438,26 @@ export default function Home({ featuredStories, topStories }) {
         <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl dark:bg-cyan-500/25" />
 
         <div className="relative mx-auto max-w-6xl text-center">
+          <div className="group mx-auto flex w-fit items-center justify-center mb-1 sm:mb-2">
+            <div className="relative h-28 w-28 sm:h-32 sm:w-32 md:h-40 md:w-40 transition-transform duration-500 hover:scale-105">
+              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-2xl transition duration-500 group-hover:bg-blue-600/20 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/20" />
+              <Image
+                src={logo}
+                alt="theInterviewRoom Logo"
+                fill
+                sizes="(max-width: 768px) 128px, 160px"
+                className="relative object-contain drop-shadow-lg transition-all duration-500 group-hover:drop-shadow-2xl"
+                priority
+              />
+            </div>
+          </div>
 
           <h2
             className={cn(
-              "group relative mx-auto mt-4 max-w-2xl text-center text-4xl leading-20 font-bold tracking-tight text-balance text-slate-700 sm:text-5xl md:text-6xl xl:text-7xl dark:text-slate-100",
+              "group relative w-full flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-4 text-center text-4xl leading-[1.1] font-bold tracking-tight text-slate-700 sm:text-5xl md:text-6xl xl:text-[4.75rem] dark:text-slate-100",
             )}
           >
-            The{" "}
+            <span>The</span>
             <CanvasText
               text="Interview"
               backgroundClassName="bg-blue-600 dark:bg-blue-700"
@@ -452,7 +476,7 @@ export default function Home({ featuredStories, topStories }) {
               lineGap={4}
               animationDuration={20}
             />
-            {" "}Room
+            <span>Room</span>
           </h2>
           <TypingSentence />
 
@@ -621,6 +645,7 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
+      {/* 
       <section className="px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
@@ -676,6 +701,7 @@ export default function Home({ featuredStories, topStories }) {
           </div>
         </div>
       </section>
+      */}
 
     </main>
   )

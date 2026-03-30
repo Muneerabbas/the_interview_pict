@@ -1,18 +1,10 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
 import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
-
-
-// Create a persistent MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const experience = db.collection("experience");
-const user = db.collection("user");
-const backup = db.collection("backup");
+import { getMongoDb } from "@/lib/mongodb";
 
 
 const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
@@ -28,16 +20,10 @@ function invalidateAfterWrite(email) {
   if (!redis) return;
 
   // @upstash/redis del() can take multiple keys or an array
-  redis.del(keys).catch((err) => {
+  redis.del(...keys).catch((err) => {
     console.warn("[cache] invalidate failed:", err?.message || err);
   });
 }
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
 
 export async function POST(req) {
   try {
@@ -46,8 +32,9 @@ export async function POST(req) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // Validate token
-    const userDoc = await user.findOne({ email });
+    const db = await getMongoDb();
+    const experience = db.collection("experience");
+    const backup = db.collection("backup");
 
     // Generate a meaningful UID: "google-sde-2025-nanoid"
     const baseSlug = slugify(`${name}'s experience at ${company} ${role} ${batch} `, { lower: true, strict: true });
@@ -96,7 +83,7 @@ export async function POST(req) {
     invalidateAfterWrite(email);
 
     // Send acknowledgment email
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+    const siteUrl = req.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     await sendAcknowledgmentEmail(name, email, uid, siteUrl);
 
     return NextResponse.json({ message: "Experience saved successfully", uid }, { status: 200 });
@@ -107,6 +94,14 @@ export async function POST(req) {
 }
 
 async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+
+  if (!emailUser || !emailPass) {
+    console.warn("Email skipped: EMAIL_USER/EMAIL_PASS are not configured.");
+    return;
+  }
+
   try {
     console.log("📩 Preparing to send email to:", email); // Debug log
 
@@ -115,13 +110,13 @@ async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: emailUser,
       to: email,
       subject: "🌟 Thank You for Sharing Your Experience! 🌟",
       html: `
@@ -141,6 +136,6 @@ async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
     await transporter.sendMail(mailOptions);
     console.log("✅ Email sent successfully to", email);
   } catch (error) {
-    console.error("❌ Failed to send email:", error);
+    console.warn("❌ Failed to send email:", error?.code || error?.message || error);
   }
 }

@@ -172,19 +172,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
                   ) : (
                     <span className="truncate">{companyName}</span>
                   )}
-                  {companySlug && (
-                    <Link
-                      href={`/edit-company/${companySlug}`}
-                      prefetch={true}
-                      onClick={(e) => e.stopPropagation()}
-                      title="Edit company details"
-                      className="ml-0.5 inline-flex shrink-0 items-center gap-0.5 rounded px-1 py-0.5 text-[10px] font-bold text-blue-700 hover:bg-blue-50 dark:text-cyan-300 dark:hover:bg-slate-800"
-                    >
-                      <Pencil size={10} strokeWidth={2.5} />
-                      <span className="hidden sm:inline">Edit company</span>
-                    </Link>
-                  )}
-                  {isOwner && editPath && (
+                  {/* isOwner && editPath && (
                     <Link
                       href={editPath}
                       prefetch={true}
@@ -195,7 +183,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
                       <Pencil size={10} strokeWidth={2.5} />
                       <span className="hidden sm:inline">Edit</span>
                     </Link>
-                  )}
+                  ) */}
                 </div>
                 <div className="ui-tag ui-tag-role inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
                   <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />

@@ -34,8 +34,8 @@ export async function GET(req) {
         {
           $sort:
             sort === FEED_SORT_TRENDING
-              ? { views: -1, date: -1 }
-              : { date: -1 },
+              ? { views: -1, date: -1, _id: -1 }
+              : { date: -1, _id: -1 },
         },
         { $skip: page * itemsPerPage },
         { $limit: itemsPerPage },

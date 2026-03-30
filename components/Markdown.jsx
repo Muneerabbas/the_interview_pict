@@ -31,7 +31,7 @@ const MarkdownRenderer = ({ content }) => {
     h2: ({ children }) => <h2 className="mb-3 mt-12 text-[1.35rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
     h3: ({ children }) => <h3 className="mb-2 mt-8 text-[1.125rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
-    p: ({ children }) => <p className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</p>,
+    p: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</div>,
     strong: ({ children }) => <strong className="font-semibold text-slate-900 dark:text-slate-100">{children}</strong>,
     em: ({ children }) => <em className="font-medium text-slate-700 dark:text-slate-300">{children}</em>,
     a: ({ href, children }) => (

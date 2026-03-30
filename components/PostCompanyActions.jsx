@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { Building2, Pencil } from "lucide-react";
 import { companySlugFromName } from "@/lib/companySlug";
 
-/** Links to company directory, public company edit, and owner post edit. */
+/** Links to company directory and owner post edit. */
 export default function PostCompanyActions({
   companyName = "",
   experienceUid = "",
@@ -33,18 +33,12 @@ export default function PostCompanyActions({
           Company page
         </Link>
       )}
-      {hasCompanyPage && (
-        <Link href={`/edit-company/${slug}`} prefetch={true} className={linkClass}>
-          <Pencil size={13} className="shrink-0 text-blue-600 dark:text-cyan-400" />
-          Edit company
-        </Link>
-      )}
-      {isOwner && experienceUid && (
+      {/* isOwner && experienceUid && (
         <Link href={`/edit/${experienceUid}`} prefetch={true} className={linkClass}>
           <Pencil size={13} className="shrink-0 text-blue-600 dark:text-cyan-400" />
           Edit post
         </Link>
-      )}
+      ) */}
     </div>
   );
 }

@@ -28,7 +28,7 @@ export async function GET(req) {
             },
           },
         },
-        { $sort: { viewsInt: -1, date: -1 } },
+        { $sort: { viewsInt: -1, date: -1, _id: -1 } },
         { $skip: page * itemsPerPage },
         { $limit: itemsPerPage },
         { $project: { viewsInt: 0 } },

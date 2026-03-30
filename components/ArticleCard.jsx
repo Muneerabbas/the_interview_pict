@@ -3,10 +3,27 @@ import Link from "next/link";
 import { Building2, Briefcase, GraduationCap, CalendarDays, Eye, ArrowUpRight } from "lucide-react";
 import ProfileAvatar from "./ProfileAvatar";
 
+const stripMarkdown = (value = "") => {
+  return value
+    .replace(/<[^>]*>?/g, " ")
+    .replace(/https?:\/\/[^\s"'<>]+/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")
+    .replace(/[>#*_~|-]/g, "")
+    .replace(/\n+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, role, batch, date, views, uid, branch } = article || {};
+  const { profile_pic, name, company, role, batch, date, views, uid, branch, exp_text } = article || {};
   const displayName = name || "Anonymous Candidate";
   const formattedDate = date ? new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Date unavailable";
+
+  const plainText = stripMarkdown(exp_text || "");
+  const previewText =
+    plainText.length > 200 ? `${plainText.slice(0, 200).trim()}...` : plainText || "No experience details shared yet.";
 
   return (
     <Link
@@ -43,6 +60,13 @@ const ArticleCard = ({ article }) => {
               <span>{formattedDate}</span>
             </div>
           </div>
+        </div>
+
+        {/* Content Zone: Experience Snapshot */}
+        <div className="mt-4 border-l-[3px] border-blue-600 pl-3.5 transition-colors group-hover:border-blue-500 dark:border-blue-500/60 dark:group-hover:border-blue-400">
+          <p className="line-clamp-3 text-[13px] leading-[1.65] text-slate-600 dark:text-slate-300">
+            {previewText}
+          </p>
         </div>
       </div>
 

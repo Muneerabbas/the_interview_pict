@@ -1,20 +1,11 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-
-// Persistent MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const drafts = db.collection("drafts");
-
-// Ensure MongoDB is connected once
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
+import { getMongoDb } from "@/lib/mongodb";
 
 // Delete draft
 export async function POST(req) {
   try {
+    const db = await getMongoDb();
+    const drafts = db.collection("drafts");
     // Parse the JSON request body properly
     const body = await req.json();
     const { email } = body;

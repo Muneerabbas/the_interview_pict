@@ -39,7 +39,7 @@ async function getPublicProfile(email) {
       const experience = db.collection("experience");
       const userCollection = db.collection("user");
 
-      const posts = await experience.find({ email }).sort({ date: -1 }).toArray();
+      const rawPosts = await experience.find({ email }).sort({ date: -1 }).toArray();
 
       // Get user statistics and profile info
       // Note: Views are incremented only on cache miss or separately
@@ -53,9 +53,15 @@ async function getPublicProfile(email) {
         return { posts: [], stats: null, profile: null };
       }
 
-      const totalReads = posts.reduce((sum, item) => sum + (Number(item?.views) || 0), 0);
-      const totalLikes = posts.reduce((sum, item) => sum + (Array.isArray(item?.likes) ? item.likes.length : 0), 0);
-      const companies = new Set(posts.map((item) => item.company).filter(Boolean));
+      const totalReads = rawPosts.reduce((sum, item) => sum + (Number(item?.views) || 0), 0);
+      const totalLikes = rawPosts.reduce((sum, item) => sum + (Array.isArray(item?.likes) ? item.likes.length : 0), 0);
+      const companies = new Set(rawPosts.map((item) => item.company).filter(Boolean));
+
+      const posts = rawPosts.map((post) => ({
+        ...post,
+        profile_pic: resolveProfileImage({ ...post, ...userData }),
+        name: resolveProfileName({ ...post, ...userData }),
+      }));
 
       const first = posts[0];
       const profile = {

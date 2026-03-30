@@ -15,7 +15,8 @@ import {
   Globe,
   Heart,
   ThumbsUp,
-  GraduationCap
+  GraduationCap,
+  Sparkles
 } from "lucide-react";
 import { JsonLd } from "react-schemaorg";
 import ArticleCard from "@/components/ArticleCard";
@@ -23,6 +24,7 @@ import ShareButton from "@/components/ShareButton";
 import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { getServerOrigin } from "@/lib/serverOrigin";
 import LikeButton from "@/components/LikeButton";
 import PostCompanyActions from "@/components/PostCompanyActions";
 
@@ -41,11 +43,10 @@ import { cache } from "react";
 
 import SimilarExperienceClient from "@/components/SimilarExperienceClient";
 
-const revalidateTime = 3600;
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+const revalidateTime = 60;
 
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
-const getExperienceData = cache(async (id) => {
+const getExperienceData = cache(async (id, baseUrl) => {
   try {
     const [expResponse, relatedResponse] = await Promise.all([
       fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
@@ -83,19 +84,19 @@ const getExperienceData = cache(async (id) => {
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const { data } = await getExperienceData(id);
-
-  const metadataBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pict.live";
+  const baseUrl = await getServerOrigin();
+  const { data } = await getExperienceData(id, baseUrl);
 
   return {
     title: `${data?.company || "theInterview"} Interview Experience`,
     description: `Read ${data?.name || "a candidate"}'s interview experience at ${data?.company || "a top company"}.`,
-    metadataBase: new URL(metadataBaseUrl),
+    metadataBase: new URL(baseUrl),
   };
 }
 
 export default async function SimilarExperience({ params }) {
   const { id } = await params;
+  const baseUrl = await getServerOrigin();
   if (!id) {
     return (
       <SingleExperienceThemeShell>
@@ -106,7 +107,7 @@ export default async function SimilarExperience({ params }) {
     );
   }
 
-  const { data, articles } = await getExperienceData(id);
+  const { data, articles } = await getExperienceData(id, baseUrl);
 
   if (!data) {
     return (

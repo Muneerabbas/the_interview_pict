@@ -1,18 +1,6 @@
 // app/layout.js
-import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import Providers from "./providers";
-
-// Custom fonts setup
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
 
 export default function RootLayout({ children }) {
   return (
@@ -36,7 +24,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased font-sans`}>
+      <body className="antialiased font-sans">
         <Providers>{children}</Providers>
       </body>
     </html>

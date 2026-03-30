@@ -4,8 +4,7 @@ import Company from "@/models/Company";
 import CompaniesDirectoryClient from "@/components/CompaniesDirectoryClient";
 import mongoose from "mongoose";
 
-// Cache page output for faster navigation while keeping data reasonably fresh.
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function CompaniesDirectory() {
     await connectToDatabase();

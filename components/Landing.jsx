@@ -144,6 +144,7 @@ const SectionHeader = ({ title, description, ctaHref, ctaLabel }) => {
 
 const StoryCard = ({ story }) => {
   let plainText = story?.exp_text || ''
+  plainText = plainText.replace(/<[^>]*>?/g, ' ') /* Strip HTML tags inserted by rich text editors */
   plainText = plainText.replace(/\*\*|__/g, '')
   plainText = plainText.replace(/\*/g, '')
   plainText = plainText.replace(/_/g, '')
@@ -237,11 +238,21 @@ export default function Home({ featuredStories, topStories }) {
   }, [resolvedTheme, mountedTheme])
 
   useEffect(() => {
-    setFetchedFeaturedStories(Array.isArray(featuredStories) ? featuredStories : [])
+    if (Array.isArray(featuredStories)) {
+      const shuffled = [...featuredStories].sort(() => Math.random() - 0.5);
+      setFetchedFeaturedStories(shuffled);
+    } else {
+      setFetchedFeaturedStories([]);
+    }
   }, [featuredStories])
 
   useEffect(() => {
-    setFetchedTopStories(Array.isArray(topStories) ? topStories : [])
+    if (Array.isArray(topStories)) {
+      const shuffled = [...topStories].sort(() => Math.random() - 0.5);
+      setFetchedTopStories(shuffled);
+    } else {
+      setFetchedTopStories([]);
+    }
   }, [topStories])
 
   useEffect(() => {
@@ -621,6 +632,7 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
+      {/* 
       <section className="px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
           <SectionHeader
@@ -676,6 +688,7 @@ export default function Home({ featuredStories, topStories }) {
           </div>
         </div>
       </section>
+      */}
 
     </main>
   )

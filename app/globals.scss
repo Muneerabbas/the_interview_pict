@@ -139,6 +139,9 @@
    DESIGN TOKENS — Global UI Polish
    ============================================================ */
 :root {
+  --font-sans: "Inter", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
   /* Typography */
   --ui-font-size-body: 15.5px;
   --ui-line-height-body: 1.7;

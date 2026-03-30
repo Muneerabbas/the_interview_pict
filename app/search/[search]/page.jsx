@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
-import ProfileCard from "../../../components/Card";
+import FeedCard from "@/components/FeedCard";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { Loader2, ArrowLeft, Search } from "lucide-react";
@@ -11,7 +11,7 @@ const SearchPage = () => {
   const params = useParams();
   const rawSearchParam = params?.search;
   const search = Array.isArray(rawSearchParam) ? rawSearchParam[0] : rawSearchParam;
-  
+
   const decodedSearch = search ? decodeURIComponent(search) : "";
   const initialSearchText = decodedSearch === "Himanshu-Nilay-Neeraj" ? "" : decodedSearch;
 
@@ -129,11 +129,11 @@ const SearchPage = () => {
           >
             <ArrowLeft size={24} className="text-slate-500 transition-transform group-hover:-translate-x-1 dark:text-slate-400" />
           </button>
-          
+
           <div className="group relative flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-xl transition-all focus-within:border-blue-400 focus-within:bg-white focus-within:ring-[4px] focus-within:ring-blue-500/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] dark:border-slate-700/60 dark:bg-slate-900/80 dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] dark:focus-within:border-cyan-500/50 dark:focus-within:bg-slate-900 dark:focus-within:ring-[4px] dark:focus-within:ring-cyan-500/20">
             {/* Ambient Background Glow on Focus */}
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5 opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 dark:from-cyan-500/10 dark:via-blue-500/10 dark:to-indigo-500/10"></div>
-            
+
             <div className="relative z-10 flex flex-1 items-center">
               <Search size={22} className="absolute left-3 sm:left-4 text-slate-400 transition-colors group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-cyan-400" />
               <input
@@ -144,7 +144,7 @@ const SearchPage = () => {
                 className="w-full bg-transparent py-2.5 pl-11 pr-4 text-[15px] font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500 sm:py-3.5 sm:pl-12 sm:text-lg"
               />
             </div>
-            
+
             <button
               type="submit"
               className="relative z-10 flex h-11 w-11 sm:h-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-[1px] hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-500/40 active:scale-95 focus:outline-none sm:w-auto sm:px-6"
@@ -167,37 +167,31 @@ const SearchPage = () => {
         <div className="mt-6 space-y-6">
           {results.length > 0
             ? results.map((profile, index) => {
-                if (results.length === index + 2) {
-                    return (
-                        <div ref={lastProfileElementRef} key={profile._id}>
-                             <ProfileCard 
-                                profile={profile} 
-                                setGlobalLoading={setGlobalLoading}
-                            />
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div key={profile._id}>
-                             <ProfileCard 
-                                profile={profile} 
-                                setGlobalLoading={setGlobalLoading}
-                            />
-                        </div>
-                    );
-                }
-              })
+              if (results.length === index + 2) {
+                return (
+                  <div ref={lastProfileElementRef} key={profile._id}>
+                    <FeedCard profile={profile} />
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={profile._id}>
+                    <FeedCard profile={profile} />
+                  </div>
+                );
+              }
+            })
             : !loading && (
-                <div className="flex h-64 flex-col items-center justify-center rounded-[24px] border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm transition-colors duration-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 mt-4">
-                  <Search size={40} className="mb-3 text-slate-300 dark:text-slate-600" />
-                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">
-                    {searchText ? "No experiences found" : "Enter a search query"}
-                  </h3>
-                  <p className="mt-1 text-sm text-center px-4 max-w-sm">
-                    {searchText ? "Try adjusting your search terms or exploring the feed." : "Search for companies, roles, or candidate names."}
-                  </p>
-                </div>
-              )}
+              <div className="flex h-64 flex-col items-center justify-center rounded-[24px] border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm transition-colors duration-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 mt-4">
+                <Search size={40} className="mb-3 text-slate-300 dark:text-slate-600" />
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">
+                  {searchText ? "No experiences found" : "Enter a search query"}
+                </h3>
+                <p className="mt-1 text-sm text-center px-4 max-w-sm">
+                  {searchText ? "Try adjusting your search terms or exploring the feed." : "Search for companies, roles, or candidate names."}
+                </p>
+              </div>
+            )}
           <div className="mt-8 flex flex-col items-center space-y-4">
             {loadingMore && (
               <div className="flex items-center space-x-2 text-blue-600">

@@ -1,21 +1,11 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-
-// Create a persistent MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const drafts = db.collection("drafts");
-const user = db.collection("user");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
+import { getMongoDb } from "@/lib/mongodb";
 
 // Save draft
 export async function POST(req) {
   try {
+    const db = await getMongoDb();
+    const drafts = db.collection("drafts");
     const {
       exp_text,
       company,
@@ -90,6 +80,8 @@ export async function POST(req) {
 // Get draft by email
 export async function GET(req) {
   try {
+    const db = await getMongoDb();
+    const drafts = db.collection("drafts");
     const email = req.nextUrl.searchParams.get('email');
 
     if (!email) {

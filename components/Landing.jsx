@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import logo from '../public/icon.svg'
+import logo from '../public/app_icon.png'
 import { CanvasText } from "@/components/ui/canvas-text";
 import TypingSentence from "@/components/TypingSentence";
 import {
@@ -303,11 +303,11 @@ export default function Home({ featuredStories, topStories }) {
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
           <div className="hidden items-center justify-between lg:flex">
             <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all dark:text-slate-100">
-              <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
-                <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
+              <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
+                <Image src={logo} alt="theInterview Logo" width={46} height={46} priority />
               </div>
               <span className="text-xl font-bold">
-                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>
+                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
               </span>
             </Link>
 
@@ -359,11 +359,11 @@ export default function Home({ featuredStories, topStories }) {
           <div className="lg:hidden">
             <div className="flex items-center justify-between">
               <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                <div className="rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-sm ring-1 ring-slate-900/5 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-200/10">
-                  <Image src={logo} alt="theInterview Logo" width={32} height={32} priority className="rounded-[10px]" />
+                <div className="relative flex items-center justify-center transition-transform">
+                  <Image src={logo} alt="theInterview Logo" width={42} height={42} priority />
                 </div>
                 <span className="text-base font-bold sm:text-lg">
-                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>
+                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>Room
                 </span>
               </Link>
               <div className="flex items-center gap-2">

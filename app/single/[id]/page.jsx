@@ -49,8 +49,8 @@ const revalidateTime = 60;
 const getExperienceData = cache(async (id, baseUrl) => {
   try {
     const [expResponse, relatedResponse] = await Promise.all([
-      fetch(`${baseUrl}/api/exp?uid=${id}`, { next: { revalidate: revalidateTime } }),
-      fetch(`${baseUrl}/api/topStories?itemsPerPage=12`, { next: { revalidate: revalidateTime } }),
+      fetch(`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
+      fetch(`${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
     ]);
 
     if (!expResponse.ok) return { data: null, articles: [] };
@@ -131,7 +131,7 @@ export default async function SimilarExperience({ params }) {
   };
   const articleUrl = `${baseUrl}/single/${id}`;
   const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
-  const profilePicUrl = data?.profile_pic || `${baseUrl}/icon.png`;
+  const profilePicUrl = data?.profile_pic || `${baseUrl}/app_icon.png`;
   const publicProfilePath = data?.email ? `/profile/public/${encodeURIComponent(data.email)}` : null;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
   const isToday = data?.date && new Date(data.date).toDateString() === new Date().toDateString();
@@ -156,7 +156,7 @@ export default async function SimilarExperience({ params }) {
             name: "theInterview",
             logo: {
               "@type": "ImageObject",
-              url: `${baseUrl}/icon.png`,
+              url: `${baseUrl}/app_icon.png`,
             },
           },
           description: articleDescription,

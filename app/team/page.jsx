@@ -8,7 +8,7 @@ import nimg from "../../public/n2.jpg";
 import niimg from "../../public/n1.jpg";
 import m1img from "../../public/m1.jpeg";
 import m2img from "../../public/m2.jpeg";
-import logo from "../../public/icon.svg";
+import logo from "../../public/app_icon.png";
 
 const TeamPage = () => {
   return (

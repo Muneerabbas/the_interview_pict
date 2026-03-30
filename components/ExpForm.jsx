@@ -8,6 +8,7 @@ import { ChevronDown, AlertCircle, CheckCircle2, Bot, Send, PenLine, Sparkles, C
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 import postCompanies from "@/data/post-companies.json";
 import { useTheme } from "next-themes";
+import SearchableDropdown from "./SearchableDropdown";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
   <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/60" : "bg-gray-500/50"}`}>
@@ -809,75 +810,66 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
           <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Batch */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
+            <div className={`group relative z-[55] rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
                 </div>
                 <div className="relative">
-                  <select
-                    value={batch}
-                    onChange={handleBatchChange}
-                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
-                  >
-                    <option value="">Select Year</option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
+                  <SearchableDropdown
+                    options={years.map(String)}
+                    value={batch ? String(batch) : ""}
+                    onChange={(val) => handleBatchChange({ target: { value: val } })}
+                    placeholder="Select Year"
+                    error={errors.batch}
+                  />
                 </div>
                 {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
 
             {/* Department */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
+            <div className={`group relative z-[54] rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
                 </div>
                 <div className="relative">
-                  <select
+                  <SearchableDropdown
+                    options={[
+                      { label: "Computer Science", value: "CS" },
+                      { label: "Information Technology", value: "IT" },
+                      { label: "E&TC", value: "EnTC" },
+                      { label: "AI & Data Science", value: "AIDS" },
+                      { label: "Electronics & Comp", value: "EC" }
+                    ]}
                     value={branch}
-                    onChange={handleBranchChange}
-                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
-                  >
-                    <option value="">Select Dept</option>
-                    <option value="CS">Computer Science</option>
-                    <option value="IT">Information Technology</option>
-                    <option value="EnTC">E&TC</option>
-                    <option value="AIDS">AI & Data Science</option>
-                    <option value="EC">Electronics & Comp</option>
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
+                    onChange={(val) => handleBranchChange({ target: { value: val } })}
+                    placeholder="Select Dept"
+                    error={errors.branch}
+                  />
                 </div>
                 {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
 
             {/* Company */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
+            <div className={`group relative z-[53] rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Company</label>
                 </div>
                 <div className="relative">
-                  <select
+                  <SearchableDropdown
+                    options={[...companies, "others"]}
                     value={company}
-                    onChange={handleCompanyChange}
-                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
-                  >
-                    <option value="">Select Company</option>
-                    <option value="others">Others...</option>
-                    {companies.map((comp) => (
-                      <option key={comp} value={comp}>{comp}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
+                    onChange={(val) => handleCompanyChange({ target: { value: val } })}
+                    placeholder="Select Company"
+                    error={errors.company}
+                  />
                 </div>
                 {company === "others" && (
                   <motion.input
@@ -895,25 +887,20 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
 
             {/* Role */}
-            <div className={`group relative rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
+            <div className={`group relative z-[52] rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
                   <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Role</label>
                 </div>
                 <div className="relative">
-                  <select
+                  <SearchableDropdown
+                    options={[...roles, "others"]}
                     value={role}
-                    onChange={handleRoleChange}
-                    className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-inner transition-all focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-sm"
-                  >
-                    <option value="">Select Role</option>
-                    <option value="others">Others...</option>
-                    {roles.map((roleOption) => (
-                      <option key={roleOption} value={roleOption}>{roleOption}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300" />
+                    onChange={(val) => handleRoleChange({ target: { value: val } })}
+                    placeholder="Select Role"
+                    error={errors.role}
+                  />
                 </div>
                 {role === "others" && (
                   <motion.input

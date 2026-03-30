@@ -2,10 +2,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import Navbar from "../../components/Navbar";
+import { useTheme } from "next-themes";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function HelpPage() {
+  const { resolvedTheme } = useTheme();
   const [markdown, setMarkdown] = useState(`
 ## 🚀 Interview Experience Template
 
@@ -120,7 +122,13 @@ Good Luck, and Remember: Stay Confident! 😎
   const [bottomMargin, setBottomMargin] = useState("0px");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
+  const [mounted, setMounted] = useState(false);
   const messageTimeout = useRef(null); // Ref to hold the timeout
+  const editorColorMode = mounted && resolvedTheme === "dark" ? "dark" : "light";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -165,11 +173,11 @@ Good Luck, and Remember: Stay Confident! 😎
   };
 
   return (
-    <div className="flex flex-col h-screen mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
-      <Navbar />
+    <div className="mb-[90vh] flex h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 sm:mb-[10vh] md:mb-[40vh]">
+      <Navbar showThemeToggle />
 
       {isSmallScreen && (
-        <div className=" text-gray-500 text-center py-4 mt-[100px]">
+        <div className="mt-[100px] py-4 text-center text-gray-500 dark:text-slate-400">
           <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
           <p>For the best experience, please use a tablet or laptop.</p>
         </div>
@@ -177,18 +185,18 @@ Good Luck, and Remember: Stay Confident! 😎
 
       <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
         <div className="max-w-7xl mx-auto p-4 md:p-6">
-          <h1 className="text-2xl font-bold text-gray-700 mb-2 text-center">Help & Template</h1>
-          <p className="text-gray-700 font-semibold mb-2 text-center">
+          <h1 className="mb-2 text-center text-2xl font-bold text-gray-700 dark:text-slate-100">Help & Template</h1>
+          <p className="mb-2 text-center font-semibold text-gray-700 dark:text-slate-200">
             <span className="text-red-500">*</span> This is just a template. You cannot edit here. <span className="text-red-500">*</span>
           </p>
-          <p className="text-gray-600 mb-4 text-center">
+          <p className="mb-4 text-center text-gray-600 dark:text-slate-300">
             To use this template, <strong className="underline">copy</strong> the content below and <strong className="underline">paste</strong> it into the Post section to share your experience.
           </p>
 
           <div className="flex justify-end mb-2"> {/* Container for copy button, aligned to right */}
             <button
               onClick={handleCopyClick}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="rounded bg-blue-500 px-4 py-2 font-bold text-white focus:outline-none focus:shadow-outline hover:bg-blue-700 dark:bg-cyan-600 dark:hover:bg-cyan-500"
             >
               Copy Template Text
             </button>
@@ -210,7 +218,7 @@ Good Luck, and Remember: Stay Confident! 😎
                   value={markdown}
                   preview="live"
                   hideToolbar={true}  /* Hide toolbar to further discourage editing */
-                  data-color-mode="light"
+                  data-color-mode={editorColorMode}
                   className="w-full h-full read-only-editor" /* Added custom class for read-only styling if needed */
                   height="100%"
                   readOnly={true}      /* Make the editor read-only */
@@ -222,7 +230,7 @@ Good Luck, and Remember: Stay Confident! 😎
 
           {/* Floating copy message */}
           {copyMessage && (
-            <div className="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-md shadow-lg animate-slide-in-right pointer-events-none">
+            <div className="pointer-events-none fixed bottom-4 right-4 animate-slide-in-right rounded-md bg-green-500 p-3 text-white shadow-lg">
               {copyMessage}
             </div>
           )}

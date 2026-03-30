@@ -4,7 +4,7 @@ import FeedCard from "@/components/FeedCard";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { Loader2, ArrowLeft, Search } from "lucide-react";
-import ClientThemeNavbar from "@/components/ClientThemeNavbar";
+import Navbar from "@/components/Navbar";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -101,7 +101,7 @@ const SearchPage = () => {
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <ClientThemeNavbar />
+      <Navbar showThemeToggle />
 
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />

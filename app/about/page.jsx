@@ -8,6 +8,7 @@ import m1img from "../../public/m1.jpeg";
 import m2img from "../../public/m2.jpeg";
 import p1img from "../../public/p1.jpeg";
 import logo from "../../public/icon.svg";
+import default1 from "../../public/default1.png";  
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import Navbar from "../../components/Navbar";
@@ -90,7 +91,8 @@ export default function Aboutus() {
                 <TeamMemberCard img={niimg} name="Nilay Tayade" subtitle="PICT'26 CE • Upcoming Barclays Intern" linkedin="https://www.linkedin.com/in/nilay-tayade/" github="https://github.com/nilaytayade" email="nilaytayadee@gmail.com" />
                 <TeamMemberCard img={m1img} name="Muneer Abbas" subtitle="PICT'28 CE" linkedin="https://www.linkedin.com/in/muneer-abass-67a095285/" github="https://github.com/muneerabbas" email="muneer.abbas5678@gmail.com" />
                 <TeamMemberCard img={m2img} name="Manas Khairnar" subtitle="PICT CE" linkedin="https://www.linkedin.com/in/manas-khairnar-98329132b/" github="https://github.com/derpx06" email="manaskhairnar1511@gmail.com" />
-                <TeamMemberCard img={p1img} name="Parag" subtitle="PICT" linkedin="#" github="#" email="#" />
+                <TeamMemberCard img={p1img} name="Parag Dharamkar" subtitle="PICT'28 CE" linkedin="https://www.linkedin.com/in/parag-dharamkar-b5529632a?utm_source=share_via&utm_content=profile&utm_medium=member_android" github="https://github.com/ParagD1606" email="paragdharamkar2006@gmail.com" />
+                <TeamMemberCard img={default1} name="Riddhesh Kataria" subtitle="PICT'28 CE" linkedin="#" github="#" email="#" />
               </div>
             </div>
           </div>

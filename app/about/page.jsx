@@ -65,10 +65,8 @@ export default function Aboutus() {
             </div>
 
             <div className="text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight">
-                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 bg-clip-text text-transparent dark:from-cyan-400 dark:via-blue-500 dark:to-indigo-400">
-                  theInterview
-                </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+                the<span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 bg-clip-text text-transparent dark:from-cyan-400 dark:via-blue-500 dark:to-indigo-400">Interview</span>Room
               </h1>
               <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl px-4">
                 Students building a simple place to share and learn from real interview experiences.

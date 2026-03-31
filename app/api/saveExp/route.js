@@ -7,25 +7,21 @@ import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feed
 import { getMongoDb } from "@/lib/mongodb";
 
 
-const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
+async function invalidateAfterWrite(email) {
+  if (!email || !redis) return;
 
-function invalidateAfterWrite(email) {
-  const keys = [...cacheInvalidationKeys];
-  if (email) {
-    keys.push(`profile_posts_${encodeURIComponent(email)}`);
-    keys.push(`public_profile_full:${email}`);
-    keys.push(`user_profile_data:${email}`);
+  const keys = [
+    `profile_posts_${encodeURIComponent(email)}`,
+    `public_profile_full:${email}`,
+    `user_profile_data:${email}`
+  ];
+
+  try {
+    await redis.del(keys);
+    console.log("[cache] User profile invalidation completed");
+  } catch (err) {
+    console.warn("[cache] Invalidation failed:", err?.message || err);
   }
-
-  if (!redis) return;
-
-  // Increment global version for instant feed invalidation
-  incrementFeedVersion(redis);
-
-  // @upstash/redis del() can take multiple keys or an array
-  redis.del(...keys).catch((err) => {
-    console.warn("[cache] invalidate failed:", err?.message || err);
-  });
 }
 
 export async function POST(req) {
@@ -83,7 +79,7 @@ export async function POST(req) {
       return NextResponse.json({ message: "Failed to save experience" }, { status: 500 });
     }
 
-    invalidateAfterWrite(email);
+    await invalidateAfterWrite(email);
 
     // Send acknowledgment email
     const siteUrl = req.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

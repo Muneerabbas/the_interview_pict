@@ -27,29 +27,31 @@ import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { fetchWithCache } from "@/lib/cache";
 import redis from "@/lib/redis";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getMongoDb } from "@/lib/mongodb";
 
 async function getPublicProfile(email) {
   const cacheKey = `public_profile_full:${email}`;
 
   return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
     try {
-      await client.connect();
-      const db = client.db("int-exp");
+      const db = await getMongoDb();
       const experience = db.collection("experience");
       const userCollection = db.collection("user");
 
       const rawPosts = await experience.find({ email }).sort({ date: -1 }).toArray();
 
       // Get user statistics and profile info
-      // Note: Views are incremented only on cache miss or separately
-      const userData = await userCollection.findOneAndUpdate(
+      // findOneAndUpdate might return { value: doc } or doc directly depending on driver version
+      const updateResult = await userCollection.findOneAndUpdate(
         { gmail: email },
         { $inc: { views: 1 } },
         { returnDocument: 'after' }
       );
 
-      if (!userData && (!posts || posts.length === 0)) {
+      const userData = updateResult?.value || updateResult;
+
+      // If no user document and no posts, then it's a 404
+      if (!userData?.gmail && (!rawPosts || rawPosts.length === 0)) {
         return { posts: [], stats: null, profile: null };
       }
 
@@ -59,20 +61,20 @@ async function getPublicProfile(email) {
 
       const posts = rawPosts.map((post) => ({
         ...post,
-        profile_pic: resolveProfileImage({ ...post, ...userData }),
-        name: resolveProfileName({ ...post, ...userData }),
+        profile_pic: resolveProfileImage({ ...post, user: userData || {} }),
+        name: resolveProfileName({ ...post, user: userData || {} }),
       }));
 
-      const first = posts[0];
+      const first = posts[0] || {};
       const profile = {
-        name: resolveProfileName({ ...first, ...userData }),
+        name: resolveProfileName({ ...first, user: userData || {} }),
         email,
-        profilePic: resolveProfileImage({ ...first, ...userData }),
+        profilePic: resolveProfileImage({ ...first, user: userData || {} }),
         branch: userData?.branch || first?.branch || "Branch not shared",
         batch: userData?.batch || first?.batch || "",
         role: userData?.role || first?.role || "Role not shared",
-        college: userData?.college || "",
-        currentCompany: userData?.currentCompany || "",
+        college: userData?.college || first?.college || "",
+        currentCompany: userData?.currentCompany || first?.currentCompany || "",
         headline: userData?.headline || "",
         about: userData?.about || "",
         views: userData?.views || 0,
@@ -163,10 +165,7 @@ export default async function PublicProfilePage({ params }) {
                       <Mail size={16} className="text-blue-600 dark:text-blue-400" />
                       <span className="text-sm">{profile.email.replace(/(?<=.{2}).(?=[^@]*@)/g, "•")}</span>
                     </div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-900/10 px-4 py-1.5 text-indigo-700 dark:text-indigo-300 shadow-sm transition-colors">
-                      <Eye size={16} className="text-indigo-600 dark:text-indigo-400" />
-                      <span className="text-sm font-semibold">{profile.views} Views</span>
-                    </div>
+
                   </div>
 
                   {/* Social Links Row */}

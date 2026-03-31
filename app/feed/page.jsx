@@ -156,8 +156,8 @@ export default function HomePage() {
         const parsed = JSON.parse(cached);
         const cacheAge = Date.now() - (parsed.timestamp || 0);
 
-        // Only use cache if it was saved within the last 5 minutes
-        if (cacheAge < 5 * 60 * 1000) {
+        // Only use cache if it was saved within the last 60 seconds
+        if (cacheAge < 60 * 1000) {
           const cachedProfiles = Array.isArray(parsed?.profiles) ? parsed.profiles : [];
           const cachedPage = Number.isFinite(Number(parsed?.page)) ? Number(parsed.page) : 0;
 

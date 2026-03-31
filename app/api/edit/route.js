@@ -1,51 +1,33 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
+import { getMongoDb } from "@/lib/mongodb";
 
+async function invalidateAfterEdit(email) {
+    if (!email || !redis) return;
 
-const { MongoClient, ObjectId } = require('mongodb');
+    const keys = [
+        `profile_posts_${encodeURIComponent(email)}`,
+        `public_profile_full:${email}`,
+        `user_profile_data:${email}`
+    ];
 
-// Create a new MongoClient
-const client = new MongoClient(process.env.MONGODB_URI);
-
-import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
-
-const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
-
-function invalidateAfterEdit(email) {
-    const keys = [...cacheInvalidationKeys];
-    if (email) {
-        keys.push(`profile_posts_${encodeURIComponent(email)}`);
-        keys.push(`public_profile_full:${email}`);
-        keys.push(`user_profile_data:${email}`);
+    try {
+        await redis.del(keys);
+        console.log("[cache] Edit invalidation completed");
+    } catch (err) {
+        console.warn("[cache] Edit invalidation failed:", err?.message || err);
     }
-
-    if (!redis) return;
-
-    // Increment global version for instant feed invalidation
-    incrementFeedVersion(redis);
-
-    // @upstash/redis del() can take multiple keys or an array
-    redis.del(keys).catch((err) => {
-        console.warn("[cache] invalidate failed:", err?.message || err);
-    });
 }
 
 export async function PUT(req) {
     const { uid, exp_text, company, college, branch, batch, role, email } = await req.json();
 
     try {
-        await client.connect();
-        console.log("Connected to MongoDB");
-
-        // Access a database
-        const db = client.db();
-
-        // Access a collection
+        const db = await getMongoDb();
         const experience = db.collection("experience");
 
-        // Find the document with the provided id and update it
         const result = await experience.updateOne(
-            { uid, email }, // Use ObjectId for MongoDB IDs
+            { uid, email },
             {
                 $set: {
                     exp_text,
@@ -54,7 +36,7 @@ export async function PUT(req) {
                     branch,
                     batch,
                     role,
-                    updated_at: new Date().toString() // Optional: to track when the record was updated
+                    updated_at: new Date().toString()
                 }
             }
         );
@@ -63,9 +45,7 @@ export async function PUT(req) {
             return NextResponse.json({ message: "No matching experience found" }, { status: 404 });
         }
 
-        invalidateAfterEdit(email);
-
-        console.log(result);
+        await invalidateAfterEdit(email);
 
         return NextResponse.json({ message: "Experience updated successfully", uid }, { status: 200 });
     } catch (error) {

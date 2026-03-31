@@ -470,12 +470,7 @@ const ProfilePage = () => {
 
                 <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-700 hidden sm:block" />
 
-                <div className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/10 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40">
-                  <Eye size={16} />
-                  <span className="text-sm font-bold">{profileData.views} Views</span>
-                </div>
 
-                <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-700 hidden sm:block" />
 
                 <div className="flex flex-wrap items-center gap-2">
                   {/* College */}
@@ -732,7 +727,7 @@ const ProfilePage = () => {
             <div className="grid gap-5">
               {posts.map((post) => (
                 <div key={post.uid} className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl">
-                  <ProfileCard profile={post} edit={true} deletePost={true} setGlobalLoading={setGlobalLoading} disableCardClick={true} />
+                  <ProfileCard profile={{ ...post, profile_pic: profile_pic || post.profile_pic }} edit={true} deletePost={true} setGlobalLoading={setGlobalLoading} disableCardClick={true} />
                 </div>
               ))}
             </div>

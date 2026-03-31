@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import redis from "@/lib/redis";
-import { buildFeedCacheKey } from "@/lib/feedCache";
+import { incrementFeedVersion } from "@/lib/feedCache";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -27,14 +27,13 @@ export async function POST(req) {
             return NextResponse.json({ message: "Not found" }, { status: 404 });
         }
 
+        // Bump global version so trending feeds pick up the new view count
         if (redis) {
-            redis.del([
-                buildFeedCacheKey({ page: 0, itemsPerPage: 10, sort: "trending" }),
-                buildFeedCacheKey({ page: 0, itemsPerPage: 6, sort: "trending" }),
-                "top_stories_page_0",
-            ]).catch((err) => {
-                console.warn("[cache] invalidate failed:", err?.message || err);
-            });
+            try {
+                await incrementFeedVersion(redis);
+            } catch (err) {
+                console.warn("[cache] view invalidation failed:", err?.message || err);
+            }
         }
 
         return NextResponse.json({ success: true });

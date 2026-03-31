@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
-import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
-import { fetchWithCache } from "@/lib/cache";
-import { buildFeedCacheKey, FEED_SORT_TRENDING, normalizeFeedSort, getFeedVersion } from "@/lib/feedCache";
+import { resolveProfileName } from "@/lib/utils";
 import { getMongoDb } from "@/lib/mongodb";
-import redis from "@/lib/redis";
 
 export const dynamic = "force-dynamic";
+
+const FEED_SORT_TRENDING = "trending";
+
+function normalizeFeedSort(sort) {
+  return sort === "trending" ? FEED_SORT_TRENDING : "latest";
+}
 
 function buildPipeline({
   sort,
@@ -59,12 +62,15 @@ function buildPipeline({
 }
 
 function processFeedResults(feed) {
-  return feed.map((item) => ({
-    ...item,
-    profile_pic: resolveProfileImage({ ...item, ...item.author }),
-    name: resolveProfileName({ ...item, ...item.author }),
-    date: item.date ? new Date(item.date).toISOString() : new Date().toISOString(),
-  }));
+  return feed.map((item) => {
+    const authorImage = item.author?.image || item.author?.profile_pic || item.author?.profilePic;
+    return {
+      ...item,
+      profile_pic: authorImage || item.profile_pic || null,
+      name: resolveProfileName({ ...item, ...item.author }),
+      date: item.date ? new Date(item.date).toISOString() : new Date().toISOString(),
+    };
+  });
 }
 
 export async function GET(req) {
@@ -76,33 +82,19 @@ export async function GET(req) {
     const branchFilter = req.nextUrl.searchParams.get("branch");
     const batchFilter = req.nextUrl.searchParams.get("batch");
     const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
-    const bypassCache = req.nextUrl.searchParams.get("refresh") === "true";
 
-    // Fetch the global version to ensure cache keys are synchronized with the latest data
-    const version = await getFeedVersion(redis);
+    const db = await getMongoDb();
+    const experience = db.collection("experience");
+    const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter });
+    const feed = await experience.aggregate(pipeline).toArray();
+    const data = processFeedResults(feed);
 
-    const cacheKey = buildFeedCacheKey({
-      page,
-      itemsPerPage,
-      sort,
-      company: companyFilter,
-      college: collegeFilter,
-      branch: branchFilter,
-      batch: batchFilter,
-      version,
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "Pragma": "no-cache",
+      },
     });
-
-    const runner = async () => {
-      const db = await getMongoDb();
-      const experience = db.collection("experience");
-      const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter });
-      const feed = await experience.aggregate(pipeline).toArray();
-      return processFeedResults(feed);
-    };
-
-    const data = await (bypassCache ? runner() : fetchWithCache(cacheKey, 60, runner));
-
-    return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching feed:", error);
     return NextResponse.json({ message: error.message }, { status: 500 });

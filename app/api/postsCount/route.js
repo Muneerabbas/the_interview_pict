@@ -14,7 +14,7 @@ async function connectDB() {
     if (!client) {
         client = new MongoClient(uri);
         await client.connect();
-        db = client.db("int-exp"); // Replace with your actual database name
+        db = client.db("int-exp");
     }
     return db;
 }

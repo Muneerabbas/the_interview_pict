@@ -13,7 +13,7 @@ export async function POST(req) {
         }
 
         await client.connect();
-        const db = client.db("int-exp");
+        const db = client.db();
         const experience = db.collection("experience");
 
 

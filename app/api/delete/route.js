@@ -5,7 +5,7 @@ import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feed
 
 // Persistent MongoDB connection
 const client = new MongoClient(process.env.MONGODB_URI);
-const database = client.db("int-exp");
+const database = client.db();
 const collection = database.collection("experience");
 
 

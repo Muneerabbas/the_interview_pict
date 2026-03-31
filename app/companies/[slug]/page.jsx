@@ -19,7 +19,7 @@ export default async function CompanyDetails({ params }) {
     if (!company) {
         return notFound();
     }
-    const db = client.db("int-exp");
+    const db = client.db();
     const experience = db.collection("experience");
     const experiences = await experience.find({
         company: company.name

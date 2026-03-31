@@ -38,7 +38,7 @@ export async function PUT(req) {
         console.log("Connected to MongoDB");
 
         // Access a database
-        const db = client.db("int-exp");
+        const db = client.db();
 
         // Access a collection
         const experience = db.collection("experience");

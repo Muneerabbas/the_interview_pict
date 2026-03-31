@@ -36,7 +36,7 @@ export async function POST(req) {
     const client = await getClient();
     console.log("🔌 Connected to MongoDB");
 
-    const db = client.db("int-exp");
+    const db = client.db();
     const users = db.collection("user");
 
     // Check if user exists

@@ -14,7 +14,7 @@ export async function POST(req) {
         }
 
         await client.connect();
-        const db = client.db("int-exp");
+        const db = client.db();
         const collection = db.collection("experience");
 
         // Atomic increment of views

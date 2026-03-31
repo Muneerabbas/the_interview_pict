@@ -8,6 +8,7 @@ export async function POST(req) {
     const drafts = db.collection("drafts");
     const {
       exp_text,
+      college,
       company,
       branch,
       batch,
@@ -38,6 +39,7 @@ export async function POST(req) {
     // Create draft document
     const draftDoc = {
       exp_text: exp_text || '',
+      college: college || '',
       company: company || '',
       branch: branch || '',
       batch: batch || '',

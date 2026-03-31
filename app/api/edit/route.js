@@ -26,7 +26,7 @@ function invalidateAfterEdit(email) {
 }
 
 export async function PUT(req) {
-    const { uid, exp_text, company, branch, batch, role, email } = await req.json();
+    const { uid, exp_text, company, college, branch, batch, role, email } = await req.json();
 
     try {
         await client.connect();
@@ -45,6 +45,7 @@ export async function PUT(req) {
                 $set: {
                     exp_text,
                     company,
+                    college,
                     branch,
                     batch,
                     role,

@@ -11,6 +11,9 @@ export async function GET(req) {
     const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
     const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10);
     const companyFilter = req.nextUrl.searchParams.get("company");
+    const collegeFilter = req.nextUrl.searchParams.get("college");
+    const branchFilter = req.nextUrl.searchParams.get("branch");
+    const batchFilter = req.nextUrl.searchParams.get("batch");
     const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
 
     const cacheKey = buildFeedCacheKey({
@@ -18,6 +21,9 @@ export async function GET(req) {
       itemsPerPage,
       sort,
       company: companyFilter,
+      college: collegeFilter,
+      branch: branchFilter,
+      batch: batchFilter,
     });
 
     const data = await fetchWithCache(cacheKey, 60, async () => {
@@ -26,8 +32,14 @@ export async function GET(req) {
 
       const pipeline = [];
 
-      if (companyFilter) {
-        pipeline.push({ $match: { company: companyFilter } });
+      const match = {};
+      if (companyFilter) match.company = companyFilter;
+      if (collegeFilter) match.college = collegeFilter;
+      if (branchFilter) match.branch = branchFilter;
+      if (batchFilter) match.batch = batchFilter;
+
+      if (Object.keys(match).length > 0) {
+        pipeline.push({ $match: match });
       }
 
       pipeline.push(

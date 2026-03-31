@@ -137,6 +137,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const [errorMessage, setErrorMessage] = useState('');
   const { data: session } = useSession();
   const [markdown, setMarkdown] = useState("");
+  const [college, setCollege] = useState("");
   const [batch, setBatch] = useState("");
   const [branch, setBranch] = useState("");
   const [company, setCompany] = useState("");
@@ -146,6 +147,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const [height, setHeight] = useState("100vh");
   const [bottomMargin, setBottomMargin] = useState("0");
   const [errors, setErrors] = useState({
+    college: false,
     batch: false,
     branch: false,
     company: false,
@@ -192,6 +194,18 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const roles = ["Intern", "SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
+  const colleges = [
+    "COEP Technological University",
+    "Pune Institute of Computer Technology (PICT)",
+    "Vishwakarma Institute of Technology (VIT Pune)",
+    "Pimpri Chinchwad College of Engineering (PCCOE)",
+    "MIT World Peace University (MIT-WPU)",
+    "Cummins College of Engineering for Women",
+    "AISSMS Institute of Information Technology",
+    "Sinhgad College of Engineering",
+    "JSPM Rajarshi Shahu College of Engineering",
+    "Dr. D. Y. Patil Institute of Technology, Akurdi",
+  ];
   const [companies, setCompanies] = useState(postCompanies);
 
   const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
@@ -243,6 +257,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         if (response.ok) {
           const draftData = await response.json();
           setMarkdown(draftData.exp_text || "");
+          setCollege(draftData.college || "");
           setBatch(draftData.batch || "");
           setBranch(draftData.branch || "");
           setCompany(draftData.company || "");
@@ -305,6 +320,8 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   // Validation function for specific fields
   const validateField = (fieldName, value) => {
     switch (fieldName) {
+      case 'college':
+        return !value;
       case 'batch':
         return !value;
       case 'branch':
@@ -321,6 +338,15 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   };
 
   // Handle input changes and validate only the relevant field
+  const handleCollegeChange = (e) => {
+    const value = e.target.value;
+    setCollege(value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      college: validateField('college', value),
+    }));
+  };
+
   const handleBatchChange = (e) => {
     const value = e.target.value;
     setBatch(value);
@@ -371,6 +397,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
   const validateRequiredMetaForAI = () => {
     const requiredErrors = {
+      college: validateField('college', college),
       batch: validateField('batch', batch),
       branch: validateField('branch', branch),
       company: validateField('company', company),
@@ -387,7 +414,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
   const handleModeChange = (nextMode) => {
     if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
-      alert("Please select Batch, Department, Company, and Role before using AI.");
+      alert("Please select College, Batch, Department, Company, and Role before using AI.");
       return;
     }
     setMode(nextMode);
@@ -415,6 +442,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
     // Validate all fields one last time before submitting
     const newErrors = {
+      college: validateField('college', college),
       batch: validateField('batch', batch),
       branch: validateField('branch', branch),
       company: validateField('company', company),
@@ -443,6 +471,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           exp_text: markdown,
           name: session.user.name,
           profile_pic: session.user.image,
+          college,
           batch,
           branch,
           company: finalCompany, // Use final company value
@@ -455,12 +484,14 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       if (!response.ok) throw new Error("Failed to submit markdown");
 
       // After successful submission, reset the draft
+      setCollege("");
       setBatch("");
       setBranch("");
       setCompany("");
       setRole("");
       setMarkdown("");
       setErrors({
+        college: false,
         batch: false,
         branch: false,
         company: false,
@@ -501,6 +532,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     if (session?.user?.email) {
       saveDraft({
         exp_text: markdown,
+        college,
         batch,
         branch,
         company,
@@ -512,7 +544,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         currentRound,
       });
     }
-  }, [markdown, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
+  }, [markdown, college, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
 
   const handleCopyTemplate = () => {
@@ -525,6 +557,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   };
 
   const handleClearForm = () => {
+    setCollege("");
     setBatch("");
     setBranch("");
     setCompany("");
@@ -534,6 +567,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     setMarkdown("");
     setChatInput("");
     setErrors({
+      college: false,
       batch: false,
       branch: false,
       company: false,
@@ -585,6 +619,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       const finalPayload = {
         company: company === 'others' ? customCompany : company || "Not specified",
         role: role === 'others' ? customRole : role || "Not specified",
+        college: college || "Not specified",
         batch: batch || "Not specified",
         branch: branch || "Not specified",
         shortlisting: finalAnswers.eligibility,
@@ -839,7 +874,27 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
           </div>
 
-          <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {/* College */}
+            <div className={`group relative z-[56] rounded-[20px] transition-all duration-300 ${errors.college ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
+              <div className="p-4 sm:p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
+                </div>
+                <div className="relative">
+                  <SearchableDropdown
+                    options={colleges}
+                    value={college}
+                    onChange={(val) => handleCollegeChange({ target: { value: val } })}
+                    placeholder="Select College"
+                    error={errors.college}
+                  />
+                </div>
+                {errors.college && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+              </div>
+            </div>
+
             {/* Batch */}
             <div className={`group relative z-[55] rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
               <div className="p-4 sm:p-5">

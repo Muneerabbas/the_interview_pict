@@ -3,16 +3,38 @@
 import Navbar from "../../components/Navbar";
 import FeedCard from "../../components/FeedCard";
 import FeedHero from "../../components/FeedHero";
+import SearchableDropdown from "../../components/SearchableDropdown";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock } from "lucide-react";
+import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
 const FEED_CACHE_PREFIX = "feed_state_v2";
-const getFeedCacheKey = (tab) => `${FEED_CACHE_PREFIX}:${tab}`;
+const COLLEGE_OPTIONS = [
+  "COEP Technological University",
+  "Pune Institute of Computer Technology (PICT)",
+  "Vishwakarma Institute of Technology (VIT Pune)",
+  "Pimpri Chinchwad College of Engineering (PCCOE)",
+  "MIT World Peace University (MIT-WPU)",
+  "Cummins College of Engineering for Women",
+  "AISSMS Institute of Information Technology",
+  "Sinhgad College of Engineering",
+  "JSPM Rajarshi Shahu College of Engineering",
+  "Dr. D. Y. Patil Institute of Technology, Akurdi",
+];
+const BRANCH_OPTIONS = [
+  { label: "Computer Science", value: "CS" },
+  { label: "Information Technology", value: "IT" },
+  { label: "E&TC", value: "EnTC" },
+  { label: "AI & Data Science", value: "AIDS" },
+  { label: "Electronics & Comp", value: "EC" },
+];
+const YEAR_OPTIONS = Array.from({ length: 28 }, (_, index) => String(2000 + index)).reverse();
+const getFeedCacheKey = (tab, filters) =>
+  `${FEED_CACHE_PREFIX}:${tab}:${filters.college || "all"}:${filters.branch || "all"}:${filters.batch || "all"}`;
 
 const LoadingScreen = ({ isDarkMode }) => (
   <div
@@ -32,6 +54,11 @@ export default function HomePage() {
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
   const [tabReady, setTabReady] = useState(false);
+  const [filters, setFilters] = useState({
+    college: "",
+    branch: "",
+    batch: "",
+  });
 
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -61,11 +88,19 @@ export default function HomePage() {
     [pageLoading, hasMoreProfiles]
   );
 
-  const fetchProfiles = useCallback(async (pageNumber, limit, sort) => {
+  const fetchProfiles = useCallback(async (pageNumber, limit, sort, activeFilters) => {
     setPageLoading(true);
     isFetchingRef.current = true;
     try {
-      const url = `/api/feed?page=${pageNumber}&itemsPerPage=${limit}&sort=${sort}`;
+      const params = new URLSearchParams({
+        page: String(pageNumber),
+        itemsPerPage: String(limit),
+        sort,
+      });
+      if (activeFilters.college) params.set("college", activeFilters.college);
+      if (activeFilters.branch) params.set("branch", activeFilters.branch);
+      if (activeFilters.batch) params.set("batch", activeFilters.batch);
+      const url = `/api/feed?${params.toString()}`;
       const response = await axios.get(url);
 
       // Safety check: only update state if this request matches the current active tab
@@ -102,7 +137,7 @@ export default function HomePage() {
 
     let restored = false;
     try {
-      const cached = sessionStorage.getItem(getFeedCacheKey(activeTab));
+      const cached = sessionStorage.getItem(getFeedCacheKey(activeTab, filters));
       if (cached) {
         const parsed = JSON.parse(cached);
         const cacheAge = Date.now() - (parsed.timestamp || 0);
@@ -125,7 +160,7 @@ export default function HomePage() {
           }
         } else {
           // Cache expired, remove it and start fresh
-          sessionStorage.removeItem(getFeedCacheKey(activeTab));
+          sessionStorage.removeItem(getFeedCacheKey(activeTab, filters));
         }
       }
     } catch (error) {
@@ -140,7 +175,7 @@ export default function HomePage() {
     }
 
     setTabReady(true);
-  }, [activeTab]);
+  }, [activeTab, filters]);
 
   useEffect(() => {
     if (!tabReady) return;
@@ -148,14 +183,14 @@ export default function HomePage() {
       skipNextFetchRef.current = false;
       return;
     }
-    fetchProfiles(page, itemsPerPage, activeTab);
-  }, [tabReady, page, activeTab, fetchProfiles, itemsPerPage]);
+    fetchProfiles(page, itemsPerPage, activeTab, filters);
+  }, [tabReady, page, activeTab, filters, fetchProfiles, itemsPerPage]);
 
   useEffect(() => {
     if (!tabReady || typeof window === "undefined") return;
     try {
       sessionStorage.setItem(
-        getFeedCacheKey(activeTab),
+        getFeedCacheKey(activeTab, filters),
         JSON.stringify({
           profiles,
           page,
@@ -167,18 +202,18 @@ export default function HomePage() {
     } catch (error) {
       console.warn("Failed to persist feed cache:", error);
     }
-  }, [profiles, page, hasMoreProfiles, activeTab, tabReady]);
+  }, [profiles, page, hasMoreProfiles, activeTab, filters, tabReady]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const saveScroll = () => {
       try {
-        const cached = sessionStorage.getItem(getFeedCacheKey(activeTab));
+        const cached = sessionStorage.getItem(getFeedCacheKey(activeTab, filters));
         if (!cached) return;
         const parsed = JSON.parse(cached);
         sessionStorage.setItem(
-          getFeedCacheKey(activeTab),
+          getFeedCacheKey(activeTab, filters),
           JSON.stringify({
             ...parsed,
             scrollY: window.scrollY,
@@ -195,12 +230,34 @@ export default function HomePage() {
       saveScroll();
       window.removeEventListener("pagehide", saveScroll);
     };
-  }, [activeTab]);
+  }, [activeTab, filters]);
 
   const skeletonCards = Array.from({ length: 3 });
 
   const handleShareExperienceClick = () => {
     setIsShareButtonLoading(true);
+  };
+
+  const activeFilterCount = [filters.college, filters.branch, filters.batch].filter(Boolean).length;
+
+  const handleFilterChange = (key, value) => {
+    setProfiles([]);
+    setPage(0);
+    setHasMoreProfiles(true);
+    skipNextFetchRef.current = false;
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const clearFilters = () => {
+    setProfiles([]);
+    setPage(0);
+    setHasMoreProfiles(true);
+    skipNextFetchRef.current = false;
+    setFilters({
+      college: "",
+      branch: "",
+      batch: "",
+    });
   };
 
   return (
@@ -296,7 +353,84 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="relative z-30 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(248,250,252,0.86)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9)_0%,rgba(2,6,23,0.82)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)]">
+            <div className="flex flex-col gap-3 border-b border-slate-200/70 px-4 py-4 dark:border-slate-700/80 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">
+                  <SlidersHorizontal className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Refine The Feed</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Filter stories by college, department, and graduation year.</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${activeFilterCount > 0 ? "bg-blue-600 text-white dark:bg-cyan-400 dark:text-slate-950" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"}`}>
+                  <span>{activeFilterCount}</span>
+                  <span>{activeFilterCount === 1 ? "filter active" : "filters active"}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  disabled={activeFilterCount === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-3 p-4 sm:p-5 md:grid-cols-[1.4fr_1fr_1fr]">
+              <label className="space-y-2">
+                <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  College
+                </span>
+                <div className="relative z-[30]">
+                  <SearchableDropdown
+                    options={[{ label: "All colleges", value: "" }, ...COLLEGE_OPTIONS.map((college) => ({ label: college, value: college }))]}
+                    value={filters.college}
+                    onChange={(value) => handleFilterChange("college", value)}
+                    placeholder="All colleges"
+                  />
+                </div>
+              </label>
+
+              <label className="space-y-2">
+                <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  Department
+                </span>
+                <div className="relative z-[20]">
+                  <SearchableDropdown
+                    options={[{ label: "All departments", value: "" }, ...BRANCH_OPTIONS]}
+                    value={filters.branch}
+                    onChange={(value) => handleFilterChange("branch", value)}
+                    placeholder="All departments"
+                  />
+                </div>
+              </label>
+
+              <label className="space-y-2">
+                <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  Year
+                </span>
+                <div className="relative z-[10]">
+                  <SearchableDropdown
+                    options={[{ label: "All years", value: "" }, ...YEAR_OPTIONS.map((year) => ({ label: year, value: year }))]}
+                    value={filters.batch}
+                    onChange={(value) => handleFilterChange("batch", value)}
+                    placeholder="All years"
+                  />
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div className="relative z-10 space-y-4">
             {pageLoading && page === 0 && profiles.length === 0 ? (
               skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
             ) : (
@@ -322,7 +456,10 @@ export default function HomePage() {
               <div className="py-12 text-center">
                 <p className="text-slate-500 dark:text-slate-400 font-medium italic">No stories found for this category.</p>
                 <button
-                  onClick={() => { setActiveTab("latest") }}
+                  onClick={() => {
+                    setActiveTab("latest");
+                    clearFilters();
+                  }}
                   className="mt-4 text-sm font-bold text-blue-600 hover:underline dark:text-cyan-400"
                 >
                   Clear all filters

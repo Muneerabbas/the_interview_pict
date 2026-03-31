@@ -9,6 +9,11 @@ const experienceSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    college: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,  // This links to the User model
       ref: User,  // Reference to the User model

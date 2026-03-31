@@ -27,7 +27,7 @@ function invalidateAfterWrite(email) {
 
 export async function POST(req) {
   try {
-    const { exp_text, company, branch, batch, profile_pic, name, role, email } = await req.json();
+    const { exp_text, college, company, branch, batch, profile_pic, name, role, email } = await req.json();
     if (!exp_text || !company || !name) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
@@ -48,10 +48,10 @@ export async function POST(req) {
     // Save experience to DB
     const now = new Date().toISOString();
     const result = await experience.insertOne({
-      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
+      uid, exp_text, college, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
     });
     const bc = await backup.insertOne({
-      uid, exp_text, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
+      uid, exp_text, college, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
     });
 
     // Sync with Company collection

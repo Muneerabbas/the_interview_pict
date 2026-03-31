@@ -26,6 +26,10 @@ export default async function CompanyDetails({ params }) {
     }).toArray();
     const interviewsCount = experiences.length;
 
+    // Detect if this is an auto-generated generic company stub
+    const isGeneric = !company.logo && !company.location && !company.website &&
+        (company.about?.includes("interview experience details.") || !company.about);
+
     return (
         <div className="relative min-h-screen w-full overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
             <Navbar showThemeToggle />
@@ -65,21 +69,21 @@ export default async function CompanyDetails({ params }) {
                         {/* Logo */}
                         <div className="relative shrink-0">
                             <div className="absolute inset-0 rounded-[28px] bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-md" />
-                        {company.logo ? (
-                            <div className="relative z-10 flex h-24 w-24 shrink-0 sm:h-32 sm:w-32 items-center justify-center rounded-3xl bg-white p-3 ring-4 ring-white shadow-sm dark:bg-slate-950 dark:ring-slate-900">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={company.logo}
-                                    alt={`${company.name} logo`}
-                                    className="object-contain h-full w-full"
-                                    loading="lazy"
-                                />
-                            </div>
-                        ) : (
-                            <div className="relative z-10 flex h-24 w-24 shrink-0 sm:h-32 sm:w-32 items-center justify-center rounded-3xl ring-4 ring-white bg-gradient-to-br from-blue-50 to-indigo-50 text-4xl sm:text-5xl font-bold text-blue-600 shadow-inner dark:bg-slate-950 dark:ring-slate-900 dark:from-cyan-900/40 dark:to-blue-900/40 dark:text-cyan-300">
-                                {(company?.name?.charAt(0) || "C").toUpperCase()}
-                            </div>
-                        )}
+                            {company.logo ? (
+                                <div className="relative z-10 flex h-24 w-24 shrink-0 sm:h-32 sm:w-32 items-center justify-center rounded-3xl bg-white p-3 ring-4 ring-white shadow-sm dark:bg-slate-950 dark:ring-slate-900">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={company.logo}
+                                        alt={`${company.name} logo`}
+                                        className="object-contain h-full w-full"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="relative z-10 flex h-24 w-24 shrink-0 sm:h-32 sm:w-32 items-center justify-center rounded-3xl ring-4 ring-white bg-gradient-to-br from-blue-50 to-indigo-50 text-4xl sm:text-5xl font-bold text-blue-600 shadow-inner dark:bg-slate-950 dark:ring-slate-900 dark:from-cyan-900/40 dark:to-blue-900/40 dark:text-cyan-300">
+                                    {(company?.name?.charAt(0) || "C").toUpperCase()}
+                                </div>
+                            )}
                         </div>
 
                         {/* Info */}
@@ -125,27 +129,31 @@ export default async function CompanyDetails({ params }) {
                         </div>
 
                         {/* Stats Block */}
-                        <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-auto mt-6 sm:mt-0 bg-slate-50/50 p-4 rounded-2xl border border-slate-200/60 dark:bg-slate-800/40 dark:border-slate-700/50">
-                            <div className="flex-1 text-center sm:text-right">
-                                <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{interviewsCount}</div>
-                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 dark:text-slate-400">Interviews</div>
+                        {!isGeneric && (
+                            <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-auto mt-6 sm:mt-0 bg-slate-50/50 p-4 rounded-2xl border border-slate-200/60 dark:bg-slate-800/40 dark:border-slate-700/50">
+                                <div className="flex-1 text-center sm:text-right">
+                                    <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{interviewsCount}</div>
+                                    <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 dark:text-slate-400">Interviews</div>
+                                </div>
+                                <div className="hidden sm:block w-full h-px bg-slate-200/80 dark:bg-slate-700/80"></div>
+                                <div className="block sm:hidden w-px bg-slate-200/80 dark:bg-slate-700/80"></div>
+                                <div className="flex-1 text-center sm:text-right">
+                                    <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{company.stats?.reviewsCount || 0}</div>
+                                    <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 dark:text-slate-400">Reviews</div>
+                                </div>
                             </div>
-                            <div className="hidden sm:block w-full h-px bg-slate-200/80 dark:bg-slate-700/80"></div>
-                            <div className="block sm:hidden w-px bg-slate-200/80 dark:bg-slate-700/80"></div>
-                            <div className="flex-1 text-center sm:text-right">
-                                <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{company.stats?.reviewsCount || 0}</div>
-                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 dark:text-slate-400">Reviews</div>
-                            </div>
-                        </div>
+                        )}
 
                     </div>
 
-                    <div className="relative z-10 mt-10 border-t border-slate-200/60 pt-8 dark:border-slate-800">
-                        <h2 className="text-xl font-bold text-slate-900 mb-4 dark:text-slate-100">About {company.name}</h2>
-                        <div className="prose prose-slate max-w-none text-slate-600 text-base leading-relaxed whitespace-pre-line dark:text-slate-300 dark:prose-invert">
-                            {company.about}
+                    {!isGeneric && company.about && (
+                        <div className="relative z-10 mt-10 border-t border-slate-200/60 pt-8 dark:border-slate-800">
+                            <h2 className="text-xl font-bold text-slate-900 mb-4 dark:text-slate-100">About {company.name}</h2>
+                            <div className="prose prose-slate max-w-none text-slate-600 text-base leading-relaxed whitespace-pre-line dark:text-slate-300 dark:prose-invert">
+                                {company.about}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Experiences Section */}
@@ -169,12 +177,12 @@ export default async function CompanyDetails({ params }) {
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2">
                             {experiences.map((exp) => (
-                                <ArticleCard 
-                                    key={exp._id.toString()} 
+                                <ArticleCard
+                                    key={exp._id.toString()}
                                     article={{
                                         ...exp,
                                         date: exp.createdAt || exp.date
-                                    }} 
+                                    }}
                                 />
                             ))}
                         </div>

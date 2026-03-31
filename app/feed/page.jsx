@@ -105,19 +105,27 @@ export default function HomePage() {
       const cached = sessionStorage.getItem(getFeedCacheKey(activeTab));
       if (cached) {
         const parsed = JSON.parse(cached);
-        const cachedProfiles = Array.isArray(parsed?.profiles) ? parsed.profiles : [];
-        const cachedPage = Number.isFinite(Number(parsed?.page)) ? Number(parsed.page) : 0;
+        const cacheAge = Date.now() - (parsed.timestamp || 0);
 
-        setProfiles(cachedProfiles);
-        setPage(cachedPage);
-        setHasMoreProfiles(parsed?.hasMoreProfiles ?? true);
-        skipNextFetchRef.current = cachedProfiles.length > 0;
-        restored = true;
+        // Only use cache if it was saved within the last 5 minutes
+        if (cacheAge < 5 * 60 * 1000) {
+          const cachedProfiles = Array.isArray(parsed?.profiles) ? parsed.profiles : [];
+          const cachedPage = Number.isFinite(Number(parsed?.page)) ? Number(parsed.page) : 0;
 
-        if (Number.isFinite(parsed?.scrollY)) {
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: parsed.scrollY, behavior: "auto" });
-          });
+          setProfiles(cachedProfiles);
+          setPage(cachedPage);
+          setHasMoreProfiles(parsed?.hasMoreProfiles ?? true);
+          skipNextFetchRef.current = cachedProfiles.length > 0;
+          restored = true;
+
+          if (Number.isFinite(parsed?.scrollY)) {
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: parsed.scrollY, behavior: "auto" });
+            });
+          }
+        } else {
+          // Cache expired, remove it and start fresh
+          sessionStorage.removeItem(getFeedCacheKey(activeTab));
         }
       }
     } catch (error) {
@@ -153,6 +161,7 @@ export default function HomePage() {
           page,
           hasMoreProfiles,
           scrollY: window.scrollY,
+          timestamp: Date.now(),
         })
       );
     } catch (error) {
@@ -173,6 +182,7 @@ export default function HomePage() {
           JSON.stringify({
             ...parsed,
             scrollY: window.scrollY,
+            timestamp: Date.now(),
           })
         );
       } catch (error) {

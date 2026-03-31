@@ -9,6 +9,7 @@ import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 import postCompanies from "@/data/post-companies.json";
 import { useTheme } from "next-themes";
 import SearchableDropdown from "./SearchableDropdown";
+import AddCompanyModal from "@/components/AddCompanyModal";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
   <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/60" : "bg-gray-500/50"}`}>
@@ -191,7 +192,33 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const roles = ["Intern", "SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
-  const companies = postCompanies;
+  const [companies, setCompanies] = useState(postCompanies);
+
+  const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
+  const [newCompanyInitialName, setNewCompanyInitialName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/getCompanies")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          const dbCompanyNames = data.data.map(c => c.name).filter(Boolean);
+          setCompanies(Array.from(new Set([...postCompanies, ...dbCompanyNames])));
+        }
+      })
+      .catch((err) => console.error("Could not fetch generic companies", err));
+  }, []);
+
+  const handleAddCompanyAction = (searchTerm) => {
+    setNewCompanyInitialName(searchTerm);
+    setShowAddCompanyModal(true);
+  };
+
+  const handleAddCompanySuccess = (newCompanyObj) => {
+    setCompanies((prev) => Array.from(new Set([...prev, newCompanyObj.name])));
+    setCompany(newCompanyObj.name);
+    setCustomCompany("");
+  };
 
 
   useEffect(() => {
@@ -449,6 +476,10 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           email: session.user.email,
         }),
       });
+
+      // Invalidate frontend feed cache so the user sees their new post immediately
+      sessionStorage.removeItem("feed_state_v2:latest");
+      sessionStorage.removeItem("feed_state_v2:trending");
 
       // Show success message
       setSuccessMessage("Your experience has been successfully submitted!");
@@ -869,6 +900,8 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                     onChange={(val) => handleCompanyChange({ target: { value: val } })}
                     placeholder="Select Company"
                     error={errors.company}
+                    addActionLabel="Add New Company"
+                    onAddActionClick={handleAddCompanyAction}
                   />
                 </div>
                 {company === "others" && (
@@ -951,9 +984,9 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           </AnimatePresence>
           <div className="w-full pb-8">
             <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] border border-white/60 bg-white/50 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:rounded-2xl sm:p-3">
-              <div className="flex flex-col gap-2.5 xl:flex-row xl:items-center xl:justify-between">
+              <div className="flex flex-col items-start md:items-center justify-between gap-4 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:flex-row md:rounded-full sm:p-4">
                 {/* Toggle (Left) */}
-                <div className="flex w-full justify-start xl:w-auto">
+                <div className="flex w-full justify-start md:w-auto">
                   <div className="relative flex h-[46px] w-full rounded-xl border border-white/40 bg-slate-100/60 p-1 shadow-inner dark:border-slate-700 dark:bg-slate-800/85 sm:h-[52px] sm:w-auto">
                     <button
                       onClick={() => handleModeChange('manual')}
@@ -978,8 +1011,19 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                   </div>
                 </div>
 
-                <div className="flex w-full flex-row gap-2.5 justify-center xl:w-auto xl:justify-start">
-                  <div className="flex w-full items-center gap-2.5 sm:gap-3 sm:w-auto">
+                <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 sm:gap-4 md:w-auto md:justify-end md:flex-nowrap mt-1 md:mt-0">
+                  {/* Copy template button */}
+                  <div className={`hidden sm:flex transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 w-0 -mx-2 overflow-hidden scale-95' : 'opacity-100 w-auto scale-100'}`}>
+                    <button
+                      type="button"
+                      onClick={handleCopyTemplate}
+                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
+                    >
+                      Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
+                    </button>
+                  </div>
+
+                  <div className="flex w-full items-center justify-center gap-2.5 sm:gap-3 sm:w-auto">
                     <button
                       onClick={handleClearForm}
                       type="button"
@@ -996,17 +1040,6 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                       <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
                     </button>
                   </div>
-                </div>
-
-                {/* Copy template button (Right) */}
-                <div className={`hidden sm:flex w-full justify-center transition-all duration-300 xl:w-auto xl:justify-end ${mode !== 'manual' ? 'pointer-events-none opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-                  <button
-                    type="button"
-                    onClick={handleCopyTemplate}
-                    className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
-                  >
-                    Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
-                  </button>
                 </div>
               </div>
             </div>
@@ -1125,6 +1158,12 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           }
         }
       `}</style>
+      <AddCompanyModal
+        isOpen={showAddCompanyModal}
+        onClose={() => setShowAddCompanyModal(false)}
+        onSuccess={handleAddCompanySuccess}
+        initialName={newCompanyInitialName}
+      />
     </div>
   );
 }

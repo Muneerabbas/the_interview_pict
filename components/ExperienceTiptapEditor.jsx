@@ -73,7 +73,6 @@ const toEditorHtml = (value = "") => {
 
 const MainToolbarContent = ({ isMobile, onHighlighterClick, onLinkClick }) => (
   <>
-    <Spacer />
     <ToolbarGroup>
       <UndoRedoButton action="undo" />
       <UndoRedoButton action="redo" />
@@ -115,7 +114,6 @@ const MainToolbarContent = ({ isMobile, onHighlighterClick, onLinkClick }) => (
     <ToolbarGroup>
       <ImageUploadButton text="Add" />
     </ToolbarGroup>
-    <Spacer />
   </>
 );
 
@@ -156,6 +154,57 @@ export default function ExperienceTiptapEditor({ value = "", onChange, onError, 
         autocapitalize: "off",
         class: "simple-editor exp-form-prosemirror",
         "aria-label": "Experience editor",
+      },
+      handlePaste: (view, event, slice) => {
+        const items = Array.from(event.clipboardData?.items || []);
+        const { schema } = view.state;
+
+        let handled = false;
+        items.forEach((item) => {
+          if (item.type.indexOf("image") === 0) {
+            handled = true;
+            event.preventDefault();
+            const file = item.getAsFile();
+            if (file) {
+              handleImageUpload(file)
+                .then((src) => {
+                  const node = schema.nodes.image.create({ src });
+                  const transaction = view.state.tr.replaceSelectionWith(node);
+                  view.dispatch(transaction);
+                })
+                .catch((err) => {
+                  console.error("Paste upload error", err);
+                  onError?.(err.message || "Failed to upload pasted image");
+                });
+            }
+          }
+        });
+        return handled;
+      },
+      handleDrop: (view, event, slice, moved) => {
+        if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+          const file = event.dataTransfer.files[0];
+          if (file.type.indexOf("image") === 0) {
+            event.preventDefault();
+            const { schema } = view.state;
+            const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+
+            if (coordinates) {
+              handleImageUpload(file)
+                .then((src) => {
+                  const node = schema.nodes.image.create({ src });
+                  const transaction = view.state.tr.insert(coordinates.pos, node);
+                  view.dispatch(transaction);
+                })
+                .catch((err) => {
+                  console.error("Drop upload error", err);
+                  onError?.(err.message || "Failed to upload dropped image");
+                });
+            }
+            return true;
+          }
+        }
+        return false;
       },
     },
     extensions: [
@@ -239,13 +288,6 @@ export default function ExperienceTiptapEditor({ value = "", onChange, onError, 
         <Toolbar
           ref={toolbarRef}
           className="experience-editor-toolbar"
-          style={
-            isMobile
-              ? {
-                bottom: `calc(100% - ${height - rect.y}px)`,
-              }
-              : undefined
-          }
         >
           {mobileView === "main" ? (
             <MainToolbarContent

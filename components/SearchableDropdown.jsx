@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, Search, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function SearchableDropdown({ options, value, onChange, placeholder = "Select option", error = false }) {
+export default function SearchableDropdown({ options, value, onChange, placeholder = "Select option", error = false, addActionLabel, onAddActionClick }) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dropdownRef = useRef(null);
@@ -85,8 +85,8 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                                         <li
                                             key={option.value}
                                             className={`relative flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors sm:text-sm ${isSelected
-                                                    ? "bg-blue-50 text-blue-700 dark:bg-cyan-950/40 dark:text-cyan-300"
-                                                    : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                ? "bg-blue-50 text-blue-700 dark:bg-cyan-950/40 dark:text-cyan-300"
+                                                : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                                                 }`}
                                             onClick={() => handleSelect(option)}
                                         >
@@ -97,6 +97,21 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                                 })
                             )}
                         </ul>
+                        {addActionLabel && (
+                            <div className="border-t border-slate-100 p-2 dark:border-slate-800">
+                                <button
+                                    type="button"
+                                    className="w-full rounded-lg bg-blue-50 py-2 text-center text-[13px] font-bold text-blue-600 hover:bg-blue-100 transition-colors dark:bg-cyan-900/30 dark:text-cyan-400 dark:hover:bg-cyan-900/50"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (onAddActionClick) onAddActionClick(searchTerm);
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    + {addActionLabel}
+                                </button>
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>

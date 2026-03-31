@@ -6,7 +6,7 @@ import FeedHero from "../../components/FeedHero";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X, RefreshCw } from "lucide-react";
+import { ArrowUpRight, Loader2, Send, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -327,17 +327,6 @@ export default function HomePage() {
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
           {/* Header & Tabs */}
           <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 sm:text-2xl">Interview Feed</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Discover experiences from top candidates.</p>
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-teal-300/60 bg-teal-500 px-3 py-1 text-xs font-semibold text-white shadow-sm dark:border-teal-400/40 dark:bg-teal-600">
-                <Sparkles className="h-3.5 w-3.5" />
-                Community powered
-              </div>
-            </div>
-
             {/* Tab Switcher */}
             <div className="flex gap-6">
               <button

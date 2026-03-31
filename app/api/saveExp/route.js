@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
-import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
+import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 import { getMongoDb } from "@/lib/mongodb";
 
 

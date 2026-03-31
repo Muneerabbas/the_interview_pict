@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const MAX_COMMENT_NESTING_LEVEL = 5;
+export const MAX_COMMENT_NESTING_LEVEL = 3;
 export const MAX_COMMENT_DEPTH = MAX_COMMENT_NESTING_LEVEL - 1;
 
 const commentSchema = new mongoose.Schema(

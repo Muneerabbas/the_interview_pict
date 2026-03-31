@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import redis from "@/lib/redis";
-import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
+import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
 
 // Persistent MongoDB connection
 const client = new MongoClient(process.env.MONGODB_URI);
 const database = client.db("int-exp");
 const collection = database.collection("experience");
 
-
-import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
 
 const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 

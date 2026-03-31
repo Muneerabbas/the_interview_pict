@@ -14,8 +14,6 @@ import {
   X,
   List,
   Building2,
-  Moon,
-  Sun,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,6 +21,7 @@ import Image from "next/image";
 import logo from "../public/app_icon.png";
 import NotificationsMenu from "./NotificationsMenu";
 import { useAuthModal } from "./AuthModalProvider";
+import ThemeToggle from "./ThemeToggle";
 
 import { useTheme } from "next-themes";
 
@@ -44,8 +43,6 @@ export default function Navbar({ showThemeToggle = false }) {
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const isDarkMode = mounted && resolvedTheme === "dark";
 
   const texts = ["Company", "Batch", "Role", "Candidate"];
   const [index, setIndex] = useState(0);
@@ -167,9 +164,7 @@ export default function Navbar({ showThemeToggle = false }) {
     router.push("/login");
   };
 
-  const handleThemeToggle = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  };
+
 
   const handleNotificationsToggle = useCallback(async () => {
     if (!session?.user) {
@@ -225,13 +220,14 @@ export default function Navbar({ showThemeToggle = false }) {
           {/* Brand */}
           <Link
             href="/"
-            className="group flex min-w-0 items-center gap-2 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
+            className="group flex min-w-0 items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
+            prefetch={true}
           >
-            <div className="relative flex items-center justify-center rounded-xl bg-gradient-to-br from-white to-slate-50 p-0.5 shadow-[0_6px_18px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5 transition-transform group-hover:scale-105 dark:from-slate-900 dark:to-slate-800 dark:ring-slate-100/10 dark:shadow-[0_8px_22px_rgba(2,6,23,0.55)]">
-              <Image src={logo} alt="theInterview Logo" width={34} height={34} priority className="rounded-[10px]" />
+            <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
+              <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
             </div>
-            <span className="text-lg font-bold sm:text-xl">
-              the<span className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
+            <span className="text-xl font-bold">
+              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
             </span>
           </Link>
 
@@ -316,14 +312,7 @@ export default function Navbar({ showThemeToggle = false }) {
             ) : null}
 
             {showThemeToggle && (
-              <button
-                onClick={handleThemeToggle}
-                aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
-                className="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-cyan-700 active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
-                type="button"
-              >
-                {isDarkMode ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} />}
-              </button>
+              <ThemeToggle className="ml-1" />
             )}
 
             <div className="ml-1 h-8 w-px bg-slate-200/80 dark:bg-slate-700/80" />
@@ -357,14 +346,7 @@ export default function Navbar({ showThemeToggle = false }) {
               <Search size={18} />
             </button>
             {showThemeToggle && (
-              <button
-                onClick={handleThemeToggle}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:h-10 sm:w-10"
-                aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
-                type="button"
-              >
-                {isDarkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
-              </button>
+              <ThemeToggle />
             )}
             {session ? (
               <div ref={mobileNotificationsRef}>

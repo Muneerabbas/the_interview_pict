@@ -16,16 +16,15 @@ import {
   GraduationCap,
   Menu,
   MessageSquareText,
-  Moon,
   Quote,
   Search,
   Sparkles,
-  Sun,
   X,
   Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTheme } from "next-themes"
+import ThemeToggle from "./ThemeToggle"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
@@ -213,10 +212,10 @@ const StoryCard = ({ story }) => {
 
 export default function Home({ featuredStories, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { resolvedTheme, setTheme } = useTheme()
-  const [mountedTheme, setMountedTheme] = useState(false)
-  useEffect(() => setMountedTheme(true), [])
-  const isDarkMode = mountedTheme && resolvedTheme === 'dark'
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  const isDarkMode = mounted && resolvedTheme === 'dark'
 
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
@@ -227,15 +226,13 @@ export default function Home({ featuredStories, topStories }) {
 
   const batchYears = useMemo(() => Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i), [])
 
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-  }
+
 
   useEffect(() => {
-    if (mountedTheme) {
+    if (mounted) {
       document.body.classList.toggle('landing-light', resolvedTheme !== 'dark')
     }
-  }, [resolvedTheme, mountedTheme])
+  }, [resolvedTheme, mounted])
 
   useEffect(() => {
     if (Array.isArray(featuredStories)) {
@@ -330,15 +327,7 @@ export default function Home({ featuredStories, topStories }) {
             </div>
 
             <div className="flex items-center gap-3">
-              <button
-                onClick={toggleTheme}
-                type="button"
-                aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-                title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/80 bg-white/85 text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
-              >
-                {isDarkMode ? <Sun size={17} className="text-amber-500" /> : <Moon size={17} className="text-slate-600" />}
-              </button>
+              <ThemeToggle />
               <Link
                 href="/search"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
@@ -367,14 +356,7 @@ export default function Home({ featuredStories, topStories }) {
                 </span>
               </Link>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={toggleTheme}
-                  type="button"
-                  aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
-                >
-                  {isDarkMode ? <Sun size={18} className="text-amber-500" /> : <Moon size={18} className="text-slate-600" />}
-                </button>
+                <ThemeToggle />
                 <button
                   onClick={() => setIsMobileMenuOpen((open) => !open)}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"

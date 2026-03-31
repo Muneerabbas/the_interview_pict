@@ -1,19 +1,22 @@
 import React from "react";
 import Image from "next/image";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 
 const IconLink = ({ href, label, children }) => {
-  if (!href) return null;
+  if (!href || href === "#") return null;
   return (
-    <a
+    <motion.a
+      whileHover={{ scale: 1.1, y: -2 }}
+      whileTap={{ scale: 0.9 }}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/12 text-white backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/20"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur-md transition-colors hover:border-white/40 hover:bg-white/20"
     >
       {children}
-    </a>
+    </motion.a>
   );
 };
 
@@ -21,49 +24,50 @@ export default function TeamMemberCard({
   img,
   name,
   subtitle,
-  hoverDetail,
   linkedin,
   github,
   email,
   priority = false,
-  featured = false,
 }) {
-  const mailHref = email ? `mailto:${email}` : undefined;
-  const minHeight = featured ? "22rem" : "28rem";
+  const mailHref = email && email !== "#" ? `mailto:${email}` : undefined;
 
   return (
     <article
-      style={{ minHeight: "26rem", backgroundColor: "#0f172a" }}
-      className="group relative isolate w-full max-w-[20rem] overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_90px_rgba(15,23,42,0.28)]"
+      className="group relative isolate w-full max-w-[19rem] aspect-[3/4] overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900 shadow-2xl transition-all duration-500 hover:shadow-blue-500/20"
     >
+      {/* Background Image */}
       <div className="absolute inset-0">
         <Image
           src={img}
           alt={name}
           fill
-          sizes={
-            featured ? "100vw" : "(min-width: 1024px) 26vw, (min-width: 640px) 40vw, 100vw"
-          }
-          className="object-cover transition duration-700 group-hover:scale-110"
+          sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 100vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
           priority={priority}
         />
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-blue-600/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </div>
 
-      {/* Stronger gradient — ensures name is always readable */}
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.05)_0%,rgba(15,23,42,0.35)_40%,rgba(2,6,23,0.97)_100%)]" />
-      <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.25),transparent_70%)] opacity-0 transition duration-500 group-hover:opacity-100" />
-
-      <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-7">
-        <div className="translate-y-4 transition duration-500 group-hover:translate-y-0">
-          <h3 className="text-xl font-semibold tracking-tight text-white">
+      {/* Content Container - Better Visibility */}
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end">
+        <div className="transform transition-transform duration-500 group-hover:-translate-y-4">
+          <h3 className="text-xl font-bold tracking-tight text-white mb-2 leading-tight">
             {name}
           </h3>
-          <p className="mt-1 max-w-xs text-[13px] leading-5 text-slate-300">
-            {subtitle}
-          </p>
+          <div className="h-1.5 w-10 bg-blue-500 rounded-full mb-3 origin-left transition-all duration-500 group-hover:w-16 group-hover:bg-cyan-400" />
+
+          {/* Subtitle with better contrast and visibility */}
+          <div className="rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 px-3 py-1.5 inline-block group-hover:bg-white/10 transition-colors">
+            <p className="text-[12px] font-bold uppercase tracking-wider text-cyan-400 dark:text-cyan-300 drop-shadow-sm">
+              {subtitle}
+            </p>
+          </div>
         </div>
 
-        <div className="mt-5 flex items-center gap-3 opacity-100 transition duration-500 sm:translate-y-4 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
+        {/* Social Links - Slide Up on Hover */}
+        <div className="mt-4 flex items-center gap-3 translate-y-8 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 overflow-visible">
           <IconLink href={linkedin} label={`${name} LinkedIn`}>
             <Linkedin size={18} />
           </IconLink>
@@ -78,4 +82,3 @@ export default function TeamMemberCard({
     </article>
   );
 }
-

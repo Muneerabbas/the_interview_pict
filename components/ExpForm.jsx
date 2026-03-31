@@ -138,6 +138,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const { data: session } = useSession();
   const [markdown, setMarkdown] = useState("");
   const [college, setCollege] = useState("");
+  const [customCollege, setCustomCollege] = useState("");
   const [batch, setBatch] = useState("");
   const [branch, setBranch] = useState("");
   const [company, setCompany] = useState("");
@@ -205,6 +206,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     "Sinhgad College of Engineering",
     "JSPM Rajarshi Shahu College of Engineering",
     "Dr. D. Y. Patil Institute of Technology, Akurdi",
+    "others"
   ];
   const [companies, setCompanies] = useState(postCompanies);
 
@@ -258,6 +260,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           const draftData = await response.json();
           setMarkdown(draftData.exp_text || "");
           setCollege(draftData.college || "");
+          setCustomCollege(draftData.customCollege || "");
           setBatch(draftData.batch || "");
           setBranch(draftData.branch || "");
           setCompany(draftData.company || "");
@@ -321,7 +324,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   const validateField = (fieldName, value) => {
     switch (fieldName) {
       case 'college':
-        return !value;
+        return !value || (value === 'others' && !customCollege);
       case 'batch':
         return !value;
       case 'branch':
@@ -338,13 +341,19 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   };
 
   // Handle input changes and validate only the relevant field
-  const handleCollegeChange = (e) => {
-    const value = e.target.value;
+  const handleCollegeChange = (value) => {
     setCollege(value);
+    if (value !== "others") {
+      setCustomCollege("");
+    }
     setErrors((prevErrors) => ({
       ...prevErrors,
       college: validateField('college', value),
     }));
+  };
+
+  const handleCustomCollegeChange = (e) => {
+    setCustomCollege(e.target.value);
   };
 
   const handleBatchChange = (e) => {
@@ -365,14 +374,14 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     }));
   };
 
-  const handleCompanyChange = (e) => {
-    setCompany(e.target.value);
-    if (e.target.value !== "others") {
+  const handleCompanyChange = (value) => {
+    setCompany(value);
+    if (value !== "others") {
       setCustomCompany(""); // Reset custom company when a predefined one is selected
     }
     setErrors((prevErrors) => ({
       ...prevErrors,
-      company: validateField('company', e.target.value),
+      company: validateField('company', value),
     }));
   };
 
@@ -380,14 +389,14 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     setCustomCompany(e.target.value);
   };
 
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
-    if (e.target.value !== "others") {
+  const handleRoleChange = (value) => {
+    setRole(value);
+    if (value !== "others") {
       setCustomRole(""); // Reset custom role when a predefined one is selected
     }
     setErrors((prevErrors) => ({
       ...prevErrors,
-      role: validateField('role', e.target.value),
+      role: validateField('role', value),
     }));
   };
 
@@ -457,7 +466,8 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       return;
     }
 
-    // Determine the company and role to send to the API (use custom values if "Others..." is selected)
+    // Determine the final values (use custom values if "Others..." is selected)
+    const finalCollege = college === 'others' ? customCollege : college;
     const finalCompany = company === 'others' ? customCompany : company;
     const finalRole = role === 'others' ? customRole : role;
 
@@ -471,7 +481,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           exp_text: markdown,
           name: session.user.name,
           profile_pic: session.user.image,
-          college,
+          college: finalCollege,
           batch,
           branch,
           company: finalCompany, // Use final company value
@@ -533,6 +543,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       saveDraft({
         exp_text: markdown,
         college,
+        customCollege,
         batch,
         branch,
         company,
@@ -544,7 +555,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         currentRound,
       });
     }
-  }, [markdown, college, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
+  }, [markdown, college, customCollege, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
 
   const handleCopyTemplate = () => {
@@ -558,6 +569,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
   const handleClearForm = () => {
     setCollege("");
+    setCustomCollege("");
     setBatch("");
     setBranch("");
     setCompany("");
@@ -619,7 +631,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       const finalPayload = {
         company: company === 'others' ? customCompany : company || "Not specified",
         role: role === 'others' ? customRole : role || "Not specified",
-        college: college || "Not specified",
+        college: (college === 'others' ? customCollege : college) || "Not specified",
         batch: batch || "Not specified",
         branch: branch || "Not specified",
         shortlisting: finalAnswers.eligibility,
@@ -884,12 +896,35 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 </div>
                 <div className="relative">
                   <SearchableDropdown
-                    options={colleges}
+                    options={[...colleges, "others"]}
                     value={college}
-                    onChange={(val) => handleCollegeChange({ target: { value: val } })}
+                    onChange={handleCollegeChange}
                     placeholder="Select College"
                     error={errors.college}
                   />
+
+                  {college === "others" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-3 overflow-hidden"
+                    >
+                      <div className="relative group/input">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/input:text-blue-500 transition-colors">
+                          <GraduationCap size={16} />
+                        </div>
+                        <input
+                          type="text"
+                          value={customCollege}
+                          onChange={handleCustomCollegeChange}
+                          placeholder="Enter your college name..."
+                          className="w-full rounded-xl border border-slate-200/60 bg-white/50 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/15"
+                          autoFocus
+                        />
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
                 {errors.college && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
@@ -950,9 +985,9 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 </div>
                 <div className="relative">
                   <SearchableDropdown
-                    options={[...companies, "others"]}
+                    options={companies}
                     value={company}
-                    onChange={(val) => handleCompanyChange({ target: { value: val } })}
+                    onChange={handleCompanyChange}
                     placeholder="Select Company"
                     error={errors.company}
                     addActionLabel="Add New Company"
@@ -983,9 +1018,9 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 </div>
                 <div className="relative">
                   <SearchableDropdown
-                    options={[...roles, "others"]}
+                    options={roles}
                     value={role}
-                    onChange={(val) => handleRoleChange({ target: { value: val } })}
+                    onChange={handleRoleChange}
                     placeholder="Select Role"
                     error={errors.role}
                   />

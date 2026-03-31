@@ -9,20 +9,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" type="image/png" href="/app_icon.png" />
         <meta name="google-adsense-account" content="ca-pub-9530051498159475" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530051498159475" crossOrigin="anonymous"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function () {
-                try {
-                  var stored = localStorage.getItem("theme");
-                  var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                  var useDark = stored === "dark" ? true : stored === "light" ? false : prefersDark;
-                  document.documentElement.classList.toggle("dark", useDark);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+
       </head>
       <body className="antialiased font-sans">
         <Providers>{children}</Providers>

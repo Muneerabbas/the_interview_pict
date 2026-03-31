@@ -61,12 +61,12 @@ export default function Footer({ isLandingPage = false }) {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
           {/* Brand & Socials (takes more space) */}
           <div className="lg:col-span-4 space-y-6">
-            <Link href="/" className="inline-flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-              <div className="flex items-center justify-center transition-transform hover:scale-105">
-                <Image src={logo} alt="theInterview Logo" width={38} height={38} priority />
+            <Link href="/" className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100">
+              <div className="flex items-center justify-center transition-transform group-hover:scale-105">
+                <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
               </div>
-              <span className="text-xl">
-                the<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-extrabold">Interview</span>Room
+              <span className="text-xl font-bold">
+                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
               </span>
             </Link>
             <p className="max-w-sm text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">

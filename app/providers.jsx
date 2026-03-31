@@ -20,7 +20,7 @@ export default function Providers({ children }) {
       <SessionProvider>
         <AuthModalProvider>{children}</AuthModalProvider>
       </SessionProvider>
-      {!isSearchPage && !isAboutPage && <Footer isLandingPage={pathname === "/"} />}
+      {!isSearchPage && <Footer isLandingPage={pathname === "/"} />}
       <GoogleAnalytics gaId="G-EBQQJCL50P" />
       <SpeedInsights />
       <Analytics />

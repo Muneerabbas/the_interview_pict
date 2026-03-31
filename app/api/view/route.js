@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-import redis from "@/lib/redis";
-import { incrementFeedVersion } from "@/lib/feedCache";
-
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getMongoDb } from "@/lib/mongodb";
 
 export async function POST(req) {
     try {
@@ -13,8 +9,7 @@ export async function POST(req) {
             return NextResponse.json({ message: "Missing id" }, { status: 400 });
         }
 
-        await client.connect();
-        const db = client.db();
+        const db = await getMongoDb();
         const collection = db.collection("experience");
 
         // Atomic increment of views
@@ -25,15 +20,6 @@ export async function POST(req) {
 
         if (result.matchedCount === 0) {
             return NextResponse.json({ message: "Not found" }, { status: 404 });
-        }
-
-        // Bump global version so trending feeds pick up the new view count
-        if (redis) {
-            try {
-                await incrementFeedVersion(redis);
-            } catch (err) {
-                console.warn("[cache] view invalidation failed:", err?.message || err);
-            }
         }
 
         return NextResponse.json({ success: true });

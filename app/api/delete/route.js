@@ -9,6 +9,8 @@ const database = client.db("int-exp");
 const collection = database.collection("experience");
 
 
+import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
+
 const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 
 function invalidateAfterDelete(email) {
@@ -20,6 +22,9 @@ function invalidateAfterDelete(email) {
   }
 
   if (!redis) return;
+
+  // Increment global version for instant feed invalidation
+  incrementFeedVersion(redis);
 
   // @upstash/redis del() can take multiple keys or an array
   redis.del(keys).catch((err) => {

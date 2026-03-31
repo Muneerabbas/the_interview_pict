@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
-import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
+import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
 import { getMongoDb } from "@/lib/mongodb";
 
 
@@ -18,6 +18,9 @@ function invalidateAfterWrite(email) {
   }
 
   if (!redis) return;
+
+  // Increment global version for instant feed invalidation
+  incrementFeedVersion(redis);
 
   // @upstash/redis del() can take multiple keys or an array
   redis.del(...keys).catch((err) => {

@@ -7,6 +7,8 @@ const { MongoClient, ObjectId } = require('mongodb');
 // Create a new MongoClient
 const client = new MongoClient(process.env.MONGODB_URI);
 
+import { getDefaultFeedInvalidationKeys, incrementFeedVersion } from "@/lib/feedCache";
+
 const cacheInvalidationKeys = getDefaultFeedInvalidationKeys();
 
 function invalidateAfterEdit(email) {
@@ -18,6 +20,9 @@ function invalidateAfterEdit(email) {
     }
 
     if (!redis) return;
+
+    // Increment global version for instant feed invalidation
+    incrementFeedVersion(redis);
 
     // @upstash/redis del() can take multiple keys or an array
     redis.del(keys).catch((err) => {

@@ -6,7 +6,7 @@ import FeedHero from "../../components/FeedHero";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X } from "lucide-react";
+import { ArrowUpRight, Loader2, Send, Sparkles, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,25 +70,28 @@ export default function HomePage() {
   const observer = useRef();
   const lastProfileElementRef = useCallback(
     (node) => {
-      if (pageLoading) return;
+      if (pageLoading || !hasMoreProfiles) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting && hasMoreProfiles && !isFetchingRef.current) {
-            isFetchingRef.current = true;
+          // Only increment page if we are actually at the bottom and not currently fetching
+          if (entries[0].isIntersecting && hasMoreProfiles && !isFetchingRef.current && profiles.length > 0) {
             setPage((prevPage) => prevPage + 1);
           }
         },
-        { rootMargin: "400px" } // Load even earlier
+        { rootMargin: "400px" }
       );
 
       if (node) observer.current.observe(node);
     },
-    [pageLoading, hasMoreProfiles]
+    [pageLoading, hasMoreProfiles, profiles.length]
   );
 
-  const fetchProfiles = useCallback(async (pageNumber, limit, sort, activeFilters) => {
+  const fetchProfiles = useCallback(async (pageNumber, limit, sort, activeFilters, forceRefresh = false) => {
+    // Avoid redundant fetches if already loading or no more profiles
+    if (isFetchingRef.current && pageNumber > 0) return;
+
     setPageLoading(true);
     isFetchingRef.current = true;
     try {
@@ -100,22 +103,31 @@ export default function HomePage() {
       if (activeFilters.college) params.set("college", activeFilters.college);
       if (activeFilters.branch) params.set("branch", activeFilters.branch);
       if (activeFilters.batch) params.set("batch", activeFilters.batch);
+      if (forceRefresh) params.set("refresh", "true");
+
       const url = `/api/feed?${params.toString()}`;
       const response = await axios.get(url);
 
       // Safety check: only update state if this request matches the current active tab
       if (sort !== activeTab) return;
 
-      if (response.data && response.data.length > 0) {
+      const incoming = Array.isArray(response.data) ? response.data : [];
+
+      if (incoming.length > 0) {
         setProfiles((prev) => {
-          const incoming = response.data;
-          // If it's page 0, we don't need to concat
+          // If it's page 0, we replace the previous state to avoid stale data
           if (pageNumber === 0) return incoming;
-          const uniqueProfiles = [...new Map(prev.concat(incoming).map((item) => [item._id, item])).values()];
+
+          // Deduplicate based on _id
+          const combined = [...prev, ...incoming];
+          const uniqueProfiles = [...new Map(combined.map((item) => [item._id, item])).values()];
           return uniqueProfiles;
         });
-        if (response.data.length < limit) {
+
+        if (incoming.length < limit) {
           setHasMoreProfiles(false);
+        } else {
+          setHasMoreProfiles(true);
         }
       } else {
         setHasMoreProfiles(false);
@@ -125,7 +137,9 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error("Error fetching profiles:", error);
-      setHasMoreProfiles(false);
+      if (pageNumber === 0) {
+        setHasMoreProfiles(false);
+      }
     } finally {
       setPageLoading(false);
       isFetchingRef.current = false;
@@ -258,6 +272,8 @@ export default function HomePage() {
       branch: "",
       batch: "",
     });
+    // Manually trigger a fresh fetch bypassing API cache
+    fetchProfiles(0, itemsPerPage, activeTab, { college: "", branch: "", batch: "" }, true);
   };
 
   return (
@@ -370,6 +386,16 @@ export default function HomePage() {
                   <span>{activeFilterCount}</span>
                   <span>{activeFilterCount === 1 ? "filter active" : "filters active"}</span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => fetchProfiles(0, itemsPerPage, activeTab, filters, true)}
+                  disabled={pageLoading}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+                  title="Force refresh (bypass cache)"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${pageLoading ? "animate-spin" : ""}`} />
+                  Refresh
+                </button>
                 <button
                   type="button"
                   onClick={clearFilters}

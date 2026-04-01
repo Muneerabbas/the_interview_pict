@@ -56,7 +56,8 @@ export async function POST(req) {
     // Sync with Company collection
     try {
       const companySlug = slugify(company, { lower: true, strict: true });
-      await db.collection("company").updateOne(
+      // Mongoose Company model uses the "companies" collection.
+      await db.collection("companies").updateOne(
         { name: company },
         {
           $inc: { "stats.interviewsCount": 1 },

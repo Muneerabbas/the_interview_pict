@@ -1,52 +1,60 @@
-// app/page.js
 import LandingPage from '@/components/Landing';
-import { getServerOrigin } from "@/lib/serverOrigin";
+import { getMongoDb } from "@/lib/mongodb";
 
-// Define revalidation time (in seconds) for ISR
-const revalidateTime = 1800;
+// Revalidate home every 30 minutes.
+export const revalidate = 1800;
 
-// Fetch Featured Stories function (reusable)
-async function fetchFeaturedStories(baseUrl) {
-    const itemsPerPage = '30';
+async function fetchFeaturedStories() {
     try {
-        const response = await fetch(`${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}`, {
-            next: { revalidate: revalidateTime }, // Enable ISR for this fetch
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        const db = await getMongoDb();
+        return await db
+            .collection("experience")
+            .find({})
+            .sort({ date: -1, _id: -1 })
+            .limit(30)
+            .toArray();
     } catch (error) {
         console.error("Fetching featured stories failed:", error);
-        return []; // Return empty array in case of error
+        return [];
     }
 }
 
-// Fetch Top Stories function (reusable)
-async function fetchTopStories(baseUrl) {
+async function fetchTopStories() {
     try {
-        const response = await fetch(`${baseUrl}/api/topStories`, {
-            next: { revalidate: revalidateTime }, // Enable ISR for this fetch
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        const db = await getMongoDb();
+        return await db
+            .collection("experience")
+            .aggregate([
+                {
+                    $addFields: {
+                        viewsInt: {
+                            $convert: {
+                                input: { $ifNull: ["$views", 0] },
+                                to: "int",
+                                onError: 0,
+                                onNull: 0,
+                            },
+                        },
+                    },
+                },
+                { $sort: { viewsInt: -1, date: -1, _id: -1 } },
+                { $limit: 30 },
+                { $project: { viewsInt: 0 } },
+            ])
+            .toArray();
     } catch (error) {
         console.error("Fetching top stories failed:", error);
-        return []; // Return empty array in case of error
+        return [];
     }
 }
 
 
 // This is a Server Component (default in app/)
 export default async function Home() {
-    const baseUrl = await getServerOrigin();
-    // Fetch data directly in the Server Component
-    const featuredStories = await fetchFeaturedStories(baseUrl);
-    const topStories = await fetchTopStories(baseUrl);
+    const [featuredStories, topStories] = await Promise.all([
+        fetchFeaturedStories(),
+        fetchTopStories(),
+    ]);
 
     return (
         <LandingPage featuredStories={featuredStories} topStories={topStories} />

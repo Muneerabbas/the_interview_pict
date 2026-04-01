@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
+    "analyze": "ANALYZE=true next build",
     "seed:companies": "node scripts/seed-post-companies.mjs",
     "seed:companies:dry": "node scripts/seed-post-companies.mjs --dry-run --limit=5"
   },

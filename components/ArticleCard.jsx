@@ -1,63 +1,86 @@
-import React from 'react';
-import Link from 'next/link'; // Import Link
+import React from "react";
+import Link from "next/link";
+import { Building2, Briefcase, GraduationCap, CalendarDays, Eye, ArrowUpRight } from "lucide-react";
+import ProfileAvatar from "./ProfileAvatar";
 
-// Import your icons from a library or define them if they are custom
-import { Building2, Briefcase, GraduationCap, CalendarDays, Eye } from 'lucide-react'; // Make sure these are correct imports
+const stripMarkdown = (value = "") => {
+  return value
+    .replace(/<[^>]*>?/g, " ")
+    .replace(/https?:\/\/[^\s"'<>]+/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")
+    .replace(/[>#*_~|-]/g, "")
+    .replace(/\n+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+};
 
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, role, batch, date, views, uid ,branch} = article || {};
+  const { profile_pic, name, company, role, batch, date, views, uid, branch, exp_text } = article || {};
+  const displayName = name || "Anonymous Candidate";
+  const formattedDate = date ? new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Date unavailable";
 
-  // Format the date
-  const formattedDate = date ? new Date(date).toLocaleDateString() : "";
+  const plainText = stripMarkdown(exp_text || "");
+  const previewText =
+    plainText.length > 200 ? `${plainText.slice(0, 200).trim()}...` : plainText || "No experience details shared yet.";
 
   return (
-    <Link // Replace <a> with Link
+    <Link
       href={`/single/${uid}`}
-      prefetch={true} // Add prefetch={true}
-      className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-[#F0F2F5] overflow-hidden"
-      aria-label={`Read the experience of ${name}`} // Adding accessibility
+      prefetch={true}
+      className="group relative block overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] backdrop-blur-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-blue-200 hover:shadow-[0_20px_40px_rgba(37,99,235,0.12)] dark:border-slate-800/80 dark:bg-slate-900/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] dark:hover:border-cyan-500/30 dark:hover:shadow-[0_20px_44px_rgba(2,6,23,0.8)]"
+      aria-label={`Read the experience of ${displayName}`}
     >
-      <div className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-[#F0F2F5]">
-            <img
-              src={profile_pic || "/api/placeholder/48/48"} // Fallback if no profile pic
-              alt={`${name}'s profile`} // Alt text for accessibility
-              className="w-full h-full object-cover"
-              loading="lazy"
+      <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 opacity-80" />
+
+      <div className="p-5">
+        <div className="flex items-start gap-4">
+          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md ring-1 ring-slate-100 dark:border-slate-800 dark:ring-slate-800">
+            <ProfileAvatar
+              src={profile_pic}
+              alt={displayName}
+              name={displayName}
+              className="h-full w-full object-cover"
             />
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-[#1D1D1D] text-lg truncate">{name}</h3>
-            <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
-              <div className="flex items-center gap-1.5 text-blue-600">
-                <Building2 size={14} />
-                <span className="text-[#1D1D1D] truncate">{company}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-blue-600">
-                <Briefcase size={14} />
-                <span className="text-[#1D1D1D] truncate">{role}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-blue-600">
-                <GraduationCap size={14} />
-                <span className="text-[#1D1D1D]">{branch} {batch}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-blue-600">
-                <CalendarDays size={14} />
-                <span className="text-[#1D1D1D] text-sm">{formattedDate}</span>
-              </div>
+
+          <div className="min-w-0 flex-1 pt-0.5">
+            <h3 className="truncate text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
+              {displayName}
+            </h3>
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] font-semibold text-slate-500 dark:text-slate-400">
+              <span className="text-blue-600 dark:text-cyan-400">{company}</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span>{role}</span>
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500">
+              <span>{branch} {batch}</span>
+              <span className="text-slate-300/60 dark:text-slate-600/60">•</span>
+              <span>{formattedDate}</span>
             </div>
           </div>
         </div>
-      </div>
-      <div className="px-4 py-2 bg-[#E7F3FF] border-t border-[#F0F2F5] flex items-center justify-between">
-        <span className="text-blue-600 text-sm font-medium">Read Experience</span>
-        <div className="flex items-center gap-1 text-[#B0B3B8]">
-          <Eye size={14} />
-          <span className="text-sm">{views}</span>
+
+        {/* Content Zone: Experience Snapshot */}
+        <div className="mt-4 border-l-[3px] border-blue-600 pl-3.5 transition-colors group-hover:border-blue-500 dark:border-blue-500/60 dark:group-hover:border-blue-400">
+          <p className="line-clamp-3 text-[13px] leading-[1.65] text-slate-600 dark:text-slate-300">
+            {previewText}
+          </p>
         </div>
       </div>
-    </Link> // Closing Link tag
+
+      <div className="flex items-center justify-between border-t border-slate-100/80 bg-slate-50/50 px-5 py-3.5 dark:border-slate-800/50 dark:bg-slate-800/20">
+        <span className="inline-flex items-center gap-1.5 text-sm font-black tracking-tight text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+          Read Experience
+          <ArrowUpRight size={16} strokeWidth={2.5} />
+        </span>
+        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
+          <Eye size={14} strokeWidth={2.2} />
+          <span>{views || 0}</span>
+        </div>
+      </div>
+    </Link>
   );
 };
 

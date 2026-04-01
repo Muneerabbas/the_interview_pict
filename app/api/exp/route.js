@@ -1,38 +1,67 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
+import { getMongoDb } from "@/lib/mongodb";
+import { resolveProfileImage, resolveProfileName } from "../../../lib/utils";
 
-// Create a persistent MongoDB client
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const collection = db.collection("experience");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
+export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
-    // Get `uid` from query parameters
+    const db = await getMongoDb();
+    const collection = db.collection("experience");
     const uid = req.nextUrl.searchParams.get("uid");
 
     if (!uid) {
       return NextResponse.json({ message: "Missing `uid` query parameter" }, { status: 400 });
     }
 
-    // Fetch document & increment views in one atomic operation
-    const data = await collection.findOneAndUpdate(
-      { uid },
-      { $inc: { views: 1 } }, // Increment views
-      { returnDocument: "after" } // Return updated document
-    );
+    const isObjectId = mongoose.Types.ObjectId.isValid(uid);
+    const matchStage = isObjectId
+      ? {
+          $match: {
+            $or: [{ uid }, { _id: new mongoose.Types.ObjectId(uid) }],
+          },
+        }
+      : { $match: { uid } };
+
+    // Fetch document and join with user info to get fresh profile image/data
+    const pipeline = [
+      matchStage,
+      {
+        $lookup: {
+          from: "user",
+          localField: "email",
+          foreignField: "gmail",
+          as: "author_info"
+        }
+      },
+      {
+        $addFields: {
+          author: { $arrayElemAt: ["$author_info", 0] }
+        }
+      },
+      {
+        $project: {
+          author_info: 0
+        }
+      }
+    ];
+
+    const results = await collection.aggregate(pipeline).toArray();
+    const data = results[0];
 
     if (!data) {
       return NextResponse.json({ message: "Document not found" }, { status: 404 });
     }
 
-    return NextResponse.json(data);
+    // Merge author info into the top level for helpers to pick it up
+    const finalData = {
+      ...data,
+      profile_pic: resolveProfileImage({ ...data, ...data.author }),
+      name: resolveProfileName({ ...data, ...data.author }),
+    };
+
+    return NextResponse.json(finalData);
   } catch (error) {
     console.error("Error fetching data:", error);
     return NextResponse.json({ message: error.message }, { status: 500 });

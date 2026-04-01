@@ -1,7 +1,14 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-const authOptions = {
+const AUTH_SECRET =
+  process.env.NEXTAUTH_SECRET ||
+  process.env.AUTH_SECRET ||
+  (process.env.NODE_ENV === "development"
+    ? "local-dev-auth-secret-change-me"
+    : undefined);
+
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -25,7 +32,7 @@ const authOptions = {
       return session;
     },
   },
-  secret: "d01c16547d0994133aeefd2b22d48f0819907cfea58c8c645395a1aef623acf9", // Use the env variable
+  secret: AUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

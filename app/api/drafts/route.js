@@ -1,30 +1,26 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
-
-// Create a persistent MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URI);
-const db = client.db("int-exp");
-const drafts = db.collection("drafts");
-const user = db.collection("user");
-
-// Ensure MongoDB is connected
-(async () => {
-  await client.connect();
-  console.log("Connected to MongoDB");
-})();
+import { getMongoDb } from "@/lib/mongodb";
 
 // Save draft
 export async function POST(req) {
   try {
-    const { 
-      exp_text, 
-      company, 
-      branch, 
-      batch, 
-      profile_pic, 
-      name, 
+    const db = await getMongoDb();
+    const drafts = db.collection("drafts");
+    const {
+      exp_text,
+      college,
+      company,
+      branch,
+      batch,
+      profile_pic,
+      name,
       role,
-      email 
+      email,
+      chatAnswers,
+      chatStage,
+      chatMessages,
+      totalRounds,
+      currentRound
     } = await req.json();
 
     // Basic validation
@@ -39,10 +35,11 @@ export async function POST(req) {
     // }
 
     const now = new Date().toISOString();
-    
+
     // Create draft document
     const draftDoc = {
       exp_text: exp_text || '',
+      college: college || '',
       company: company || '',
       branch: branch || '',
       batch: batch || '',
@@ -50,6 +47,11 @@ export async function POST(req) {
       name: name || '',
       role: role || '',
       email,
+      chatAnswers: chatAnswers || null,
+      chatStage: chatStage || 'eligibility',
+      chatMessages: chatMessages || [],
+      totalRounds: totalRounds || 0,
+      currentRound: currentRound || 1,
       created_at: now,
       last_edited: now,
       status: 'draft'
@@ -66,9 +68,9 @@ export async function POST(req) {
       return NextResponse.json({ message: "Failed to save draft" }, { status: 500 });
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: "Draft saved successfully",
-      email 
+      email
     }, { status: 200 });
 
   } catch (error) {
@@ -80,14 +82,16 @@ export async function POST(req) {
 // Get draft by email
 export async function GET(req) {
   try {
+    const db = await getMongoDb();
+    const drafts = db.collection("drafts");
     const email = req.nextUrl.searchParams.get('email');
-    
+
     if (!email) {
       return NextResponse.json({ message: "Email is required" }, { status: 400 });
     }
 
     const draft = await drafts.findOne({ email });
-    
+
     if (!draft) {
       return NextResponse.json({ message: "No draft found" }, { status: 404 });
     }

@@ -1,35 +1,102 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { resolveProfileName } from "@/lib/utils";
+import { getMongoDb } from "@/lib/mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+export const dynamic = "force-dynamic";
+
+const FEED_SORT_TRENDING = "trending";
+
+function normalizeFeedSort(sort) {
+  return sort === "trending" ? FEED_SORT_TRENDING : "latest";
+}
+
+function buildPipeline({
+  sort,
+  page,
+  itemsPerPage,
+  companyFilter,
+  collegeFilter,
+  branchFilter,
+  batchFilter,
+}) {
+  const pipeline = [];
+  const match = {};
+  if (companyFilter) match.company = companyFilter;
+  if (collegeFilter) match.college = collegeFilter;
+  if (branchFilter) match.branch = branchFilter;
+  if (batchFilter) match.batch = batchFilter;
+
+  if (Object.keys(match).length > 0) {
+    pipeline.push({ $match: match });
+  }
+
+  pipeline.push(
+    {
+      $sort:
+        sort === FEED_SORT_TRENDING
+          ? { views: -1, date: -1, _id: -1 }
+          : { date: -1, _id: -1 },
+    },
+    { $skip: page * itemsPerPage },
+    { $limit: itemsPerPage },
+    {
+      $lookup: {
+        from: "user",
+        localField: "email",
+        foreignField: "gmail",
+        as: "author_info",
+      },
+    },
+    {
+      $addFields: {
+        author: { $arrayElemAt: ["$author_info", 0] },
+      },
+    },
+    {
+      $project: {
+        author_info: 0,
+      },
+    }
+  );
+  return pipeline;
+}
+
+function processFeedResults(feed) {
+  return feed.map((item) => {
+    const authorImage = item.author?.image || item.author?.profile_pic || item.author?.profilePic;
+    return {
+      ...item,
+      profile_pic: authorImage || item.profile_pic || null,
+      name: resolveProfileName({ ...item, ...item.author }),
+      date: item.date ? new Date(item.date).toISOString() : new Date().toISOString(),
+    };
+  });
+}
 
 export async function GET(req) {
   try {
-    const page = parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const itemsPerPage = parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10); // Get itemsPerPage from query, default to 10
+    const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
+    const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10);
+    const companyFilter = req.nextUrl.searchParams.get("company");
+    const collegeFilter = req.nextUrl.searchParams.get("college");
+    const branchFilter = req.nextUrl.searchParams.get("branch");
+    const batchFilter = req.nextUrl.searchParams.get("batch");
+    const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
 
-    await client.connect();
-    const db = client.db("int-exp");
+    const db = await getMongoDb();
     const experience = db.collection("experience");
+    const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter });
+    const feed = await experience.aggregate(pipeline).toArray();
+    const data = processFeedResults(feed);
 
-    const feed = await experience.find({}).toArray();
-
-    const sortedFeed = feed
-      .map(item => ({
-        ...item,
-        date: new Date(item.date)
-      }))
-      .sort((a, b) => b.date - a.date)
-      .slice(page * itemsPerPage, (page + 1) * itemsPerPage); // Use itemsPerPage here
-
-    const finalFeed = sortedFeed.map(item => ({
-      ...item,
-      date: item.date.toString()
-    }));
-
-    return NextResponse.json(finalFeed);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "Pragma": "no-cache",
+      },
+    });
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching feed:", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

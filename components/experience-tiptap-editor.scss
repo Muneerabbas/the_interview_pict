@@ -1,0 +1,54 @@
+.experience-editor-shell {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.experience-editor-toolbar {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.experience-editor-content {
+  min-height: 520px;
+  background: #f8fafc;
+}
+
+.experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror {
+  min-height: 520px;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 2.75rem 3.25rem;
+  line-height: 1.7;
+  font-size: 1.02rem;
+  color: #0f172a;
+}
+
+.experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror:focus {
+  outline: none;
+}
+
+.dark .experience-editor-shell {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.dark .experience-editor-toolbar {
+  border-bottom-color: #334155;
+}
+
+.dark .experience-editor-content {
+  background: #0f172a;
+}
+
+.dark .experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror {
+  color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .experience-editor-content .tiptap.ProseMirror.exp-form-prosemirror {
+    padding: 1.25rem 1.1rem 5.5rem;
+  }
+}

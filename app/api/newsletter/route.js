@@ -15,7 +15,7 @@ export async function POST(req) {
         await client.connect();
         console.log("Connected to MongoDB");
 
-        const db = client.db("int-exp");
+        const db = client.db();
         const newsletters = db.collection("newsletter");
 
         // Check if the email already exists

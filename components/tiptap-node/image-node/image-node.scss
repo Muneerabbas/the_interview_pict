@@ -1,0 +1,141 @@
+.tiptap.ProseMirror {
+  .tiptap-resizable-image {
+    display: inline-block;
+    position: relative;
+    margin: 1.25rem 0;
+    max-width: 100%;
+  }
+
+  .tiptap-resizable-image-frame {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 0;
+    overflow: visible;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 2px;
+  }
+
+  .tiptap-resizable-image-cropbox {
+    display: inline-block;
+    overflow: visible;
+    border-radius: var(--tt-radius-xs, 0.25rem);
+  }
+
+  .tiptap-resizable-image-frame img {
+    display: block;
+    border-radius: var(--tt-radius-xs, 0.25rem);
+    outline: none;
+  }
+
+  .tiptap-resizable-image.is-selected .tiptap-resizable-image-frame {
+    border-color: var(--tt-brand-color-500);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  .tiptap-image-handle {
+    position: absolute;
+    border: 2px solid #0f172a;
+    background: #ffffff;
+    width: 13px;
+    height: 13px;
+    border-radius: 999px;
+    padding: 0;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95);
+    z-index: 10;
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+
+    &:hover {
+      transform: scale(1.12);
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(191, 219, 254, 0.95);
+    }
+  }
+
+  .tiptap-image-handle-x-left {
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+
+  .tiptap-image-handle-x {
+    right: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+
+  .tiptap-image-handle-y-top {
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+  }
+
+  .tiptap-image-handle-y {
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+  }
+
+  .tiptap-image-handle-xy-tl {
+    left: -9px;
+    top: -9px;
+    cursor: nwse-resize;
+  }
+
+  .tiptap-image-handle-xy-tr {
+    right: -9px;
+    top: -9px;
+    cursor: nesw-resize;
+  }
+
+  .tiptap-image-handle-xy-bl {
+    left: -9px;
+    bottom: -9px;
+    cursor: nesw-resize;
+  }
+
+  .tiptap-image-handle-xy {
+    right: -9px;
+    bottom: -9px;
+    cursor: nwse-resize;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  p > img {
+    display: inline-block;
+  }
+
+  > img:not([data-type="emoji"] img) {
+    margin: 2rem 0;
+    outline: none;
+    border-radius: var(--tt-radius-xs, 0.25rem);
+  }
+
+  img:not([data-type="emoji"] img).ProseMirror-selectednode {
+    outline-color: var(--tt-brand-color-500);
+  }
+
+  // Thread image handling
+  .tiptap-thread:has(> img) {
+    margin: 2rem 0;
+
+    img {
+      outline: 0.125rem solid transparent;
+      border-radius: var(--tt-radius-xs, 0.25rem);
+    }
+  }
+
+  .tiptap-thread img {
+    margin: 0;
+  }
+}

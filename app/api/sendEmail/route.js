@@ -8,6 +8,13 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: "Missing email or name" }), { status: 400 });
     }
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return new Response(
+        JSON.stringify({ message: "Email disabled: SMTP credentials not configured" }),
+        { status: 200 }
+      );
+    }
+
     // Configure Nodemailer with Gmail SMTP (or another provider)
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -35,7 +42,7 @@ export async function POST(req) {
     return new Response(JSON.stringify({ message: "Email sent successfully" }), { status: 200 });
 
   } catch (error) {
-    console.error("Error sending email:", error);
-    return new Response(JSON.stringify({ error: "Failed to send email" }), { status: 500 });
+    console.warn("Email send skipped/failed:", error?.code || error?.message || error);
+    return new Response(JSON.stringify({ message: "Email delivery failed but request accepted" }), { status: 200 });
   }
 }

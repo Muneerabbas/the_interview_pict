@@ -1,0 +1,197 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import { ArrowRight, Building2, MapPin, Search, X } from "lucide-react";
+import Link from "next/link";
+
+export default function CompaniesDirectoryClient({ companies = [], countsMap = {} }) {
+  const [hasInterviewsOnly, setHasInterviewsOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredCompanies = companies.filter(c => {
+    const matchesSearch = (c.name || "").toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesInterviews = hasInterviewsOnly ? (countsMap[(c.name || "").toLowerCase()] || 0) > 0 : true;
+    return matchesSearch && matchesInterviews;
+  });
+
+  return (
+    <div className="relative min-h-screen overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <Navbar showThemeToggle />
+
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />
+        <div className="absolute -right-[10%] top-[20%] h-[60vh] w-[60vw] rounded-full bg-cyan-300/10 blur-[130px] dark:bg-cyan-500/12" />
+        <div className="absolute bottom-[-10%] left-[20%] h-[50vh] w-[50vw] rounded-full bg-indigo-300/10 blur-[100px] dark:bg-indigo-500/12" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mb-10 flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
+          <div className="relative z-10">
+            <h1 className="flex items-center justify-center gap-3 pb-1 text-[28px] font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:justify-start sm:text-4xl">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/40">
+                <Building2 className="text-blue-600 dark:text-blue-400" size={24} />
+              </span>
+              Company Directory
+            </h1>
+            <p className="mt-3 max-w-2xl text-[15px] text-slate-600 dark:text-slate-300 sm:text-lg">
+              Explore the companies where candidates have interviewed and prepare for your next opportunity.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-start">
+              {/* Search Bar */}
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search companies..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-10 text-sm font-medium outline-none transition-all placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-600 dark:focus:border-blue-900/40 dark:focus:ring-blue-900/10"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              {/* Has Interviews Filter */}
+              <button
+                onClick={() => setHasInterviewsOnly(!hasInterviewsOnly)}
+                className={`group flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold transition-all whitespace-nowrap ${hasInterviewsOnly
+                  ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-900/40"
+                  }`}
+              >
+                <div className={`h-2 w-2 rounded-full transition-colors ${hasInterviewsOnly ? "bg-white animate-pulse" : "bg-slate-300 dark:bg-slate-600"}`} />
+                Has Interviews
+                {hasInterviewsOnly && (
+                  <span className="ml-1 rounded-full bg-white/20 px-1.5 py-0.5 text-[10px]">
+                    {filteredCompanies.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <Link
+            href="/add-company"
+            className="relative z-10 inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-[14px] font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-blue-500/35 active:scale-95"
+          >
+            Add Company
+          </Link>
+        </div>
+
+        {filteredCompanies.length === 0 ? (
+          <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+            <Building2 size={40} className="mb-3 text-slate-300 dark:text-slate-600" />
+            <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">No companies found</h3>
+            <p className="mt-1 text-sm">
+              {hasInterviewsOnly || searchQuery
+                ? "No companies match your search or filters."
+                : "Be the first to add a company to the directory."}
+            </p>
+            {(hasInterviewsOnly || searchQuery) && (
+              <button
+                onClick={() => {
+                  setHasInterviewsOnly(false);
+                  setSearchQuery("");
+                }}
+                className="mt-4 text-sm font-bold text-blue-600 hover:underline dark:text-blue-400"
+              >
+                Clear All Filters
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="relative z-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredCompanies.map((company) => (
+              <Link
+                href={`/companies/${company?.slug}`}
+                key={company._id}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/85 bg-white p-5 sm:p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]"
+              >
+                <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-cyan-950/20 dark:to-transparent" />
+
+                <div className="relative z-10 mb-4 flex items-start gap-4">
+                  <div className="relative shrink-0 mt-0.5">
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
+                    {company.logo ? (
+                      <div className="relative z-10 flex h-12 w-12 items-center justify-center overflow-hidden rounded-[12px] bg-white p-1.5 ring-2 ring-white shadow-sm transition-transform duration-300 group-hover:scale-105 dark:bg-slate-950 dark:ring-slate-800">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={company.logo}
+                          alt={company.name}
+                          className="h-full w-full object-contain"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-[12px] ring-2 ring-white bg-gradient-to-br from-blue-50 to-indigo-50 text-xl font-bold text-blue-600 shadow-inner transition-transform duration-300 group-hover:scale-105 dark:from-cyan-900/40 dark:to-blue-900/40 dark:text-cyan-300 dark:bg-slate-950 dark:ring-slate-800">
+                        {(company?.name?.charAt(0) || "C").toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-[17px] font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-cyan-300">
+                      {company.name}
+                    </h3>
+
+                    <div className="mt-1 flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                      {company.location && (
+                        <span className="flex items-center gap-1 line-clamp-1">
+                          <MapPin size={12} className="shrink-0" /> {company.location}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mb-5 flex-1 line-clamp-2 text-sm text-slate-600 dark:text-slate-300" style={{ lineHeight: '1.6' }}>
+                  {company.about}
+                </p>
+
+                <div className="mt-auto">
+                  {company.tags && company.tags.length > 0 && (
+                    <div className="mb-4 flex flex-wrap gap-1.5">
+                      {company.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="ui-tag ui-tag-role text-[11px] px-2 py-0.5">
+                          {tag}
+                        </span>
+                      ))}
+                      {company.tags.length > 3 && (
+                        <span className="ui-tag ui-tag-role text-[11px] px-2 py-0.5">
+                          +{company.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="relative z-10 flex items-center justify-between border-t border-slate-200/60 pt-4 dark:border-slate-700/80">
+                    <div className={`text-[13px] font-bold transition-colors ${(countsMap[(company.name || "").toLowerCase()] || 0) > 0
+                      ? "text-blue-600 dark:text-blue-400"
+                      : "text-slate-400 opacity-50 dark:text-slate-500"
+                      }`}>
+                      {countsMap[(company.name || "").toLowerCase()] || 0} Interviews
+                    </div>
+                    <div className="flex items-center gap-1 text-[13px] font-bold text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-cyan-300">
+                      View Details
+                      <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

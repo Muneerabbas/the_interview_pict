@@ -1,0 +1,561 @@
+@import '../styles/_variables.scss';
+@import '../styles/_keyframe-animations.scss';
+
+/* Shimmer skeleton for Cloudinary image blur-loading */
+@keyframes shimmer {
+  0% {
+    background-position: -600px 0;
+  }
+
+  100% {
+    background-position: 600px 0;
+  }
+}
+
+.img-shimmer {
+  background: linear-gradient(90deg,
+      #e2e8f0 25%,
+      #f1f5f9 50%,
+      #e2e8f0 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 0.75rem;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-foreground {
+    color: hsl(var(--foreground));
+  }
+
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+
+  .bg-card {
+    background-color: hsl(var(--card));
+  }
+
+  .text-card-foreground {
+    color: hsl(var(--card-foreground));
+  }
+
+  .bg-popover {
+    background-color: hsl(var(--popover));
+  }
+
+  .text-popover-foreground {
+    color: hsl(var(--popover-foreground));
+  }
+
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground));
+  }
+
+  .bg-primary-foreground {
+    background-color: hsl(var(--primary-foreground));
+  }
+
+  .bg-secondary {
+    background-color: hsl(var(--secondary));
+  }
+
+  .text-secondary-foreground {
+    color: hsl(var(--secondary-foreground));
+  }
+
+  .bg-muted {
+    background-color: hsl(var(--muted));
+  }
+
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+
+  .text-accent-foreground {
+    color: hsl(var(--accent-foreground));
+  }
+
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+
+  .text-destructive-foreground {
+    color: hsl(var(--destructive-foreground));
+  }
+
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+
+  .bg-input {
+    background-color: hsl(var(--input));
+  }
+
+  .ring-ring {
+    --tw-ring-color: hsl(var(--ring));
+  }
+
+  .outline-ring {
+    outline-color: hsl(var(--ring));
+  }
+
+  .outline-ring\/50 {
+    outline-color: hsl(var(--ring) / 0.5);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+/* ============================================================
+   DESIGN TOKENS — Global UI Polish
+   ============================================================ */
+:root {
+  --font-sans: "Inter", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Typography */
+  --ui-font-size-body: 15.5px;
+  --ui-line-height-body: 1.7;
+  --ui-letter-spacing: 0.01em;
+  --ui-line-height-heading: 1.15;
+  --ui-letter-spacing-heading: -0.01em;
+
+  /* Text Colors (light) */
+  --ui-text-primary: #111827;
+  /* replaces pure #000 */
+  --ui-text-secondary: #374151;
+  --ui-text-muted: #6B7280;
+
+  /* Light Mode backgrounds */
+  --ui-bg-app: #F4F6FB;
+  /* main page background */
+  --ui-bg-card: #FFFFFF;
+  /* card surfaces */
+  --ui-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.07), 0 6px 18px rgba(15, 23, 42, 0.05);
+
+  /* Accent Blue */
+  --ui-accent: #2563EB;
+  --ui-accent-hover: #1D4ED8;
+
+  /* Light borders */
+  --ui-border: rgba(37, 39, 45, 0.10);
+}
+
+/* Dark mode overrides */
+.dark {
+  --ui-text-primary: #F1F5F9;
+  /* replaces pure #FFF */
+  --ui-text-secondary: #CBD5E1;
+  --ui-text-muted: #94A3B8;
+
+  --ui-bg-app: #0D1117;
+  --ui-bg-card: #1C2230;
+  --ui-shadow-card: 0 1px 4px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+
+  --ui-border: #2A3347;
+}
+
+/* ============================================================
+   GLOBAL TYPOGRAPHY
+   ============================================================ */
+body {
+  font-size: var(--ui-font-size-body);
+  line-height: var(--ui-line-height-body);
+  letter-spacing: var(--ui-letter-spacing);
+  font-weight: 400;
+  color: var(--ui-text-primary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--ui-line-height-heading);
+  letter-spacing: var(--ui-letter-spacing-heading);
+  color: var(--ui-text-primary);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
+/* Secondary labels (e.g. badges, captions) */
+label,
+caption,
+figcaption,
+.text-secondary-label {
+  font-weight: 500;
+  color: var(--ui-text-secondary);
+}
+
+
+body.landing-light {
+  background-color: #f8fafc;
+  color-scheme: light;
+}
+
+@keyframes teamFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes teamFloat {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+@keyframes teamPulseDot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 0.72;
+  }
+}
+
+.team-fade-up {
+  animation: teamFadeUp 0.75s ease-out both;
+}
+
+.team-fade-up-delay {
+  animation: teamFadeUp 0.75s ease-out 0.18s both;
+}
+
+.team-float-slow {
+  animation: teamFloat 7s ease-in-out infinite;
+}
+
+.team-float-delayed {
+  animation: teamFloat 9s ease-in-out 1.2s infinite;
+}
+
+.team-pulse-dot {
+  animation: teamPulseDot 1.8s ease-in-out infinite;
+}
+
+.team-logo-glow {
+  animation: teamFloat 6.5s ease-in-out infinite;
+}
+
+@keyframes placeholderExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes placeholderEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+input::placeholder {
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+label,
+small {
+  font-weight: 500;
+}
+
+.animate-placeholder-exit::placeholder {
+  animation: placeholderExit 0.5s ease-out forwards;
+}
+
+.animate-placeholder-enter::placeholder {
+  animation: placeholderEnter 0.5s ease-out forwards;
+}
+
+/* Ensure @uiw/react-md-editor inherits app font (Inter) */
+.w-md-editor,
+.w-md-editor * {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+
+  :root {
+    --background: 224 43% 97%;
+    --foreground: 220 39% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 39% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 39% 11%;
+    --primary: 220 83% 53%;
+    --primary-hover: 221 83% 46%;
+    --primary-foreground: 210 40% 96%;
+    --secondary: 220 25% 95%;
+    --secondary-foreground: 220 26% 20%;
+    --muted: 220 23% 95%;
+    --muted-foreground: 220 12% 45%;
+    --accent: 220 83% 53%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 72% 51%;
+    --border: 220 21% 88%;
+    --input: 220 21% 88%;
+    --ring: 221 83% 46%;
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: 224 43% 97%;
+    --sidebar-foreground: 220 39% 11%;
+    --sidebar-primary: 220 83% 53%;
+    --sidebar-primary-foreground: 210 40% 96%;
+    --sidebar-accent: 220 23% 95%;
+    --sidebar-accent-foreground: 220 39% 11%;
+    --sidebar-border: 220 21% 88%;
+    --sidebar-ring: 221 83% 46%;
+    --tag-surface: rgb(37 99 235 / 0.12);
+    --tag-border: rgb(37 99 235 / 0.28);
+  }
+
+  .dark {
+    --background: 218 35% 8%;
+    --foreground: 210 40% 96%;
+    --card: 220 26% 15%;
+    --card-foreground: 210 40% 96%;
+    --popover: 220 26% 15%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 220 83% 53%;
+    --primary-hover: 221 83% 46%;
+    --primary-foreground: 210 40% 96%;
+    --secondary: 220 20% 19%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 220 20% 19%;
+    --muted-foreground: 220 12% 68%;
+    --accent: 220 83% 53%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 62% 56%;
+    --border: 220 26% 22%;
+    --input: 220 26% 22%;
+    --ring: 221 83% 46%;
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: 220 26% 15%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 220 83% 53%;
+    --sidebar-primary-foreground: 210 40% 96%;
+    --sidebar-accent: 220 20% 19%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 220 26% 22%;
+    --sidebar-ring: 221 83% 46%;
+    --tag-surface: rgb(37 99 235 / 0.18);
+    --tag-border: rgb(37 99 235 / 0.34);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .light-mode-card {
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ============================================================
+   CARD UTILITIES
+   ============================================================ */
+.ui-card {
+  border-radius: 15px;
+  padding: 22px;
+  background-color: var(--ui-bg-card, #ffffff);
+  border: 1px solid var(--ui-border, rgba(37, 39, 45, 0.10));
+  box-shadow: var(--ui-shadow-card, 0 1px 3px rgba(15, 23, 42, 0.07), 0 6px 18px rgba(15, 23, 42, 0.05));
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+/* 3‑px top accent bar (blue → teal) */
+.ui-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563EB, #0891b2);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 15px 15px 0 0;
+}
+
+.ui-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.08), 0 16px 36px rgba(15, 23, 42, 0.1);
+}
+
+.ui-card:hover::before {
+  opacity: 1;
+}
+
+/* ============================================================
+   TAG / CHIP UTILITIES
+   ============================================================ */
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Company tag — blue tint */
+.ui-tag-company {
+  background-color: rgba(37, 99, 235, 0.10);
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
+/* Role tag — neutral */
+.ui-tag-role {
+  background-color: rgba(100, 116, 139, 0.10);
+  color: #475569;
+  border-color: rgba(100, 116, 139, 0.20);
+}
+
+/* Batch/year tag — teal tint */
+.ui-tag-batch {
+  background-color: rgba(8, 145, 178, 0.10);
+  color: #0e7490;
+  border-color: rgba(8, 145, 178, 0.22);
+}
+
+/* Dark mode overrides */
+.dark .ui-tag-company {
+  background-color: rgba(37, 99, 235, 0.18);
+  color: #93c5fd;
+  border-color: rgba(37, 99, 235, 0.34);
+}
+
+.dark .ui-tag-role {
+  background-color: rgba(100, 116, 139, 0.18);
+  color: #94a3b8;
+  border-color: rgba(100, 116, 139, 0.30);
+}
+
+
+/* ============================================================
+   GLOBAL GRID BACKGROUND — reduced to 2-5% opacity
+   ============================================================ */
+/* Soften all bg-grid patterns sitewide: override the inline opacity
+   by targeting the pointer-events-none overlay divs. */
+.grid-quiet {
+  opacity: 0.03;
+}
+
+.dark .grid-quiet {
+  opacity: 0.06;
+}
+
+/* Auto-apply to the standard grid pattern divs across all pages */
+[class*="bg-[linear-gradient(to_right,rgba(148,163,184,0.18)"] {
+  --tw-bg-opacity: 1;
+  opacity: 0.35 !important;
+}
+
+[class*="bg-[linear-gradient(to_right,rgba(51,65,85,0.45)"] {
+  opacity: 0.45 !important;
+}

@@ -226,14 +226,14 @@ export default function Navbar({ showThemeToggle = false }) {
             <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
               <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
             </div>
-            <span className="text-xl font-bold">
+            <span className="hidden min-[420px]:inline text-lg font-bold sm:text-xl">
               the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
             </span>
           </Link>
 
           {/* Desktop: search + links */}
-          <div className="hidden flex-1 items-center justify-center px-8 lg:flex">
-            <form onSubmit={handleSearch} className="w-full max-w-2xl">
+          <div className="hidden min-w-0 flex-1 items-center justify-center px-4 xl:flex 2xl:px-8">
+            <form onSubmit={handleSearch} className="min-w-0 w-full max-w-xl 2xl:max-w-2xl">
               <div className="group relative">
                 <Search
                   size={18}
@@ -248,7 +248,7 @@ export default function Navbar({ showThemeToggle = false }) {
                 />
 
                 {!searchText && (
-                  <div className="pointer-events-none absolute left-[116px] top-1/2 -translate-y-1/2 overflow-hidden h-5 w-28">
+                  <div className="pointer-events-none absolute left-[116px] top-1/2 hidden h-5 w-28 -translate-y-1/2 overflow-hidden 2xl:block">
                     <AnimatePresence mode="sync">
                       <motion.div
                         key={index}
@@ -276,13 +276,13 @@ export default function Navbar({ showThemeToggle = false }) {
           </div>
 
           {/* Desktop: nav items + auth */}
-          <div className="hidden items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-[0_8px_20px_rgba(2,6,23,0.55)] lg:flex">
+          <div className="hidden shrink-0 items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-[0_8px_20px_rgba(2,6,23,0.55)] xl:flex">
             {navItems.map(({ href, label, Icon }) => (
               <Link
                 key={href}
                 href={href}
                 className={[
-                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-all active:scale-95",
+                  "group relative flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm font-semibold transition-all active:scale-95 2xl:px-3",
                   isActive(href)
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300"
                     : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/90 dark:hover:text-slate-100",
@@ -293,7 +293,10 @@ export default function Navbar({ showThemeToggle = false }) {
                   size={18}
                   className={`transition-colors duration-200 ${isActive(href) ? "text-blue-600 dark:text-cyan-300" : "text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-200"}`}
                 />
-                <span>{label}</span>
+                <span className="hidden 2xl:inline">{label}</span>
+                <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-slate-200/80 bg-white/95 px-2 py-1 text-xs font-semibold text-slate-700 opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-150 group-hover:opacity-100 dark:border-slate-700/80 dark:bg-slate-900/95 dark:text-slate-200 2xl:hidden">
+                  {label}
+                </span>
               </Link>
             ))}
 
@@ -320,24 +323,32 @@ export default function Navbar({ showThemeToggle = false }) {
             {session ? (
               <button
                 onClick={handleLogout}
-                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/50 dark:focus:ring-rose-500/35"
+                aria-label="Logout"
+                className="group relative ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/50 dark:focus:ring-rose-500/35 2xl:px-4"
               >
                 <LogOut size={16} />
-                Logout
+                <span className="hidden 2xl:inline">Logout</span>
+                <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-slate-200/80 bg-white/95 px-2 py-1 text-xs font-semibold text-slate-700 opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-150 group-hover:opacity-100 dark:border-slate-700/80 dark:bg-slate-900/95 dark:text-slate-200 2xl:hidden">
+                  Logout
+                </span>
               </button>
             ) : (
               <button
                 onClick={handleLogin}
-                className="ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40"
+                aria-label="Login"
+                className="group relative ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-3 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40 2xl:px-4"
               >
                 <LogIn size={16} />
-                Login
+                <span className="hidden 2xl:inline">Login</span>
+                <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-slate-200/80 bg-white/95 px-2 py-1 text-xs font-semibold text-slate-700 opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-150 group-hover:opacity-100 dark:border-slate-700/80 dark:bg-slate-900/95 dark:text-slate-200 2xl:hidden">
+                  Login
+                </span>
               </button>
             )}
           </div>
 
           {/* Mobile: search + menu */}
-          <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
+          <div className="flex items-center gap-1.5 xl:hidden sm:gap-2">
             <button
               onClick={() => router.push("/search")}
               className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:h-10 sm:w-10"
@@ -392,7 +403,7 @@ export default function Navbar({ showThemeToggle = false }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed left-0 right-0 top-[62px] z-50 mx-auto w-full max-w-7xl px-4 sm:top-[68px] lg:hidden"
+              className="fixed left-0 right-0 top-[62px] z-50 mx-auto w-full max-w-7xl px-4 sm:top-[68px] xl:hidden"
             >
               <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_24px_50px_rgba(2,6,23,0.7)] dark:supports-[backdrop-filter]:bg-slate-950/90">
                 <div className="p-4">

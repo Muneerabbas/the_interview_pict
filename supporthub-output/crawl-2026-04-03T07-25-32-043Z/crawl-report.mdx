@@ -1,0 +1,1340 @@
+# SupportHub Crawl Report
+
+Generated at: 2026-04-03T07:25:33.938Z
+Codebase root: `/home/manas/Documents/the_interview_pict`
+Scan mode: `standard`
+Include tests: `false`
+
+## Executive Summary
+
+- Total scanned files: **906**
+- Kept (high-signal) files: **873**
+- Dropped (low-signal) files: **33**
+- APIs discovered: **27**
+- Pages discovered: **21**
+- Components discovered: **812**
+- Content files discovered: **2**
+- Config/data files discovered: **11**
+- Call references extracted: **602**
+- Text snippets extracted: **4742**
+- Knowledge chunks created: **4582**
+- Server actions discovered: **13**
+- i18n keys used in UI: **27**
+- i18n keys in locale files: **0**
+
+## Extraction Health
+
+- Status: **excellent**
+- Score: **100/100**
+- Warnings: **0**
+- No critical extraction warnings detected.
+
+## APIs (Tool-ready)
+
+| Route | Methods | Route Params | File |
+| --- | --- | --- | --- |
+| /api/view | POST | - | app/api/view/route.js |
+| /api/user/profile | GET, POST | - | app/api/user/profile/route.js |
+| /api/upload | POST | - | app/api/upload/route.js |
+| /api/topStories | GET | - | app/api/topStories/route.js |
+| /api/sendEmail | POST | - | app/api/sendEmail/route.js |
+| /api/search | GET | - | app/api/search/route.js |
+| /api/saveUser | POST | - | app/api/saveUser/route.js |
+| /api/saveExp | POST | - | app/api/saveExp/route.js |
+| /api/profile | POST | - | app/api/profile/route.js |
+| /api/profile/view | POST | - | app/api/profile/view/route.js |
+| /api/postsCount | GET | - | app/api/postsCount/route.js |
+| /api/postCompanies | GET, POST, PUT | - | app/api/postCompanies/route.js |
+| /api/notifications | GET, PATCH | - | app/api/notifications/route.js |
+| /api/newsletter | POST | - | app/api/newsletter/route.js |
+| /api/like | POST | - | app/api/like/route.js |
+| /api/getCompanies | GET | - | app/api/getCompanies/route.js |
+| /api/feed | GET | - | app/api/feed/route.js |
+| /api/exp | GET | - | app/api/exp/route.js |
+| /api/edit | PUT | - | app/api/edit/route.js |
+| /api/drafts | POST, GET | - | app/api/drafts/route.js |
+| /api/deleteDraft | POST | - | app/api/deleteDraft/route.js |
+| /api/delete-image | POST | - | app/api/delete-image/route.js |
+| /api/delete | DELETE | - | app/api/delete/route.js |
+| /api/comments | GET, POST, PATCH | - | app/api/comments/route.js |
+| /api/auth/* | unknown | catchAll | app/api/auth/[...nextauth]/route.js |
+| /api/ai-generate | POST | - | app/api/ai-generate/route.js |
+| /api/addCompany | POST | - | app/api/addCompany/route.js |
+
+## API Call Linkages
+
+| API Route | Caller Count | Caller Files |
+| --- | --- | --- |
+| /api/view | 4 | components/ScrollViewTracker.js, .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js, .next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js |
+| /api/user/profile | 4 | app/profile/page.jsx, .next_stale_1774889991/server/app/profile/page.js |
+| /api/upload | 2 | lib/tiptap-utils.js, .next_stale_1774889991/server/chunks/3709.js |
+| /api/topStories | 5 | app/page.js, .next_stale_1774889991/server/app/page.js, .next_stale_1774889991/server/app/single/[id]/page.js, .next_stale_1774889991/dev/static/chunks/app/page.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__fbc4e689._.js |
+| /api/sendEmail | 0 | - |
+| /api/search | 2 | app/search/[search]/page.jsx |
+| /api/saveUser | 4 | components/Login.jsx, .next_stale_1774889991/server/chunks/7102.js, .next_stale_1774889991/dev/static/chunks/_e813803e._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js |
+| /api/saveExp | 1 | .next_stale_1774889991/server/app/post/page.js |
+| /api/profile | 2 | app/profile/page.jsx, .next_stale_1774889991/server/app/profile/page.js |
+| /api/profile/view | 1 | components/ProfileViewTracker.js |
+| /api/postsCount | 0 | - |
+| /api/postCompanies | 4 | app/edit-company/[slug]/page.jsx, app/add-company/page.jsx, .next_stale_1774889991/server/app/edit-company/[slug]/page.js, .next_stale_1774889991/server/app/add-company/page.js |
+| /api/notifications | 16 | components/Navbar.jsx, .next_stale_1774889991/server/chunks/3214.js, .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js, .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js, .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js, .next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js |
+| /api/newsletter | 4 | components/Footer.jsx, .next_stale_1774889991/server/chunks/7102.js, .next_stale_1774889991/dev/static/chunks/_e813803e._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js |
+| /api/like | 8 | components/FeedCard.jsx, components/LikeButton.jsx, .next_stale_1774889991/server/app/single/[id]/page.js, .next_stale_1774889991/server/app/feed/page.js, .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js, .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js |
+| /api/getCompanies | 1 | components/ExpForm.jsx |
+| /api/feed | 8 | compare_pages.js, components/FeedHero.jsx, app/page.js, .next_stale_1774889991/server/app/page.js, .next_stale_1774889991/dev/static/chunks/app/page.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__52c24234._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__fbc4e689._.js |
+| /api/exp | 7 | components/LikeButton.jsx, app/edit/[id]/page.jsx, .next_stale_1774889991/server/app/single/[id]/page.js, .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js, .next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__52c24234._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js |
+| /api/edit | 2 | app/edit/[id]/page.jsx, .next_stale_1774889991/server/app/edit/[id]/page.js |
+| /api/drafts | 5 | components/ExpForm.jsx, .next_stale_1774889991/server/app/post/page.js, .next_stale_1774889991/dev/static/chunks/app/post/page.js, .next_stale_1774889991/dev/server/app/post/page.js |
+| /api/deleteDraft | 2 | components/ExpForm.jsx, .next_stale_1774889991/server/app/post/page.js |
+| /api/delete-image | 2 | lib/tiptap-utils.js, .next_stale_1774889991/server/chunks/3709.js |
+| /api/delete | 2 | components/Card.jsx, .next_stale_1774889991/server/chunks/6147.js |
+| /api/comments | 16 | components/CommentsSection.jsx, .next_stale_1774889991/server/app/single/[id]/page.js, .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js, .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js |
+| /api/auth/* | 0 | - |
+| /api/ai-generate | 2 | components/ExpForm.jsx, .next_stale_1774889991/server/app/post/page.js |
+| /api/addCompany | 1 | components/AddCompanyModal.jsx |
+
+## Server Actions
+
+| Action Name | Args | Source | File |
+| --- | --- | --- | --- |
+| _default | - | local-server-action | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| render404 | - | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| handleResponse | span | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| responseGenerator | { previousCacheEntry } | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| doRender | - | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| onCompletedProcessingRouteTree | - | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| doOriginalFetch | isStale, cacheReasonOverride | local-server-action | .next_stale_1774889991/dev/server/vendor-chunks/next.js |
+| resolveOpenGraph | openGraph, metadataBase, pathname, metadataContext, titleTemplate | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+| resolveAlternates | alternates, metadataBase, pathname, context | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+| resolveItunes | itunes, metadataBase, pathname, context | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+| resolvePagination | pagination, metadataBase, pathname, context | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+| onCompletedProcessingRouteTree | - | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+| doOriginalFetch | isStale, cacheReasonOverride | local-server-action | .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js |
+
+## i18n Mapping
+
+- Missing UI keys in locale files: **27**
+- Unused locale keys: **0**
+
+| i18n Key | Used In Files | Locales Found |
+| --- | --- | --- |
+| onHeaderField | .next_stale_1774889991/server/chunks/1724.js | - |
+| onHeaderValue | .next_stale_1774889991/server/chunks/1724.js | - |
+| onPartData | .next_stale_1774889991/server/chunks/1724.js | - |
+| undefined | .next_stale_1774889991/server/chunks/4237.js | - |
+| string | .next_stale_1774889991/server/chunks/4237.js | - |
+| function | .next_stale_1774889991/server/chunks/4237.js | - |
+| number | .next_stale_1774889991/server/chunks/4237.js | - |
+| Experience deleted successfully! | .next_stale_1774889991/server/chunks/6147.js | - |
+| color | .next_stale_1774889991/server/chunks/861.js | - |
+| font | .next_stale_1774889991/server/chunks/861.js | - |
+| text | .next_stale_1774889991/server/chunks/861.js | - |
+| font-weight | .next_stale_1774889991/server/chunks/861.js | - |
+| tracking | .next_stale_1774889991/server/chunks/861.js | - |
+| leading | .next_stale_1774889991/server/chunks/861.js | - |
+| breakpoint | .next_stale_1774889991/server/chunks/861.js | - |
+| container | .next_stale_1774889991/server/chunks/861.js | - |
+| spacing | .next_stale_1774889991/server/chunks/861.js | - |
+| radius | .next_stale_1774889991/server/chunks/861.js | - |
+| shadow | .next_stale_1774889991/server/chunks/861.js | - |
+| inset-shadow | .next_stale_1774889991/server/chunks/861.js | - |
+| text-shadow | .next_stale_1774889991/server/chunks/861.js | - |
+| drop-shadow | .next_stale_1774889991/server/chunks/861.js | - |
+| blur | .next_stale_1774889991/server/chunks/861.js | - |
+| perspective | .next_stale_1774889991/server/chunks/861.js | - |
+| aspect | .next_stale_1774889991/server/chunks/861.js | - |
+| ease | .next_stale_1774889991/server/chunks/861.js | - |
+| animate | .next_stale_1774889991/server/chunks/861.js | - |
+
+## Pages
+
+| Route | File | Text Snippets | Call References |
+| --- | --- | --- | --- |
+| /500 | pages/500.js | 2 | 0 |
+| / | app/page.js | 3 | 2 |
+| /terms | app/terms/page.jsx | 16 | 0 |
+| /team | app/team/page.jsx | 15 | 0 |
+| /single/:id | app/single/[id]/page.jsx | 15 | 3 |
+| /simple | app/simple/page.jsx | 0 | 0 |
+| /search | app/search/page.jsx | 1 | 1 |
+| /search/:search | app/search/[search]/page.jsx | 17 | 6 |
+| /profile | app/profile/page.jsx | 6 | 5 |
+| /profile/public/:email | app/profile/public/[email]/page.jsx | 9 | 1 |
+| /privacy | app/privacy/page.jsx | 17 | 0 |
+| /post | app/post/page.jsx | 17 | 0 |
+| /login | app/login/page.jsx | 6 | 1 |
+| /help | app/help/page.jsx | 11 | 0 |
+| /feed | app/feed/page.jsx | 10 | 2 |
+| /edit-company/:slug | app/edit-company/[slug]/page.jsx | 13 | 3 |
+| /edit/:id | app/edit/[id]/page.jsx | 16 | 3 |
+| /companies | app/companies/page.jsx | 1 | 0 |
+| /companies/:slug | app/companies/[slug]/page.jsx | 11 | 2 |
+| /add-company | app/add-company/page.jsx | 13 | 3 |
+| /about | app/about/page.jsx | 14 | 0 |
+
+## Components
+
+| Component File | Text Snippets | Call References |
+| --- | --- | --- |
+| compare_pages.js | 4 | 2 |
+| list_col.js | 2 | 0 |
+| tailwind.config.mjs | 8 | 0 |
+| scripts/seed-post-companies.mjs | 6 | 5 |
+| hooks/use-tiptap-editor.js | 1 | 0 |
+| components/AdComponent.jsx | 1 | 0 |
+| components/AdComponent2.jsx | 1 | 0 |
+| components/AddCompanyModal.jsx | 7 | 1 |
+| components/ArticleCard.jsx | 13 | 0 |
+| components/AuthModalProvider.jsx | 4 | 0 |
+| components/Card.jsx | 10 | 5 |
+| components/CloudinaryImage.jsx | 5 | 0 |
+| components/CommentsSection.jsx | 5 | 5 |
+| components/CompaniesDirectoryClient.jsx | 9 | 1 |
+| components/CompanyFilter.jsx | 7 | 0 |
+| components/ExpForm.jsx | 4 | 6 |
+| components/ExperienceTiptapEditor.jsx | 5 | 0 |
+| components/FeaturesSection.jsx | 9 | 0 |
+| components/FeedCard.jsx | 10 | 2 |
+| components/FeedHero.jsx | 11 | 1 |
+| components/Footer.jsx | 8 | 4 |
+| components/FounderCard.jsx | 6 | 2 |
+| components/Landing.jsx | 5 | 9 |
+| components/LikeButton.jsx | 7 | 2 |
+| components/Login.jsx | 10 | 2 |
+| components/Markdown.jsx | 13 | 0 |
+| components/Navbar.jsx | 4 | 6 |
+| components/NotificationsMenu.jsx | 11 | 0 |
+| components/PostCompanyActions.jsx | 4 | 0 |
+| components/ProfileAvatar.jsx | 5 | 0 |
+| components/ProfileCardSkeleton.jsx | 12 | 0 |
+| components/ProfileViewTracker.js | 2 | 1 |
+| components/ScrollViewTracker.js | 2 | 1 |
+| components/SearchableDropdown.jsx | 11 | 0 |
+| components/ShareButton.jsx | 3 | 0 |
+| components/ShareProfileButton.jsx | 2 | 0 |
+| components/SimilarExperienceClient.jsx | 12 | 0 |
+| components/SingleExperienceThemeShell.jsx | 0 | 0 |
+| components/TeamMemberCard.jsx | 13 | 0 |
+| components/ThemeToggle.jsx | 6 | 0 |
+| components/TypingSentence.jsx | 6 | 0 |
+| components/ui/canvas-text.jsx | 6 | 0 |
+| components/tiptap-ui-primitive/tooltip/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/tooltip/tooltip.jsx | 5 | 0 |
+| components/tiptap-ui-primitive/toolbar/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/toolbar/toolbar.jsx | 5 | 0 |
+| components/tiptap-ui-primitive/spacer/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/spacer/spacer.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/separator/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/separator/separator.jsx | 2 | 0 |
+| components/tiptap-ui-primitive/popover/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/popover/popover.jsx | 1 | 0 |
+| components/tiptap-ui-primitive/input/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/input/input.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/dropdown-menu/dropdown-menu.jsx | 14 | 0 |
+| components/tiptap-ui-primitive/dropdown-menu/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/card/card.jsx | 6 | 0 |
+| components/tiptap-ui-primitive/card/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/button-group/button-group.jsx | 6 | 0 |
+| components/tiptap-ui-primitive/button-group/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/button/button.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/button/index.jsx | 0 | 0 |
+| components/tiptap-ui-primitive/badge/badge.jsx | 1 | 0 |
+| components/tiptap-ui-primitive/badge/index.jsx | 0 | 0 |
+| components/tiptap-ui/undo-redo-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/undo-redo-button/undo-redo-button.jsx | 3 | 0 |
+| components/tiptap-ui/undo-redo-button/use-undo-redo.js | 2 | 0 |
+| components/tiptap-ui/text-align-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/text-align-button/text-align-button.jsx | 3 | 0 |
+| components/tiptap-ui/text-align-button/use-text-align.js | 7 | 0 |
+| components/tiptap-ui/mark-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/mark-button/mark-button.jsx | 2 | 0 |
+| components/tiptap-ui/mark-button/use-mark.js | 3 | 0 |
+| components/tiptap-ui/list-dropdown-menu/index.jsx | 0 | 0 |
+| components/tiptap-ui/list-dropdown-menu/list-dropdown-menu.jsx | 2 | 0 |
+| components/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu.js | 1 | 0 |
+| components/tiptap-ui/list-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/list-button/list-button.jsx | 2 | 0 |
+| components/tiptap-ui/list-button/use-list.js | 3 | 0 |
+| components/tiptap-ui/link-popover/index.jsx | 0 | 0 |
+| components/tiptap-ui/link-popover/link-popover.jsx | 5 | 0 |
+| components/tiptap-ui/link-popover/use-link-popover.js | 4 | 0 |
+| components/tiptap-ui/image-upload-button/image-upload-button.jsx | 3 | 0 |
+| components/tiptap-ui/image-upload-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/image-upload-button/use-image-upload.js | 4 | 0 |
+| components/tiptap-ui/heading-dropdown-menu/heading-dropdown-menu.jsx | 7 | 0 |
+| components/tiptap-ui/heading-dropdown-menu/index.jsx | 0 | 0 |
+| components/tiptap-ui/heading-dropdown-menu/use-heading-dropdown-menu.js | 1 | 0 |
+| components/tiptap-ui/heading-button/heading-button.jsx | 2 | 0 |
+| components/tiptap-ui/heading-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/heading-button/use-heading.js | 8 | 0 |
+| components/tiptap-ui/color-highlight-popover/color-highlight-popover.jsx | 10 | 0 |
+| components/tiptap-ui/color-highlight-popover/index.jsx | 0 | 0 |
+| components/tiptap-ui/color-highlight-button/color-highlight-button.jsx | 7 | 0 |
+| components/tiptap-ui/color-highlight-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/color-highlight-button/use-color-highlight.js | 15 | 0 |
+| components/tiptap-ui/code-block-button/code-block-button.jsx | 3 | 0 |
+| components/tiptap-ui/code-block-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/code-block-button/use-code-block.js | 3 | 0 |
+| components/tiptap-ui/blockquote-button/blockquote-button.jsx | 3 | 0 |
+| components/tiptap-ui/blockquote-button/index.jsx | 0 | 0 |
+| components/tiptap-ui/blockquote-button/use-blockquote.js | 3 | 0 |
+| components/tiptap-templates/simple/simple-editor.jsx | 2 | 0 |
+| components/tiptap-templates/simple/theme-toggle.jsx | 3 | 0 |
+| components/tiptap-node/image-upload-node/image-upload-node-extension.js | 1 | 0 |
+| components/tiptap-node/image-upload-node/image-upload-node.jsx | 8 | 0 |
+| components/tiptap-node/image-upload-node/index.jsx | 0 | 0 |
+| components/tiptap-node/image-node/resizable-image-extension.js | 0 | 0 |
+| components/tiptap-node/image-node/resizable-image-node-view.jsx | 12 | 0 |
+| components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension.js | 0 | 0 |
+| components/tiptap-icons/align-center-icon.jsx | 1 | 0 |
+| components/tiptap-icons/align-justify-icon.jsx | 1 | 0 |
+| components/tiptap-icons/align-left-icon.jsx | 0 | 0 |
+| components/tiptap-icons/align-right-icon.jsx | 1 | 0 |
+| components/tiptap-icons/arrow-left-icon.jsx | 0 | 0 |
+| components/tiptap-icons/ban-icon.jsx | 0 | 0 |
+| components/tiptap-icons/blockquote-icon.jsx | 1 | 0 |
+| components/tiptap-icons/bold-icon.jsx | 0 | 0 |
+| components/tiptap-icons/check-icon.jsx | 0 | 0 |
+| components/tiptap-icons/chevron-down-icon.jsx | 1 | 0 |
+| components/tiptap-icons/close-icon.jsx | 0 | 0 |
+| components/tiptap-icons/code-block-icon.jsx | 0 | 0 |
+| components/tiptap-icons/code2-icon.jsx | 0 | 0 |
+| components/tiptap-icons/corner-down-left-icon.jsx | 1 | 0 |
+| components/tiptap-icons/external-link-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-five-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-four-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-icon.jsx | 0 | 0 |
+| components/tiptap-icons/heading-one-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-six-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-three-icon.jsx | 1 | 0 |
+| components/tiptap-icons/heading-two-icon.jsx | 1 | 0 |
+| components/tiptap-icons/highlighter-icon.jsx | 1 | 0 |
+| components/tiptap-icons/image-plus-icon.jsx | 0 | 0 |
+| components/tiptap-icons/italic-icon.jsx | 0 | 0 |
+| components/tiptap-icons/link-icon.jsx | 0 | 0 |
+| components/tiptap-icons/list-icon.jsx | 0 | 0 |
+| components/tiptap-icons/list-ordered-icon.jsx | 1 | 0 |
+| components/tiptap-icons/list-todo-icon.jsx | 0 | 0 |
+| components/tiptap-icons/moon-star-icon.jsx | 0 | 0 |
+| components/tiptap-icons/redo2-icon.jsx | 0 | 0 |
+| components/tiptap-icons/strike-icon.jsx | 0 | 0 |
+| components/tiptap-icons/subscript-icon.jsx | 0 | 0 |
+| components/tiptap-icons/sun-icon.jsx | 0 | 0 |
+| components/tiptap-icons/superscript-icon.jsx | 1 | 0 |
+| components/tiptap-icons/trash-icon.jsx | 0 | 0 |
+| components/tiptap-icons/underline-icon.jsx | 0 | 0 |
+| components/tiptap-icons/undo2-icon.jsx | 0 | 0 |
+| components/tiptap-extension/node-background-extension.js | 4 | 0 |
+| app/layout.js | 5 | 1 |
+| app/middleware.js | 6 | 0 |
+| app/providers.jsx | 2 | 0 |
+| .next_stale_1774889991/types/routes.d.ts | 1 | 0 |
+| .next_stale_1774889991/types/app/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/terms/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/team/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/single/[id]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/simple/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/search/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/search/[search]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/profile/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/profile/public/[email]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/privacy/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/post/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/login/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/help/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/feed/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/edit-company/[slug]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/edit/[id]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/companies/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/companies/[slug]/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/view/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/user/profile/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/upload/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/topStories/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/sendEmail/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/search/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/saveUser/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/saveExp/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/profile/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/profile/view/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/postsCount/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/postCompanies/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/notifications/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/newsletter/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/like/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/getCompanies/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/feed/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/exp/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/edit/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/drafts/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/deleteDraft/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/delete-image/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/delete/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/comments/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/auth/[...nextauth]/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/api/ai-generate/route.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/add-company/page.ts | 5 | 0 |
+| .next_stale_1774889991/types/app/about/page.ts | 5 | 0 |
+| .next_stale_1774889991/server/server-reference-manifest.js | 2 | 0 |
+| .next_stale_1774889991/server/chunks/1061.js | 4 | 0 |
+| .next_stale_1774889991/server/chunks/1070.js | 6 | 3 |
+| .next_stale_1774889991/server/chunks/1196.js | 9 | 0 |
+| .next_stale_1774889991/server/chunks/1607.js | 7 | 0 |
+| .next_stale_1774889991/server/chunks/1724.js | 5 | 0 |
+| .next_stale_1774889991/server/chunks/1813.js | 10 | 0 |
+| .next_stale_1774889991/server/chunks/2460.js | 7 | 0 |
+| .next_stale_1774889991/server/chunks/2915.js | 9 | 0 |
+| .next_stale_1774889991/server/chunks/3214.js | 9 | 2 |
+| .next_stale_1774889991/server/chunks/3618.js | 8 | 0 |
+| .next_stale_1774889991/server/chunks/3709.js | 5 | 3 |
+| .next_stale_1774889991/server/chunks/4237.js | 3 | 0 |
+| .next_stale_1774889991/server/chunks/4400.js | 9 | 0 |
+| .next_stale_1774889991/server/chunks/4741.js | 12 | 3 |
+| .next_stale_1774889991/server/chunks/4902.js | 8 | 1 |
+| .next_stale_1774889991/server/chunks/5573.js | 8 | 0 |
+| .next_stale_1774889991/server/chunks/6147.js | 5 | 1 |
+| .next_stale_1774889991/server/chunks/6921.js | 11 | 0 |
+| .next_stale_1774889991/server/chunks/7102.js | 13 | 2 |
+| .next_stale_1774889991/server/chunks/7459.js | 3 | 1 |
+| .next_stale_1774889991/server/chunks/7471.js | 11 | 3 |
+| .next_stale_1774889991/server/chunks/763.js | 7 | 0 |
+| .next_stale_1774889991/server/chunks/7642.js | 10 | 0 |
+| .next_stale_1774889991/server/chunks/8175.js | 10 | 1 |
+| .next_stale_1774889991/server/chunks/861.js | 2 | 0 |
+| .next_stale_1774889991/server/app/page.js | 2 | 2 |
+| .next_stale_1774889991/server/app/terms/page.js | 3 | 0 |
+| .next_stale_1774889991/server/app/team/page.js | 6 | 1 |
+| .next_stale_1774889991/server/app/single/[id]/page.js | 6 | 10 |
+| .next_stale_1774889991/server/app/simple/page.js | 3 | 0 |
+| .next_stale_1774889991/server/app/search/page.js | 2 | 0 |
+| .next_stale_1774889991/server/app/search/[search]/page.js | 7 | 0 |
+| .next_stale_1774889991/server/app/profile/page.js | 10 | 3 |
+| .next_stale_1774889991/server/app/profile/public/[email]/page.js | 10 | 0 |
+| .next_stale_1774889991/server/app/privacy/page.js | 5 | 0 |
+| .next_stale_1774889991/server/app/post/page.js | 3 | 5 |
+| .next_stale_1774889991/server/app/login/page.js | 3 | 0 |
+| .next_stale_1774889991/server/app/help/page.js | 3 | 0 |
+| .next_stale_1774889991/server/app/feed/page.js | 6 | 1 |
+| .next_stale_1774889991/server/app/edit-company/[slug]/page.js | 4 | 1 |
+| .next_stale_1774889991/server/app/edit/[id]/page.js | 7 | 2 |
+| .next_stale_1774889991/server/app/companies/page.js | 4 | 0 |
+| .next_stale_1774889991/server/app/companies/[slug]/page.js | 7 | 0 |
+| .next_stale_1774889991/server/app/api/view/route.js | 7 | 0 |
+| .next_stale_1774889991/server/app/api/user/profile/route.js | 6 | 0 |
+| .next_stale_1774889991/server/app/api/upload/route.js | 9 | 0 |
+| .next_stale_1774889991/server/app/api/topStories/route.js | 8 | 0 |
+| .next_stale_1774889991/server/app/api/sendEmail/route.js | 9 | 0 |
+| .next_stale_1774889991/server/app/api/search/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/saveUser/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/saveExp/route.js | 5 | 1 |
+| .next_stale_1774889991/server/app/api/profile/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/profile/view/route.js | 7 | 0 |
+| .next_stale_1774889991/server/app/api/postsCount/route.js | 7 | 0 |
+| .next_stale_1774889991/server/app/api/postCompanies/route.js | 9 | 0 |
+| .next_stale_1774889991/server/app/api/notifications/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/newsletter/route.js | 6 | 0 |
+| .next_stale_1774889991/server/app/api/like/route.js | 10 | 0 |
+| .next_stale_1774889991/server/app/api/getCompanies/route.js | 7 | 0 |
+| .next_stale_1774889991/server/app/api/feed/route.js | 4 | 0 |
+| .next_stale_1774889991/server/app/api/exp/route.js | 3 | 0 |
+| .next_stale_1774889991/server/app/api/edit/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/drafts/route.js | 11 | 0 |
+| .next_stale_1774889991/server/app/api/deleteDraft/route.js | 11 | 0 |
+| .next_stale_1774889991/server/app/api/delete-image/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/delete/route.js | 11 | 0 |
+| .next_stale_1774889991/server/app/api/comments/route.js | 5 | 0 |
+| .next_stale_1774889991/server/app/api/auth/[...nextauth]/route.js | 8 | 0 |
+| .next_stale_1774889991/server/app/api/ai-generate/route.js | 9 | 6 |
+| .next_stale_1774889991/server/app/add-company/page.js | 2 | 1 |
+| .next_stale_1774889991/server/app/about/page.js | 6 | 0 |
+| .next_stale_1774889991/server/app/_not-found/page.js | 2 | 0 |
+| .next_stale_1774889991/server/app/_global-error/page.js | 2 | 0 |
+| .next_stale_1774889991/dev/types/routes.d.ts | 1 | 0 |
+| .next_stale_1774889991/dev/types/app/layout.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/page.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/single/[id]/page.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/post/page.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/feed/page.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/view/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/upload/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/topStories/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/notifications/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/feed/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/exp/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/drafts/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/delete-image/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/comments/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/types/app/api/auth/[...nextauth]/route.ts | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.03955b9a272ff36b.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.071289ada5007fee.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.0c060b01a5081ef3.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.12dc15f1fee223d7.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.18f1b91599ed7ca1.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.19d0d5c0f702fd8d.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.1b82d88f9ffdbc1b.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.24160c0712aa7d1e.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.25b4358e3bab3012.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.34ceba79b18a481a.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.35fd759ec285018a.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.36d7f3fd9dee406a.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.3a486ffd94432c99.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.4cc95ef1882ab3a9.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.59e66bdeb1c437d5.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.5ba50e32ba05664b.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.5e82214b6201f032.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.5f0ac633fe8e0aad.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.60ed5fa3f08093ea.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.65279dc65ee0688a.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.68de77c3337bf03b.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.6b5417e9087db5db.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.6cc751bc020e3a80.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.75c81efe732ddb56.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.7d94edef487d774c.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.7f189c1c14b4ca62.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.84db730a3ade2908.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.886f584efd9e95f4.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.8a0ab54e0b3a1465.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.8b328f98cfb5f75e.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.8d40a11e894c82fb.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.8f4d544327cb5f0e.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.90d323e007fdbb25.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.93abfcfa975190af.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.953884fb420365b9.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.95e3c0f9f8908257.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.9b557ac7c4f6f027.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.9bc320da55ea0e4b.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.9d967d4ed7e1a2b4.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.9dd5565ff15b113b.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.9ebc9b486979351d.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.a27983f0484574bc.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.a30aed762acf900f.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.a356efd6e8036271.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.a59ae418e5c46fd0.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.a9608b4ebafe16b0.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.aa5d399f6b6ab54b.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.ac0070facf54cf48.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.ac947ffd8ec9d147.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.ae36cc9f6bb090b6.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.b42ef46ffa503acd.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.b6ae30df68dd8b20.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.bf26246db2d1770f.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.c0fb209dcf878428.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.c1b2e3db8e2199de.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.c5c4f02405b5b7f1.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.c7d81649ce201c6c.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.d0bd3464ddf8467e.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.e0211b3d6b147453.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.e9bb4c96e2db6a70.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.e9fda1a75289f083.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.f1a4af5e6bbaea91.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.f3c504e5dc125c9a.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.f66ee7c67718bbcd.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.f89efc627526f42f.hot-update.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/webpack/webpack.f8a4e4d0b7843ada.hot-update.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.03955b9a272ff36b.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.071289ada5007fee.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.18f1b91599ed7ca1.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.19d0d5c0f702fd8d.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.25b4358e3bab3012.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.34ceba79b18a481a.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.36d7f3fd9dee406a.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.4cc95ef1882ab3a9.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.5ba50e32ba05664b.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.5f0ac633fe8e0aad.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.6b5417e9087db5db.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.75c81efe732ddb56.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.7f189c1c14b4ca62.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.8a0ab54e0b3a1465.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.8b328f98cfb5f75e.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.8d40a11e894c82fb.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.8f4d544327cb5f0e.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.953884fb420365b9.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.95e3c0f9f8908257.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.9b557ac7c4f6f027.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.9d967d4ed7e1a2b4.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.9dd5565ff15b113b.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.9ebc9b486979351d.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.a356efd6e8036271.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.a59ae418e5c46fd0.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.aa5d399f6b6ab54b.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.ae36cc9f6bb090b6.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.b6ae30df68dd8b20.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.c5c4f02405b5b7f1.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.c7d81649ce201c6c.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.d0bd3464ddf8467e.hot-update.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.e9fda1a75289f083.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/layout.f89efc627526f42f.hot-update.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/single/[id]/page.25b4358e3bab3012.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/single/[id]/page.75c81efe732ddb56.hot-update.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/single/[id]/page.8b328f98cfb5f75e.hot-update.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/single/[id]/page.aa5d399f6b6ab54b.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/single/[id]/page.f89efc627526f42f.hot-update.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.03955b9a272ff36b.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.071289ada5007fee.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.34ceba79b18a481a.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.36d7f3fd9dee406a.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.4cc95ef1882ab3a9.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.5ba50e32ba05664b.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.5f0ac633fe8e0aad.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.6b5417e9087db5db.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.7f189c1c14b4ca62.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.8d40a11e894c82fb.hot-update.js | 13 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.8f4d544327cb5f0e.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.953884fb420365b9.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.95e3c0f9f8908257.hot-update.js | 13 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.9b557ac7c4f6f027.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.9d967d4ed7e1a2b4.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.9dd5565ff15b113b.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.9ebc9b486979351d.hot-update.js | 13 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.a356efd6e8036271.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.a59ae418e5c46fd0.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.ae36cc9f6bb090b6.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.b6ae30df68dd8b20.hot-update.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.c5c4f02405b5b7f1.hot-update.js | 7 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.c7d81649ce201c6c.hot-update.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.d0bd3464ddf8467e.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.e9fda1a75289f083.hot-update.js | 12 | 0 |
+| .next_stale_1774889991/dev/static/webpack/app/post/page.f89efc627526f42f.hot-update.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[next]_entry_page-loader_ts_43b523b5._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[next]_entry_page-loader_ts_742e4b53._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[root-of-the-server]__092393de._.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[root-of-the-server]__45f039c3._.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_956a0d3a._.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_c7192189._.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js | 9 | 7 |
+| .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js | 6 | 13 |
+| .next_stale_1774889991/dev/static/chunks/_a0ff3932._.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/chunks/_app-pages-browser_node_modules_browser-image-compression_dist_browser-image-compression_mjs.js | 7 | 0 |
+| .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js | 11 | 5 |
+| .next_stale_1774889991/dev/static/chunks/_e11d897a._.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/chunks/_e813803e._.js | 11 | 3 |
+| .next_stale_1774889991/dev/static/chunks/_error.js | 3 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app-pages-internals.js | 11 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_about_page_jsx_c1229ddb._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_feed_page_jsx_c1229ddb._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_feed_page_jsx_ed1faf7a._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_layout_1cf6b850.js | 1 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_page_c1229ddb.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_page_ed1faf7a.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_single_[id]_page_jsx_c1229ddb._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app_single_[id]_page_jsx_ed1faf7a._.js | 0 | 0 |
+| .next_stale_1774889991/dev/static/chunks/f92dd_refractor_c1ea008b._.js | 3 | 1 |
+| .next_stale_1774889991/dev/static/chunks/main-app.js | 4 | 20 |
+| .next_stale_1774889991/dev/static/chunks/main.js | 3 | 21 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js | 3 | 3 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_7f09fef0._.js | 8 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_@cloudinary-util_url-loader_dist_d3f6b1e0._.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js | 3 | 3 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_axios_lib_99e19c7d._.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js | 10 | 4 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_e07de1bb._.js | 9 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_fdd6ff62._.js | 7 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_framer-motion_dist_es_011a2bde._.js | 9 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_micromark-core-commonmark_dev_lib_fc41dd51._.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js | 2 | 3 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_a93b0a1c._.js | 4 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_a183fb77._.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_b3fb3b5f._.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_be32b49c._.js | 9 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_build_polyfills_polyfill-nomodule.js | 7 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js | 6 | 5 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js | 5 | 7 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js | 1 | 15 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js | 10 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js | 3 | 15 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js | 11 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_f3530cac._.js | 6 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js | 6 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js | 6 | 1 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_parse5_dist_cc581741._.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_react-dom_4411d9bd._.js | 11 | 2 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_react-syntax-highlighter_97335d4a._.js | 15 | 0 |
+| .next_stale_1774889991/dev/static/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_56b6fd65._.js | 8 | 0 |
+| .next_stale_1774889991/dev/static/chunks/pages__app_2da965e7._.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/chunks/pages__error_2da965e7._.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/chunks/polyfills.js | 7 | 0 |
+| .next_stale_1774889991/dev/static/chunks/react-refresh.js | 9 | 0 |
+| .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js | 3 | 8 |
+| .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js | 3 | 8 |
+| .next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js | 3 | 8 |
+| .next_stale_1774889991/dev/static/chunks/webpack.js | 6 | 1 |
+| .next_stale_1774889991/dev/static/chunks/pages/_app.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/chunks/pages/_error.js | 2 | 0 |
+| .next_stale_1774889991/dev/static/chunks/fallback/main-app.js | 4 | 20 |
+| .next_stale_1774889991/dev/static/chunks/fallback/main.js | 3 | 21 |
+| .next_stale_1774889991/dev/static/chunks/fallback/react-refresh.js | 9 | 0 |
+| .next_stale_1774889991/dev/static/chunks/fallback/webpack.js | 5 | 1 |
+| .next_stale_1774889991/dev/static/chunks/fallback/pages/_app.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/fallback/pages/_error.js | 5 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/layout.js | 9 | 6 |
+| .next_stale_1774889991/dev/static/chunks/app/page.js | 10 | 3 |
+| .next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js | 8 | 22 |
+| .next_stale_1774889991/dev/static/chunks/app/post/page.js | 10 | 21 |
+| .next_stale_1774889991/dev/static/chunks/app/feed/page.js | 14 | 12 |
+| .next_stale_1774889991/dev/static/chunks/app/api/view/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/upload/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/topStories/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/notifications/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/feed/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/exp/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/drafts/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/delete-image/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/comments/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/static/chunks/app/api/auth/[...nextauth]/route.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/_error.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/interception-route-rewrite-manifest.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/middleware-build-manifest.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/middleware-react-loadable-manifest.js | 15 | 0 |
+| .next_stale_1774889991/dev/server/next-font-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/server-reference-manifest.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/webpack-runtime.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@babel.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@base-ui.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@cloudinary-util.js | 10 | 2 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@cloudinary.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@floating-ui.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@next.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@panva.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@radix-ui.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@swc.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@tiptap.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@ungap.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/@vercel.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/aria-hidden.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/asynckit.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/axios.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/bail.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/browser-image-compression.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/call-bind-apply-helpers.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/ccount.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/character-entities.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/class-variance-authority.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/cloudinary.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/clsx.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/combined-stream.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/comma-separated-tokens.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/cookie.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/debug.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/decode-named-character-reference.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/delayed-stream.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/dequal.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/devlop.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/dunder-proto.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/entities.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/es-define-property.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/es-errors.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/es-object-atoms.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/es-set-tostringtag.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/estree-util-is-identifier-name.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/extend.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/fast-equals.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/follow-redirects.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/form-data.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/framer-motion.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/function-bind.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/get-intrinsic.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/get-nonce.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/get-proto.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/gopd.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/has-flag.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/has-symbols.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/has-tostringtag.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hasown.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-from-parse5.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-parse-selector.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-raw.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-to-jsx-runtime.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-to-parse5.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hast-util-whitespace.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/hastscript.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/html-url-attributes.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/html-void-elements.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/inline-style-parser.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/is-plain-obj.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/jose.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/linkifyjs.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/lodash.js | 15 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/lodash.throttle.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/longest-streak.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/lucide-react.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/markdown-table.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/marked.js | 10 | 3 |
+| .next_stale_1774889991/dev/server/vendor-chunks/math-intrinsics.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-find-and-replace.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-from-markdown.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm-autolink-literal.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm-footnote.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm-strikethrough.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm-table.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm-task-list-item.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-gfm.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-phrasing.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-to-hast.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-to-markdown.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mdast-util-to-string.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-core-commonmark.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-autolink-literal.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-footnote.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-strikethrough.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-table.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-tagfilter.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm-task-list-item.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-extension-gfm.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-factory-destination.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-factory-label.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-factory-space.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-factory-title.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-factory-whitespace.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-character.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-chunked.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-classify-character.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-combine-extensions.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-decode-numeric-character-reference.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-decode-string.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-encode.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-html-tag-name.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-normalize-identifier.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-resolve-all.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-sanitize-uri.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-subtokenize.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark-util-symbol.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/micromark.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mime-db.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/mime-types.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/motion-dom.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/motion-utils.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/ms.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/next-auth.js | 11 | 3 |
+| .next_stale_1774889991/dev/server/vendor-chunks/next-cloudinary.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/next.js | 12 | 17 |
+| .next_stale_1774889991/dev/server/vendor-chunks/oauth.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/oidc-token-hash.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/openid-client.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/orderedmap.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/parse5.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/preact-render-to-string.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/preact.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/property-information.js | 14 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-commands.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-dropcursor.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-gapcursor.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-history.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-keymap.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-model.js | 13 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-schema-list.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-state.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-tables.js | 15 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-transform.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/prosemirror-view.js | 15 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/proxy-from-env.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-hotkeys-hook.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-markdown.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-remove-scroll-bar.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-remove-scroll.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-schemaorg.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-style-singleton.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/react-syntax-highlighter.js | 15 | 1 |
+| .next_stale_1774889991/dev/server/vendor-chunks/rehype-raw.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/remark-gfm.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/remark-parse.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/remark-rehype.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/rope-sequence.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/space-separated-tokens.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/style-to-object.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/styled-jsx.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/supports-color.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/tabbable.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/tailwind-merge.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/third-party-capital.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/trim-lines.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/trough.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/tslib.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unified.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unist-util-is.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unist-util-position.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unist-util-stringify-position.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unist-util-visit-parents.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/unist-util-visit.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/use-callback-ref.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/use-sidecar.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/use-sync-external-store.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/uuid.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/vfile-location.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/vfile-message.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/vfile.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/w3c-keyname.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/web-namespaces.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/xtend.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/yallist.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/zod.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/vendor-chunks/zwitch.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/pages/_app.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/pages/_document.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/pages/_error.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js | 14 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__0da06bbb._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__168b5b57._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__219aff5f._.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__246b1406._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2a4a91be._.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js | 10 | 8 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__345aa077._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__54052485._.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__622bba2f._.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__7f8e3cf3._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__81fea4c4._.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__baa4ddec._.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js | 10 | 8 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c7d45f09._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__d597a710._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/[turbopack]_runtime.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_auth_[___nextauth]_route_actions_1c865db8.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_comments_route_actions_e2402523.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_exp_route_actions_e6df9809.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_feed_route_actions_a769378e.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_notifications_route_actions_850cb780.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_topStories_route_actions_39a4e47a.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/_next-internal_server_app_api_view_route_actions_ebfaac4e.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_c2fd4507._.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_ioredis_built_77e820c2._.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_jose_dist_node_cjs_bd88468e._.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_next-auth_ff6d33bd._.js | 12 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_openid-client_d15f72b3._.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/chunks/node_modules_tailwind-merge_dist_bundle-mjs_mjs_c3b2c59f._.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[externals]__7f148858._.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[externals]__e6a4d965._.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__2968f6af._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js | 9 | 7 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__52c24234._.js | 10 | 2 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__70a73b34._.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__7c25d198._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js | 7 | 3 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__a646d9d6._.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js | 6 | 13 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__fbc4e689._.js | 7 | 2 |
+| .next_stale_1774889991/dev/server/chunks/ssr/[turbopack]_runtime.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_c9bb5ce5._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js | 11 | 5 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_next-internal_server_app_about_page_actions_6fff35e4.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_next-internal_server_app_feed_page_actions_29bbaae9.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_next-internal_server_app_page_actions_39d4fc33.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/_next-internal_server_app_single_[id]_page_actions_b561a1bd.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/components_CommentsSection_jsx_ff151437._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/f92dd_refractor_97a415a9._.js | 3 | 1 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_186c80ea._.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_3603f619._.js | 7 | 2 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_4c90c24b._.js | 9 | 1 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js | 7 | 5 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_6dd1b741._.js | 9 | 2 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_8efa1af6._.js | 0 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_@cloudinary-util_url-loader_dist_8d7f009a._.js | 6 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_axios_lib_eb68eff6._.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js | 7 | 5 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_eab7e71b._.js | 10 | 4 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_f0eadda6._.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_framer-motion_dist_es_514a1049._.js | 9 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_micromark-core-commonmark_dev_lib_db259fd5._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_mime-db_54e42dbe._.js | 14 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_119432dc._.js | 7 | 2 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_8105ecd4._.js | 6 | 3 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_5edbd3b5._.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js | 7 | 5 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_90dc552e._.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js | 9 | 5 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_c28a260d._.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_client_components_9774470f._.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_client_components_builtin_forbidden_45780354.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_15817684.js | 1 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_parse5_dist_88dcd08b._.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_react-syntax-highlighter_a7c3bd3d._.js | 15 | 0 |
+| .next_stale_1774889991/dev/server/chunks/ssr/node_modules_tailwind-merge_dist_bundle-mjs_mjs_0b83d5d5._.js | 8 | 0 |
+| .next_stale_1774889991/dev/server/app/page.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/app/page_client-reference-manifest.js | 7 | 0 |
+| .next_stale_1774889991/dev/server/app/single/[id]/page.js | 5 | 0 |
+| .next_stale_1774889991/dev/server/app/single/[id]/page_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/post/page.js | 10 | 15 |
+| .next_stale_1774889991/dev/server/app/post/page_client-reference-manifest.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/feed/page.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/app/feed/page_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/view/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/view/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/upload/route.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/api/upload/route_client-reference-manifest.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/api/topStories/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/topStories/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/notifications/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/notifications/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/feed/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/feed/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/exp/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/exp/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/drafts/route.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/api/drafts/route_client-reference-manifest.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/api/delete-image/route.js | 10 | 0 |
+| .next_stale_1774889991/dev/server/app/api/delete-image/route_client-reference-manifest.js | 11 | 0 |
+| .next_stale_1774889991/dev/server/app/api/comments/route.js | 2 | 0 |
+| .next_stale_1774889991/dev/server/app/api/comments/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/api/auth/[...nextauth]/route.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/app/api/auth/[...nextauth]/route_client-reference-manifest.js | 4 | 0 |
+| .next_stale_1774889991/dev/server/app/about/page.js | 3 | 0 |
+| .next_stale_1774889991/dev/server/app/about/page_client-reference-manifest.js | 7 | 0 |
+
+## Content Files
+
+| File | Paragraph Chunks |
+| --- | --- |
+| README 2.md | 11 |
+| README.md | 30 |
+
+## Config / Environment Keys
+
+| Env Key | Source File |
+| --- | --- |
+| CLOUDINARY_CLOUD_NAME | lib/cloudinary.js |
+| CLOUDINARY_API_KEY | lib/cloudinary.js |
+| CLOUDINARY_API_SECRET | lib/cloudinary.js |
+| MONGODB_URI | lib/mongodb.js |
+| MONGODB_URI | lib/mongoose.js |
+| UPSTASH_REDIS_REST_URL | lib/redis.js |
+| UPSTASH_REDIS_REST_TOKEN | lib/redis.js |
+| NEXT_PUBLIC_SITE_URL | lib/serverOrigin.js |
+
+## Call References (Top 300)
+
+| Type | Method | Target | Path Params | Query Params | Body Source | File |
+| --- | --- | --- | --- | --- | --- | --- |
+| fetch | GET | http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest | - | page, itemsPerPage, sort | - | compare_pages.js |
+| fetch | GET | http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest | - | page, itemsPerPage, sort | - | compare_pages.js |
+| fetch | GET | url | - | - | - | scripts/seed-post-companies.mjs |
+| fetch | GET | url | - | - | - | scripts/seed-post-companies.mjs |
+| fetch | GET | url | - | - | - | scripts/seed-post-companies.mjs |
+| fetch | GET | url | - | - | - | scripts/seed-post-companies.mjs |
+| fetch | GET | url | - | - | - | scripts/seed-post-companies.mjs |
+| fetch | GET | url | - | - | - | lib/redis.js |
+| fetch | POST | /api/upload | - | - | JSON.stringify({ | lib/tiptap-utils.js |
+| fetch | POST | uploadUrl | - | - | formData | lib/tiptap-utils.js |
+| fetch | POST | /api/delete-image | - | - | JSON.stringify({ public_id: publicId | lib/tiptap-utils.js |
+| fetch | POST | /api/addCompany | - | - | JSON.stringify({ | components/AddCompanyModal.jsx |
+| fetch | DELETE | /api/delete | - | - | JSON.stringify({ | components/Card.jsx |
+| router.push | NAVIGATE | `/single/${articleId}` | articleId | - | - | components/Card.jsx |
+| router.push | NAVIGATE | `/edit/${profile.uid}` | profile.uid | - | - | components/Card.jsx |
+| router.push | NAVIGATE | `/single/${articleId}` | articleId | - | - | components/Card.jsx |
+| router.push | NAVIGATE | `/profile/public/${encodeURIComponent(profile.email | - | - | - | components/Card.jsx |
+| fetch | GET | `/api/comments?experienceId=${encodeURIComponent(experienceId | - | experienceId | - | components/CommentsSection.jsx |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({ | components/CommentsSection.jsx |
+| fetch | POST | /api/comments | - | - | JSON.stringify({ | components/CommentsSection.jsx |
+| fetch | POST | /api/comments | - | - | JSON.stringify({ | components/CommentsSection.jsx |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({ | components/CommentsSection.jsx |
+| href | NAVIGATE | /add-company | - | - | - | components/CompaniesDirectoryClient.jsx |
+| fetch | GET | /api/getCompanies | - | - | - | components/ExpForm.jsx |
+| fetch | GET | /api/drafts?email=${session.user.email} | session.user.email | email | - | components/ExpForm.jsx |
+| fetch | POST | /api/drafts | - | - | JSON.stringify({ | components/ExpForm.jsx |
+| fetch | POST | /api/deleteDraft | - | - | JSON.stringify({ | components/ExpForm.jsx |
+| fetch | POST | /api/ai-generate | - | - | JSON.stringify({ data: finalPayload | components/ExpForm.jsx |
+| href | NAVIGATE | /single/${data.uid} | - | - | - | components/ExpForm.jsx |
+| fetch | POST | /api/like | - | - | JSON.stringify({ id: profile.uid | components/FeedCard.jsx |
+| router.push | NAVIGATE | readPath | - | - | - | components/FeedCard.jsx |
+| axios.get | GET | /api/feed?sort=trending&itemsPerPage=6 | - | sort, itemsPerPage | - | components/FeedHero.jsx |
+| fetch | POST | /api/newsletter | - | - | JSON.stringify({ email | components/Footer.jsx |
+| href | NAVIGATE | / | - | - | - | components/Footer.jsx |
+| href | NAVIGATE | https://maps.app.goo.gl/xy4z53owHAz4SxgA8 | - | - | - | components/Footer.jsx |
+| href | NAVIGATE | mailto:theinterviewroom.in@gmail.com | - | - | - | components/Footer.jsx |
+| href | NAVIGATE | mailto:${email} | - | - | - | components/FounderCard.jsx |
+| href | NAVIGATE | tel:${phone} | - | - | - | components/FounderCard.jsx |
+| href | NAVIGATE | / | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /search | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /post | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | / | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /search | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /post | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /feed | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /post | - | - | - | components/Landing.jsx |
+| href | NAVIGATE | /add-company | - | - | - | components/Landing.jsx |
+| fetch | GET | /api/exp?uid=${id} | id | uid | - | components/LikeButton.jsx |
+| fetch | POST | /api/like | - | - | JSON.stringify({ id | components/LikeButton.jsx |
+| fetch | POST | /api/saveUser | - | - | JSON.stringify(userData | components/Login.jsx |
+| router.push | NAVIGATE | "/feed" | - | - | - | components/Login.jsx |
+| fetch | GET | /api/notifications | - | - | - | components/Navbar.jsx |
+| fetch | PATCH | /api/notifications | - | - | - | components/Navbar.jsx |
+| router.push | NAVIGATE | `/search/${encodeURIComponent(query | - | - | - | components/Navbar.jsx |
+| router.push | NAVIGATE | "/login" | - | - | - | components/Navbar.jsx |
+| router.push | NAVIGATE | "/search" | - | - | - | components/Navbar.jsx |
+| href | NAVIGATE | / | - | - | - | components/Navbar.jsx |
+| fetch | POST | /api/profile/view | - | - | JSON.stringify({ email | components/ProfileViewTracker.js |
+| fetch | POST | /api/view | - | - | JSON.stringify({ id | components/ScrollViewTracker.js |
+| href | NAVIGATE | /app_icon.png | - | - | - | app/layout.js |
+| fetch | GET | ${baseUrl}/api/feed?itemsPerPage=${itemsPerPage} | baseUrl, itemsPerPage | itemsPerPage | - | app/page.js |
+| fetch | GET | ${baseUrl}/api/topStories | baseUrl | - | - | app/page.js |
+| fetch | GET | `${baseUrl}/api/exp?uid=${id}&_ts=${Date.now( | baseUrl, id | uid, _ts | - | app/single/[id]/page.jsx |
+| fetch | GET | `${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now( | baseUrl | itemsPerPage, _ts | - | app/single/[id]/page.jsx |
+| href | NAVIGATE | /feed | - | - | - | app/single/[id]/page.jsx |
+| router.push | NAVIGATE | "/search/Himanshu-Nilay-Neeraj" | - | - | - | app/search/page.jsx |
+| axios.get | GET | /api/search?search=${debouncedSearch}&page=1 | debouncedSearch | search, page | - | app/search/[search]/page.jsx |
+| axios.get | GET | /api/search?search=${debouncedSearch}&page=${nextPage} | debouncedSearch, nextPage | search, page | - | app/search/[search]/page.jsx |
+| router.push | NAVIGATE | "/search/Himanshu-Nilay-Neeraj" | - | - | - | app/search/[search]/page.jsx |
+| router.push | NAVIGATE | `/search/${encodeURIComponent(searchText | - | - | - | app/search/[search]/page.jsx |
+| router.push | NAVIGATE | `/search/Himanshu-Nilay-Neeraj` | - | - | - | app/search/[search]/page.jsx |
+| router.push | NAVIGATE | "/feed" | - | - | - | app/search/[search]/page.jsx |
+| fetch | POST | /api/profile | - | - | JSON.stringify({ email | app/profile/page.jsx |
+| fetch | GET | /api/user/profile?email=${email} | email | email | - | app/profile/page.jsx |
+| fetch | POST | /api/user/profile | - | - | JSON.stringify(dataToSave | app/profile/page.jsx |
+| href | NAVIGATE | /post | - | - | - | app/profile/page.jsx |
+| href | NAVIGATE | /post | - | - | - | app/profile/page.jsx |
+| href | NAVIGATE | /feed | - | - | - | app/profile/public/[email]/page.jsx |
+| router.push | NAVIGATE | "/feed" | - | - | - | app/login/page.jsx |
+| axios.get | GET | url | - | - | - | app/feed/page.jsx |
+| href | NAVIGATE | /post | - | - | - | app/feed/page.jsx |
+| fetch | GET | `/api/postCompanies?slug=${encodeURIComponent(normalizedSlug | - | slug | - | app/edit-company/[slug]/page.jsx |
+| fetch | PUT | /api/postCompanies | - | - | JSON.stringify({ | app/edit-company/[slug]/page.jsx |
+| router.push | NAVIGATE | `/companies/${nextSlug}` | nextSlug | - | - | app/edit-company/[slug]/page.jsx |
+| fetch | GET | /api/exp?uid=${id} | id | uid | - | app/edit/[id]/page.jsx |
+| fetch | PUT | /api/edit/ | - | - | JSON.stringify({ | app/edit/[id]/page.jsx |
+| href | NAVIGATE | /single/${data.uid} | - | - | - | app/edit/[id]/page.jsx |
+| href | NAVIGATE | /companies | - | - | - | app/companies/[slug]/page.jsx |
+| href | NAVIGATE | /post | - | - | - | app/companies/[slug]/page.jsx |
+| href | NAVIGATE | ${postUrl} | - | - | - | app/api/saveExp/route.js |
+| fetch | POST | /api/postCompanies | - | - | JSON.stringify({ | app/add-company/page.jsx |
+| router.push | NAVIGATE | "/companies" | - | - | - | app/add-company/page.jsx |
+| href | NAVIGATE | /companies | - | - | - | app/add-company/page.jsx |
+| fetch | GET | "".concat(f | - | - | - | .next_stale_1774889991/server/chunks/1070.js |
+| fetch | POST | h | - | - | l | .next_stale_1774889991/server/chunks/1070.js |
+| fetch | GET | l | - | - | - | .next_stale_1774889991/server/chunks/1070.js |
+| fetch | GET | /api/notifications | - | - | - | .next_stale_1774889991/server/chunks/3214.js |
+| fetch | PATCH | /api/notifications | - | - | - | .next_stale_1774889991/server/chunks/3214.js |
+| fetch | POST | /api/upload | - | - | JSON.stringify({ | .next_stale_1774889991/server/chunks/3709.js |
+| fetch | POST | o | - | - | n | .next_stale_1774889991/server/chunks/3709.js |
+| fetch | POST | /api/delete-image | - | - | JSON.stringify({public_id:b | .next_stale_1774889991/server/chunks/3709.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/server/chunks/4741.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/server/chunks/4741.js |
+| fetch | GET | location.pathname+'?${h}' | h | - | - | .next_stale_1774889991/server/chunks/4741.js |
+| fetch | POST | h | - | - | l | .next_stale_1774889991/server/chunks/4902.js |
+| fetch | DELETE | /api/delete | - | - | JSON.stringify({uid:a.uid | .next_stale_1774889991/server/chunks/6147.js |
+| fetch | POST | /api/newsletter | - | - | JSON.stringify({email:b | .next_stale_1774889991/server/chunks/7102.js |
+| fetch | POST | /api/saveUser | - | - | JSON.stringify(a | .next_stale_1774889991/server/chunks/7102.js |
+| href | NAVIGATE | ${e} | - | - | - | .next_stale_1774889991/server/chunks/7459.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/server/chunks/7471.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/server/chunks/7471.js |
+| fetch | GET | n | - | - | - | .next_stale_1774889991/server/chunks/7471.js |
+| fetch | GET | d | - | - | - | .next_stale_1774889991/server/chunks/8175.js |
+| fetch | GET | ${a}/api/feed?itemsPerPage=30 | a | itemsPerPage | - | .next_stale_1774889991/server/app/page.js |
+| fetch | GET | ${a}/api/topStories | a | - | - | .next_stale_1774889991/server/app/page.js |
+| href | NAVIGATE | ${e} | - | - | - | .next_stale_1774889991/server/app/team/page.js |
+| fetch | GET | a.src | - | - | - | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | POST | /api/like | - | - | JSON.stringify({id:a | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | GET | ?:Tarball\|url | - | - | - | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | GET | ${b}/api/exp?uid=${a} | b, a | uid | - | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | GET | ${b}/api/topStories?itemsPerPage=12 | b | itemsPerPage | - | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | GET | `/api/comments?experienceId=${encodeURIComponent(a | - | experienceId | - | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({commentId:a.id | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | POST | /api/comments | - | - | JSON.stringify({experienceId:a | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | POST | /api/comments | - | - | JSON.stringify({experienceId:a | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({commentId:a.id | .next_stale_1774889991/server/app/single/[id]/page.js |
+| fetch | GET | /api/user/profile?email=${L} | L | email | - | .next_stale_1774889991/server/app/profile/page.js |
+| fetch | POST | /api/profile | - | - | JSON.stringify({email:L | .next_stale_1774889991/server/app/profile/page.js |
+| fetch | POST | /api/user/profile | - | - | JSON.stringify(a | .next_stale_1774889991/server/app/profile/page.js |
+| fetch | POST | /api/drafts | - | - | JSON.stringify({...a | .next_stale_1774889991/server/app/post/page.js |
+| fetch | POST | /api/saveExp | - | - | JSON.stringify({exp_text:K | .next_stale_1774889991/server/app/post/page.js |
+| fetch | POST | /api/deleteDraft | - | - | JSON.stringify({email:J.user.email | .next_stale_1774889991/server/app/post/page.js |
+| fetch | POST | /api/ai-generate | - | - | JSON.stringify({data:c | .next_stale_1774889991/server/app/post/page.js |
+| href | NAVIGATE | /single/${d.uid} | - | - | - | .next_stale_1774889991/server/app/post/page.js |
+| fetch | POST | /api/like | - | - | JSON.stringify({id:a.uid | .next_stale_1774889991/server/app/feed/page.js |
+| fetch | PUT | /api/postCompanies | - | - | JSON.stringify({currentSlug:s | .next_stale_1774889991/server/app/edit-company/[slug]/page.js |
+| fetch | PUT | /api/edit/ | - | - | JSON.stringify({uid:m | .next_stale_1774889991/server/app/edit/[id]/page.js |
+| href | NAVIGATE | /single/${g.uid} | - | - | - | .next_stale_1774889991/server/app/edit/[id]/page.js |
+| href | NAVIGATE | ${g} | - | - | - | .next_stale_1774889991/server/app/api/saveExp/route.js |
+| fetch | GET | ...a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | GET | ...a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | GET | ...a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | GET | ...a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | GET | a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | GET | a | - | - | - | .next_stale_1774889991/server/app/api/ai-generate/route.js |
+| fetch | POST | /api/postCompanies | - | - | JSON.stringify({...n | .next_stale_1774889991/server/app/add-company/page.js |
+| fetch | GET | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| fetch | PATCH | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| fetch | POST | /api/like | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| router.push | NAVIGATE | `/search/${encodeURIComponent(query | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| router.push | NAVIGATE | "/login" | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| router.push | NAVIGATE | "/search" | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| router.push | NAVIGATE | readPath | - | - | - | .next_stale_1774889991/dev/static/chunks/_1b8491d5._.js |
+| fetch | GET | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | PATCH | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | POST | /api/view | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | GET | /api/exp?uid=${id} | id | uid | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | POST | /api/like | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | GET | `/api/comments?experienceId=${encodeURIComponent(experienceId | - | experienceId | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | POST | /api/comments | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | POST | /api/comments | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | PATCH | /api/comments | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| router.push | NAVIGATE | `/search/${encodeURIComponent(query | - | - | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| router.push | NAVIGATE | "/login" | - | - | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| router.push | NAVIGATE | "/search" | - | - | - | .next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js |
+| fetch | GET | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js |
+| fetch | PATCH | /api/notifications | - | - | - | .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js |
+| router.push | NAVIGATE | `/search/${encodeURIComponent(query | - | - | - | .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js |
+| router.push | NAVIGATE | "/login" | - | - | - | .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js |
+| router.push | NAVIGATE | "/search" | - | - | - | .next_stale_1774889991/dev/static/chunks/_c51c20f8._.js |
+| fetch | POST | /api/newsletter | - | - | JSON.stringify({ | .next_stale_1774889991/dev/static/chunks/_e813803e._.js |
+| fetch | POST | /api/saveUser | - | - | JSON.stringify(userData | .next_stale_1774889991/dev/static/chunks/_e813803e._.js |
+| router.push | NAVIGATE | "/feed" | - | - | - | .next_stale_1774889991/dev/static/chunks/_e813803e._.js |
+| fetch | GET | ?:Tarball\|url | - | - | - | .next_stale_1774889991/dev/static/chunks/f92dd_refractor_c1ea008b._.js |
+| fetch | GET | fetchUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | POST | state.canonicalUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | HEAD | url | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_original-stack-frames\" | - | - | JSON.stringify(r | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"\".concat( false \|\| \"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_attach-nodejs-inspector\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"\".concat( false \|\| \"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_devtools_config\" | - | - | e | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_server_status\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | e | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_server_status\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"\".concat( false \|\| \"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"\".concat( false \|\| \"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | \"/__nextjs_disable_dev_indicator\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| router.push | NAVIGATE | redirect, {} | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| router.replace | NAVIGATE | redirect, {} | - | - | - | .next_stale_1774889991/dev/static/chunks/main-app.js |
+| fetch | GET | `${assetPrefix}/_next/static/development/_devPagesManifest.json` | assetPrefix | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | `${this.assetPrefix}/_next/static/development/${_constants.DEV_CLIENT_PAGES_MANIFEST}` | this.assetPrefix, _constants.DEV_CLIENT_PAGES_MANIFEST | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | `${this.assetPrefix}/_next/static/${this.buildId}/${_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST}` | this.assetPrefix, this.buildId, _constants.DEV_CLIENT_MIDDLEWARE_MANIFEST | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | href | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_original-stack-frames\" | - | - | JSON.stringify(r | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"\".concat( false\|\|\"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_attach-nodejs-inspector\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"\".concat( false\|\|\"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_devtools_config\" | - | - | e | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_server_status\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | e | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_server_status\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"\".concat( false\|\|\"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"\".concat( false\|\|\"\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | GET | \"/__nextjs_disable_dev_indicator\" | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| router.replace | NAVIGATE | router.pathname + '?' + String((0, _querystring.assign | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| router.replace | NAVIGATE | _.router.pathname + '?' + String((0, _querystring.assign | - | - | - | .next_stale_1774889991/dev/static/chunks/main.js |
+| fetch | POST | url | - | - | body | .next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js |
+| fetch | GET | url | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js |
+| fetch | GET | "".concat(baseUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js |
+| fetch | POST | url | - | - | body | .next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js |
+| fetch | GET | url | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js |
+| fetch | GET | "".concat(baseUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js |
+| fetch | GET | options.src | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js |
+| fetch | GET | options.src | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js |
+| href | NAVIGATE | # | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js |
+| href | NAVIGATE | # | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js |
+| href | NAVIGATE | ${blurDataURL} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_e07de1bb._.js |
+| href | NAVIGATE | ${c.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_e07de1bb._.js |
+| href | NAVIGATE | ${blurDataURL} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_fdd6ff62._.js |
+| href | NAVIGATE | ${c.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_fdd6ff62._.js |
+| href | NAVIGATE | ${workStore.assetPrefix}/_next/${(0, _encodeuripath.encodeURIPath)(chunk)}${dplId} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js |
+| href | NAVIGATE | ${blurDataURL} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js |
+| href | NAVIGATE | ${c.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js |
+| href | NAVIGATE | ${blurDataURL} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_a93b0a1c._.js |
+| href | NAVIGATE | ${c.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_a93b0a1c._.js |
+| fetch | GET | fetchUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js |
+| fetch | POST | state.canonicalUrl | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js |
+| router.push | NAVIGATE | redirect, {} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js |
+| router.replace | NAVIGATE | redirect, {} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js |
+| href | NAVIGATE | ${otherHref} | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js |
+| fetch | GET | href | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| fetch | GET | `${this.assetPrefix}/_next/static/development/${_constants.DEV_CLIENT_PAGES_MANIFEST}` | this.assetPrefix, _constants.DEV_CLIENT_PAGES_MANIFEST | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| fetch | GET | `${this.assetPrefix}/_next/static/${this.buildId}/${_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST}` | this.assetPrefix, this.buildId, _constants.DEV_CLIENT_MIDDLEWARE_MANIFEST | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| fetch | GET | `${assetPrefix}/_next/static/development/_devPagesManifest.json` | assetPrefix | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| router.replace | NAVIGATE | router.pathname + '?' + String((0, _querystring.assign | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| router.replace | NAVIGATE | _.router.pathname + '?' + String((0, _querystring.assign | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| href | NAVIGATE | ${h.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js |
+| fetch | POST | "/__nextjs_original-stack-frames" | - | - | JSON.stringify(r | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | POST | "/__nextjs_attach-nodejs-inspector" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | POST | "/__nextjs_devtools_config" | - | - | e | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "/__nextjs_server_status" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | POST | e | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "/__nextjs_server_status" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | POST | "/__nextjs_disable_dev_indicator" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js |
+| fetch | POST | "/__nextjs_original-stack-frames" | - | - | JSON.stringify(r | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | POST | "/__nextjs_attach-nodejs-inspector" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | POST | "/__nextjs_devtools_config" | - | - | e | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "/__nextjs_server_status" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | POST | e | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "/__nextjs_server_status" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | GET | "".concat(process.env.__NEXT_ROUTER_BASEPATH\|\|"" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| fetch | POST | "/__nextjs_disable_dev_indicator" | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js |
+| href | NAVIGATE | some unique resource identifier | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js |
+| href | NAVIGATE | %s | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_f3530cac._.js |
+| fetch | GET | ... | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_f3530cac._.js |
+| href | NAVIGATE | ${c.props[ | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js |
+| href | NAVIGATE | some unique resource identifier | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_react-dom_4411d9bd._.js |
+| href | NAVIGATE | %s | - | - | - | .next_stale_1774889991/dev/static/chunks/node_modules_react-dom_4411d9bd._.js |
+| fetch | GET | getChunkRelativeUrl(wasmChunkPath | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| href | NAVIGATE | ${chunkUrl}?ts=${Date.now()} | - | ts | - | .next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js |
+| fetch | GET | getChunkRelativeUrl(wasmChunkPath | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${chunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${decodedChunkUrl} | - | - | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+| href | NAVIGATE | ${chunkUrl}?ts=${Date.now()} | - | ts | - | .next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js |
+
+## Output Files
+
+- `repo-map.json`
+- `summary.json`
+- `apis.json`
+- `pages.json`
+- `components.json`
+- `content.json`
+- `config.json`
+- `calls.json`
+- `linkages.json`
+- `knowledge-chunks.json`
+- `tooling.json`
+- `server-actions.json`
+- `i18n-map.json`
+- `dropped-files.json`
+- `extraction-health.json`
+- `crawl-report.mdx`
+
+## Notes
+
+- This report is generated **without AI**.
+- Extraction uses static analysis and deterministic heuristics.
+- These outputs are designed to directly power an external RAG/tool-calling layer later.

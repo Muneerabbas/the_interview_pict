@@ -1,0 +1,87 @@
+[
+  {
+    "file": "compare_pages.js",
+    "envKeys": [],
+    "textCount": 4
+  },
+  {
+    "file": "scripts/seed-post-companies.mjs",
+    "envKeys": [
+      "MONGODB_URI"
+    ],
+    "textCount": 1
+  },
+  {
+    "file": "lib/cache.js",
+    "envKeys": [],
+    "textCount": 0
+  },
+  {
+    "file": "lib/chache.js",
+    "envKeys": [],
+    "textCount": 0
+  },
+  {
+    "file": "lib/cloudinary.js",
+    "envKeys": [
+      "CLOUDINARY_CLOUD_NAME",
+      "CLOUDINARY_API_KEY",
+      "CLOUDINARY_API_SECRET"
+    ],
+    "textCount": 0
+  },
+  {
+    "file": "lib/companySlug.js",
+    "envKeys": [],
+    "textCount": 0
+  },
+  {
+    "file": "lib/feedCache.js",
+    "envKeys": [],
+    "textCount": 5
+  },
+  {
+    "file": "lib/mongodb.js",
+    "envKeys": [
+      "MONGODB_URI"
+    ],
+    "textCount": 1
+  },
+  {
+    "file": "lib/mongoose.js",
+    "envKeys": [
+      "MONGODB_URI"
+    ],
+    "textCount": 1
+  },
+  {
+    "file": "lib/redis.js",
+    "envKeys": [
+      "UPSTASH_REDIS_REST_URL",
+      "UPSTASH_REDIS_REST_TOKEN"
+    ],
+    "textCount": 0
+  },
+  {
+    "file": "lib/serverOrigin.js",
+    "envKeys": [
+      "NEXT_PUBLIC_SITE_URL"
+    ],
+    "textCount": 0
+  },
+  {
+    "file": "lib/tiptap-utils.js",
+    "envKeys": [],
+    "textCount": 5
+  },
+  {
+    "file": "lib/utils.js",
+    "envKeys": [],
+    "textCount": 1
+  },
+  {
+    "file": "app/layout.js",
+    "envKeys": [],
+    "textCount": 1
+  }
+]

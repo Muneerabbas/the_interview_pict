@@ -1,0 +1,924 @@
+{
+  "apiCalls": [
+    {
+      "route": "/api/view",
+      "file": "app/api/view/route.js",
+      "callers": [
+        {
+          "file": "components/ScrollViewTracker.js",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/view",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ id",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/ScrollViewTracker.js"
+      ]
+    },
+    {
+      "route": "/api/user/profile",
+      "file": "app/api/user/profile/route.js",
+      "callers": [
+        {
+          "file": "app/profile/page.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/user/profile?email=${email}",
+          "params": {
+            "path": [
+              "email"
+            ],
+            "query": [
+              "email"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "app/profile/page.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/user/profile",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify(dataToSave",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "app/profile/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/upload",
+      "file": "app/api/upload/route.js",
+      "callers": [
+        {
+          "file": "lib/tiptap-utils.js",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/upload",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "lib/tiptap-utils.js"
+      ]
+    },
+    {
+      "route": "/api/topStories",
+      "file": "app/api/topStories/route.js",
+      "callers": [
+        {
+          "file": "app/page.js",
+          "method": "GET",
+          "type": "fetch",
+          "target": "${baseUrl}/api/topStories",
+          "params": {
+            "path": [
+              "baseUrl"
+            ],
+            "query": [],
+            "bodySource": null,
+            "headerSources": []
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "app/page.js"
+      ]
+    },
+    {
+      "route": "/api/sendEmail",
+      "file": "app/api/sendEmail/route.js",
+      "callers": [],
+      "callerCount": 0,
+      "callerFiles": []
+    },
+    {
+      "route": "/api/search",
+      "file": "app/api/search/route.js",
+      "callers": [
+        {
+          "file": "app/search/[search]/page.jsx",
+          "method": "GET",
+          "type": "axios.get",
+          "target": "/api/search?search=${debouncedSearch}&page=1",
+          "params": {
+            "path": [
+              "debouncedSearch"
+            ],
+            "query": [
+              "search",
+              "page"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "app/search/[search]/page.jsx",
+          "method": "GET",
+          "type": "axios.get",
+          "target": "/api/search?search=${debouncedSearch}&page=${nextPage}",
+          "params": {
+            "path": [
+              "debouncedSearch",
+              "nextPage"
+            ],
+            "query": [
+              "search",
+              "page"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "app/search/[search]/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/saveUser",
+      "file": "app/api/saveUser/route.js",
+      "callers": [
+        {
+          "file": "components/Login.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/saveUser",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify(userData",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/Login.jsx"
+      ]
+    },
+    {
+      "route": "/api/saveExp",
+      "file": "app/api/saveExp/route.js",
+      "callers": [],
+      "callerCount": 0,
+      "callerFiles": []
+    },
+    {
+      "route": "/api/profile",
+      "file": "app/api/profile/route.js",
+      "callers": [
+        {
+          "file": "app/profile/page.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/profile",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ email",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "app/profile/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/profile/view",
+      "file": "app/api/profile/view/route.js",
+      "callers": [
+        {
+          "file": "components/ProfileViewTracker.js",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/profile/view",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ email",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/ProfileViewTracker.js"
+      ]
+    },
+    {
+      "route": "/api/postsCount",
+      "file": "app/api/postsCount/route.js",
+      "callers": [],
+      "callerCount": 0,
+      "callerFiles": []
+    },
+    {
+      "route": "/api/postCompanies",
+      "file": "app/api/postCompanies/route.js",
+      "callers": [
+        {
+          "file": "app/edit-company/[slug]/page.jsx",
+          "method": "PUT",
+          "type": "fetch",
+          "target": "/api/postCompanies",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        },
+        {
+          "file": "app/add-company/page.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/postCompanies",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "app/edit-company/[slug]/page.jsx",
+        "app/add-company/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/notifications",
+      "file": "app/api/notifications/route.js",
+      "callers": [
+        {
+          "file": "components/Navbar.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/notifications",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "components/Navbar.jsx",
+          "method": "PATCH",
+          "type": "fetch",
+          "target": "/api/notifications",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": null,
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "components/Navbar.jsx"
+      ]
+    },
+    {
+      "route": "/api/newsletter",
+      "file": "app/api/newsletter/route.js",
+      "callers": [
+        {
+          "file": "components/Footer.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/newsletter",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ email",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/Footer.jsx"
+      ]
+    },
+    {
+      "route": "/api/like",
+      "file": "app/api/like/route.js",
+      "callers": [
+        {
+          "file": "components/FeedCard.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/like",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ id: profile.uid",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        },
+        {
+          "file": "components/LikeButton.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/like",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ id",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "components/FeedCard.jsx",
+        "components/LikeButton.jsx"
+      ]
+    },
+    {
+      "route": "/api/getCompanies",
+      "file": "app/api/getCompanies/route.js",
+      "callers": [
+        {
+          "file": "components/ExpForm.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/getCompanies",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": null,
+            "headerSources": []
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/ExpForm.jsx"
+      ]
+    },
+    {
+      "route": "/api/feed",
+      "file": "app/api/feed/route.js",
+      "callers": [
+        {
+          "file": "compare_pages.js",
+          "method": "GET",
+          "type": "fetch",
+          "target": "http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest",
+          "params": {
+            "path": [],
+            "query": [
+              "page",
+              "itemsPerPage",
+              "sort"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "compare_pages.js",
+          "method": "GET",
+          "type": "fetch",
+          "target": "http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest",
+          "params": {
+            "path": [],
+            "query": [
+              "page",
+              "itemsPerPage",
+              "sort"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "components/FeedHero.jsx",
+          "method": "GET",
+          "type": "axios.get",
+          "target": "/api/feed?sort=trending&itemsPerPage=6",
+          "params": {
+            "path": [],
+            "query": [
+              "sort",
+              "itemsPerPage"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "app/page.js",
+          "method": "GET",
+          "type": "fetch",
+          "target": "${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}",
+          "params": {
+            "path": [
+              "baseUrl",
+              "itemsPerPage"
+            ],
+            "query": [
+              "itemsPerPage"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        }
+      ],
+      "callerCount": 4,
+      "callerFiles": [
+        "compare_pages.js",
+        "components/FeedHero.jsx",
+        "app/page.js"
+      ]
+    },
+    {
+      "route": "/api/exp",
+      "file": "app/api/exp/route.js",
+      "callers": [
+        {
+          "file": "components/LikeButton.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/exp?uid=${id}",
+          "params": {
+            "path": [
+              "id"
+            ],
+            "query": [
+              "uid"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "app/edit/[id]/page.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/exp?uid=${id}",
+          "params": {
+            "path": [
+              "id"
+            ],
+            "query": [
+              "uid"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "components/LikeButton.jsx",
+        "app/edit/[id]/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/edit",
+      "file": "app/api/edit/route.js",
+      "callers": [
+        {
+          "file": "app/edit/[id]/page.jsx",
+          "method": "PUT",
+          "type": "fetch",
+          "target": "/api/edit/",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "app/edit/[id]/page.jsx"
+      ]
+    },
+    {
+      "route": "/api/drafts",
+      "file": "app/api/drafts/route.js",
+      "callers": [
+        {
+          "file": "components/ExpForm.jsx",
+          "method": "GET",
+          "type": "fetch",
+          "target": "/api/drafts?email=${session.user.email}",
+          "params": {
+            "path": [
+              "session.user.email"
+            ],
+            "query": [
+              "email"
+            ],
+            "bodySource": null,
+            "headerSources": []
+          }
+        },
+        {
+          "file": "components/ExpForm.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/drafts",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 2,
+      "callerFiles": [
+        "components/ExpForm.jsx"
+      ]
+    },
+    {
+      "route": "/api/deleteDraft",
+      "file": "app/api/deleteDraft/route.js",
+      "callers": [
+        {
+          "file": "components/ExpForm.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/deleteDraft",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/ExpForm.jsx"
+      ]
+    },
+    {
+      "route": "/api/delete-image",
+      "file": "app/api/delete-image/route.js",
+      "callers": [
+        {
+          "file": "lib/tiptap-utils.js",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/delete-image",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ public_id: publicId",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "lib/tiptap-utils.js"
+      ]
+    },
+    {
+      "route": "/api/delete",
+      "file": "app/api/delete/route.js",
+      "callers": [
+        {
+          "file": "components/Card.jsx",
+          "method": "DELETE",
+          "type": "fetch",
+          "target": "/api/delete",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/Card.jsx"
+      ]
+    },
+    {
+      "route": "/api/comments",
+      "file": "app/api/comments/route.js",
+      "callers": [
+        {
+          "file": "components/CommentsSection.jsx",
+          "method": "PATCH",
+          "type": "fetch",
+          "target": "/api/comments",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        },
+        {
+          "file": "components/CommentsSection.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/comments",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        },
+        {
+          "file": "components/CommentsSection.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/comments",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        },
+        {
+          "file": "components/CommentsSection.jsx",
+          "method": "PATCH",
+          "type": "fetch",
+          "target": "/api/comments",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 4,
+      "callerFiles": [
+        "components/CommentsSection.jsx"
+      ]
+    },
+    {
+      "route": "/api/auth/*",
+      "file": "app/api/auth/[...nextauth]/route.js",
+      "callers": [],
+      "callerCount": 0,
+      "callerFiles": []
+    },
+    {
+      "route": "/api/ai-generate",
+      "file": "app/api/ai-generate/route.js",
+      "callers": [
+        {
+          "file": "components/ExpForm.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/ai-generate",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({ data: finalPayload",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/ExpForm.jsx"
+      ]
+    },
+    {
+      "route": "/api/addCompany",
+      "file": "app/api/addCompany/route.js",
+      "callers": [
+        {
+          "file": "components/AddCompanyModal.jsx",
+          "method": "POST",
+          "type": "fetch",
+          "target": "/api/addCompany",
+          "params": {
+            "path": [],
+            "query": [],
+            "bodySource": "JSON.stringify({",
+            "headerSources": [
+              "Content-Type"
+            ]
+          }
+        }
+      ],
+      "callerCount": 1,
+      "callerFiles": [
+        "components/AddCompanyModal.jsx"
+      ]
+    }
+  ],
+  "pageNavigation": [
+    {
+      "file": "pages/500.js",
+      "route": "/500",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/page.js",
+      "route": "/",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/terms/page.jsx",
+      "route": "/terms",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/team/page.jsx",
+      "route": "/team",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/single/[id]/page.jsx",
+      "route": "/single/:id",
+      "outboundLinks": [
+        "/feed"
+      ]
+    },
+    {
+      "file": "app/simple/page.jsx",
+      "route": "/simple",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/search/page.jsx",
+      "route": "/search",
+      "outboundLinks": [
+        "\"/search/Himanshu-Nilay-Neeraj\""
+      ]
+    },
+    {
+      "file": "app/search/[search]/page.jsx",
+      "route": "/search/:search",
+      "outboundLinks": [
+        "\"/search/Himanshu-Nilay-Neeraj\"",
+        "`/search/${encodeURIComponent(searchText",
+        "`/search/Himanshu-Nilay-Neeraj`",
+        "\"/feed\""
+      ]
+    },
+    {
+      "file": "app/profile/page.jsx",
+      "route": "/profile",
+      "outboundLinks": [
+        "/post"
+      ]
+    },
+    {
+      "file": "app/profile/public/[email]/page.jsx",
+      "route": "/profile/public/:email",
+      "outboundLinks": [
+        "/feed"
+      ]
+    },
+    {
+      "file": "app/privacy/page.jsx",
+      "route": "/privacy",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/post/page.jsx",
+      "route": "/post",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/login/page.jsx",
+      "route": "/login",
+      "outboundLinks": [
+        "\"/feed\""
+      ]
+    },
+    {
+      "file": "app/help/page.jsx",
+      "route": "/help",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/feed/page.jsx",
+      "route": "/feed",
+      "outboundLinks": [
+        "/post"
+      ]
+    },
+    {
+      "file": "app/edit-company/[slug]/page.jsx",
+      "route": "/edit-company/:slug",
+      "outboundLinks": [
+        "`/companies/${nextSlug}`"
+      ]
+    },
+    {
+      "file": "app/edit/[id]/page.jsx",
+      "route": "/edit/:id",
+      "outboundLinks": [
+        "/single/${data.uid}"
+      ]
+    },
+    {
+      "file": "app/companies/page.jsx",
+      "route": "/companies",
+      "outboundLinks": []
+    },
+    {
+      "file": "app/companies/[slug]/page.jsx",
+      "route": "/companies/:slug",
+      "outboundLinks": [
+        "/companies",
+        "/post"
+      ]
+    },
+    {
+      "file": "app/add-company/page.jsx",
+      "route": "/add-company",
+      "outboundLinks": [
+        "\"/companies\"",
+        "/companies"
+      ]
+    },
+    {
+      "file": "app/about/page.jsx",
+      "route": "/about",
+      "outboundLinks": []
+    }
+  ]
+}

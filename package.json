@@ -39,6 +39,7 @@
     "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
     "caniuse-lite": "^1.0.30001761",
+    "chatbot-package": "file:../ticket_classifier/chatbot-package/chatbot-package-1.0.0.tgz",
     "cloudinary": "^2.9.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

@@ -1,0 +1,18 @@
+{
+  "status": "excellent",
+  "score": 100,
+  "warnings": [],
+  "rawHints": {
+    "possibleApiFiles": 27,
+    "possiblePageFiles": 20,
+    "possibleContentFiles": 2
+  },
+  "extracted": {
+    "apis": 27,
+    "pages": 21,
+    "content": 2,
+    "calls": 93,
+    "tooling": 27,
+    "dropped": 22
+  }
+}

@@ -1,0 +1,1219 @@
+[
+  {
+    "file": "components/AdComponent.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "AdSense error:"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/AdComponent2.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "AdSense error:"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/AddCompanyModal.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "Register Company",
+      "About / Description",
+      "Logo Image URL"
+    ],
+    "callCount": 1,
+    "envKeys": []
+  },
+  {
+    "file": "components/ArticleCard.jsx",
+    "textCount": 5,
+    "sampleText": [
+      "Read Experience",
+      "Anonymous Candidate",
+      "Date unavailable",
+      "No experience details shared yet.",
+      "Read the experience of ${displayName}"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/AuthModalProvider.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "fixed inset-0 z-[1200] flex items-center justify-center bg-slate-950/55 p-4",
+      "relative w-full max-w-lg rounded-2xl bg-white shadow-2xl",
+      "Close login popup",
+      "absolute right-3 top-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 hover:bg-slate-50"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/Card.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "Confirm Deletion",
+      "Are you sure you want to delete this experience? This action cannot be undone.",
+      "Yes, Delete"
+    ],
+    "callCount": 5,
+    "envKeys": []
+  },
+  {
+    "file": "components/CloudinaryImage.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "my-6 block max-w-full h-auto rounded-xl border border-slate-200 dark:border-slate-800",
+      "relative my-6 block w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 ${className}",
+      "block max-w-full h-auto object-contain"
+    ],
+    "callCount": 0,
+    "envKeys": [
+      "CLOUDINARY_CLOUD_NAME"
+    ]
+  },
+  {
+    "file": "components/CommentsSection.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 5,
+    "envKeys": []
+  },
+  {
+    "file": "components/CompaniesDirectoryClient.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Company Directory",
+      "Explore the companies where candidates have interviewed and prepare for your next opportunity.",
+      "No companies found",
+      "Clear All Filters"
+    ],
+    "callCount": 1,
+    "envKeys": []
+  },
+  {
+    "file": "components/CompanyFilter.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "Filter by Company",
+      "mb-2 flex items-center justify-between"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ExpForm.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Best experienced on a tablet or laptop.",
+      "Share Your Journey",
+      "Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.",
+      "Fill details below, then choose Manual or AI mode."
+    ],
+    "callCount": 6,
+    "envKeys": []
+  },
+  {
+    "file": "components/ExperienceTiptapEditor.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/FeaturesSection.jsx",
+    "textCount": 6,
+    "sampleText": [
+      "p-4 border rounded shadow",
+      "py-16 bg-gray-100",
+      "text-center text-2xl font-bold",
+      "grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 max-w-6xl mx-auto",
+      "Search Experiences",
+      "Find interview insights for specific roles."
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/FeedCard.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "Experience Snapshot",
+      "Read full experience"
+    ],
+    "callCount": 2,
+    "envKeys": []
+  },
+  {
+    "file": "components/FeedHero.jsx",
+    "textCount": 5,
+    "sampleText": [
+      "Most popular stories this week",
+      "Failed to fetch trending:",
+      "mb-10 w-full overflow-hidden",
+      "mb-4 flex items-center justify-between",
+      "flex items-center gap-2"
+    ],
+    "callCount": 1,
+    "envKeys": []
+  },
+  {
+    "file": "components/Footer.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Empowering students with real interview experiences and practical insights from top candidates at leading tech companies. Your roadmap to dream jobs.",
+      "Contact & Info",
+      "PICT, Pune,",
+      "Maharashtra 411045"
+    ],
+    "callCount": 4,
+    "envKeys": []
+  },
+  {
+    "file": "components/FounderCard.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "mailto:${email}",
+      "Email ${name}"
+    ],
+    "callCount": 2,
+    "envKeys": []
+  },
+  {
+    "file": "components/Landing.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "Share Experience"
+    ],
+    "callCount": 9,
+    "envKeys": []
+  },
+  {
+    "file": "components/LikeButton.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Failed to sync likes:",
+      "Failed to like",
+      "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/40 dark:bg-pink-950/35 dark:text-pink-300",
+      "transition-transform duration-200 ${isLiked ?"
+    ],
+    "callCount": 2,
+    "envKeys": []
+  },
+  {
+    "file": "components/Login.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "Sign in to share and view interview experiences",
+      "Continue with Google",
+      "Protected by Google"
+    ],
+    "callCount": 2,
+    "envKeys": []
+  },
+  {
+    "file": "components/Markdown.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "mb-6 mt-2 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-50 sm:text-[2.25rem]",
+      "mb-3 mt-12 text-[1.35rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.45rem]",
+      "mb-2 mt-8 text-[1.125rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.18rem]"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/Navbar.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 6,
+    "envKeys": []
+  },
+  {
+    "file": "components/NotificationsMenu.jsx",
+    "textCount": 4,
+    "sampleText": [
+      ") : notifications.length === 0 ? (",
+      "No notifications yet",
+      "Replies and likes on your posts or comments will show up here.",
+      "bg-blue-50 text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/PostCompanyActions.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "flex flex-wrap items-center gap-2 ${className}",
+      "shrink-0 text-blue-600 dark:text-cyan-400"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ProfileAvatar.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ProfileCardSkeleton.jsx",
+    "textCount": 6,
+    "sampleText": [
+      "h-1 w-full bg-gradient-to-r from-cyan-500/30 via-blue-600/30 to-indigo-500/30",
+      "mb-4 flex items-start justify-between gap-4 border-b border-slate-100 pb-4 dark:border-slate-700",
+      "flex min-w-0 items-center gap-3",
+      "h-14 w-14 rounded-full bg-slate-200 dark:bg-slate-700",
+      "h-5 w-40 rounded-md bg-slate-200 dark:bg-slate-700",
+      "mt-2 h-3 w-28 rounded-md bg-slate-200 dark:bg-slate-700"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ProfileViewTracker.js",
+    "textCount": 1,
+    "sampleText": [
+      "Error sending profile view count:"
+    ],
+    "callCount": 1,
+    "envKeys": []
+  },
+  {
+    "file": "components/ScrollViewTracker.js",
+    "textCount": 1,
+    "sampleText": [
+      "Error sending article view count:"
+    ],
+    "callCount": 1,
+    "envKeys": []
+  },
+  {
+    "file": "components/SearchableDropdown.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "No results found.",
+      "relative w-full"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ShareButton.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "Share this Article"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ShareProfileButton.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/SimilarExperienceClient.jsx",
+    "textCount": 7,
+    "sampleText": [
+      "Related Experiences",
+      "Hand-picked interview stories similar to this one.",
+      "pointer-events-none absolute -left-20 -top-16 h-64 w-64 rounded-full bg-blue-400/10 blur-[100px] dark:bg-cyan-500/10",
+      "pointer-events-none absolute -right-16 -bottom-20 h-64 w-64 rounded-full bg-indigo-400/10 blur-[100px] dark:bg-blue-600/10",
+      "relative mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:border-b sm:border-slate-100 dark:sm:border-slate-800/50 sm:pb-6",
+      "inline-flex items-center gap-2.5 text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl",
+      "text-blue-600 dark:text-cyan-400"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/SingleExperienceThemeShell.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/TeamMemberCard.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "noopener noreferrer",
+      "mailto:${email}",
+      "absolute inset-0"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ThemeToggle.jsx",
+    "textCount": 2,
+    "sampleText": [
+      ") : resolvedTheme === \"dark\" ? (",
+      "h-9 w-9 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/TypingSentence.jsx",
+    "textCount": 5,
+    "sampleText": [
+      "mt-5 w-full px-2 sm:px-0",
+      "mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 dark:text-slate-300 sm:min-h-[2.4rem] sm:text-lg md:text-xl",
+      "relative inline-block align-baseline text-left font-semibold text-blue-700 dark:text-cyan-300",
+      "invisible select-none",
+      "absolute inset-0 inline-flex items-center"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/ui/canvas-text.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "bg-white dark:bg-neutral-950",
+      "relative inline-block",
+      "absolute inset-0",
+      "pointer-events-none absolute h-0 w-0 opacity-0"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/tooltip/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/tooltip/tooltip.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "Tooltip components must be wrapped in <TooltipProvider />"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/toolbar/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/toolbar/toolbar.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "button:not([disabled]), [role="
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/spacer/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/spacer/spacer.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/separator/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/separator/separator.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/popover/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/popover/popover.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/input/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/input/input.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/dropdown-menu/dropdown-menu.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/dropdown-menu/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/card/card.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/card/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/button-group/button-group.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/button-group/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/button/button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/badge/badge.jsx",
+    "textCount": 1,
+    "sampleText": [
+      "tiptap-badge ${className ||"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui-primitive/badge/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/undo-redo-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/undo-redo-button/undo-redo-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/undo-redo-button/use-undo-redo.js",
+    "textCount": 2,
+    "sampleText": [
+      "mod+shift+z",
+      "Action executed!"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/text-align-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/text-align-button/text-align-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/text-align-button/use-text-align.js",
+    "textCount": 4,
+    "sampleText": [
+      "mod+shift+l",
+      "mod+shift+e",
+      "mod+shift+r",
+      "mod+shift+j"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/mark-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/mark-button/mark-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/mark-button/use-mark.js",
+    "textCount": 2,
+    "sampleText": [
+      "mod+shift+s",
+      "Mark toggled!"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-dropdown-menu/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-dropdown-menu/list-dropdown-menu.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu.js",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-button/list-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/list-button/use-list.js",
+    "textCount": 3,
+    "sampleText": [
+      "mod+shift+8",
+      "mod+shift+7",
+      "mod+shift+9"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/link-popover/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/link-popover/link-popover.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "Paste a link...",
+      "Open in new window"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/link-popover/use-link-popover.js",
+    "textCount": 2,
+    "sampleText": [
+      "noopener,noreferrer",
+      "Link set!"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/image-upload-button/image-upload-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/image-upload-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/image-upload-button/use-image-upload.js",
+    "textCount": 2,
+    "sampleText": [
+      "mod+shift+i",
+      "Image inserted!"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-dropdown-menu/heading-dropdown-menu.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "Format text as heading",
+      "heading-${level}",
+      "Heading ${level}"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-dropdown-menu/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-dropdown-menu/use-heading-dropdown-menu.js",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-button/heading-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/heading-button/use-heading.js",
+    "textCount": 6,
+    "sampleText": [
+      "ctrl+alt+1",
+      "ctrl+alt+2",
+      "ctrl+alt+3",
+      "ctrl+alt+4",
+      "ctrl+alt+5",
+      "ctrl+alt+6"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/color-highlight-popover/color-highlight-popover.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Highlight text",
+      "var(--tt-color-highlight-green)",
+      "var(--tt-color-highlight-blue)",
+      "var(--tt-color-highlight-red)"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/color-highlight-popover/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/color-highlight-button/color-highlight-button.jsx",
+    "textCount": 3,
+    "sampleText": [
+      "var(--tt-color-highlight-blue)",
+      "Applied ${color} in ${mode} mode",
+      "Toggle highlight (${highlightColor})"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/color-highlight-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/color-highlight-button/use-color-highlight.js",
+    "textCount": 7,
+    "sampleText": [
+      "mod+shift+h",
+      "Default background",
+      "var(--tt-bg-color)",
+      "var(--tt-bg-color-contrast)",
+      "Gray background",
+      "var(--tt-color-highlight-gray)",
+      "var(--tt-color-highlight-gray-contrast)"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/code-block-button/code-block-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/code-block-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/code-block-button/use-code-block.js",
+    "textCount": 1,
+    "sampleText": [
+      "mod+alt+c"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/blockquote-button/blockquote-button.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/blockquote-button/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-ui/blockquote-button/use-blockquote.js",
+    "textCount": 1,
+    "sampleText": [
+      "mod+shift+b"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-templates/simple/simple-editor.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-templates/simple/theme-toggle.jsx",
+    "textCount": 2,
+    "sampleText": [
+      "meta[name=",
+      "Switch to ${isDarkMode ?"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/image-upload-node/image-upload-node-extension.js",
+    "textCount": 1,
+    "sampleText": [
+      "div[data-type="
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/image-upload-node/image-upload-node.jsx",
+    "textCount": 4,
+    "sampleText": [
+      "Click to upload",
+      "or drag and drop",
+      "File size exceeds maximum allowed (${options.maxSize / 1024 / 1024}MB)",
+      "Upload function is not defined"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/image-upload-node/index.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/image-node/resizable-image-extension.js",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/image-node/resizable-image-node-view.jsx",
+    "textCount": 5,
+    "sampleText": [
+      "width: ${targetW}px",
+      "height: ${targetH}px",
+      "object-fit: contain",
+      "max-width: 100%",
+      "filter: ${filterValue}"
+    ],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension.js",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/align-center-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/align-justify-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/align-left-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/align-right-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/arrow-left-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/ban-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/blockquote-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/bold-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/check-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/chevron-down-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/close-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/code-block-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/code2-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/corner-down-left-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/external-link-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-five-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-four-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-one-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-six-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-three-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/heading-two-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/highlighter-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/image-plus-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/italic-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/link-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/list-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/list-ordered-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/list-todo-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/moon-star-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/redo2-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/strike-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/subscript-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/sun-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/superscript-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/trash-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/underline-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-icons/undo2-icon.jsx",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  },
+  {
+    "file": "components/tiptap-extension/node-background-extension.js",
+    "textCount": 0,
+    "sampleText": [],
+    "callCount": 0,
+    "envKeys": []
+  }
+]

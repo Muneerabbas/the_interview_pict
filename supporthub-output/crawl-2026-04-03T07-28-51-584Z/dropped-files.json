@@ -1,0 +1,178 @@
+[
+  {
+    "file": "list_col.js",
+    "kind": "other-code",
+    "score": 2,
+    "reasons": [
+      "other-code-low-signal"
+    ]
+  },
+  {
+    "file": "next.config.mjs",
+    "kind": "other-code",
+    "score": -3,
+    "reasons": [
+      "low-signal-config-file"
+    ]
+  },
+  {
+    "file": "postcss.config.mjs",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "scss.d.ts",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "tailwind.config.mjs",
+    "kind": "other-code",
+    "score": 2,
+    "reasons": [
+      "other-code-low-signal"
+    ]
+  },
+  {
+    "file": "models/Comment.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "models/Company.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "models/Experience.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "models/User.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "models/test.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-composed-ref.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-cursor-visibility.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-element-rect.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-is-breakpoint.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-menu-navigation.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-scrolling.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-throttled-callback.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-tiptap-editor.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-unmount.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "hooks/use-window-size.js",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  },
+  {
+    "file": "app/middleware.js",
+    "kind": "other-code",
+    "score": 2,
+    "reasons": [
+      "other-code-low-signal"
+    ]
+  },
+  {
+    "file": "app/providers.jsx",
+    "kind": "other-code",
+    "score": 0,
+    "reasons": [
+      "insufficient-signal"
+    ]
+  }
+]

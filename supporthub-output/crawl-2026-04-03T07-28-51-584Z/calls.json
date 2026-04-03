@@ -1,0 +1,1325 @@
+[
+  {
+    "type": "fetch",
+    "targetExpr": "'http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest'",
+    "apiTarget": "http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "itemsPerPage",
+        "sort"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "compare_pages.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest'",
+    "apiTarget": "http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "itemsPerPage",
+        "sort"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "compare_pages.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "lib/redis.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/upload\"",
+    "apiTarget": "/api/upload",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "uploadUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "formData",
+      "headerSources": []
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/delete-image\"",
+    "apiTarget": "/api/delete-image",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ public_id: publicId",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/addCompany\"",
+    "apiTarget": "/api/addCompany",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/AddCompanyModal.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/delete'",
+    "apiTarget": "/api/delete",
+    "method": "DELETE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/single/${articleId}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "articleId"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/edit/${profile.uid}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "profile.uid"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/single/${articleId}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "articleId"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/profile/public/${encodeURIComponent(profile.email",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(experienceId",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/add-company",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/CompaniesDirectoryClient.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/getCompanies\"",
+    "apiTarget": "/api/getCompanies",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/drafts?email=${session.user.email}`",
+    "apiTarget": "/api/drafts?email=${session.user.email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "session.user.email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/drafts\"",
+    "apiTarget": "/api/drafts",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/deleteDraft\"",
+    "apiTarget": "/api/deleteDraft",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/ai-generate\"",
+    "apiTarget": "/api/ai-generate",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ data: finalPayload",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id: profile.uid",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/FeedCard.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "readPath",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FeedCard.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "\"/api/feed?sort=trending&itemsPerPage=6\"",
+    "apiTarget": "/api/feed?sort=trending&itemsPerPage=6",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "sort",
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FeedHero.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/newsletter\"",
+    "apiTarget": "/api/newsletter",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "https://maps.app.goo.gl/xy4z53owHAz4SxgA8",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:theinterviewroom.in@gmail.com",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:${email}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FounderCard.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "tel:${phone}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FounderCard.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/search",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/search",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/add-company",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/LikeButton.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/LikeButton.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveUser\"",
+    "apiTarget": "/api/saveUser",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Login.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Login.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/profile/view'",
+    "apiTarget": "/api/profile/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ProfileViewTracker.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/view'",
+    "apiTarget": "/api/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ScrollViewTracker.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/app_icon.png",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}`",
+    "apiTarget": "${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl",
+        "itemsPerPage"
+      ],
+      "query": [
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/topStories`",
+    "apiTarget": "${baseUrl}/api/topStories",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl",
+        "id"
+      ],
+      "query": [
+        "uid",
+        "_ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl"
+      ],
+      "query": [
+        "itemsPerPage",
+        "_ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search/Himanshu-Nilay-Neeraj\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "`/api/search?search=${debouncedSearch}&page=1`",
+    "apiTarget": "/api/search?search=${debouncedSearch}&page=1",
+    "method": "GET",
+    "params": {
+      "path": [
+        "debouncedSearch"
+      ],
+      "query": [
+        "search",
+        "page"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "`/api/search?search=${debouncedSearch}&page=${nextPage}`",
+    "apiTarget": "/api/search?search=${debouncedSearch}&page=${nextPage}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "debouncedSearch",
+        "nextPage"
+      ],
+      "query": [
+        "search",
+        "page"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search/Himanshu-Nilay-Neeraj\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(searchText",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/Himanshu-Nilay-Neeraj`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/profile'",
+    "apiTarget": "/api/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/user/profile?email=${email}`",
+    "apiTarget": "/api/user/profile?email=${email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/user/profile'",
+    "apiTarget": "/api/user/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(dataToSave",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/public/[email]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/login/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/feed/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/feed/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/postCompanies?slug=${encodeURIComponent(normalizedSlug",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "slug"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/companies/${nextSlug}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "nextSlug"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/edit/\"",
+    "apiTarget": "/api/edit/",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/companies",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/companies/[slug]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/companies/[slug]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${postUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/api/saveExp/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/add-company/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/companies\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/add-company/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/companies",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/add-company/page.jsx"
+  }
+]

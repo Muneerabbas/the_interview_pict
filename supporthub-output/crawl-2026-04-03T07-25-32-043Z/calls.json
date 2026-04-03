@@ -1,0 +1,8196 @@
+[
+  {
+    "type": "fetch",
+    "targetExpr": "'http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest'",
+    "apiTarget": "http://localhost:3000/api/feed?page=0&itemsPerPage=10&sort=latest",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "itemsPerPage",
+        "sort"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "compare_pages.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest'",
+    "apiTarget": "http://localhost:3000/api/feed?page=1&itemsPerPage=10&sort=latest",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "page",
+        "itemsPerPage",
+        "sort"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "compare_pages.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "scripts/seed-post-companies.mjs"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "lib/redis.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/upload\"",
+    "apiTarget": "/api/upload",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "uploadUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "formData",
+      "headerSources": []
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/delete-image\"",
+    "apiTarget": "/api/delete-image",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ public_id: publicId",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "lib/tiptap-utils.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/addCompany\"",
+    "apiTarget": "/api/addCompany",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/AddCompanyModal.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/delete'",
+    "apiTarget": "/api/delete",
+    "method": "DELETE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/single/${articleId}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "articleId"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/edit/${profile.uid}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "profile.uid"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/single/${articleId}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "articleId"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/profile/public/${encodeURIComponent(profile.email",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Card.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(experienceId",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/CommentsSection.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/add-company",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/CompaniesDirectoryClient.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/getCompanies\"",
+    "apiTarget": "/api/getCompanies",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/drafts?email=${session.user.email}`",
+    "apiTarget": "/api/drafts?email=${session.user.email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "session.user.email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/drafts\"",
+    "apiTarget": "/api/drafts",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/deleteDraft\"",
+    "apiTarget": "/api/deleteDraft",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/ai-generate\"",
+    "apiTarget": "/api/ai-generate",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ data: finalPayload",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/ExpForm.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id: profile.uid",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/FeedCard.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "readPath",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FeedCard.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "\"/api/feed?sort=trending&itemsPerPage=6\"",
+    "apiTarget": "/api/feed?sort=trending&itemsPerPage=6",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "sort",
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FeedHero.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/newsletter\"",
+    "apiTarget": "/api/newsletter",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "https://maps.app.goo.gl/xy4z53owHAz4SxgA8",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:theinterviewroom.in@gmail.com",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Footer.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:${email}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FounderCard.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "tel:${phone}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/FounderCard.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/search",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/search",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/add-company",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Landing.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/LikeButton.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/LikeButton.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveUser\"",
+    "apiTarget": "/api/saveUser",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Login.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Login.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "components/Navbar.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/profile/view'",
+    "apiTarget": "/api/profile/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ProfileViewTracker.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/view'",
+    "apiTarget": "/api/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "components/ScrollViewTracker.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/app_icon.png",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}`",
+    "apiTarget": "${baseUrl}/api/feed?itemsPerPage=${itemsPerPage}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl",
+        "itemsPerPage"
+      ],
+      "query": [
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/topStories`",
+    "apiTarget": "${baseUrl}/api/topStories",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl",
+        "id"
+      ],
+      "query": [
+        "uid",
+        "_ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl"
+      ],
+      "query": [
+        "itemsPerPage",
+        "_ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/single/[id]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search/Himanshu-Nilay-Neeraj\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "`/api/search?search=${debouncedSearch}&page=1`",
+    "apiTarget": "/api/search?search=${debouncedSearch}&page=1",
+    "method": "GET",
+    "params": {
+      "path": [
+        "debouncedSearch"
+      ],
+      "query": [
+        "search",
+        "page"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "`/api/search?search=${debouncedSearch}&page=${nextPage}`",
+    "apiTarget": "/api/search?search=${debouncedSearch}&page=${nextPage}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "debouncedSearch",
+        "nextPage"
+      ],
+      "query": [
+        "search",
+        "page"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search/Himanshu-Nilay-Neeraj\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(searchText",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/Himanshu-Nilay-Neeraj`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/search/[search]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/profile'",
+    "apiTarget": "/api/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({ email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/user/profile?email=${email}`",
+    "apiTarget": "/api/user/profile?email=${email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/user/profile'",
+    "apiTarget": "/api/user/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(dataToSave",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/feed",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/profile/public/[email]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/login/page.jsx"
+  },
+  {
+    "type": "axios.get",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/feed/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/feed/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/postCompanies?slug=${encodeURIComponent(normalizedSlug",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "slug"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/companies/${nextSlug}`",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [
+        "nextSlug"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit-company/[slug]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/edit/\"",
+    "apiTarget": "/api/edit/",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/edit/[id]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/companies",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/companies/[slug]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/post",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/companies/[slug]/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${postUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/api/saveExp/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": "app/add-company/page.jsx"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/companies\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/add-company/page.jsx"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/companies",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": "app/add-company/page.jsx"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(f",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/1070.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "h",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "l",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/1070.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "l",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/1070.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/3214.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/3214.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/upload\"",
+    "apiTarget": "/api/upload",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/3709.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "o",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "n",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/3709.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/delete-image\"",
+    "apiTarget": "/api/delete-image",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({public_id:b",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/3709.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/4741.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/4741.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "location.pathname+'?${h}'",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "h"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/4741.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "h",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "l",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/4902.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/delete\"",
+    "apiTarget": "/api/delete",
+    "method": "DELETE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({uid:a.uid",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/6147.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/newsletter\"",
+    "apiTarget": "/api/newsletter",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({email:b",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/7102.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveUser\"",
+    "apiTarget": "/api/saveUser",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/chunks/7102.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${e}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/7459.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/7471.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/7471.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "n",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/7471.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "d",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/chunks/8175.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${a}/api/feed?itemsPerPage=30`",
+    "apiTarget": "${a}/api/feed?itemsPerPage=30",
+    "method": "GET",
+    "params": {
+      "path": [
+        "a"
+      ],
+      "query": [
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${a}/api/topStories`",
+    "apiTarget": "${a}/api/topStories",
+    "method": "GET",
+    "params": {
+      "path": [
+        "a"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${e}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/team/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "a.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({id:a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "?:Tarball|url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${b}/api/exp?uid=${a}`",
+    "apiTarget": "${b}/api/exp?uid=${a}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "b",
+        "a"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${b}/api/topStories?itemsPerPage=12`",
+    "apiTarget": "${b}/api/topStories?itemsPerPage=12",
+    "method": "GET",
+    "params": {
+      "path": [
+        "b"
+      ],
+      "query": [
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({commentId:a.id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({experienceId:a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({experienceId:a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({commentId:a.id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/user/profile?email=${L}`",
+    "apiTarget": "/api/user/profile?email=${L}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "L"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/profile/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/profile\"",
+    "apiTarget": "/api/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({email:L",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/profile/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/user/profile\"",
+    "apiTarget": "/api/user/profile",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/profile/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/drafts\"",
+    "apiTarget": "/api/drafts",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({...a",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveExp\"",
+    "apiTarget": "/api/saveExp",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({exp_text:K",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/deleteDraft\"",
+    "apiTarget": "/api/deleteDraft",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({email:J.user.email",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/ai-generate\"",
+    "apiTarget": "/api/ai-generate",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({data:c",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${d.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({id:a.uid",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({currentSlug:s",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/edit-company/[slug]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/edit/\"",
+    "apiTarget": "/api/edit/",
+    "method": "PUT",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({uid:m",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/edit/[id]/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${g.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/edit/[id]/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${g}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/saveExp/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "a",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/server/app/api/ai-generate/route.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/postCompanies\"",
+    "apiTarget": "/api/postCompanies",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({...n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/server/app/add-company/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "readPath",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_1b8491d5._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/view'",
+    "apiTarget": "/api/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(experienceId",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_20bf2fe2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_c51c20f8._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_c51c20f8._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_c51c20f8._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_c51c20f8._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_c51c20f8._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/newsletter\"",
+    "apiTarget": "/api/newsletter",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_e813803e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveUser\"",
+    "apiTarget": "/api/saveUser",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_e813803e._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/_e813803e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "?:Tarball|url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/f92dd_refractor_c1ea008b._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "state.canonicalUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "HEAD",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_original-stack-frames\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_attach-nodejs-inspector\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_devtools_config\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_disable_dev_indicator\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${assetPrefix}/_next/static/development/_devPagesManifest.json`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "assetPrefix"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/development/${_constants.DEV_CLIENT_PAGES_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "_constants.DEV_CLIENT_PAGES_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/${this.buildId}/${_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "this.buildId",
+        "_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "href",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_original-stack-frames\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_attach-nodejs-inspector\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_devtools_config\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_disable_dev_indicator\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "_.router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_732094a2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_a7ef56c8._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "#",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "#",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_b642067c._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_e07de1bb._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_e07de1bb._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_fdd6ff62._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_fdd6ff62._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${workStore.assetPrefix}/_next/${(0, _encodeuripath.encodeURIPath)(chunk)}${dplId}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_47e3a5ed._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_a93b0a1c._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_a93b0a1c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "state.canonicalUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${otherHref}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_17643121._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "href",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/development/${_constants.DEV_CLIENT_PAGES_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "_constants.DEV_CLIENT_PAGES_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/${this.buildId}/${_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "this.buildId",
+        "_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${assetPrefix}/_next/static/development/_devPagesManifest.json`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "assetPrefix"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "_.router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${h.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_client_5a8a528e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_original-stack-frames\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_attach-nodejs-inspector\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_devtools_config\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_server_status\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_server_status\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_disable_dev_indicator\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_8ca6b690._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_original-stack-frames\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_attach-nodejs-inspector\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_devtools_config\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_server_status\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_server_status\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(process.env.__NEXT_ROUTER_BASEPATH||\"\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/__nextjs_disable_dev_indicator\"",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_1dd7fb59.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "some unique resource identifier",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "%s",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_f3530cac._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_f3530cac._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_next_dist_shared_lib_9a2a7093._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "some unique resource identifier",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_react-dom_4411d9bd._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "%s",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/node_modules_react-dom_4411d9bd._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "getChunkRelativeUrl(wasmChunkPath",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}?ts=${Date.now()}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [
+        "ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-_23a915ee._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "getChunkRelativeUrl(wasmChunkPath",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}?ts=${Date.now()}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [
+        "ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__app_0fce199e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "getChunkRelativeUrl(wasmChunkPath",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${decodedChunkUrl}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${chunkUrl}?ts=${Date.now()}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [
+        "ts"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/turbopack-pages__error_af01c4e3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "__webpack_require__.p + __webpack_require__.hmrF(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/webpack.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "state.canonicalUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "HEAD",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_original-stack-frames\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_attach-nodejs-inspector\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_devtools_config\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false || \\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_disable_dev_indicator\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main-app.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${assetPrefix}/_next/static/development/_devPagesManifest.json`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "assetPrefix"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/development/${_constants.DEV_CLIENT_PAGES_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "_constants.DEV_CLIENT_PAGES_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${this.assetPrefix}/_next/static/${this.buildId}/${_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST}`",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "this.assetPrefix",
+        "this.buildId",
+        "_constants.DEV_CLIENT_MIDDLEWARE_MANIFEST"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "href",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_original-stack-frames\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(r",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_attach-nodejs-inspector\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_devtools_config\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "e",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "e",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_server_status\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat( false||\\\"\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/__nextjs_disable_dev_indicator\\\"",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "_.router.pathname + '?' + String((0, _querystring.assign",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/main.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "__webpack_require__.p + __webpack_require__.hmrF(",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/fallback/webpack.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/newsletter\\\"",
+    "apiTarget": "/api/newsletter\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    email\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/saveUser\\\"",
+    "apiTarget": "/api/saveUser\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/feed\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/layout.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/feed'",
+    "apiTarget": "/api/feed",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/topStories'",
+    "apiTarget": "/api/topStories",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(experienceId",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/comments\\\"",
+    "apiTarget": "/api/comments\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    commentId: item.id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/comments\\\"",
+    "apiTarget": "/api/comments\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    experienceId",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/comments\\\"",
+    "apiTarget": "/api/comments\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    commentId: item.id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/like\\\"",
+    "apiTarget": "/api/like\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    id",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/saveUser\\\"",
+    "apiTarget": "/api/saveUser\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/view'",
+    "apiTarget": "/api/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                                    id\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "?:Tarball|url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/feed\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/login\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/search\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${workStore.assetPrefix}/_next/${(0, _encodeuripath.encodeURIPath)(chunk)}${dplId}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/single/[id]/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/drafts?email=${session.user.email}`",
+    "apiTarget": "/api/drafts?email=${session.user.email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "session.user.email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/deleteDraft\\\"",
+    "apiTarget": "/api/deleteDraft\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    email: session.user.email\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/ai-generate\\\"",
+    "apiTarget": "/api/ai-generate\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    data: finalPayload\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/saveUser\\\"",
+    "apiTarget": "/api/saveUser\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/upload\\\"",
+    "apiTarget": "/api/upload\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "uploadUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "formData",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/delete-image\\\"",
+    "apiTarget": "/api/delete-image\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                public_id: publicId\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/feed\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/login\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/search\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "http://",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/like\\\"",
+    "apiTarget": "/api/like\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    id: profile.uid",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/saveUser\\\"",
+    "apiTarget": "/api/saveUser\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/feed\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/login\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/search\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/static/chunks/app/feed/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/@cloudinary-util.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/@cloudinary-util.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/marked.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "mailto:",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/marked.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "http://",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/marked.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next-auth.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"\\\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next-auth.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "body",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next-auth.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "location.pathname+'?${searchStr}'",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "searchStr"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "location.pathname+'?${searchStr}'",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "searchStr"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "state.canonicalUrl",
+    "apiTarget": null,
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "HEAD",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "location.pathname+'?${searchStr}'",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [
+        "searchStr"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${workStore.assetPrefix}/_next/${(0, _encodeuripath.encodeURIPath)(chunk)}${dplId}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/next.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "?:Tarball|url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/vendor-chunks/react-syntax-highlighter.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__094ffb2c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "requestUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__2b784e1e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__443c2c2f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__a20a9f65._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__b16abee2._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ba7f4d4c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "requestUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__c3a3050f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__ca3b3c62._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/[root-of-the-server]__f416a70c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_0057a2d3._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/node_modules_next_d367dc5f._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "readPath",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__4946eb23._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/exp?uid=${id}`",
+    "apiTarget": "${baseUrl}/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl",
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__52c24234._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${baseUrl}/api/feed`",
+    "apiTarget": "${baseUrl}/api/feed",
+    "method": "GET",
+    "params": {
+      "path": [
+        "baseUrl"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__52c24234._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/newsletter\"",
+    "apiTarget": "/api/newsletter",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/saveUser\"",
+    "apiTarget": "/api/saveUser",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/feed\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__9966ec7a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "'/api/view'",
+    "apiTarget": "/api/view",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/exp?uid=${id}`",
+    "apiTarget": "/api/exp?uid=${id}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "id"
+      ],
+      "query": [
+        "uid"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/like\"",
+    "apiTarget": "/api/like",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/comments?experienceId=${encodeURIComponent(experienceId",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [
+        "experienceId"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "POST",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/comments\"",
+    "apiTarget": "/api/comments",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__b3b08d4e._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.pict.live'}/api/feed?itemsPerPage=${itemsPerPage}`",
+    "apiTarget": "}/api/feed?itemsPerPage=${itemsPerPage}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "process.env.NEXT_PUBLIC_SITE_URL || 'https://www.pict.live'",
+        "itemsPerPage"
+      ],
+      "query": [
+        "itemsPerPage"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__fbc4e689._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.pict.live'}/api/topStories`",
+    "apiTarget": "}/api/topStories",
+    "method": "GET",
+    "params": {
+      "path": [
+        "process.env.NEXT_PUBLIC_SITE_URL || 'https://www.pict.live'"
+      ],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/[root-of-the-server]__fbc4e689._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"/api/notifications\"",
+    "apiTarget": "/api/notifications",
+    "method": "PATCH",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/login\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\"/search\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/_d8582319._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "?:Tarball|url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/f92dd_refractor_97a415a9._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_3603f619._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_3603f619._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_4c90c24b._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6831f2d4._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6dd1b741._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_6dd1b741._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\"\".concat(baseUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_c6c2e26a._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_eab7e71b._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "options.src",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_eab7e71b._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "#",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_eab7e71b._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "#",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_eab7e71b._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_119432dc._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_119432dc._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${workStore.assetPrefix}/_next/${(0, _encodeuripath.encodeURIPath)(chunk)}${dplId}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_8105ecd4._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${blurDataURL}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_8105ecd4._.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "${c.props[",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_8105ecd4._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "input",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "url",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_7381059c._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "...",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "fetchUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js"
+  },
+  {
+    "type": "router.replace",
+    "targetExpr": "redirect, {}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/chunks/ssr/node_modules_next_dist_afb60855._.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "`/api/drafts?email=${session.user.email}`",
+    "apiTarget": "/api/drafts?email=${session.user.email}",
+    "method": "GET",
+    "params": {
+      "path": [
+        "session.user.email"
+      ],
+      "query": [
+        "email"
+      ],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/deleteDraft\\\"",
+    "apiTarget": "/api/deleteDraft\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    email: session.user.email\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/ai-generate\\\"",
+    "apiTarget": "/api/ai-generate\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    data: finalPayload\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/newsletter\\\"",
+    "apiTarget": "/api/newsletter\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                    email\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/saveUser\\\"",
+    "apiTarget": "/api/saveUser\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify(userData",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/notifications\\\"",
+    "apiTarget": "/api/notifications\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/upload\\\"",
+    "apiTarget": "/api/upload\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "uploadUrl",
+    "apiTarget": null,
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "formData",
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "fetch",
+    "targetExpr": "\\\"/api/delete-image\\\"",
+    "apiTarget": "/api/delete-image\\",
+    "method": "GET",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": "JSON.stringify({\\n                public_id: publicId\\n",
+      "headerSources": [
+        "Content-Type"
+      ]
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/feed\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "`/search/${encodeURIComponent(query",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/login\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "router.push",
+    "targetExpr": "\\\"/search\\\"",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  },
+  {
+    "type": "href",
+    "targetExpr": "/single/${data.uid}",
+    "apiTarget": null,
+    "method": "NAVIGATE",
+    "params": {
+      "path": [],
+      "query": [],
+      "bodySource": null,
+      "headerSources": []
+    },
+    "file": ".next_stale_1774889991/dev/server/app/post/page.js"
+  }
+]

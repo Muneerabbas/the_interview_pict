@@ -216,24 +216,24 @@ export default function Navbar({ showThemeToggle = false }) {
       <nav
         className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/85 dark:shadow-[0_12px_36px_rgba(2,6,23,0.65)] dark:supports-[backdrop-filter]:bg-slate-950/65"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 lg:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 lg:gap-3 lg:px-5 xl:px-6">
           {/* Brand */}
           <Link
             href="/"
-            className="group flex min-w-0 items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
+            className="group flex min-w-0 shrink-0 items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
             prefetch={true}
           >
             <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
               <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
             </div>
-            <span className="text-xl font-bold">
-              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
+            <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
+              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span className="hidden sm:inline">Room</span>
             </span>
           </Link>
 
           {/* Desktop: search + links */}
-          <div className="hidden flex-1 items-center justify-center px-8 lg:flex">
-            <form onSubmit={handleSearch} className="w-full max-w-2xl">
+          <div className="hidden min-w-0 flex-1 items-center justify-center px-3 lg:flex xl:px-6">
+            <form onSubmit={handleSearch} className="w-full max-w-xl xl:max-w-2xl">
               <div className="group relative">
                 <Search
                   size={18}
@@ -242,25 +242,28 @@ export default function Navbar({ showThemeToggle = false }) {
                 <input
                   type="text"
                   value={searchText}
-                  className="w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-12 text-sm text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
+                  className="min-w-0 w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-12 text-sm text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
                   onChange={(e) => setSearchText(e.target.value)}
-                  placeholder="Search for"
+                  placeholder=""
                 />
 
                 {!searchText && (
-                  <div className="pointer-events-none absolute left-[116px] top-1/2 -translate-y-1/2 overflow-hidden h-5 w-28">
-                    <AnimatePresence mode="sync">
-                      <motion.div
-                        key={index}
-                        initial={{ y: "-100%", opacity: 0 }}
-                        animate={{ y: "0%", opacity: 1 }}
-                        exit={{ y: "100%", opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="absolute w-full text-sm font-medium text-blue-500 dark:text-cyan-300"
-                      >
-                        {texts[index]}
-                      </motion.div>
-                    </AnimatePresence>
+                  <div className="pointer-events-none absolute inset-y-0 left-11 right-12 flex items-center gap-1.5 overflow-hidden">
+                    <span className="shrink-0 text-sm text-slate-400 dark:text-slate-500">Search for</span>
+                    <div className="relative h-5 min-w-0 flex-1 overflow-hidden">
+                      <AnimatePresence mode="wait" initial={false}>
+                        <motion.span
+                          key={index}
+                          initial={{ y: 14, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -14, opacity: 0 }}
+                          transition={{ duration: 0.28, ease: "easeOut" }}
+                          className="absolute inset-0 truncate text-sm font-medium text-blue-500 dark:text-cyan-300"
+                        >
+                          {texts[index]}
+                        </motion.span>
+                      </AnimatePresence>
+                    </div>
                   </div>
                 )}
 
@@ -276,13 +279,14 @@ export default function Navbar({ showThemeToggle = false }) {
           </div>
 
           {/* Desktop: nav items + auth */}
-          <div className="hidden items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-[0_8px_20px_rgba(2,6,23,0.55)] lg:flex">
+          <div className="hidden shrink-0 items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-[0_8px_20px_rgba(2,6,23,0.55)] lg:flex">
             {navItems.map(({ href, label, Icon }) => (
               <Link
                 key={href}
                 href={href}
+                aria-label={label}
                 className={[
-                  "group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-all active:scale-95",
+                  "group flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-sm font-semibold transition-all active:scale-95 xl:gap-2 xl:px-3",
                   isActive(href)
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300"
                     : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/90 dark:hover:text-slate-100",
@@ -293,7 +297,7 @@ export default function Navbar({ showThemeToggle = false }) {
                   size={18}
                   className={`transition-colors duration-200 ${isActive(href) ? "text-blue-600 dark:text-cyan-300" : "text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-200"}`}
                 />
-                <span>{label}</span>
+                <span className="hidden xl:inline">{label}</span>
               </Link>
             ))}
 
@@ -320,18 +324,20 @@ export default function Navbar({ showThemeToggle = false }) {
             {session ? (
               <button
                 onClick={handleLogout}
-                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/50 dark:focus:ring-rose-500/35"
+                aria-label="Logout"
+                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/50 dark:focus:ring-rose-500/35 xl:px-4"
               >
                 <LogOut size={16} />
-                Logout
+                <span className="hidden xl:inline">Logout</span>
               </button>
             ) : (
               <button
                 onClick={handleLogin}
-                className="ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40"
+                aria-label="Login"
+                className="ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-3 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40 xl:px-4"
               >
                 <LogIn size={16} />
-                Login
+                <span className="hidden xl:inline">Login</span>
               </button>
             )}
           </div>

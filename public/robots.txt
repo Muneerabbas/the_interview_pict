@@ -1,0 +1,17 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /profile
+Disallow: /post
+Disallow: /add-company
+Disallow: /edit
+Disallow: /edit-company
+Disallow: /search
+Disallow: /simple
+
+# Host
+Host: https://theinterviewroom.in
+
+# Sitemaps
+Sitemap: https://theinterviewroom.in/sitemap.xml

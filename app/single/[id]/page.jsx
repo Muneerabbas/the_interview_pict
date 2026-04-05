@@ -87,10 +87,36 @@ export async function generateMetadata({ params }) {
   const baseUrl = await getServerOrigin();
   const { data } = await getExperienceData(id, baseUrl);
 
+  if (!data) {
+    return {
+      title: "Interview Experience Not Found",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const title = `${data?.company || "Interview"} Experience`;
+  const description = `Read ${data?.name || "a candidate"}'s interview experience at ${data?.company || "a top company"}.`;
+  const canonical = `/single/${id}`;
+  const ogImage = data?.profile_pic || `${baseUrl}/app_icon.png`;
+
   return {
-    title: `${data?.company || "theInterview"} Interview Experience`,
-    description: `Read ${data?.name || "a candidate"}'s interview experience at ${data?.company || "a top company"}.`,
+    title,
+    description,
     metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title: `${title} | The Interview Room`,
+      description,
+      url: `${baseUrl}${canonical}`,
+      images: [{ url: ogImage, alt: title }],
+    },
+    twitter: {
+      title: `${title} | The Interview Room`,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -150,6 +176,11 @@ export default async function SimilarExperience({ params }) {
             name: data?.name,
           },
           datePublished: data?.date ? new Date(data.date).toISOString() : new Date().toISOString(),
+          dateModified: data?.updatedAt
+            ? new Date(data.updatedAt).toISOString()
+            : data?.date
+            ? new Date(data.date).toISOString()
+            : new Date().toISOString(),
           image: profilePicUrl,
           publisher: {
             "@type": "Organization",

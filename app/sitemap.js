@@ -1,29 +1,80 @@
 import { MongoClient } from "mongodb";
 
+const siteUrl = "https://theinterviewroom.in";
+
 export default async function sitemap() {
   const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
 
   const db = client.db(process.env.MONGODB_DB_NAME);
 
-  // 🔥 Fetch all posts (or interviews)
   const posts = await db.collection("experience").find({}).toArray();
-
+  const companies = await db.collection("companies").find({}).toArray();
 
   const postUrls = posts.map((post) => ({
-    url: `https://pict.live/single/${post.uid}`,
-    lastModified: new Date(),
+    url: `${siteUrl}/single/${post.uid}`,
+    lastModified: post?.updatedAt || post?.date || post?.createdAt || new Date(),
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  const companyUrls = companies.map((company) => ({
+    url: `${siteUrl}/companies/${company.slug}`,
+    lastModified: company?.updatedAt || company?.createdAt || new Date(),
+    changeFrequency: "weekly",
+    priority: 0.6,
   }));
 
   return [
     {
-      url: "https://pict.live",
+      url: siteUrl,
       lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
     },
     {
-      url: "https://pict.live/feed",
+      url: `${siteUrl}/feed`,
       lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
     },
-    ...postUrls, // 🔥 dynamic pages
+    {
+      url: `${siteUrl}/companies`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${siteUrl}/help`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${siteUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${siteUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    {
+      url: `${siteUrl}/team`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    ...companyUrls,
+    ...postUrls,
   ];
 }

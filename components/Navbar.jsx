@@ -227,7 +227,7 @@ export default function Navbar({ showThemeToggle = false }) {
               <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
             </div>
             <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
-              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span className="hidden sm:inline">Room</span>
+              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span>Room</span>
             </span>
           </Link>
 

@@ -6,6 +6,21 @@ import mongoose from "mongoose";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+    title: "Companies",
+    description:
+        "Browse companies and read real interview experiences, hiring insights, and preparation tips.",
+    alternates: {
+        canonical: "/companies",
+    },
+    openGraph: {
+        title: "Companies | The Interview Room",
+        description:
+            "Browse companies and read real interview experiences, hiring insights, and preparation tips.",
+        url: "https://theinterviewroom.in/companies",
+    },
+};
+
 export default async function CompaniesDirectory() {
     await connectToDatabase();
     const db = mongoose.connection.db;

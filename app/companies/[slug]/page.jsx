@@ -9,6 +9,48 @@ import { MongoClient } from "mongodb";
 import ArticleCard from "@/components/ArticleCard";
 import Navbar from "@/components/Navbar";
 
+export async function generateMetadata({ params }) {
+    await connectToDatabase();
+    const { slug } = await params;
+    const company = await Company.findOne({ slug })
+        .select("name slug about logo location website")
+        .lean();
+
+    if (!company) {
+        return {
+            title: "Company Not Found",
+            robots: { index: false, follow: false },
+        };
+    }
+
+    const title = `${company.name} Interviews`;
+    const description =
+        company.about?.slice(0, 180) ||
+        `Read interview experiences, process details, and insights for ${company.name}.`;
+    const canonical = `/companies/${company.slug}`;
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical,
+        },
+        openGraph: {
+            title: `${title} | The Interview Room`,
+            description,
+            url: `https://theinterviewroom.in${canonical}`,
+            images: company.logo
+                ? [
+                      {
+                          url: company.logo,
+                          alt: company.name,
+                      },
+                  ]
+                : undefined,
+        },
+    };
+}
+
 export default async function CompanyDetails({ params }) {
     await connectToDatabase();
     const client = new MongoClient(process.env.MONGODB_URI);

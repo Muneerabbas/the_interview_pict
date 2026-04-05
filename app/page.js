@@ -1,8 +1,31 @@
-import LandingPage from '@/components/Landing';
+import LandingPage from "@/components/Landing";
+import Script from "next/script";
 import { getMongoDb } from "@/lib/mongodb";
 
 // Revalidate home every 30 minutes.
 export const revalidate = 1800;
+
+const siteUrl = "https://theinterviewroom.in";
+
+export const metadata = {
+    title: "The Interview Room",
+    description:
+        "Read real interview experiences, company-specific insights, and prep resources to land your next role.",
+    alternates: {
+        canonical: "/",
+    },
+    openGraph: {
+        title: "The Interview Room",
+        description:
+            "Read real interview experiences, company-specific insights, and prep resources to land your next role.",
+        url: siteUrl,
+    },
+    twitter: {
+        title: "The Interview Room",
+        description:
+            "Read real interview experiences, company-specific insights, and prep resources to land your next role.",
+    },
+};
 
 async function fetchFeaturedStories() {
     try {
@@ -57,6 +80,38 @@ export default async function Home() {
     ]);
 
     return (
-        <LandingPage featuredStories={featuredStories} topStories={topStories} />
+        <>
+            <Script
+                id="ld-json-website"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "WebSite",
+                        name: "The Interview Room",
+                        url: siteUrl,
+                        potentialAction: {
+                            "@type": "SearchAction",
+                            target: `${siteUrl}/search?q={search_term_string}`,
+                            "query-input": "required name=search_term_string",
+                        },
+                    }),
+                }}
+            />
+            <Script
+                id="ld-json-organization"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Organization",
+                        name: "The Interview Room",
+                        url: siteUrl,
+                        logo: `${siteUrl}/app_icon.png`,
+                    }),
+                }}
+            />
+            <LandingPage featuredStories={featuredStories} topStories={topStories} />
+        </>
     );
 }

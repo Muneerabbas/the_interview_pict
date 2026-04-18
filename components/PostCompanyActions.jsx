@@ -23,7 +23,7 @@ export default function PostCompanyActions({
   if (!hasCompanyPage && !isOwner) return null;
 
   const linkClass =
-    "inline-flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-white px-3 py-1 text-[11px] font-bold text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-800 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:bg-slate-800 dark:hover:text-cyan-200";
+    "inline-flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/85 px-3 py-1.5 text-[11px] font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[1px] hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:bg-slate-800 dark:hover:text-cyan-200";
 
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>

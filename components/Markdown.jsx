@@ -27,9 +27,9 @@ const MarkdownRenderer = ({ content }) => {
   }, []);
 
   const components = {
-    h1: ({ children }) => <h1 className="mb-6 mt-2 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
-    h2: ({ children }) => <h2 className="mb-3 mt-12 text-[1.35rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
-    h3: ({ children }) => <h3 className="mb-2 mt-8 text-[1.125rem] font-bold leading-snug text-slate-900 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
+    h1: ({ children }) => <h1 className="mb-8 mt-2 border-b border-slate-200/80 pb-4 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:border-slate-700/70 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
+    h2: ({ children }) => <h2 className="mb-4 mt-12 rounded-xl border border-slate-200/80 bg-slate-50/70 px-3 py-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
+    h3: ({ children }) => <h3 className="mb-3 mt-8 border-l-4 border-blue-500 pl-3 text-[1.125rem] font-bold leading-snug text-slate-900 dark:border-cyan-400 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
     p: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</div>,
     strong: ({ children }) => <strong className="font-semibold text-slate-900 dark:text-slate-100">{children}</strong>,
@@ -44,11 +44,11 @@ const MarkdownRenderer = ({ content }) => {
         {children}
       </a>
     ),
-    ul: ({ children }) => <ul className="mb-6 list-disc space-y-2 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:text-blue-500 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ul>,
+    ul: ({ children }) => <ul className="mb-7 list-disc space-y-2.5 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:text-blue-500 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ul>,
     ol: ({ children }) => (
-      <ol className="mb-6 list-decimal space-y-2 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:font-semibold marker:text-blue-600 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ol>
+      <ol className="mb-7 list-decimal space-y-2.5 pl-6 text-[16px] leading-[1.75] text-slate-700 marker:font-semibold marker:text-blue-600 dark:text-[#E8EDF5] dark:marker:text-blue-400">{children}</ol>
     ),
-    li: ({ children }) => <li className="leading-[1.75]">{children}</li>,
+    li: ({ children }) => <li className="leading-[1.8]">{children}</li>,
     blockquote: ({ children }) => (
       <blockquote className="my-6 rounded-xl border-l-4 border-blue-500 bg-blue-50/70 px-4 py-3 text-slate-700 dark:border-cyan-400 dark:bg-cyan-950/30 dark:text-slate-300">
         <div className="text-[15px] leading-7 sm:text-base">{children}</div>

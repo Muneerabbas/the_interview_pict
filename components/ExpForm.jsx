@@ -4,16 +4,23 @@ import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, AlertCircle, CheckCircle2, Bot, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
+import { ChevronDown, AlertCircle, CheckCircle2, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
+import Image from "next/image";
 import postCompanies from "@/data/post-companies.json";
 import { useTheme } from "next-themes";
 import SearchableDropdown from "./SearchableDropdown";
 import AddCompanyModal from "@/components/AddCompanyModal";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
-  <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/60" : "bg-gray-500/50"}`}>
-    <div className={`h-32 w-32 animate-spin rounded-full border-b-2 border-t-2 ${isDarkMode ? "border-cyan-300" : "border-blue-500"}`}></div>
+  <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/65" : "bg-slate-900/25"} backdrop-blur-sm`}>
+    <div className="relative flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
+      <span className={`pointer-events-none absolute inset-0 rounded-2xl blur-xl animate-pulse ${isDarkMode ? "bg-cyan-400/10" : "bg-blue-500/10"}`} />
+      <span className={`absolute h-16 w-16 rounded-full border ${isDarkMode ? "border-cyan-400/25 border-t-cyan-300" : "border-blue-500/25 border-t-blue-600"} animate-spin`} />
+      <div className="relative h-11 w-11">
+        <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
+      </div>
+    </div>
   </div>
 );
 
@@ -191,10 +198,36 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
   });
   const chatContainerRef = useRef(null);
 
-  const years = Array.from({ length: 28 }, (_, index) => 2000 + index).reverse();
+  const years = Array.from({ length: 30 }, (_, index) => 2000 + index).reverse();
   const [isLoading, setIsLoading] = useState(false);
 
   const roles = ["Intern", "SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
+  const branchOptions = [
+    { label: "Computer Science", value: "CS" },
+    { label: "Information Technology", value: "IT" },
+    { label: "E&TC", value: "EnTC" },
+    { label: "AI & Data Science", value: "AIDS" },
+    { label: "Electronics & Comp", value: "EC" },
+    { label: "Mechanical Engineering", value: "ME" },
+    { label: "Civil Engineering", value: "CE" },
+    { label: "Electrical Engineering", value: "EE" },
+    { label: "Chemical Engineering", value: "CHE" },
+    { label: "Instrumentation Engineering", value: "INSTR" },
+    { label: "Production Engineering", value: "PROD" },
+    { label: "Automobile Engineering", value: "AUTO" },
+    { label: "Robotics & Automation", value: "ROBO" },
+    { label: "Aerospace Engineering", value: "AERO" },
+    { label: "Biomedical Engineering", value: "BIO" },
+    { label: "Biotechnology", value: "BIOTECH" },
+    { label: "Computer Engineering", value: "COMP" },
+    { label: "AI & Machine Learning", value: "AIML" },
+    { label: "Data Science", value: "DS" },
+    { label: "Industrial Engineering", value: "IE" },
+    { label: "Metallurgy Engineering", value: "META" },
+    { label: "Mining Engineering", value: "MIN" },
+    { label: "Mechatronics", value: "MECHATRONICS" },
+    { label: "Environmental Engineering", value: "ENV" },
+  ];
   const colleges = [
     "COEP Technological University",
     "Pune Institute of Computer Technology (PICT)",
@@ -830,10 +863,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-12 dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-2 dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)] sm:pb-4">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
       <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px] dark:bg-sky-500/20" />
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px] dark:bg-indigo-500/20" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.35),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.06),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.06),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.7),transparent_52%)]" />
       <Navbar showThemeToggle={showThemeToggle} />
       {isLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
@@ -845,20 +879,20 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         </motion.div>
       )}
 
-      <div className={`relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
+      <div className={`relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 ${isSmallScreen ? 'mt-4' : 'mt-[100px]'}`}>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/70 dark:bg-slate-900/70 dark:shadow-[0_14px_36px_rgba(2,6,23,0.65)] sm:rounded-[2.5rem] sm:p-8 md:p-10 lg:p-12"
+          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/70 dark:bg-slate-900/70 dark:shadow-[0_14px_36px_rgba(2,6,23,0.65)] sm:rounded-[2.5rem] sm:p-7 md:p-9 lg:p-10"
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent dark:from-cyan-900/20 dark:via-blue-900/15" />
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px] dark:bg-cyan-500/15" />
           <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px] dark:bg-indigo-500/15" />
 
-          <div className="relative text-center mx-auto max-w-3xl mb-8 sm:mb-12">
-            <h1 className="mb-3 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-6 sm:text-5xl lg:text-6xl">
+          <div className="relative mx-auto mb-3 max-w-3xl text-center sm:mb-4">
+            <h1 className="mb-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-3 sm:text-5xl lg:text-6xl">
               Share Your Journey
             </h1>
             <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
@@ -866,33 +900,29 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </p>
           </div>
 
-          <div className="mb-8 w-full animate-fade-in-up">
-            <div className="flex flex-col gap-3 rounded-[20px] border border-white/60 bg-white/50 p-4 shadow-sm backdrop-blur-lg dark:border-slate-700 dark:bg-slate-900/75 sm:rounded-2xl sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-blue-100/80 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">
-                  <FileSignature className="h-5 w-5" />
-                </div>
-                <p className="text-[13px] font-bold text-slate-700 dark:text-slate-200 sm:text-sm">
-                  Fill details below, then choose Manual or AI mode.
-                </p>
-              </div>
-              <div className="flex items-center gap-2 px-2 sm:px-0">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+          <div className="mb-4 w-full animate-fade-in-up">
+            <div className="flex flex-col gap-2 rounded-xl border border-slate-200/65 bg-white/30 px-3 py-2.5 backdrop-blur-md dark:border-slate-700/65 dark:bg-slate-900/35 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 sm:text-[13px]">
+                Fill details below, then choose Manual or AI mode.
+              </p>
+              <div className="flex items-center gap-2 px-1 sm:px-0">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
                 </span>
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:text-xs">Auto-saving</p>
+                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Auto-saving</p>
               </div>
             </div>
           </div>
 
-          <div className="mb-10 grid w-full grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mb-6 w-full rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
+          <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
             {/* College */}
-            <div className={`group relative z-[56] rounded-[20px] transition-all duration-300 ${errors.college ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
-              <div className="p-4 sm:p-5">
+            <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+              <div>
                 <div className="flex items-center gap-2 mb-3">
                   <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
+                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
                 </div>
                 <div className="relative">
                   <SearchableDropdown
@@ -931,11 +961,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
 
             {/* Batch */}
-            <div className={`group relative z-[55] rounded-[20px] transition-all duration-300 ${errors.batch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
-              <div className="p-4 sm:p-5">
+            <div className={`group relative z-[55] rounded-xl p-2 transition-all duration-300 ${errors.batch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+              <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
+                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
                 </div>
                 <div className="relative">
                   <SearchableDropdown
@@ -951,21 +981,15 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
 
             {/* Department */}
-            <div className={`group relative z-[54] rounded-[20px] transition-all duration-300 ${errors.branch ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
-              <div className="p-4 sm:p-5">
+            <div className={`group relative z-[54] rounded-xl p-2 transition-all duration-300 ${errors.branch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+              <div>
                 <div className="flex items-center gap-2 mb-3">
                   <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
+                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
                 </div>
                 <div className="relative">
                   <SearchableDropdown
-                    options={[
-                      { label: "Computer Science", value: "CS" },
-                      { label: "Information Technology", value: "IT" },
-                      { label: "E&TC", value: "EnTC" },
-                      { label: "AI & Data Science", value: "AIDS" },
-                      { label: "Electronics & Comp", value: "EC" }
-                    ]}
+                    options={branchOptions}
                     value={branch}
                     onChange={(val) => handleBranchChange({ target: { value: val } })}
                     placeholder="Select Dept"
@@ -977,11 +1001,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
 
             {/* Company */}
-            <div className={`group relative z-[53] rounded-[20px] transition-all duration-300 ${errors.company ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
-              <div className="p-4 sm:p-5">
+            <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+              <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Company</label>
+                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Company</label>
                 </div>
                 <div className="relative">
                   <SearchableDropdown
@@ -1010,11 +1034,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
 
             {/* Role */}
-            <div className={`group relative z-[52] rounded-[20px] transition-all duration-300 ${errors.role ? "border border-red-300 bg-red-50/50 dark:border-rose-500/40 dark:bg-rose-950/25" : "border border-white/60 bg-white/50 shadow-sm backdrop-blur-lg hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/75 dark:hover:border-slate-500 dark:hover:bg-slate-900"}`}>
-              <div className="p-4 sm:p-5">
+            <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+              <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Role</label>
+                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Role</label>
                 </div>
                 <div className="relative">
                   <SearchableDropdown
@@ -1039,6 +1063,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
+          </div>
           </div>
 
           <AnimatePresence>
@@ -1072,15 +1097,15 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
               </motion.div>
             )}
           </AnimatePresence>
-          <div className="w-full pb-8">
+          <div className="w-full pb-4 sm:pb-5">
             <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] border border-white/60 bg-white/50 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:rounded-2xl sm:p-3">
-              <div className="flex flex-col items-start md:items-center justify-between gap-4 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:flex-row md:rounded-full sm:p-4">
+              <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
                 {/* Toggle (Left) */}
-                <div className="flex w-full justify-start md:w-auto">
-                  <div className="relative flex h-[46px] w-full rounded-xl border border-white/40 bg-slate-100/60 p-1 shadow-inner dark:border-slate-700 dark:bg-slate-800/85 sm:h-[52px] sm:w-auto">
+                <div className="flex w-full justify-start">
+                  <div className="relative flex h-[46px] w-full rounded-xl border border-slate-300/70 bg-slate-100/70 p-1 shadow-inner dark:border-slate-700 dark:bg-slate-800/85 sm:h-[52px] sm:w-auto">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'manual' ? 'text-slate-800 dark:text-slate-100' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
                       <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
                     </button>
@@ -1093,15 +1118,15 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
                     {/* Animated pill background */}
                     <div
-                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out dark:bg-slate-900 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`}
+                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_7px_20px_rgba(15,23,42,0.14)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`}
                       style={{
-                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.1)' : '1px solid rgba(226, 232, 240, 0.4)'
+                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
                       }}
                     />
                   </div>
                 </div>
 
-                <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 sm:gap-4 md:w-auto md:justify-end md:flex-nowrap mt-1 md:mt-0">
+                <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 border-t border-slate-200/70 pt-3 sm:gap-4 sm:justify-end dark:border-slate-700/80">
                   {/* Copy template button */}
                   <div className={`hidden sm:flex transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 w-0 -mx-2 overflow-hidden scale-95' : 'opacity-100 w-auto scale-100'}`}>
                     <button
@@ -1133,20 +1158,20 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 </div>
               </div>
             </div>
-            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white/60 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/75 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)]">
+            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
 
               {/* AI Prompt Area */}
               {mode === 'ai' && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/50 dark:bg-slate-900/80"
+                  className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/65 dark:bg-slate-950/85"
                 >
                   {/* Chat header */}
-                  <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/80 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/90">
+                  <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/85 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 shadow-inner dark:border-slate-700 dark:from-cyan-950/40 dark:to-blue-950/40 dark:text-cyan-300">
-                        <Bot className="w-6 h-6" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 shadow-inner dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50 dark:text-cyan-300">
+                        <Sparkles className="w-5 h-5" />
                       </div>
                       <div>
                         <h3 className="text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">Interview AI Guide</h3>
@@ -1156,7 +1181,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                   </div>
 
                   {/* Chat messages area */}
-                  <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-none sm:p-8">
+                  <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-slate-900/65 sm:p-8">
                     {chatMessages.map((msg, index) => (
                       <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -1166,11 +1191,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                         className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         {msg.role !== 'user' && (
-                          <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
-                            <Bot className="w-4 h-4 text-indigo-600" />
+                          <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
+                            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
                           </div>
                         )}
-                        <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/60 bg-white text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'}`}>
+                        <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/75 bg-white text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100'}`}>
                           <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
                             {msg.text}
                           </p>
@@ -1185,10 +1210,10 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex w-full justify-start"
                       >
-                        <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white bg-indigo-100 shadow-sm dark:border-slate-700 dark:bg-cyan-950/40">
-                          <Bot className="w-4 h-4 text-indigo-600" />
+                        <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
+                          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
                         </div>
-                        <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/60 bg-white px-6 py-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                        <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/70 bg-white px-6 py-4 shadow-sm dark:border-slate-600 dark:bg-slate-800/95">
                           <div className="flex items-center gap-1.5">
                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
                             <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
@@ -1201,20 +1226,20 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                   </div>
 
                   {/* Chat input form */}
-                  <div className="rounded-b-[2rem] border-t border-slate-200/60 bg-white/90 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/90 sm:p-6">
-                    <form onSubmit={handleSendChatMessage} className="flex gap-3 max-w-4xl mx-auto w-full relative">
+                  <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
+                    <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
                       <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="flex-1 rounded-2xl border border-slate-200 bg-slate-50/50 px-6 py-4 pr-16 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                        className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                         placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
                       />
                       <button
                         type="submit"
                         disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-indigo-600 shadow-sm"
+                        className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
                       >
                         <Send className="w-4 h-4 ml-0.5" />
                       </button>

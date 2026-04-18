@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Building2, Briefcase, GraduationCap, CalendarDays, Eye, ArrowUpRight } from "lucide-react";
+import { Building2, ArrowUpRight } from "lucide-react";
 import ProfileAvatar from "./ProfileAvatar";
 
 const stripMarkdown = (value = "") => {
@@ -17,9 +17,8 @@ const stripMarkdown = (value = "") => {
 };
 
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, role, batch, date, views, uid, branch, exp_text } = article || {};
+  const { profile_pic, name, company, uid, exp_text } = article || {};
   const displayName = name || "Anonymous Candidate";
-  const formattedDate = date ? new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Date unavailable";
 
   const plainText = stripMarkdown(exp_text || "");
   const previewText =
@@ -51,13 +50,6 @@ const ArticleCard = ({ article }) => {
             </h3>
             <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] font-semibold text-slate-500 dark:text-slate-400">
               <span className="text-blue-600 dark:text-cyan-400">{company}</span>
-              <span className="text-slate-300 dark:text-slate-600">•</span>
-              <span>{role}</span>
-            </div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500">
-              <span>{branch} {batch}</span>
-              <span className="text-slate-300/60 dark:text-slate-600/60">•</span>
-              <span>{formattedDate}</span>
             </div>
           </div>
         </div>
@@ -75,10 +67,6 @@ const ArticleCard = ({ article }) => {
           Read Experience
           <ArrowUpRight size={16} strokeWidth={2.5} />
         </span>
-        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
-          <Eye size={14} strokeWidth={2.2} />
-          <span>{views || 0}</span>
-        </div>
       </div>
     </Link>
   );

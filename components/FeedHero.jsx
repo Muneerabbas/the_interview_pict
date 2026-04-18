@@ -65,7 +65,7 @@ const FeedHero = ({ isDarkMode }) => {
 
             <div
                 ref={scrollRef}
-                className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
+                className="flex items-stretch gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {loading ? (
@@ -80,7 +80,7 @@ const FeedHero = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                                className="min-w-[300px] sm:min-w-[380px] snap-start"
+                                className="flex min-w-[300px] snap-start sm:min-w-[380px]"
                             >
                                 <FeedCard profile={profile} width="w-full" />
                             </motion.div>

@@ -43,10 +43,10 @@ export default function SearchableDropdown({ options, value, onChange, placehold
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-bold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                className={`w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
                     } dark:text-slate-200 cursor-pointer`}
             >
-                <span className={`truncate ${!value ? 'text-slate-500 dark:text-slate-400 font-medium' : ''}`}>
+                <span title={currentLabel || placeholder} className={`block min-w-0 pr-3 text-[13px] sm:text-sm ${!value ? 'text-slate-500 dark:text-slate-400 font-medium' : 'text-slate-700 dark:text-slate-200'}`}>
                     {currentLabel || placeholder}
                 </span>
                 <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-500 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
@@ -59,7 +59,7 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -5, scale: 0.98 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute z-[100] mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95"
+                        className="absolute z-[100] mt-2 w-[max(100%,24rem)] overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95"
                     >
                         <div className="p-2 border-b border-slate-100 dark:border-slate-800 relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
@@ -86,11 +86,12 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                                             key={option.value}
                                             className={`relative flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors sm:text-sm ${isSelected
                                                 ? "bg-blue-50 text-blue-700 dark:bg-cyan-950/40 dark:text-cyan-300"
-                                                : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                                                : "text-slate-700 hover:bg-blue-100 hover:text-blue-900 dark:text-slate-200 dark:hover:bg-cyan-900/35 dark:hover:text-cyan-100"
                                                 }`}
                                             onClick={() => handleSelect(option)}
+                                            title={option.label}
                                         >
-                                            <span className="truncate">{option.label}</span>
+                                            <span className="block break-words pr-2 leading-snug">{option.label}</span>
                                             {isSelected && <Check className="h-4 w-4 shrink-0" />}
                                         </li>
                                     );

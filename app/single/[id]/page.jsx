@@ -216,14 +216,13 @@ export default async function SimilarExperience({ params }) {
                 <ArrowLeft size={16} />
                 Back to feed
               </Link>
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300">
-                <Compass size={13} />
+              <div className="inline-flex items-center rounded-full border border-slate-200/70 bg-slate-50/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] text-slate-400 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-500">
                 Single Experience
               </div>
             </div>
 
             <div className="grid gap-6">
-              <article className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
+              <article className="overflow-hidden rounded-3xl border border-slate-300/85 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/85 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
                 <header className="relative overflow-hidden border-b border-slate-100/80 bg-gradient-to-br from-slate-50/50 to-blue-50/30 px-4 py-8 pr-14 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-blue-950/20 sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
                   <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
                   <ShareButton id={id} data={data} />
@@ -254,8 +253,8 @@ export default async function SimilarExperience({ params }) {
                     )}
 
                     <div className="min-w-0 flex-1">
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-blue-700 dark:bg-cyan-500/10 dark:text-cyan-300">
+                      <div className="mb-1 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:bg-cyan-500/10 dark:text-slate-500">
                           Interview Experience
                         </span>
                         {isToday && (
@@ -279,7 +278,7 @@ export default async function SimilarExperience({ params }) {
                         </h1>
                       )}
 
-                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+                      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
                         <div className="flex items-center gap-1.5">
                           <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
                           <span className="text-slate-900 dark:text-slate-200 font-bold">{data?.company}</span>
@@ -294,20 +293,20 @@ export default async function SimilarExperience({ params }) {
                         companyName={data?.company}
                         experienceUid={id}
                         authorEmail={typeof data?.email === "string" ? data.email : ""}
-                        className="mt-3"
+                        className="mt-4"
                       />
 
                       {/* Header Meta: Flattened Inline Row */}
-                      <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
+                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
                           <GraduationCap size={13} />
                           {data?.branch} {data?.batch}
                         </div>
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
                           <CalendarDays size={13} />
                           {data?.date ? formatLongDate(data.date) : "Date unavailable"}
                         </div>
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/50 px-3 py-1 text-[11.5px] font-bold text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                        <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11.5px] font-bold text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">
                           <Eye size={13} />
                           {data?.views} reads
                         </div>
@@ -323,15 +322,18 @@ export default async function SimilarExperience({ params }) {
                   </div>
                 </header>
 
-                <section className="px-4 py-8 sm:px-8 sm:py-10 lg:px-12">
-                  <div className="mx-auto w-full max-w-[720px] text-slate-700 dark:text-slate-300">
+                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
+                  <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/92 dark:text-slate-300 sm:p-6">
                     <MarkdownRenderer content={data?.exp_text || ""} />
                   </div>
                 </section>
 
-                <footer className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/80 px-4 py-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-                  <p>Reads: {data?.views}</p>
-                  <p>Shared on theInterview community feed</p>
+                <footer className="flex flex-col gap-2 border-t border-slate-200/90 bg-gradient-to-r from-slate-50/95 to-blue-50/50 px-4 py-4 text-sm text-slate-600 dark:border-slate-700/80 dark:from-slate-900/90 dark:to-slate-800/80 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                  <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 dark:text-slate-200">
+                    <Eye size={14} className="text-blue-600 dark:text-cyan-300" />
+                    {data?.views} reads
+                  </p>
+                  <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">Shared on theInterview community feed</p>
                 </footer>
               </article>
 

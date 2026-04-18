@@ -548,7 +548,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   };
 
   return (
-    <section className="relative mt-10 overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/90 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-7">
+    <section className="relative mt-10 overflow-hidden rounded-3xl border border-violet-200/70 bg-gradient-to-br from-white/95 to-violet-50/55 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-violet-800/40 dark:from-slate-900/90 dark:to-violet-950/20 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-7">
       <div className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-cyan-500/15" />
       <div className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-cyan-200/25 blur-3xl dark:bg-blue-500/15" />
 
@@ -582,7 +582,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                 className={cn(
                   "rounded-lg border px-2.5 py-1 text-[11px] font-bold transition-all duration-200",
                   composeType === type
-                    ? "border-blue-500 bg-blue-50/50 text-blue-700 dark:border-blue-400 dark:bg-blue-950/40 dark:text-blue-300"
+                    ? "border-blue-500 bg-blue-100 text-blue-800 shadow-sm ring-2 ring-blue-500/20 dark:border-cyan-400 dark:bg-cyan-950/50 dark:text-cyan-200 dark:ring-cyan-500/20"
                     : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-600"
                 )}
               >
@@ -606,7 +606,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           className="min-h-[100px] w-full resize-none border-none bg-transparent p-0 text-[14px] leading-relaxed text-slate-700 placeholder:text-slate-400 focus:outline-none dark:text-slate-200"
         />
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-slate-100 pt-3 dark:border-slate-700/50">
-          <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500">
+          <span className="rounded-full border border-slate-200/80 bg-slate-50/70 px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:border-slate-700 dark:bg-slate-800/75 dark:text-slate-300">
             {composeText.length}/{meta.uiConfig.maxCommentLength || 1000} characters
           </span>
           <button
@@ -621,7 +621,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         </div>
       </div>
 
-      <div className="relative mt-8 flex flex-wrap items-center gap-6 border-b border-slate-100 dark:border-slate-700/80">
+      <div className="relative mt-8 flex flex-wrap items-center gap-3 border-b border-slate-100 pb-1 dark:border-slate-700/80">
         {[
           { key: "all", label: "All" },
           { key: "doubt", label: "Doubts" },
@@ -635,9 +635,9 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
             type="button"
             onClick={() => setFilter(item.key)}
             className={cn(
-              "relative pb-3 text-[13px] font-bold transition-all duration-200",
+              "relative rounded-full px-3 py-1.5 text-[13px] font-bold transition-all duration-200",
               filter === item.key
-                ? "text-blue-700 dark:text-cyan-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-600 dark:after:bg-cyan-500"
+                ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200 dark:bg-cyan-950/35 dark:text-cyan-300 dark:ring-cyan-500/35"
                 : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
             )}
           >
@@ -655,13 +655,17 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           ))}
         </div>
       ) : filteredComments.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center py-10 text-center opacity-80">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800/50">
-            <MessageSquare size={28} className="text-slate-300 dark:text-slate-600" />
+        <div className="mt-8 rounded-2xl border border-dashed border-slate-300/70 bg-slate-50/60 p-6 dark:border-slate-700/70 dark:bg-slate-800/35">
+          <div className="mb-3 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm dark:bg-slate-900/70">
+              <MessageSquare size={22} className="text-blue-500 dark:text-cyan-300" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No comments yet</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Start the discussion with a doubt, tip, or experience.</p>
+            </div>
           </div>
-          <p className="max-w-[180px] text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-            No comments yet.<br />Start the discussion.
-          </p>
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Use the input above to post the first comment.</p>
         </div>
       ) : (
         <div className="relative mt-4 space-y-3">{filteredComments.map((item) => renderComment(item))}</div>

@@ -310,7 +310,7 @@ export default function Navbar({ showThemeToggle = false }) {
                   notifications={notifications}
                   onToggle={handleNotificationsToggle}
                   onClose={() => setNotificationsOpen(false)}
-                  buttonClassName="relative ml-1 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-all hover:-translate-y-[0.5px] hover:border-blue-300/50 hover:text-blue-700 active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
+                  buttonClassName="relative ml-1 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_20px_rgba(59,130,246,0.2)] active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.15)]"
                 />
               </div>
             ) : null}
@@ -325,7 +325,7 @@ export default function Navbar({ showThemeToggle = false }) {
               <button
                 onClick={handleLogout}
                 aria-label="Logout"
-                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-600 transition-all hover:-translate-y-[0.5px] hover:bg-rose-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/50 dark:focus:ring-rose-500/35 xl:px-4"
+                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 transition-all hover:-translate-y-[0.5px] hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:ring-slate-600/45 xl:px-4"
               >
                 <LogOut size={16} />
                 <span className="hidden xl:inline">Logout</span>
@@ -346,7 +346,7 @@ export default function Navbar({ showThemeToggle = false }) {
           <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
             <button
               onClick={() => router.push("/search")}
-              className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:h-10 sm:w-10"
+              className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
               aria-label="Search"
             >
               <Search size={18} />
@@ -363,13 +363,13 @@ export default function Navbar({ showThemeToggle = false }) {
                   notifications={notifications}
                   onToggle={handleNotificationsToggle}
                   onClose={() => setNotificationsOpen(false)}
-                  buttonClassName="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:h-10 sm:w-10"
+                  buttonClassName="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
                 />
               </div>
             ) : null}
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 sm:h-10 sm:w-10"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
             >
@@ -448,7 +448,7 @@ export default function Navbar({ showThemeToggle = false }) {
                   {session ? (
                     <button
                       onClick={handleLogout}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 py-3 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-200 dark:border-rose-500/40 dark:bg-rose-950/35 dark:text-rose-300 dark:hover:bg-rose-950/55 dark:focus:ring-rose-500/35"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus:ring-slate-600/45"
                     >
                       <LogOut size={16} />
                       Logout

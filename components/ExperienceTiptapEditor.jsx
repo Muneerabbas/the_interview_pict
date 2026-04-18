@@ -9,6 +9,7 @@ import { Typography } from "@tiptap/extension-typography";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
+import Placeholder from "@tiptap/extension-placeholder";
 import { Selection } from "@tiptap/extensions";
 import { marked } from "marked";
 
@@ -154,6 +155,7 @@ export default function ExperienceTiptapEditor({ value = "", onChange, onError, 
         autocapitalize: "off",
         class: "simple-editor exp-form-prosemirror",
         "aria-label": "Experience editor",
+        "data-placeholder": "Start writing your interview experience here...",
       },
       handlePaste: (view, event, slice) => {
         const items = Array.from(event.clipboardData?.items || []);
@@ -220,6 +222,9 @@ export default function ExperienceTiptapEditor({ value = "", onChange, onError, 
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
+      Placeholder.configure({
+        placeholder: "Start writing your interview experience here...",
+      }),
       ResizableImage,
       Typography,
       Superscript,

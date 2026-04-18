@@ -81,7 +81,7 @@ export default function Footer({ isLandingPage = false }) {
                 <a
                   key={idx}
                   href={social.href}
-                  className="group flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-all duration-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-cyan-300"
+                  className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all duration-300 hover:-translate-y-[1px] hover:border-blue-300/70 hover:bg-blue-50 hover:text-blue-600 hover:shadow-[0_10px_20px_rgba(59,130,246,0.2)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-cyan-500/50 dark:hover:bg-slate-700 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.18)]"
                 >
                   <social.icon size={20} className="transition-transform group-hover:scale-110" />
                 </a>
@@ -155,7 +155,7 @@ export default function Footer({ isLandingPage = false }) {
                   disabled={isSubmitting}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-800 shadow-inner outline-none transition-all duration-300 disabled:opacity-70 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/10"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-800 shadow-inner outline-none transition-all duration-300 disabled:opacity-70 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/10"
                 />
                 <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-300 group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-cyan-300" />
               </div>
@@ -181,13 +181,13 @@ export default function Footer({ isLandingPage = false }) {
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
             &copy; {new Date().getFullYear()} theInterview community. All rights reserved.
           </p>
-          <div className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 sm:justify-end">
             <span>Made with</span>
-            <div>
+            <div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-rose-50 dark:bg-rose-950/35">
               <Heart size={16} className="text-rose-500 fill-rose-500" />
             </div>
             <span>
-              by <span className="font-semibold text-slate-900 dark:text-slate-100">theInterview Team</span>
+              by <span className="font-semibold text-slate-700 dark:text-slate-200">theInterview Team</span>
             </span>
           </div>
         </div>

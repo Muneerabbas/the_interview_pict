@@ -77,7 +77,7 @@ export default function Post() {
           // Content when the user is logged in
           <div className="relative min-h-screen">
             <MdxEditorPage showThemeToggle />
-            <div className="pb-[400px] sm:pb-[110px] md:pb-[300px]"></div>
+            <div className="pb-8 sm:pb-10 md:pb-12"></div>
           </div>
         )}
       </div>

@@ -51,13 +51,13 @@ export default function TypingSentence() {
     <div className="mt-5 w-full px-2 sm:px-0">
       <p className="mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 dark:text-slate-300 sm:min-h-[2.4rem] sm:text-lg md:text-xl">
         Turn interview stress into preparation that feels{" "}
-        <span className="relative inline-block align-baseline text-left font-semibold text-blue-700 dark:text-cyan-300">
+        <span className="relative inline-block align-baseline text-left font-extrabold text-blue-700 drop-shadow-[0_0_10px_rgba(37,99,235,0.2)] dark:text-cyan-200 dark:drop-shadow-[0_0_14px_rgba(34,211,238,0.32)]">
           <span className="invisible select-none">{longestWord}</span>
           <span className="absolute inset-0 inline-flex items-center">
             {typedWord}
             <span
               aria-hidden="true"
-              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700 dark:bg-cyan-300"
+              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700 dark:bg-cyan-200"
             />
           </span>
         </span>

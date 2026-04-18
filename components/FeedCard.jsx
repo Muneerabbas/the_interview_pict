@@ -120,13 +120,11 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           openPost();
         }
       }}
-      className={`${width} group relative mx-auto block cursor-pointer overflow-hidden rounded-2xl border border-slate-200/85 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-[2px] hover:border-blue-200 hover:shadow-[0_18px_48px_rgba(37,99,235,0.18)] dark:border-slate-700/90 dark:bg-slate-900/90 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_20px_52px_rgba(8,145,178,0.24)]`}
+      className={`${width} group relative mx-auto block h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200/90 border-l-4 border-l-blue-600 bg-white/95 shadow-[0_10px_26px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:border-slate-700/90 dark:border-l-cyan-400 dark:bg-slate-900/95 dark:shadow-[0_12px_30px_rgba(2,6,23,0.6)] dark:hover:shadow-[0_18px_42px_rgba(2,6,23,0.7)]`}
     >
-      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500 transition-opacity duration-300 group-hover:opacity-100" />
-
-      <div className="relative p-4 sm:p-5">
-        {/* Header Row: Avatar + Info (Left) | Stats (Right) */}
-        <div className="flex items-start justify-between gap-4">
+      <div className="relative flex h-full flex-col p-5 sm:p-6">
+        {/* Header Row: Avatar + Info */}
+        <div className="flex items-start gap-4">
           <div
             className="flex min-w-0 items-start gap-3"
             aria-label={`View experience by ${profileName || "user"}`}
@@ -142,11 +140,11 @@ const FeedCard = ({ profile, width = "w-full" }) => {
             </div>
 
             <div className="min-w-0 flex-1">
-              <h2 className="line-clamp-1 text-base font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[17px]">
+              <h2 className="line-clamp-1 text-[17px] font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[18px]">
                 {profileName || "Anonymous Candidate"}
               </h2>
-              <div className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:text-xs">
-                <Clock size={11} className="text-slate-400 dark:text-slate-500" />
+              <div className="mt-0.5 flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500 sm:text-[11px]">
+                <Clock size={10} className="text-slate-400/80 dark:text-slate-500" />
                 {formattedDate}
                 {isToday && (
                   <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
@@ -158,7 +156,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
               {/* Tags: Tucked directly beneath Info */}
               <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 py-0.5 pl-2 pr-1 text-[10.5px]">
+                <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 border-blue-300/70 bg-blue-50/90 py-0.5 pl-2 pr-1 text-[10.5px] font-semibold text-blue-700 dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-cyan-200">
                   <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
                   {companySlug ? (
                     <Link
@@ -185,60 +183,63 @@ const FeedCard = ({ profile, width = "w-full" }) => {
                     </Link>
                   ) */}
                 </div>
-                <div className="ui-tag ui-tag-role inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+                <div className="ui-tag ui-tag-role inline-flex items-center gap-1 border-slate-300/60 bg-slate-100/80 px-2 py-0.5 text-[10.5px] font-medium text-slate-600 dark:border-slate-600/60 dark:bg-slate-800/70 dark:text-slate-300">
                   <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />
                   <span className="truncate">{roleName}</span>
                 </div>
-                <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 py-0.5 px-2 text-[10.5px]">
+                <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 border-slate-200/70 bg-slate-50/70 px-2 py-0.5 text-[10.5px] font-medium text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-400">
                   <GraduationCap size={11} strokeWidth={2.5} className="shrink-0" />
                   <span className="truncate">{branchAndBatch}</span>
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200/60 bg-slate-50/50 px-2 py-0.5 text-[11px] font-semibold text-slate-500 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400">
-              <Eye size={12} />
-              {totalViews}
-            </div>
-
-            <button
-              onClick={handleLike}
-              className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold transition-all duration-200 ${isLiked
-                ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/35 dark:bg-pink-950/25 dark:text-pink-300"
-                : "border-slate-200/60 bg-white text-slate-400 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500 dark:border-slate-700/50 dark:bg-slate-900/40 dark:text-slate-500 dark:hover:border-pink-500/35 dark:hover:text-pink-300"
-                }`}
-            >
-              <Heart
-                size={12}
-                className={`transition-transform duration-200 ${isLiked ? "scale-110 fill-pink-500" : "group-hover/heart:scale-110"}`}
-              />
-              {likes.length}
-            </button>
-          </div>
         </div>
 
         {/* Content Zone: Experience Snapshot */}
-        <div className="mt-4">
-          <div className="mb-0.5 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500 opacity-60">
+        <div className="mt-5">
+          <div className="mb-1 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-slate-400/80 dark:text-slate-500/80">
             Experience Snapshot
           </div>
-          <div className="border-l-3 border-blue-600 pl-4 transition-colors group-hover:border-blue-500 dark:border-blue-500/60 dark:group-hover:border-blue-400">
-            <p className="line-clamp-3 text-[14px] leading-[1.65] text-slate-600 dark:text-slate-300">
+          <div className="pl-1">
+            <p className="line-clamp-3 text-[14px] leading-[1.82] text-slate-600 dark:text-slate-300">
               {previewText}
             </p>
           </div>
         </div>
 
-        {/* Footer Row: Read Time | Action Link */}
-        <div className="mt-4 flex items-center justify-between gap-3 sm:mt-4.5">
-          <div className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-400/80 dark:text-slate-500/80">
-            ✦ {readTime} MIN READ
-          </div>
-          <div className="inline-flex items-center text-[12.5px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
-            <span>Read full experience</span>
-            <ChevronRight size={15} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
+        {/* Footer Row: Stats + Read Link */}
+        <div className="mt-auto border-t border-slate-200/75 pt-3 dark:border-slate-700/75">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200/60 bg-slate-50/70 px-2 py-0.5 text-[10px] font-medium text-slate-400 dark:border-slate-700/60 dark:bg-slate-800/50 dark:text-slate-500">
+                <Eye size={11} />
+                {totalViews}
+              </div>
+
+              <button
+                onClick={handleLike}
+                className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-all duration-200 ${isLiked
+                  ? "border-pink-200 bg-pink-50 text-pink-600 shadow-sm dark:border-pink-500/35 dark:bg-pink-950/25 dark:text-pink-300"
+                  : "border-slate-200/60 bg-white/90 text-slate-400 hover:border-pink-200 hover:bg-pink-50/50 hover:text-pink-500 dark:border-slate-700/60 dark:bg-slate-900/55 dark:text-slate-500 dark:hover:border-pink-500/35 dark:hover:text-pink-300"
+                  }`}
+              >
+                <Heart
+                  size={11}
+                  className={`transition-transform duration-200 ${isLiked ? "scale-110 fill-pink-500" : "group-hover/heart:scale-110"}`}
+                />
+                {likes.length}
+              </button>
+
+              <div className="inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.05em] text-slate-400/90 dark:text-slate-500/85">
+                ✦ {readTime} MIN
+              </div>
+            </div>
+
+            <div className="inline-flex items-center text-[13px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+              <span>Read full experience</span>
+              <ChevronRight size={16} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </div>
           </div>
         </div>
       </div>

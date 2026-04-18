@@ -299,6 +299,8 @@ export default function HomePage() {
         }}
       />
 
+      <div className="fixed inset-0 -z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.38),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.08),transparent_42%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.07),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.65),transparent_45%)]" />
+
       {/* Center Reading Track */}
       <div className="fixed inset-y-0 left-1/2 w-full max-w-[800px] -translate-x-1/2 -z-10 bg-slate-100/10 dark:bg-slate-900/20 pointer-events-none" />
 
@@ -306,59 +308,66 @@ export default function HomePage() {
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
-        {/* Post Button Row */}
-        <div className="mb-8 mt-3 flex justify-end sm:mt-5">
-          <Link
-            href="/post"
-            onClick={handleShareExperienceClick}
-            prefetch={true}
-            scroll={false}
-            className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/35 transition hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-blue-500/50 active:scale-95 dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400"
-          >
-            <Send className="h-4 w-4" />
-            Post Your Story
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </div>
-
         {/* Hero Section */}
         <FeedHero isDarkMode={isDarkMode} />
+
+        <div className="mb-8 flex items-center gap-3">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-slate-300 dark:via-slate-700 dark:to-slate-700" />
+          <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:text-slate-400">
+            Feed Stories
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-slate-300 via-slate-300 to-transparent dark:from-slate-700 dark:via-slate-700" />
+        </div>
 
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
           {/* Header & Tabs */}
           <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
             {/* Tab Switcher */}
-            <div className="flex gap-6">
-              <button
-                onClick={() => setActiveTab("latest")}
-                className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "latest"
-                  ? "text-blue-600 dark:text-cyan-400"
-                  : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
-                  }`}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex gap-6">
+                <button
+                  onClick={() => setActiveTab("latest")}
+                  className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "latest"
+                    ? "text-blue-600 dark:text-cyan-400"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                    }`}
+                >
+                  <Clock size={16} />
+                  Latest
+                  {activeTab === "latest" && (
+                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab("trending")}
+                  className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "trending"
+                    ? "text-blue-600 dark:text-cyan-400"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                    }`}
+                >
+                  <Zap size={16} />
+                  Trending
+                  {activeTab === "trending" && (
+                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
+                  )}
+                </button>
+              </div>
+
+              <Link
+                href="/post"
+                onClick={handleShareExperienceClick}
+                prefetch={true}
+                scroll={false}
+                className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/30 transition hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-blue-500/45 active:scale-95 dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400 sm:px-5 sm:text-sm"
               >
-                <Clock size={16} />
-                Latest
-                {activeTab === "latest" && (
-                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveTab("trending")}
-                className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "trending"
-                  ? "text-blue-600 dark:text-cyan-400"
-                  : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
-                  }`}
-              >
-                <Zap size={16} />
-                Trending
-                {activeTab === "trending" && (
-                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
-                )}
-              </button>
+                <Send className="h-4 w-4" />
+                Post Your Story
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
 
-          <div className="relative z-30 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(248,250,252,0.86)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9)_0%,rgba(2,6,23,0.82)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)]">
+          <div className="sticky top-[76px] z-30 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(248,250,252,0.82)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.84)_0%,rgba(2,6,23,0.8)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)] md:top-[88px]">
             <div className="flex flex-col gap-3 border-b border-slate-200/70 px-4 py-4 dark:border-slate-700/80 sm:flex-row sm:items-center sm:justify-between sm:px-5">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">
@@ -366,7 +375,6 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Refine The Feed</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Filter stories by college, department, and graduation year.</p>
                 </div>
               </div>
 
@@ -445,7 +453,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-10 space-y-4">
+          <div className="relative z-10 space-y-6">
             {pageLoading && page === 0 && profiles.length === 0 ? (
               skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
             ) : (

@@ -63,70 +63,72 @@ export default function ShareProfileButton({ email, name }) {
         <>
             <button
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-2 text-sm font-bold shadow-lg hover:scale-105 transition-transform"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/90 px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-[0.5px] hover:border-blue-300 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800/85 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:text-sm"
             >
                 <Globe size={16} /> Share Profile
             </button>
 
             {mounted && isModalOpen && createPortal(
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4 dark:bg-black/60">
-                    <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-900 animate-in fade-in zoom-in duration-200">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-slate-900/45 backdrop-blur-md dark:bg-black/65" />
+                    <div className="relative w-full max-w-sm rounded-2xl border border-slate-300/90 bg-white/98 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.32)] dark:border-slate-600/85 dark:bg-slate-900/98 animate-in fade-in zoom-in duration-200">
                         <button
                             onClick={closeModal}
-                            className="absolute right-3 top-3 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                            className="absolute right-3 top-3 rounded-lg p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                         >
                             <X size={18} />
                         </button>
 
-                        <h2 className="mb-4 text-center text-lg font-bold text-slate-900 dark:text-slate-100">Share Profile</h2>
+                        <h2 className="pb-3 text-center text-lg font-bold text-slate-900 dark:text-slate-100">Share Profile</h2>
+                        <div className="mb-3 border-b border-slate-200/90 dark:border-slate-700/85" />
 
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2">
                             <button
                                 onClick={handleWhatsAppShare}
-                                className="flex items-center gap-3 rounded-lg p-2.5 text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                                className="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]">
-                                    <Share2 size={18} />
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]">
+                                    <Share2 size={16} />
                                 </div>
                                 WhatsApp
                             </button>
 
                             <button
                                 onClick={handleLinkedInShare}
-                                className="flex items-center gap-3 rounded-lg p-2.5 text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                                className="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0077B5]/10 text-[#0077B5]">
-                                    <Linkedin size={18} />
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0077B5]/10 text-[#0077B5]">
+                                    <Linkedin size={16} />
                                 </div>
                                 LinkedIn
                             </button>
 
                             <button
                                 onClick={handleFacebookShare}
-                                className="flex items-center gap-3 rounded-lg p-2.5 text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                                className="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/10 text-blue-600">
-                                    <Facebook size={18} />
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600/10 text-blue-600">
+                                    <Facebook size={16} />
                                 </div>
                                 Facebook
                             </button>
 
                             <button
                                 onClick={handleTwitterShare}
-                                className="flex items-center gap-3 rounded-lg p-2.5 text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                                className="flex cursor-pointer items-center gap-3 rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1DA1F2]/10 text-[#1DA1F2]">
-                                    <Twitter size={18} />
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1DA1F2]/10 text-[#1DA1F2]">
+                                    <Twitter size={16} />
                                 </div>
                                 Twitter
                             </button>
 
                             <button
                                 onClick={handleCopyToClipboard}
-                                className="flex items-center gap-3 rounded-lg p-2.5 text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 border-t border-slate-100 dark:border-slate-800 mt-2"
+                                className="mt-1 flex cursor-pointer items-center gap-3 rounded-lg border-t border-slate-200 pt-3 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400">
-                                    <Clipboard size={18} />
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                                    <Clipboard size={16} />
                                 </div>
                                 Copy Link
                             </button>

@@ -4,6 +4,7 @@ import { marked } from "marked";
 import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-react";
 import { useState } from "react";
 import ProfileAvatar from './ProfileAvatar';
+import Image from "next/image";
 
 const ProfileCard = ({
   profile,
@@ -26,17 +27,13 @@ const ProfileCard = ({
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
   const articleId = profile?.uid || profile?._id?.toString?.() || profile?._id || "";
+  const isProfileContext = edit && deletePost;
 
-  const formattedDate = new Date(profile.date).toLocaleString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZoneName: "short",
-  });
+  const dateObj = profile?.date ? new Date(profile.date) : null;
+  const isValidDate = dateObj && !Number.isNaN(dateObj.getTime());
+  const formattedDate = isValidDate
+    ? dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "Date unavailable";
 
   const handleReadMore = (e) => {
     e.stopPropagation();
@@ -126,10 +123,11 @@ const ProfileCard = ({
     >
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-lg border border-slate-200 dark:border-slate-700">
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400"></div>
-              <span className="ml-3 text-[#1D1D1D] dark:text-white">Loading...</span>
+          <div className="relative rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
+            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl animate-pulse dark:bg-cyan-400/10" />
+            <span className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-cyan-400/25 dark:border-t-cyan-300" />
+            <div className="relative h-11 w-11">
+              <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
             </div>
           </div>
         </div>
@@ -162,19 +160,19 @@ const ProfileCard = ({
         >
           {/* Profile Image */}
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 sm:w-20 sm:h-20">
+            <div className={`${isProfileContext ? "w-10 h-10 sm:w-11 sm:h-11 opacity-85" : "w-12 h-12 sm:w-20 sm:h-20"}`}>
               <ProfileAvatar
                 src={profilePic}
                 alt="Profile"
-                className="w-full h-full rounded-full object-cover border-2 border-blue-600 dark:border-blue-500"
+                className={`w-full h-full rounded-full object-cover ${isProfileContext ? "border border-blue-400/55 dark:border-cyan-400/50" : "border-2 border-blue-600 dark:border-blue-500"}`}
               />
             </div>
           </div>
 
           {/* Profile Info */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-base sm:text-lg font-bold text-[#1D1D1D] dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{profileName}</h2>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 text-xs sm:text-sm text-[#B0B3B8] dark:text-slate-400 transition-colors duration-300">
+            <h2 className={`${isProfileContext ? "text-sm sm:text-base font-semibold text-slate-600 dark:text-slate-300" : "text-base sm:text-lg font-bold text-[#1D1D1D] dark:text-white"} truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300`}>{profileName}</h2>
+            <div className={`flex flex-col sm:flex-row items-start sm:items-center gap-1 ${isProfileContext ? "text-[11px] sm:text-xs" : "text-xs sm:text-sm"} text-[#B0B3B8] dark:text-slate-400 transition-colors duration-300`}>
               <div className="flex items-center gap-1">
                 <GraduationCap size={12} className="text-blue-600 dark:text-blue-400" />
                 <span className="truncate">{profile.branch} {profile.batch}</span>
@@ -214,34 +212,36 @@ const ProfileCard = ({
         </div>
 
         {/* Footer Section */}
-        <div className="mt-auto flex flex-col items-start pt-2">
-          <div className="flex items-center gap-2">
+        <div className="mt-auto pt-2">
+          <div className="flex items-center justify-between gap-3 border-t border-slate-200/80 dark:border-slate-700/80 pt-2">
             <button
               onClick={handleReadMore}
               className="text-blue-600 dark:text-blue-400 hover:text-[#8B77F9] dark:hover:text-indigo-400 font-medium text-xs sm:text-sm transition-colors duration-300"
             >
               Read More
             </button>
-            {edit && (
-              <button
-                onClick={handleEdit}
-                className="p-1.5 rounded-lg hover:bg-[#E7F3FF] dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 transition-colors duration-300"
-                title="Edit Post"
-              >
-                <Pencil size={14} />
-              </button>
-            )}
-            {deletePost && (
-              <button
-                onClick={handleDeleteClick}
-                className="p-1.5 rounded-lg hover:bg-[#FF5F5F] dark:hover:bg-red-500 hover:text-white dark:hover:text-white text-[#FF5F5F] dark:text-red-400 transition-colors duration-300"
-                title="Delete Post"
-              >
-                <Trash size={14} />
-              </button>
-            )}
+            <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/70 px-1.5 py-1 dark:border-slate-700 dark:bg-slate-700/40">
+              {edit && (
+                <button
+                  onClick={handleEdit}
+                  className="rounded-md p-2 text-blue-600 transition-colors duration-300 hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/35 dark:hover:text-blue-300"
+                  title="Edit Post"
+                >
+                  <Pencil size={16} />
+                </button>
+              )}
+              {deletePost && (
+                <button
+                  onClick={handleDeleteClick}
+                  className="rounded-md p-2 text-[#FF5F5F] transition-colors duration-300 hover:bg-[#FF5F5F] hover:text-white dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white"
+                  title="Delete Post"
+                >
+                  <Trash size={16} />
+                </button>
+              )}
+            </div>
           </div>
-          <div className="text-[10px] sm:text-xs text-[#B0B3B8] dark:text-slate-500 mt-1.5 transition-colors duration-300">
+          <div className="mt-1.5 text-[10px] sm:text-xs text-[#B0B3B8] dark:text-slate-500 transition-colors duration-300">
             {formattedDate}
           </div>
         </div>

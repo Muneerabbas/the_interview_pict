@@ -17,7 +17,7 @@ export default function SimilarExperienceClient({ articles }) {
     if (!articles || articles.length === 0) return null;
 
     return (
-        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white/80 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-md dark:border-slate-800/60 dark:bg-[#0f172a]/40 dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] sm:p-10">
+        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-slate-300/75 bg-white/88 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-md dark:border-slate-700/70 dark:bg-[#0f172a]/55 dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] sm:p-10">
             <div className="pointer-events-none absolute -left-20 -top-16 h-64 w-64 rounded-full bg-blue-400/10 blur-[100px] dark:bg-cyan-500/10" />
             <div className="pointer-events-none absolute -right-16 -bottom-20 h-64 w-64 rounded-full bg-indigo-400/10 blur-[100px] dark:bg-blue-600/10" />
 
@@ -32,7 +32,7 @@ export default function SimilarExperienceClient({ articles }) {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-slate-100 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                    <span className="rounded-full border border-slate-200/80 bg-slate-50/80 px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800/75 dark:text-slate-300">
                         {articles.length} posts
                     </span>
                 </div>
@@ -42,17 +42,17 @@ export default function SimilarExperienceClient({ articles }) {
                 {/* Navigation Arrows */}
                 <button
                     onClick={() => scroll('left')}
-                    className="absolute -left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-blue-600 group-hover/scroll:opacity-100 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:border-cyan-500/50 dark:hover:text-cyan-300 sm:-left-5 opacity-0 sm:opacity-100"
+                    className="absolute -left-5 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/90 bg-white/95 text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.18)] backdrop-blur-sm transition-all hover:scale-105 hover:border-blue-300 hover:text-blue-700 group-hover/scroll:opacity-100 dark:border-slate-600 dark:bg-slate-900/95 dark:text-slate-200 dark:hover:border-cyan-500/55 dark:hover:text-cyan-300 sm:-left-6 opacity-0 sm:opacity-100"
                     aria-label="Scroll left"
                 >
-                    <ChevronLeft size={20} strokeWidth={2.5} />
+                    <ChevronLeft size={22} strokeWidth={2.5} />
                 </button>
                 <button
                     onClick={() => scroll('right')}
-                    className="absolute -right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:text-blue-600 group-hover/scroll:opacity-100 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:border-cyan-500/50 dark:hover:text-cyan-300 sm:-right-5 opacity-0 sm:opacity-100"
+                    className="absolute -right-5 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/90 bg-white/95 text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.18)] backdrop-blur-sm transition-all hover:scale-105 hover:border-blue-300 hover:text-blue-700 group-hover/scroll:opacity-100 dark:border-slate-600 dark:bg-slate-900/95 dark:text-slate-200 dark:hover:border-cyan-500/55 dark:hover:text-cyan-300 sm:-right-6 opacity-0 sm:opacity-100"
                     aria-label="Scroll right"
                 >
-                    <ChevronRight size={20} strokeWidth={2.5} />
+                    <ChevronRight size={22} strokeWidth={2.5} />
                 </button>
 
                 <div

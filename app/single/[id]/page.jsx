@@ -179,8 +179,8 @@ export default async function SimilarExperience({ params }) {
           dateModified: data?.updatedAt
             ? new Date(data.updatedAt).toISOString()
             : data?.date
-            ? new Date(data.date).toISOString()
-            : new Date().toISOString(),
+              ? new Date(data.date).toISOString()
+              : new Date().toISOString(),
           image: profilePicUrl,
           publisher: {
             "@type": "Organization",
@@ -322,8 +322,8 @@ export default async function SimilarExperience({ params }) {
                   </div>
                 </header>
 
-                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
-                  <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/92 dark:text-slate-300 sm:p-6">
+                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-transparent sm:px-8 sm:py-10 lg:px-12">
+                  <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/60 dark:bg-slate-900 dark:text-slate-300 sm:p-6">
                     <MarkdownRenderer content={data?.exp_text || ""} />
                   </div>
                 </section>

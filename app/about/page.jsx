@@ -52,14 +52,14 @@ export default function Aboutus() {
         {/* Header - added padding so it doesn't overlap navbar */}
         <header className="w-full pb-3 pt-12 lg:pt-14">
           <div className="group mx-auto flex w-fit flex-col items-center gap-3">
-            <div className="relative h-20 w-20 sm:h-24 sm:w-24">
-              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-xl transition duration-300 group-hover:bg-blue-600/15 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/15" />
+            <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-2xl transition duration-300 group-hover:bg-blue-600/20 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/20" />
               <Image
                 src={logo}
                 alt="theInterview Logo"
                 fill
-                sizes="96px"
-                className="relative object-contain drop-shadow-sm group-hover:animate-logo-spin"
+                sizes="160px"
+                className="relative object-contain drop-shadow-lg group-hover:animate-logo-spin"
                 priority
               />
             </div>

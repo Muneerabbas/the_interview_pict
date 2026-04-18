@@ -27,8 +27,12 @@ const MarkdownRenderer = ({ content }) => {
   }, []);
 
   const components = {
+    div: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</div>,
+    section: ({ children }) => <section className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</section>,
+    article: ({ children }) => <article className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</article>,
+    span: ({ children }) => <span className="text-inherit">{children}</span>,
     h1: ({ children }) => <h1 className="mb-8 mt-2 border-b border-slate-200/80 pb-4 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:border-slate-700/70 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
-    h2: ({ children }) => <h2 className="mb-4 mt-12 rounded-xl border border-slate-200/80 bg-slate-50/70 px-3 py-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
+    h2: ({ children }) => <h2 className="mb-4 mt-12 border-b border-slate-200 pb-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
     h3: ({ children }) => <h3 className="mb-3 mt-8 border-l-4 border-blue-500 pl-3 text-[1.125rem] font-bold leading-snug text-slate-900 dark:border-cyan-400 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
     p: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</div>,

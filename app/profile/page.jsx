@@ -249,14 +249,14 @@ const ProfilePage = () => {
         <Navbar showThemeToggle />
         {globalLoading && <LoadingScreen />}
         <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-24 sm:px-6">
-          <div className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/88 dark:bg-slate-800/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
+          <div className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/90 dark:bg-slate-800/90 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
             <div className="flex flex-col items-center gap-6 md:flex-row">
               <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.15)]">
                 <ProfileAvatar src={profile_pic} alt="Profile" name={name} className="h-full w-full object-cover" />
               </div>
               <div className="flex-1 space-y-3 text-center md:text-left">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{name}</h1>
-                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/85 dark:bg-slate-800 px-4 py-2 text-slate-700 dark:text-slate-300 md:justify-start">
+                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/90 dark:bg-slate-800 px-4 py-2 text-slate-700 dark:text-slate-300 md:justify-start">
                   <Mail size={16} className="text-blue-600" />
                   <span>{email}</span>
                 </div>
@@ -424,7 +424,7 @@ const ProfilePage = () => {
       )}
 
       <div className="relative mx-auto mt-2 max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
-        <div className="rounded-3xl border border-slate-300/85 dark:border-slate-600/85 bg-white/90 dark:bg-slate-800/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
+        <div className="rounded-3xl border border-slate-300/80 dark:border-slate-600/80 bg-white/90 dark:bg-slate-800/90 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
           <div className="flex flex-col items-start gap-6 md:flex-row">
               <div className="relative group">
               <div className="h-36 w-36 overflow-hidden rounded-full border-4 border-white ring-4 ring-blue-500/40 dark:border-slate-800 shadow-[0_16px_32px_rgba(15,23,42,0.18)] transition-all duration-300 group-hover:scale-105 dark:ring-cyan-400/35">
@@ -706,7 +706,7 @@ const ProfilePage = () => {
 
       <div className="relative mx-auto mt-10 max-w-6xl px-4 pb-8 sm:px-6 sm:pb-10">
         {/* Your Experiences section */}
-        <section className="rounded-3xl border border-slate-300/85 dark:border-slate-600/85 bg-white/90 dark:bg-slate-800/88 p-5 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6 transition-colors duration-500">
+        <section className="rounded-3xl border border-slate-300/80 dark:border-slate-600/80 bg-white/90 dark:bg-slate-800/90 p-5 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6 transition-colors duration-500">
           <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white sm:text-xl md:text-2xl">

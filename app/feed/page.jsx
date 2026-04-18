@@ -367,7 +367,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="sticky top-[76px] z-30 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(248,250,252,0.82)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.84)_0%,rgba(2,6,23,0.8)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)] md:top-[88px]">
+          <div className="relative z-20 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(248,250,252,0.82)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.84)_0%,rgba(2,6,23,0.8)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)]">
             <div className="flex flex-col gap-3 border-b border-slate-200/70 px-4 py-4 dark:border-slate-700/80 sm:flex-row sm:items-center sm:justify-between sm:px-5">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">

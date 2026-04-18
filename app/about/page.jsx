@@ -48,9 +48,9 @@ export default function Aboutus() {
       <Navbar showThemeToggle />
 
       {/* First Screen */}
-      <div className='min-h-screen flex flex-col relative pt-16'>
+      <div className='relative flex min-h-screen flex-col pt-16'>
         {/* Header - added padding so it doesn't overlap navbar */}
-        <header className="w-full pt-16 pb-6 lg:pt-20">
+        <header className="w-full pb-3 pt-12 lg:pt-14">
           <div className="group mx-auto flex w-fit flex-col items-center gap-3">
             <div className="relative h-20 w-20 sm:h-24 sm:w-24">
               <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-xl transition duration-300 group-hover:bg-blue-600/15 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/15" />
@@ -68,7 +68,7 @@ export default function Aboutus() {
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                 the<span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 bg-clip-text text-transparent dark:from-cyan-400 dark:via-blue-500 dark:to-indigo-400">Interview</span>Room
               </h1>
-              <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl px-4">
+              <p className="mx-auto mt-3 max-w-2xl px-4 text-base font-medium leading-relaxed text-slate-700 dark:text-slate-300 sm:text-lg">
                 Students building a simple place to share and learn from real interview experiences.
               </p>
             </div>
@@ -76,14 +76,19 @@ export default function Aboutus() {
         </header>
 
         {/* Team Content */}
-        <div className='flex-grow flex flex-col pt-12 pb-20'>
+        <div className='flex flex-grow flex-col pb-12 pt-5'>
           <div className='container mx-auto px-6'>
-            <h2 className="text-3xl sm:text-4xl font-semibold text-center mb-10 text-slate-900 dark:text-slate-100">
-              Team
-            </h2>
+            <div className="mx-auto mb-8 w-full max-w-5xl border-t border-slate-200/70 pt-6 text-center dark:border-slate-700/70">
+              <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
+                Team
+              </h2>
+              <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400 sm:text-base">
+                Built by students who have been through the same interview journey.
+              </p>
+            </div>
 
-            <div className="mx-auto mt-10 max-w-5xl">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center">
+            <div className="mx-auto mt-7 max-w-5xl rounded-3xl border border-slate-200/80 bg-white/35 p-4 shadow-[0_12px_34px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-5">
+              <div className="grid grid-cols-1 place-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:sm:col-span-2 [&>*:last-child]:lg:col-span-1 [&>*:last-child]:lg:col-start-2">
                 <TeamMemberCard img={himg} name="Himanshu Gholse" subtitle="PICT'26 ENTC" linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/" github="https://github.com/himanshug-08" email="himanshugholse08@gmail.com" />
                 <TeamMemberCard img={nimg} name="Neeraj Magdum" subtitle="PICT'26 CE" linkedin="https://www.linkedin.com/in/neerajmagdum/" github="https://github.com/nirz306" email="neerajmagdum10@gmail.com" />
                 <TeamMemberCard img={niimg} name="Nilay Tayade" subtitle="PICT'26 CE" linkedin="https://www.linkedin.com/in/nilay-tayade/" github="https://github.com/nilaytayade" email="nilaytayadee@gmail.com" />
@@ -97,7 +102,8 @@ export default function Aboutus() {
         </div>
 
         {/* Scroll Arrow - Only visible on desktop */}
-        <div className="hidden lg:flex justify-center pb-8 absolute bottom-0 w-full">
+        <div className="absolute bottom-3 hidden w-full flex-col items-center gap-2 lg:flex">
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-blue-400/70 to-transparent dark:via-cyan-400/70" />
           <button
             onClick={scrollToStory}
             className="p-2 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-500/35 hover:bg-blue-700 hover:shadow-blue-500/50 transition-all duration-300 animate-bounce dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400"
@@ -105,25 +111,19 @@ export default function Aboutus() {
           >
             <ChevronDown size={24} />
           </button>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
+            Continue to Our Story
+          </span>
         </div>
       </div>
 
       {/* Second Screen */}
-      <div ref={storyRef} className='min-h-screen flex flex-col relative overflow-hidden'>
-        <div className='container mx-auto px-6 py-16 relative z-10'>
-          <section className="max-w-3xl mx-auto rounded-3xl border border-slate-200/80 bg-white/80 p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-12 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-24 h-24  animate-bubble1" style={{ top: '-5%', left: '10%' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-16 h-16  animate-bubble2" style={{ bottom: '15%', right: '20%' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-32 h-32  animate-bubble3" style={{ top: '20%', right: '5%' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-12 h-12  animate-bubble4" style={{ bottom: '-10%', left: '30%' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-20 h-20  animate-bubble2" style={{ top: '30%', left: '20%', animationDelay: '2s' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-10 h-10  animate-bubble1" style={{ bottom: '25%', left: '5%', animationDelay: '4s' }} />
-              <div className="absolute bg-blue-400/10 dark:bg-cyan-400/5 rounded-full w-18 h-18  animate-bubble3" style={{ top: '5%', right: '30%', animationDelay: '3s' }} />
-            </div>
-
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6 text-center relative z-20">Our Story</h2>
-            <div className="mx-auto max-w-[640px] space-y-5 text-slate-700 dark:text-slate-300 relative z-20">
+      <div ref={storyRef} className='relative flex flex-col overflow-hidden'>
+        <div className='container relative z-10 mx-auto px-6 pb-8 pt-10 sm:pt-12'>
+          <div className="mx-auto mb-6 h-px max-w-5xl bg-gradient-to-r from-transparent via-slate-300/80 to-transparent dark:via-slate-700/80" />
+          <section className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-12">
+            <h2 className="relative z-20 mb-6 text-left text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">Our Story</h2>
+            <div className="relative z-20 mx-auto max-w-2xl space-y-5 text-left text-slate-700 dark:text-slate-300">
               <p className="text-[16px] leading-[1.75]">
                 We all know that preparing for job interviews can be a daunting task 😬. But what if there was a way to make it a little easier? That's when the idea for our website came to life 💡.
               </p>
@@ -137,8 +137,8 @@ export default function Aboutus() {
                 Through our website, we hope to build a community of people supporting each other 🤝, sharing knowledge, and making the interview process a little less intimidating. Because we believe that understanding the process is just as important as preparing the answers.
               </p>
               {/* Pull-quote tagline */}
-              <blockquote className="border-l-4 border-blue-500 bg-blue-50/50 dark:border-cyan-500 dark:bg-cyan-950/20 pl-4 py-2 pr-3 rounded-r-xl mt-6">
-                <p className="text-[16px] leading-[1.75] font-semibold italic text-blue-800 dark:text-cyan-300">By the students, for the students 🧑‍🎓</p>
+              <blockquote className="mt-6 rounded-r-xl border-l-4 border-blue-500 bg-blue-50/55 py-3 pl-4 pr-3 dark:border-cyan-500 dark:bg-cyan-950/20">
+                <p className="text-[19px] font-bold leading-[1.55] text-blue-800 dark:text-cyan-300 sm:text-[21px]">By the students, for the students 👋</p>
               </blockquote>
             </div>
           </section>

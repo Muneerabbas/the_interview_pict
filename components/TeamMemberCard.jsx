@@ -48,21 +48,22 @@ export default function TeamMemberCard({
           priority={priority}
         />
         {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 via-42% to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
         <div className="absolute inset-0 bg-blue-600/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </div>
 
       {/* Content Container - Better Visibility */}
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col justify-end">
         <div className="transform transition-transform duration-500 group-hover:-translate-y-4">
-          <h3 className="text-xl font-bold tracking-tight text-white mb-2 leading-tight">
+          <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight text-white [text-shadow:0_2px_14px_rgba(2,6,23,0.7)]">
             {name}
           </h3>
           <div className="h-1.5 w-10 bg-blue-500 rounded-full mb-3 origin-left transition-all duration-500 group-hover:w-16 group-hover:bg-cyan-400" />
 
           {/* Subtitle with better contrast and visibility */}
-          <div className="rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 px-3 py-1.5 inline-block group-hover:bg-white/10 transition-colors">
-            <p className="text-[12px] font-bold uppercase tracking-wider text-cyan-400 dark:text-cyan-300 drop-shadow-sm">
+          <div className="inline-flex rounded-lg border border-white/15 bg-black/35 px-3.5 py-1.5 backdrop-blur-sm transition-colors group-hover:bg-black/40">
+            <p className="text-xs font-bold uppercase tracking-wider text-cyan-300 drop-shadow-sm">
               {subtitle}
             </p>
           </div>

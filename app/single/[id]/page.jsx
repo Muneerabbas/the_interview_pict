@@ -222,7 +222,7 @@ export default async function SimilarExperience({ params }) {
             </div>
 
             <div className="grid gap-6">
-              <article className="overflow-hidden rounded-3xl border border-slate-300/85 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/85 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
+              <article className="overflow-hidden rounded-3xl border border-slate-300/80 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/80 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
                 <header className="relative overflow-hidden border-b border-slate-100/80 bg-gradient-to-br from-slate-50/50 to-blue-50/30 px-4 py-8 pr-14 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-blue-950/20 sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
                   <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
                   <ShareButton id={id} data={data} />

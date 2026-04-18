@@ -79,7 +79,7 @@ export default function ShareButton({ id, data }) {
           handleCopyToClipboard();
           setIsModalOpen(true);
         }}
-        className="absolute right-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-[0_10px_22px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
+        className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-[0_10px_22px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:right-4 sm:top-4 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
         aria-label="Share article"
       >
         <Share2 size={16} />
@@ -90,22 +90,27 @@ export default function ShareButton({ id, data }) {
         {/* Modal for Share Options */}
         {mounted && isModalOpen && createPortal(
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4 dark:bg-black/60">
-            <div className="relative w-full max-w-xs rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+            <div className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.3)] backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/95">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-50/80 to-transparent dark:from-cyan-950/40" />
               {/* Close Button */}
               <button
                 onClick={closeModal}
-                className="absolute right-3 top-3 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                className="absolute right-4 top-4 rounded-full p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                 aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
-              <h2 className="mb-4 text-center text-lg font-bold text-slate-900 dark:text-slate-100">Share this Article</h2>
+              <div className="relative mb-5 pr-8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Spread this story</p>
+                <h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Share this Article</h2>
+                <p className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">Choose a platform to share instantly.</p>
+              </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2.5">
                 <button
                   onClick={handleWhatsAppShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#25D366] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="flex items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50/70 px-3 py-2.5 text-sm font-semibold text-emerald-700 transition hover:-translate-y-[1px] hover:bg-emerald-100 dark:border-emerald-500/35 dark:bg-emerald-950/25 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
                   aria-label="Share on WhatsApp"
                 >
                   <Share2 size={18} />
@@ -114,7 +119,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleLinkedInShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#0077B5] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="flex items-center gap-2 rounded-xl border border-blue-200/80 bg-blue-50/70 px-3 py-2.5 text-sm font-semibold text-blue-700 transition hover:-translate-y-[1px] hover:bg-blue-100 dark:border-cyan-500/35 dark:bg-cyan-950/30 dark:text-cyan-300 dark:hover:bg-cyan-950/45"
                   aria-label="Share on LinkedIn"
                 >
                   <Linkedin size={18} />
@@ -123,7 +128,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleFacebookShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-blue-600 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="flex items-center gap-2 rounded-xl border border-indigo-200/80 bg-indigo-50/70 px-3 py-2.5 text-sm font-semibold text-indigo-700 transition hover:-translate-y-[1px] hover:bg-indigo-100 dark:border-indigo-500/35 dark:bg-indigo-950/30 dark:text-indigo-300 dark:hover:bg-indigo-950/45"
                   aria-label="Share on Facebook"
                 >
                   <Facebook size={18} />
@@ -131,7 +136,7 @@ export default function ShareButton({ id, data }) {
                 </button>
                 <button
                   onClick={handleTwitterShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#1DA1F2] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="flex items-center gap-2 rounded-xl border border-sky-200/80 bg-sky-50/70 px-3 py-2.5 text-sm font-semibold text-sky-700 transition hover:-translate-y-[1px] hover:bg-sky-100 dark:border-sky-500/35 dark:bg-sky-950/30 dark:text-sky-300 dark:hover:bg-sky-950/45"
                   aria-label="Share on Twitter"
                 >
                   <Twitter size={18} />
@@ -140,7 +145,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleInstagramShare}
-                  className="flex items-center gap-2 rounded-lg p-2 text-[#E1306C] transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-pink-200/80 bg-pink-50/70 px-3 py-2.5 text-sm font-semibold text-pink-700 transition hover:-translate-y-[1px] hover:bg-pink-100 dark:border-pink-500/35 dark:bg-pink-950/30 dark:text-pink-300 dark:hover:bg-pink-950/45"
                   aria-label="Share on Instagram"
                 >
                   <Instagram size={18} />

@@ -39,14 +39,14 @@ export default function SearchableDropdown({ options, value, onChange, placehold
     };
 
     return (
-        <div className="relative w-full" ref={dropdownRef}>
+        <div className={`relative w-full ${isOpen ? 'z-[320]' : 'z-20'}`} ref={dropdownRef}>
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={`w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
                     } dark:text-slate-200 cursor-pointer`}
             >
-                <span title={currentLabel || placeholder} className={`block min-w-0 pr-3 text-[13px] sm:text-sm ${!value ? 'text-slate-500 dark:text-slate-400 font-medium' : 'text-slate-700 dark:text-slate-200'}`}>
+                <span title={currentLabel || placeholder} className={`block min-w-0 flex-1 truncate pr-3 text-[13px] sm:text-sm ${!value ? 'font-medium text-slate-500 dark:text-slate-300' : 'text-slate-700 dark:text-slate-200'}`}>
                     {currentLabel || placeholder}
                 </span>
                 <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-500 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
@@ -59,7 +59,7 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -5, scale: 0.98 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute z-[100] mt-2 w-[max(100%,24rem)] overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95"
+                        className="absolute left-0 right-0 z-[360] mt-2 w-full max-w-full overflow-hidden rounded-xl border border-slate-200 bg-white/95 shadow-xl backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95"
                     >
                         <div className="p-2 border-b border-slate-100 dark:border-slate-800 relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
@@ -91,7 +91,7 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                                             onClick={() => handleSelect(option)}
                                             title={option.label}
                                         >
-                                            <span className="block break-words pr-2 leading-snug">{option.label}</span>
+                                            <span className="block flex-1 truncate pr-2 leading-snug">{option.label}</span>
                                             {isSelected && <Check className="h-4 w-4 shrink-0" />}
                                         </li>
                                     );

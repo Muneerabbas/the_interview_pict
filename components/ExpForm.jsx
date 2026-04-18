@@ -915,7 +915,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             </div>
           </div>
 
-          <div className="mb-6 w-full rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
+          <div className="relative z-[60] mb-6 w-full overflow-visible rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
           <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
             {/* College */}
             <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
@@ -1098,27 +1098,28 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             )}
           </AnimatePresence>
           <div className="w-full pb-4 sm:pb-5">
-            <div className="sticky top-4 z-30 mb-6 w-full rounded-[20px] border border-white/60 bg-white/50 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:rounded-2xl sm:p-3">
+            <div className="relative mt-2 w-full overflow-visible rounded-[2rem] border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
+            <div className="sticky top-4 z-20 w-full rounded-t-[2rem] border-b border-slate-200/70 bg-white/70 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:p-3">
               <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
                 {/* Toggle (Left) */}
-                <div className="flex w-full justify-start">
-                  <div className="relative flex h-[46px] w-full rounded-xl border border-slate-300/70 bg-slate-100/70 p-1 shadow-inner dark:border-slate-700 dark:bg-slate-800/85 sm:h-[52px] sm:w-auto">
+                <div className="flex w-full justify-center">
+                  <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
                       <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
                     </button>
                     <button
                       onClick={() => handleModeChange('ai')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold transition-colors duration-300 sm:flex-none sm:px-6 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
                       <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
                     </button>
 
                     {/* Animated pill background */}
                     <div
-                      className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_7px_20px_rgba(15,23,42,0.14)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 sm:w-[150px] ${mode === 'manual' ? 'left-1' : 'left-[calc(50%+2px)] sm:left-[156px]'}`}
+                      className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
                       style={{
                         border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
                       }}
@@ -1158,7 +1159,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 </div>
               </div>
             </div>
-            <div className="relative mt-2 w-full overflow-hidden rounded-[2rem] border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
+            <div className="w-full">
 
               {/* AI Prompt Area */}
               {mode === 'ai' && (
@@ -1257,6 +1258,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                 />
               </div>
             </div>
+              </div>
 
           </div>
         </motion.div>

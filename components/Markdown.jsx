@@ -7,6 +7,30 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CloudinaryImage from "@/components/CloudinaryImage";
+import { Check, Copy } from "lucide-react";
+
+const CopyButton = ({ code }) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="ml-auto flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all duration-200 text-slate-400 hover:bg-slate-200/60 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-700/60 dark:hover:text-slate-300"
+      aria-label="Copy code"
+    >
+      {copied ? (
+        <><Check className="h-3.5 w-3.5 text-emerald-500" /><span className="text-emerald-500">Copied!</span></>
+      ) : (
+        <><Copy className="h-3.5 w-3.5" /><span>Copy</span></>
+      )}
+    </button>
+  );
+};
 
 const MarkdownRenderer = ({ content }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -62,10 +86,17 @@ const MarkdownRenderer = ({ content }) => {
       const match = /language-(\w+)/.exec(className || "");
       if (!inline) {
         const lang = match?.[1] || "code";
+        const codeString = String(children).replace(/\n$/, "");
         return (
-          <div className="my-6 overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-800">
-            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
-              {lang}
+          <div className="my-6 overflow-hidden rounded-2xl border border-slate-200/60 shadow-sm dark:border-slate-700/50">
+            <div className="flex items-center gap-2 border-b border-slate-200/40 bg-[#f9fafb] px-4 py-2.5 dark:border-slate-700/40 dark:bg-[#0d1117]">
+              <span className="flex gap-1.5">
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-400/70 dark:bg-red-500/60" />
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-yellow-400/70 dark:bg-yellow-500/60" />
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-400/70 dark:bg-green-500/60" />
+              </span>
+              <span className="ml-1 font-mono text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">{lang}</span>
+              <CopyButton code={codeString} />
             </div>
             <SyntaxHighlighter
               language={match?.[1] || "text"}
@@ -74,15 +105,14 @@ const MarkdownRenderer = ({ content }) => {
                 margin: 0,
                 borderRadius: 0,
                 background: "transparent",
-                padding: "14px 16px",
+                padding: "16px 20px",
                 fontSize: "13.5px",
-                lineHeight: "1.6",
+                lineHeight: "1.7",
               }}
-              className={isDarkMode ? "!bg-[#0f172a]" : "!bg-[#f8fafc]"}
-              showLineNumbers
+              className={isDarkMode ? "!bg-[#0d1117]" : "!bg-[#f9fafb]"}
               {...props}
             >
-              {String(children).replace(/\n$/, "")}
+              {codeString}
             </SyntaxHighlighter>
           </div>
         );

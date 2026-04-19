@@ -7,35 +7,12 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CloudinaryImage from "@/components/CloudinaryImage";
-import { Check, Copy } from "lucide-react";
-
-const CopyButton = ({ code }) => {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-  return (
-    <button
-      onClick={handleCopy}
-      className="ml-auto flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all duration-200 text-slate-400 hover:bg-slate-200/60 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-700/60 dark:hover:text-slate-300"
-      aria-label="Copy code"
-    >
-      {copied ? (
-        <><Check className="h-3.5 w-3.5 text-emerald-500" /><span className="text-emerald-500">Copied!</span></>
-      ) : (
-        <><Copy className="h-3.5 w-3.5" /><span>Copy</span></>
-      )}
-    </button>
-  );
-};
 
 const MarkdownRenderer = ({ content }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
+    // Keep markdown styling aligned with the active theme.
     const checkTheme = () => {
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
@@ -56,7 +33,7 @@ const MarkdownRenderer = ({ content }) => {
     article: ({ children }) => <article className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</article>,
     span: ({ children }) => <span className="text-inherit">{children}</span>,
     h1: ({ children }) => <h1 className="mb-8 mt-2 border-b border-slate-200/80 pb-4 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:border-slate-700/70 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
-    h2: ({ children }) => <h2 className="mb-4 mt-12 border-b border-slate-200 pb-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
+    h2: ({ children }) => <h2 className="mb-4 mt-12 rounded-xl border border-slate-200/80 bg-slate-50/70 px-3 py-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
     h3: ({ children }) => <h3 className="mb-3 mt-8 border-l-4 border-blue-500 pl-3 text-[1.125rem] font-bold leading-snug text-slate-900 dark:border-cyan-400 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
     p: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</div>,
@@ -86,17 +63,10 @@ const MarkdownRenderer = ({ content }) => {
       const match = /language-(\w+)/.exec(className || "");
       if (!inline) {
         const lang = match?.[1] || "code";
-        const codeString = String(children).replace(/\n$/, "");
         return (
-          <div className="my-6 overflow-hidden rounded-2xl border border-slate-200/60 shadow-sm dark:border-slate-700/50">
-            <div className="flex items-center gap-2 border-b border-slate-200/40 bg-[#f9fafb] px-4 py-2.5 dark:border-slate-700/40 dark:bg-[#0d1117]">
-              <span className="flex gap-1.5">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-400/70 dark:bg-red-500/60" />
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-yellow-400/70 dark:bg-yellow-500/60" />
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-400/70 dark:bg-green-500/60" />
-              </span>
-              <span className="ml-1 font-mono text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">{lang}</span>
-              <CopyButton code={codeString} />
+          <div className="my-6 overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-800">
+            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400">
+              {lang}
             </div>
             <SyntaxHighlighter
               language={match?.[1] || "text"}
@@ -105,14 +75,15 @@ const MarkdownRenderer = ({ content }) => {
                 margin: 0,
                 borderRadius: 0,
                 background: "transparent",
-                padding: "16px 20px",
+                padding: "14px 16px",
                 fontSize: "13.5px",
-                lineHeight: "1.7",
+                lineHeight: "1.6",
               }}
-              className={isDarkMode ? "!bg-[#0d1117]" : "!bg-[#f9fafb]"}
+              className={isDarkMode ? "!bg-[#0f172a]" : "!bg-[#f8fafc]"}
+              showLineNumbers
               {...props}
             >
-              {codeString}
+              {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           </div>
         );

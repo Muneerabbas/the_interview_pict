@@ -12,19 +12,12 @@ import logo from "../../public/app_icon.png";
 
 const TeamPage = () => {
   return (
-    <div className="min-h-screen bg-[#eef4ff] text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar showThemeToggle />
-      <div className="relative overflow-hidden pt-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.16),_transparent_32%),radial-gradient(circle_at_80%_20%,_rgba(14,165,233,0.18),_transparent_24%),linear-gradient(180deg,_#f7fbff_0%,_#eef4ff_55%,_#edf2ff_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.28),_transparent_34%),radial-gradient(circle_at_80%_20%,_rgba(37,99,235,0.2),_transparent_28%),linear-gradient(180deg,_#020617_0%,_#0b1120_55%,_#111827_100%)]" />
-        <div className="absolute left-[-8rem] top-28 h-56 w-56 rounded-full bg-blue-300/20 blur-3xl team-float-slow dark:bg-cyan-500/15" />
-        <div className="absolute right-[-5rem] top-20 h-44 w-44 rounded-full bg-cyan-300/25 blur-3xl team-float-delayed dark:bg-blue-500/15" />
-        <div className="absolute bottom-16 left-1/2 h-36 w-36 -translate-x-1/2 rounded-full bg-indigo-300/20 blur-3xl team-float-slow dark:bg-indigo-500/15" />
-
-        <div className="container relative mx-auto px-6 pb-16 pt-10">
+      <div className="pt-24">
+        <div className="container mx-auto px-6 pb-16 pt-10">
           <div className="mx-auto max-w-6xl">
-            <section className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/65 px-6 py-12 shadow-[0_30px_80px_rgba(37,99,235,0.14)] backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-900/70 dark:shadow-[0_30px_80px_rgba(2,6,23,0.6)] sm:px-10 lg:px-14">
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent dark:via-cyan-500/50" />
-              <div className="absolute -right-16 top-0 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl dark:bg-cyan-500/10" />
+            <section className="rounded-xl border border-slate-200 bg-white px-6 py-10 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-10 lg:px-12">
 
               <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-3xl">
@@ -34,7 +27,7 @@ const TeamPage = () => {
                   </div>
 
                   <div className="mt-6 flex items-center gap-4">
-                    <div className="team-logo-glow relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 shadow-[0_20px_45px_rgba(37,99,235,0.35)] sm:h-20 sm:w-20">
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 dark:border-blue-900/60 dark:bg-blue-950/40 sm:h-20 sm:w-20">
                       <Image
                         src={logo}
                         alt="theInterview logo"
@@ -49,9 +42,9 @@ const TeamPage = () => {
                     </p>
                   </div>
 
-                  <h1 className="team-fade-up mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.05em] text-slate-950 dark:text-slate-100 sm:text-6xl lg:text-7xl">
+                  <h1 className="team-fade-up mt-6 max-w-4xl text-4xl font-bold leading-tight text-slate-950 dark:text-slate-100 sm:text-5xl lg:text-6xl">
                     Meet the people behind{" "}
-                    <span className="bg-gradient-to-r from-blue-700 via-cyan-500 to-indigo-500 bg-clip-text text-transparent">
+                    <span className="text-blue-600 dark:text-blue-400">
                       theInterview
                     </span>
                   </h1>
@@ -63,12 +56,12 @@ const TeamPage = () => {
                 </div>
 
                 <div className="team-fade-up-delay grid grid-cols-2 gap-4 sm:min-w-[320px]">
-                  <div className="rounded-3xl border border-white/80 bg-slate-950 px-5 py-5 text-white shadow-xl dark:border-slate-700/80 dark:bg-slate-800">
+                  <div className="rounded-xl border border-slate-800 bg-slate-950 px-5 py-5 text-white dark:border-slate-700 dark:bg-slate-800">
                     <p className="text-3xl font-bold">5</p>
                     <p className="mt-2 text-sm text-slate-300">Builders shipping the platform</p>
                   </div>
-                  <div className="rounded-3xl border border-blue-100 bg-blue-50/90 px-5 py-5 text-slate-900 shadow-lg dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-slate-100">
-                    <p className="text-3xl font-bold text-blue-700 dark:text-cyan-300">PICT</p>
+                  <div className="rounded-xl border border-blue-100 bg-blue-50 px-5 py-5 text-slate-900 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-slate-100">
+                    <p className="text-3xl font-bold text-blue-700 dark:text-blue-300">PICT</p>
                     <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Created by students for students</p>
                   </div>
                 </div>

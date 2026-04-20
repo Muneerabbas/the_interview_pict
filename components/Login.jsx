@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const Login = () => {
+const Login = ({ compact = false }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const saveAttempted = useRef(false);
@@ -111,21 +111,21 @@ const Login = () => {
             <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />
           </div>
         ) : (
-          <div className="flex flex-col items-center space-y-6 sm:space-y-8">
+          <div className={`flex flex-col items-center ${compact ? "space-y-6" : "space-y-6 sm:space-y-8"}`}>
             <div className="text-center space-y-2 sm:space-y-3">
-              <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-[#8B77F9] bg-clip-text text-transparent">
+              <h2 id={compact ? "auth-modal-title" : undefined} className="text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
                 Welcome
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 dark:text-slate-300 px-2 sm:px-4">
+              <p className="px-2 text-sm text-slate-500 dark:text-slate-400 sm:px-4 sm:text-base">
                 Sign in to share and view interview experiences
               </p>
             </div>
 
             <button
+              type="button"
               onClick={handleGoogleSignIn}
-              className="group relative w-full bg-white text-gray-700 rounded-xl py-2.5 sm:py-3 px-4 sm:px-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 dark:bg-slate-900 dark:text-slate-200 dark:border dark:border-slate-700"
+              className="group relative w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-700 sm:px-6"
             >
-              <div className="absolute inset-0 w-full h-full rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 opacity-0 group-hover:opacity-100 transition-all duration-300 dark:from-cyan-950/35 dark:to-blue-950/35"></div>
               <div className="relative flex items-center justify-center space-x-2 sm:space-x-3">
                 <svg
                   className="w-4 h-4 sm:w-5 sm:h-5"
@@ -143,12 +143,12 @@ const Login = () => {
               </div>
             </button>
 
-            <div className="w-full flex items-center justify-center space-x-2">
-              <div className="h-px w-12 sm:w-16 bg-gray-300 dark:bg-slate-700"></div>
-              <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 whitespace-nowrap">
+            <div className="flex w-full items-center justify-center gap-3">
+              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
+              <span className="whitespace-nowrap text-xs text-slate-400 dark:text-slate-500 sm:text-sm">
                 Protected by Google
               </span>
-              <div className="h-px w-12 sm:w-16 bg-gray-300 dark:bg-slate-700"></div>
+              <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700"></div>
             </div>
           </div>
         )}

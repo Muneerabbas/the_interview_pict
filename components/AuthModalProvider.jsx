@@ -14,9 +14,14 @@ export function AuthModalProvider({ children }) {
   useEffect(() => {
     if (!isOpen) return undefined;
     const previous = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
     document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", closeOnEscape);
     return () => {
       document.body.style.overflow = previous;
+      document.removeEventListener("keydown", closeOnEscape);
     };
   }, [isOpen]);
 
@@ -32,17 +37,23 @@ export function AuthModalProvider({ children }) {
     <AuthModalContext.Provider value={value}>
       {children}
       {isOpen ? (
-        <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-slate-950/55 p-4">
-          <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+        <div
+          className="fixed inset-0 z-[1200] flex items-center justify-center bg-slate-950/60 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setIsOpen(false);
+          }}
+        >
+          <div role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" className="relative w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-900 sm:p-8">
             <button
               type="button"
               aria-label="Close login popup"
               onClick={() => setIsOpen(false)}
-              className="absolute right-3 top-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 hover:bg-slate-50"
+              className="absolute right-4 top-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
             >
               ×
             </button>
-            <Login />
+            <Login compact />
           </div>
         </div>
       ) : null}

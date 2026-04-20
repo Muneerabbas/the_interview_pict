@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Building2, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 export default function EditCompanyPage() {
@@ -93,15 +93,9 @@ export default function EditCompanyPage() {
 
   if (loading) {
     return (
-      <div className="relative min-h-screen w-full overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <div className="min-h-screen w-full bg-slate-50 pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <Navbar showThemeToggle />
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />
-          <div className="absolute -right-[10%] top-[20%] h-[60vh] w-[60vw] rounded-full bg-cyan-300/10 blur-[130px] dark:bg-cyan-500/12" />
-          <div className="absolute top-[30%] left-[20%] h-[50vh] w-[50vw] rounded-full bg-indigo-300/10 blur-[100px] dark:bg-indigo-500/12" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
-        </div>
-        <div className="relative z-10 mx-auto max-w-2xl px-4 sm:px-6">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
             <Loader2 className="h-4 w-4 animate-spin" />
             Loading company...
@@ -112,15 +106,9 @@ export default function EditCompanyPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-[#fafcff] pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen w-full bg-slate-50 pb-20 pt-24 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar showThemeToggle />
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute -left-[10%] top-[-10%] h-[50vh] w-[50vw] rounded-full bg-blue-400/10 blur-[100px] dark:bg-blue-500/15" />
-        <div className="absolute -right-[10%] top-[20%] h-[60vh] w-[60vw] rounded-full bg-cyan-300/10 blur-[130px] dark:bg-cyan-500/12" />
-        <div className="absolute top-[30%] left-[20%] h-[50vh] w-[50vw] rounded-full bg-indigo-300/10 blur-[100px] dark:bg-indigo-500/12" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
-      </div>
-      <div className="relative z-10 mx-auto max-w-2xl px-4 sm:px-6">
+      <div className="mx-auto max-w-2xl px-4 sm:px-6">
         <Link
           href={normalizedSlug ? `/companies/${normalizedSlug}` : "/companies"}
           className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
@@ -129,11 +117,8 @@ export default function EditCompanyPage() {
           Back to Company
         </Link>
 
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200/85 bg-white/75 p-6 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-slate-800/80 dark:bg-slate-900/70 dark:shadow-[0_16px_40px_rgba(2,6,23,0.65)] sm:p-10">
-          <div className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-cyan-500 via-blue-600 to-indigo-500" />
-          <div className="absolute top-0 right-0 p-8 opacity-5">
-            <Building2 size={120} />
-          </div>
+        <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+          <div className="absolute bottom-0 left-0 top-0 w-1 bg-blue-600" />
 
           <div className="relative z-10">
             <h1 className="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
@@ -232,7 +217,7 @@ export default function EditCompanyPage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-[15px] font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:-translate-y-[1px] hover:shadow-lg disabled:opacity-70 disabled:hover:translate-y-0"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3.5 text-[15px] font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <Save size={18} />}
                   {saving ? "Saving Changes..." : "Save Changes"}

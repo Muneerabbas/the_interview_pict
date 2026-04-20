@@ -70,7 +70,7 @@ export async function POST(req) {
         if (redis) {
             await redis.del([
                 `user_profile_data:${userEmail}`,
-                `public_profile_full:${userEmail}`
+                `public_profile_full_v2:${userEmail}`
             ]);
         }
 

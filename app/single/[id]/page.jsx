@@ -216,7 +216,7 @@ export default async function SimilarExperience({ params }) {
 
       <SingleExperienceThemeShell>
         <div className="relative min-h-screen overflow-x-clip bg-slate-50 dark:bg-slate-950">
-          <div className="relative z-10 mx-auto max-w-3xl px-4 pb-14 pt-24 sm:px-6 sm:pb-16 lg:px-8">
+          <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 pt-24 sm:px-6 sm:pb-16 lg:px-8">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <Link
                 href={isTale ? "/tales" : "/feed"}
@@ -328,7 +328,7 @@ export default async function SimilarExperience({ params }) {
                     </header>
 
                     <section className="px-4 py-7 sm:px-8 sm:py-9 lg:px-12">
-                      <div className="mx-auto w-full max-w-[720px] text-slate-700 dark:text-slate-300">
+                      <div className="mx-auto w-full max-w-[800px] text-slate-700 dark:text-slate-300">
                         <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
                     </section>
@@ -447,7 +447,7 @@ export default async function SimilarExperience({ params }) {
                     </header>
 
                     <section className="px-4 py-7 sm:px-8 sm:py-9 lg:px-12">
-                      <div className="mx-auto w-full max-w-[720px] text-slate-700 dark:text-slate-300">
+                      <div className="mx-auto w-full max-w-[800px] text-slate-700 dark:text-slate-300">
                         <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
                     </section>

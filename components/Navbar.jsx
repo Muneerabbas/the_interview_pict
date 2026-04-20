@@ -7,7 +7,6 @@ import {
   Home,
   FileText,
   LogOut,
-  Search,
   User,
   LogIn,
   Menu,
@@ -30,7 +29,6 @@ import { useTheme } from "next-themes";
 export default function Navbar({ showThemeToggle = false }) {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
-  const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -146,13 +144,6 @@ export default function Navbar({ showThemeToggle = false }) {
     await signOut({ callbackUrl: "/" });
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const query = searchText.trim() === "" ? "Himanshu-Nilay-Neeraj" : searchText.trim();
-    router.push(`/search/${encodeURIComponent(query)}`);
-    setIsMenuOpen(false);
-  };
-
   const handleLogin = () => {
     router.push("/login");
   };
@@ -260,27 +251,8 @@ export default function Navbar({ showThemeToggle = false }) {
             ))}
           </nav>
 
-          {/* Right: Search & Actions */}
+          {/* Right: Actions */}
           <div className="hidden items-center gap-2 lg:ml-auto lg:flex lg:justify-self-end xl:gap-3">
-            {/* Search Bar */}
-            <div className="min-w-0 lg:w-[150px] xl:w-[220px] 2xl:w-[280px]">
-              <form onSubmit={handleSearch}>
-                <div className="group relative">
-                  <Search
-                    size={16}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-600 dark:text-slate-500"
-                  />
-                  <input
-                    type="text"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder="Search experiences…"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-700"
-                  />
-                </div>
-              </form>
-            </div>
-
             <ThemeToggle />
 
             <div className="flex items-center gap-2">
@@ -323,7 +295,7 @@ export default function Navbar({ showThemeToggle = false }) {
             </div>
           </div>
 
-          {/* Mobile: Search + Menu + CTA */}
+          {/* Mobile: Menu and actions */}
           <div className="flex items-center gap-1.5 lg:hidden min-[400px]:gap-2">
             <div className="flex items-center gap-1.5 min-[400px]:gap-2">
               {showThemeToggle && <ThemeToggle />}
@@ -378,32 +350,7 @@ export default function Navbar({ showThemeToggle = false }) {
               className="fixed left-0 right-0 top-[calc(env(safe-area-inset-top)+66px)] z-50 mx-auto w-full max-w-2xl px-3 min-[400px]:px-4 sm:top-[calc(env(safe-area-inset-top)+72px)] sm:px-5 md:top-[calc(env(safe-area-inset-top)+78px)] lg:hidden"
             >
               <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_24px_50px_rgba(2,6,23,0.7)] dark:supports-[backdrop-filter]:bg-slate-950/90">
-                <div className="p-4">
-                  <form onSubmit={handleSearch}>
-                    <div className="relative group">
-                      <Search
-                        size={18}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors dark:text-slate-500 dark:group-focus-within:text-blue-400"
-                      />
-                      <input
-                        type="text"
-                        value={searchText}
-                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 py-2.5 pl-11 pr-4 text-sm text-slate-700 shadow-inner outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/15"
-                        onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Search for companies or roles..."
-                        autoFocus
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="mt-3 w-full rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                    >
-                      Search
-                    </button>
-                  </form>
-                </div>
-
-                <div className="border-t border-slate-100 p-3 sm:p-4 dark:border-slate-800">
+                <div className="p-3 sm:p-4">
                   <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
                     {navItems.map(({ href, label, Icon }) => (
                       <Link

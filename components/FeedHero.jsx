@@ -57,7 +57,7 @@ const MiniTrendingCard = ({ profile }) => {
     );
 };
 
-const FeedHero = ({ isDarkMode }) => {
+const FeedHero = ({ isDarkMode, contentType = "interview" }) => {
     const [trending, setTrending] = useState([]);
     const [loading, setLoading] = useState(true);
     const scrollRef = useRef(null);
@@ -65,7 +65,7 @@ const FeedHero = ({ isDarkMode }) => {
     useEffect(() => {
         const fetchTrending = async () => {
             try {
-                const res = await axios.get("/api/feed?sort=trending&itemsPerPage=8");
+                const res = await axios.get(`/api/feed?sort=trending&itemsPerPage=8&contentType=${contentType}`);
                 setTrending(res.data);
             } catch (err) {
                 console.error("Failed to fetch trending:", err);
@@ -74,7 +74,7 @@ const FeedHero = ({ isDarkMode }) => {
             }
         };
         fetchTrending();
-    }, []);
+    }, [contentType]);
 
     const scroll = (direction) => {
         if (scrollRef.current) {

@@ -75,7 +75,7 @@ export async function POST(req) {
     if (redis) {
       await redis.del([
         `user_profile_data:${gmail}`,
-        `public_profile_full:${gmail}`
+        `public_profile_full_v2:${gmail}`
       ]);
     }
 

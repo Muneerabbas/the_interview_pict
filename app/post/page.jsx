@@ -36,7 +36,7 @@ function PostContent() {
   if (status === "loading") {
     return (
       <div className="relative flex min-h-screen items-center justify-center">
-        <div className="flex items-center gap-2 rounded-2xl border border-blue-100 bg-white/85 px-6 py-4 text-blue-600 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-cyan-500/35 dark:bg-slate-900/85 dark:text-cyan-300 dark:shadow-[0_16px_42px_rgba(2,6,23,0.65)]">
+        <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-4 text-blue-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-blue-300">
           <Loader2 className="animate-spin" size={24} />
           <span className="text-xl font-medium">Loading session...</span>
         </div>
@@ -50,7 +50,7 @@ function PostContent() {
         // Displaying the login overlay and banner when the user is not logged in
         <div className="relative min-h-screen pt-24">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <div className="rounded-3xl border border-slate-200/80 bg-white/85 px-6 py-12 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/85 dark:shadow-[0_16px_44px_rgba(2,6,23,0.65)] sm:px-10">
+            <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-10">
               <div className="flex flex-col items-center text-center space-y-4">
                 <FileText size={48} className="text-blue-600 dark:text-cyan-300" />
                 <h1 className="text-3xl font-bold text-[#1D1D1D] dark:text-slate-100">
@@ -102,7 +102,7 @@ function PostContent() {
         <div className="relative min-h-screen">
           <div className="relative z-10 mx-auto max-w-7xl px-4 pt-24 sm:px-6">
             <div className="mb-5 flex justify-center">
-              <div className="inline-flex rounded-full border border-slate-200 bg-white/80 p-1 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80">
+              <div className="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-700 dark:bg-slate-800">
                 <button
                   type="button"
                   onClick={() => setContentType("interview")}
@@ -140,10 +140,7 @@ export default function Post() {
   const { data: session } = useSession();
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-500/20" />
-      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-500/20" />
+    <main className="relative min-h-screen overflow-x-clip bg-slate-50 dark:bg-slate-950">
 
       {!session && (
         <Navbar showThemeToggle />
@@ -151,7 +148,7 @@ export default function Post() {
 
       <Suspense fallback={
         <div className="relative flex min-h-screen items-center justify-center">
-          <div className="flex items-center gap-2 rounded-2xl border border-blue-100 bg-white/85 px-6 py-4 text-blue-600 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-cyan-500/35 dark:bg-slate-900/85 dark:text-cyan-300 dark:shadow-[0_16px_42px_rgba(2,6,23,0.65)]">
+          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-4 text-blue-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-blue-300">
             <Loader2 className="animate-spin" size={24} />
             <span className="text-xl font-medium">Initializing editor...</span>
           </div>

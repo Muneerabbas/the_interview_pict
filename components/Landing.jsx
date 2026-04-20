@@ -393,21 +393,21 @@ export default function Home({ tales, featuredStories, topStories }) {
           <div className="mt-6 rounded-xl border border-slate-200 bg-white px-5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <FilterGroup icon={Building2} label="By company">
               {COMPANIES.map((company) => (
-                <Link key={company} href={`/search/${company}`} prefetch className={chipClass}>
+                <Link key={company} href="/companies" prefetch className={chipClass}>
                   {company}
                 </Link>
               ))}
             </FilterGroup>
             <FilterGroup icon={GraduationCap} label="By batch year">
               {batchYears.map((year) => (
-                <Link key={year} href={`/search/${year}`} prefetch className={chipClass}>
+                <Link key={year} href="/feed" prefetch className={chipClass}>
                   {year}
                 </Link>
               ))}
             </FilterGroup>
             <FilterGroup icon={Blocks} label="By department">
               {DEPARTMENTS.map((dept) => (
-                <Link key={dept.key} href={`/search/${dept.key}`} prefetch className={chipClass}>
+                <Link key={dept.key} href="/feed" prefetch className={chipClass}>
                   {dept.label}
                 </Link>
               ))}

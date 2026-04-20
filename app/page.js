@@ -114,11 +114,6 @@ export default async function Home() {
                         "@type": "WebSite",
                         name: "The Interview Room",
                         url: siteUrl,
-                        potentialAction: {
-                            "@type": "SearchAction",
-                            target: `${siteUrl}/search?q={search_term_string}`,
-                            "query-input": "required name=search_term_string",
-                        },
                     }),
                 }}
             />

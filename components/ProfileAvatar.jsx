@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { User } from 'lucide-react';
 
 const ProfileAvatar = ({ src, alt, className, name }) => {
+  const imageRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -10,6 +11,12 @@ const ProfileAvatar = ({ src, alt, className, name }) => {
   useEffect(() => {
     setImageError(false);
     setImageLoaded(false);
+
+    const image = imageRef.current;
+    if (image?.complete) {
+      if (image.naturalWidth > 0) setImageLoaded(true);
+      else setImageError(true);
+    }
   }, [src]);
 
   const { initials, bgColor } = useMemo(() => {
@@ -42,12 +49,13 @@ const ProfileAvatar = ({ src, alt, className, name }) => {
       {/* Image Layer - Fades in on top */}
       {showImage && (
         <img
+          ref={imageRef}
           src={src}
           alt={alt}
           referrerPolicy="no-referrer"
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
         />
       )}
     </div>

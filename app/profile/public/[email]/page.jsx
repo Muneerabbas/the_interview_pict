@@ -30,7 +30,7 @@ import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
 
 async function getPublicProfile(email) {
-  const cacheKey = `public_profile_full:${email}`;
+  const cacheKey = `public_profile_full_v2:${email}`;
 
   return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
     try {
@@ -59,9 +59,10 @@ async function getPublicProfile(email) {
       const totalLikes = rawPosts.reduce((sum, item) => sum + (Array.isArray(item?.likes) ? item.likes.length : 0), 0);
       const companies = new Set(rawPosts.map((item) => item.company).filter(Boolean));
 
+      const userProfileImage = resolveProfileImage(userData || {});
       const posts = rawPosts.map((post) => ({
         ...post,
-        profile_pic: resolveProfileImage({ ...post, user: userData || {} }),
+        profile_pic: userProfileImage || resolveProfileImage(post),
         name: resolveProfileName({ ...post, user: userData || {} }),
       }));
 
@@ -69,7 +70,7 @@ async function getPublicProfile(email) {
       const profile = {
         name: resolveProfileName({ ...first, user: userData || {} }),
         email,
-        profilePic: resolveProfileImage({ ...first, user: userData || {} }),
+        profilePic: userProfileImage || resolveProfileImage(first),
         branch: userData?.branch || first?.branch || "Branch not shared",
         batch: userData?.batch || first?.batch || "",
         role: userData?.role || first?.role || "Role not shared",
@@ -120,11 +121,7 @@ export default async function PublicProfilePage({ params }) {
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.1),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.1),transparent_34%),linear-gradient(180deg,#0f172a_0%,#1e293b_100%)] transition-colors duration-500">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 dark:bg-sky-500/10 blur-3xl transition-colors duration-500" />
-      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 dark:bg-indigo-500/10 blur-3xl transition-colors duration-500" />
-
+    <main className="relative min-h-screen overflow-x-clip bg-slate-50 font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar />
       <ProfileViewTracker email={profile?.email} />
 
@@ -139,7 +136,7 @@ export default async function PublicProfilePage({ params }) {
           </Link>
         </div>
 
-        <section className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/88 dark:bg-slate-800/88 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
           {profile ? (
             <div className="space-y-8">
               <div className="flex flex-col items-center gap-6 md:flex-row">
@@ -161,7 +158,7 @@ export default async function PublicProfilePage({ params }) {
                     <p className="text-lg font-medium text-slate-600 dark:text-slate-400">{profile.headline}</p>
                   )}
                   <div className="flex flex-wrap items-center justify-center gap-4 md:justify-start">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white/85 dark:bg-slate-800 px-4 py-1.5 text-slate-700 dark:text-slate-300 shadow-sm transition-colors">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                       <Mail size={16} className="text-blue-600 dark:text-blue-400" />
                       <span className="text-sm">{profile.email.replace(/(?<=.{2}).(?=[^@]*@)/g, "•")}</span>
                     </div>
@@ -241,19 +238,19 @@ export default async function PublicProfilePage({ params }) {
         {stats && (
           <div className="relative mx-auto mt-6 max-w-6xl">
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-blue-100 dark:border-blue-900/40 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Articles</div>
                 <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><FileText size={18} className="text-blue-600" /> {stats.posts}</div>
               </div>
-              <div className="rounded-2xl border border-blue-100 dark:border-blue-900/40 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Reads</div>
                 <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><Eye size={18} className="text-indigo-600" /> {stats.reads}</div>
               </div>
-              <div className="rounded-2xl border border-blue-100 dark:border-blue-900/40 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Likes</div>
                 <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><ThumbsUp size={18} className="text-pink-600" /> {stats.likes}</div>
               </div>
-              <div className="rounded-2xl border border-blue-100 dark:border-blue-900/40 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+              <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Companies</div>
                 <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><Building2 size={18} className="text-emerald-600" /> {stats.companies}</div>
               </div>
@@ -262,7 +259,7 @@ export default async function PublicProfilePage({ params }) {
         )}
 
         <div className="relative mx-auto mt-8 max-w-6xl pb-14">
-          <section className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/88 dark:bg-slate-800/88 p-5 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
             <h2 className="mb-4 text-xl font-bold text-slate-900 dark:text-white">Public Articles</h2>
             {posts.length === 0 ? (
               <p className="text-sm text-slate-600 dark:text-slate-300">This user has not shared any articles yet.</p>

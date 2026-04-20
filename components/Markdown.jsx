@@ -132,7 +132,7 @@ const MarkdownRenderer = ({ content }) => {
   };
 
   return (
-    <div className="markdown-container mx-auto max-w-[700px] px-2 pb-2 sm:px-4">
+    <div className="markdown-container mx-auto max-w-[760px] px-2 pb-2 sm:px-4">
       <ReactMarkdown components={components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
         {content}
       </ReactMarkdown>

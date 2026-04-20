@@ -7,7 +7,7 @@ async function invalidateAfterDelete(email) {
 
   const keys = [
     `profile_posts_${encodeURIComponent(email)}`,
-    `public_profile_full:${email}`,
+    `public_profile_full_v2:${email}`,
     `user_profile_data:${email}`
   ];
 

@@ -225,10 +225,7 @@ const ProfilePage = () => {
 
   if (status === 'loading') {
     return (
-      <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.1),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.1),transparent_34%),linear-gradient(180deg,#0f172a_0%,#1e293b_100%)] transition-colors duration-500">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
-        <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/25 blur-3xl dark:bg-sky-500/20" />
-        <div className="pointer-events-none absolute right-[-100px] top-60 h-72 w-72 rounded-full bg-indigo-300/25 blur-3xl dark:bg-indigo-500/20" />
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <div className="relative flex min-h-screen items-center justify-center">
           <div className="relative flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500 dark:border-slate-700/80 dark:bg-slate-900/95">
             <span className="pointer-events-none absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl animate-pulse dark:bg-cyan-400/10" />
@@ -244,12 +241,11 @@ const ProfilePage = () => {
 
   if (!session) {
     return (
-      <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.1),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.1),transparent_34%),linear-gradient(180deg,#0f172a_0%,#1e293b_100%)] transition-colors duration-500">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <Navbar showThemeToggle />
         {globalLoading && <LoadingScreen />}
         <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-24 sm:px-6">
-          <div className="rounded-3xl border border-slate-200/80 dark:border-slate-700/80 bg-white/90 dark:bg-slate-800/90 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
             <div className="flex flex-col items-center gap-6 md:flex-row">
               <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.15)]">
                 <ProfileAvatar src={profile_pic} alt="Profile" name={name} className="h-full w-full object-cover" />
@@ -275,11 +271,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.1),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.1),transparent_34%),linear-gradient(180deg,#0f172a_0%,#1e293b_100%)] transition-colors duration-500">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.18)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.38),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.06),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.06),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.72),transparent_52%)]" />
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/25 blur-3xl dark:bg-sky-500/20" />
-      <div className="pointer-events-none absolute right-[-100px] top-60 h-72 w-72 rounded-full bg-indigo-300/25 blur-3xl dark:bg-indigo-500/20" />
+    <main className="relative min-h-screen overflow-x-clip bg-slate-50 dark:bg-slate-950">
 
       <Navbar showThemeToggle />
 
@@ -424,10 +416,10 @@ const ProfilePage = () => {
       )}
 
       <div className="relative mx-auto mt-2 max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
-        <div className="rounded-3xl border border-slate-300/80 dark:border-slate-600/80 bg-white/90 dark:bg-slate-800/90 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
           <div className="flex flex-col items-start gap-6 md:flex-row">
             <div className="relative group">
-              <div className="h-36 w-36 overflow-hidden rounded-full border-4 border-white ring-4 ring-blue-500/40 dark:border-slate-800 shadow-[0_16px_32px_rgba(15,23,42,0.18)] transition-all duration-300 group-hover:scale-105 dark:ring-cyan-400/35">
+              <div className="h-36 w-36 overflow-hidden rounded-full border-4 border-white ring-2 ring-blue-500/40 shadow-sm transition-all duration-300 group-hover:scale-105 dark:border-slate-800 dark:ring-blue-400/35">
                 <ProfileAvatar src={profile_pic || null} alt={`${name}'s profile picture`} name={name} className="h-full w-full object-cover" />
               </div>
             </div>
@@ -713,7 +705,7 @@ const ProfilePage = () => {
 
       <div className="relative mx-auto mt-10 max-w-6xl px-4 pb-8 sm:px-6 sm:pb-10">
         {/* Your Experiences section */}
-        <section className="rounded-3xl border border-slate-300/80 dark:border-slate-600/80 bg-white/90 dark:bg-slate-800/90 p-5 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-6 transition-colors duration-500">
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
           <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white sm:text-xl md:text-2xl">
@@ -740,7 +732,7 @@ const ProfilePage = () => {
               <h3 className="text-xl font-bold dark:text-white mb-2">No experiences shared yet</h3>
               <p className="text-slate-500 mb-6">Your interview story can help seniors prepare smarter.</p>
               <Link href="/post">
-                <button className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-md shadow-blue-500/20">Share Your First Experience</button>
+                <button className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700">Share Your First Experience</button>
               </Link>
             </div>
           ) : (

@@ -26,8 +26,12 @@ async function invalidateAfterWrite(email) {
 
 export async function POST(req) {
   try {
-    const { exp_text, college, company, branch, batch, profile_pic, name, role, email } = await req.json();
-    if (!exp_text || !company || !name) {
+    const { exp_text, college, company, branch, batch, profile_pic, name, role, email, content_type, title } = await req.json();
+
+    // For interviews, company and name are required.
+    // For tales, title and name are required.
+    const isTale = content_type === "tale";
+    if (!exp_text || !name || (!isTale && !company) || (isTale && !title)) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
@@ -35,8 +39,14 @@ export async function POST(req) {
     const experience = db.collection("experience");
     const backup = db.collection("backup");
 
-    // Generate a meaningful UID: "google-sde-2025-nanoid"
-    const baseSlug = slugify(`${name}'s experience at ${company} ${role} ${batch} `, { lower: true, strict: true });
+    // Generate a meaningful UID
+    let baseSlug;
+    if (isTale) {
+      baseSlug = slugify(`${title} by ${name}`, { lower: true, strict: true });
+    } else {
+      baseSlug = slugify(`${name}'s experience at ${company} ${role} ${batch} `, { lower: true, strict: true });
+    }
+
     let uid = `${baseSlug}-${nanoid(6)}`; // Append a short unique ID
 
     // Ensure UID uniqueness in DB
@@ -46,34 +56,48 @@ export async function POST(req) {
 
     // Save experience to DB
     const now = new Date().toISOString();
-    const result = await experience.insertOne({
-      uid, exp_text, college, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
-    });
-    const bc = await backup.insertOne({
-      uid, exp_text, college, company, branch, batch, profile_pic, name, date: now, views: 0, role, email
-    });
+    const doc = {
+      uid,
+      exp_text,
+      college,
+      company: isTale ? "Tales From PICT" : company,
+      branch,
+      batch,
+      profile_pic,
+      name,
+      date: now,
+      views: 0,
+      role: isTale ? "Student Tale" : role,
+      email,
+      content_type: content_type || "interview",
+      title: title || ""
+    };
 
-    // Sync with Company collection
-    try {
-      const companySlug = slugify(company, { lower: true, strict: true });
-      // Mongoose Company model uses the "companies" collection.
-      await db.collection("companies").updateOne(
-        { name: company },
-        {
-          $inc: { "stats.interviewsCount": 1 },
-          $setOnInsert: {
-            slug: companySlug,
-            about: `Company ${company} interview experience details.`,
-            tags: ["Interview"],
-            "stats.reviewsCount": 0,
-            "stats.rating": 5
-          }
-        },
-        { upsert: true }
-      );
-    } catch (companyError) {
-      console.error("Failed to sync company state:", companyError);
-      // Non-blocking error
+    const result = await experience.insertOne(doc);
+    await backup.insertOne(doc);
+
+    // Sync with Company collection only for interviews
+    if (!isTale) {
+      try {
+        const companySlug = slugify(company, { lower: true, strict: true });
+        await db.collection("companies").updateOne(
+          { name: company },
+          {
+            $inc: { "stats.interviewsCount": 1 },
+            $setOnInsert: {
+              slug: companySlug,
+              about: `Company ${company} interview experience details.`,
+              tags: ["Interview"],
+              "stats.reviewsCount": 0,
+              "stats.rating": 5
+            }
+          },
+          { upsert: true }
+        );
+      } catch (companyError) {
+        console.error("Failed to sync company state:", companyError);
+        // Non-blocking error
+      }
     }
 
     if (!result.acknowledged) {
@@ -88,7 +112,7 @@ export async function POST(req) {
 
     return NextResponse.json({ message: "Experience saved successfully", uid }, { status: 200 });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error saving experience:", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

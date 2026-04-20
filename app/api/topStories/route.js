@@ -13,6 +13,9 @@ export async function GET(req) {
 
     const pipeline = [
       {
+        $match: { content_type: "interview" }
+      },
+      {
         $addFields: {
           viewsInt: {
             $convert: {

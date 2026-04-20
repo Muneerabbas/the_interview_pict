@@ -14,6 +14,7 @@ import {
   X,
   List,
   Building2,
+  BookOpen,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -200,6 +201,7 @@ export default function Navbar({ showThemeToggle = false }) {
       { href: "/", label: "Home", Icon: Home },
       { href: "/companies", label: "Companies", Icon: Building2 },
       { href: "/feed", label: "Feed", Icon: List },
+      { href: "/tales", label: "Tales", Icon: BookOpen },
       { href: "/post", label: "Post", Icon: FileText },
       { href: "/profile", label: "Profile", Icon: User },
     ],

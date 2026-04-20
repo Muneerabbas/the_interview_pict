@@ -6,6 +6,7 @@ export async function POST(req) {
   try {
     const db = await getMongoDb();
     const drafts = db.collection("drafts");
+    const body = await req.json();
     const {
       exp_text,
       college,
@@ -20,19 +21,14 @@ export async function POST(req) {
       chatStage,
       chatMessages,
       totalRounds,
-      currentRound
-    } = await req.json();
+      currentRound,
+      content_type
+    } = body;
 
     // Basic validation
     if (!email) {
       return NextResponse.json({ message: "User email is required" }, { status: 400 });
     }
-
-    // // Validate user exists
-    // const userDoc = await user.findOne({ email });
-    // if (!userDoc) {
-    //   return NextResponse.json({ message: "User not found" }, { status: 404 });
-    // }
 
     const now = new Date().toISOString();
 
@@ -54,12 +50,13 @@ export async function POST(req) {
       currentRound: currentRound || 1,
       created_at: now,
       last_edited: now,
-      status: 'draft'
+      status: 'draft',
+      content_type: content_type || 'interview'
     };
 
     // Upsert the draft - if exists update, if not create
     const result = await drafts.updateOne(
-      { email },
+      { email, content_type: draftDoc.content_type },
       { $set: draftDoc },
       { upsert: true }
     );
@@ -85,12 +82,13 @@ export async function GET(req) {
     const db = await getMongoDb();
     const drafts = db.collection("drafts");
     const email = req.nextUrl.searchParams.get('email');
+    const contentType = req.nextUrl.searchParams.get('contentType') || 'interview';
 
     if (!email) {
       return NextResponse.json({ message: "Email is required" }, { status: 400 });
     }
 
-    const draft = await drafts.findOne({ email });
+    const draft = await drafts.findOne({ email, content_type: contentType });
 
     if (!draft) {
       return NextResponse.json({ message: "No draft found" }, { status: 404 });

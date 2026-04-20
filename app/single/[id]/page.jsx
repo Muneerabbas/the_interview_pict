@@ -94,8 +94,13 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const title = `${data?.company || "Interview"} Experience`;
-  const description = `Read ${data?.name || "a candidate"}'s interview experience at ${data?.company || "a top company"}.`;
+  const isTale = data?.content_type === "tale";
+  const title = isTale
+    ? (data?.title || `${data?.name}'s Tale`)
+    : `${data?.company || "Interview"} Experience`;
+  const description = isTale
+    ? `Read ${data?.name}'s story: ${data?.title || "a general experience"}.`
+    : `Read ${data?.name}'s interview experience at ${data?.company || "a top company"}.`;
   const canonical = `/single/${id}`;
   const ogImage = data?.profile_pic || `${baseUrl}/app_icon.png`;
 
@@ -170,7 +175,7 @@ export default async function SimilarExperience({ params }) {
         item={{
           "@context": "https://schema.org",
           "@type": "Article",
-          headline: `${data?.company} Interview Experience: ${data?.role}`,
+          headline: isTale ? (data?.title || `Story by ${data?.name}`) : `${data?.company} Interview Experience: ${data?.role}`,
           author: {
             "@type": "Person",
             name: data?.name,
@@ -217,7 +222,7 @@ export default async function SimilarExperience({ params }) {
                 Back to feed
               </Link>
               <div className="inline-flex items-center rounded-full border border-slate-200/70 bg-slate-50/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] text-slate-400 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-500">
-                Single Experience
+                {isTale ? "Tales From PICT" : "Single Experience"}
               </div>
             </div>
 
@@ -255,7 +260,7 @@ export default async function SimilarExperience({ params }) {
                     <div className="min-w-0 flex-1">
                       <div className="mb-1 flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:bg-cyan-500/10 dark:text-slate-500">
-                          Interview Experience
+                          {isTale ? "Tales From PICT" : "Interview Experience"}
                         </span>
                         {isToday && (
                           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
@@ -279,14 +284,24 @@ export default async function SimilarExperience({ params }) {
                       )}
 
                       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-                        <div className="flex items-center gap-1.5">
-                          <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
-                          <span className="text-slate-900 dark:text-slate-200 font-bold">{data?.company}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Briefcase size={15} className="text-blue-600 dark:text-cyan-300" />
-                          <span>{data?.role}</span>
-                        </div>
+                        {data?.company && (
+                          <div className="flex items-center gap-1.5">
+                            <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
+                            <span className="text-slate-900 dark:text-slate-200 font-bold">
+                              {isTale ? "Event / Topic: " : ""}
+                              {data?.company}
+                            </span>
+                          </div>
+                        )}
+                        {data?.role && (
+                          <div className="flex items-center gap-1.5">
+                            <Briefcase size={15} className="text-blue-600 dark:text-cyan-300" />
+                            <span>
+                              {isTale ? "Subject: " : ""}
+                              {data?.role}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       <PostCompanyActions
@@ -319,11 +334,18 @@ export default async function SimilarExperience({ params }) {
                         </div>
                       </div>
                     </div>
+                    {isTale && data?.title && (
+                      <div className="mt-8 border-t border-slate-100/80 pt-8 dark:border-slate-700/50">
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100 sm:text-3xl">
+                          {data.title}
+                        </h2>
+                      </div>
+                    )}
                   </div>
                 </header>
 
-                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-transparent sm:px-10 sm:py-10 lg:px-16">
-                  <div className="mx-auto w-full max-w-[800px]">
+                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
+                  <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/90 dark:text-slate-300 sm:p-6">
                     <MarkdownRenderer content={data?.exp_text || ""} />
                   </div>
                 </section>

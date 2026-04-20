@@ -133,12 +133,42 @@ def merge(left, right):
 
 Be as detailed as possible, and replace the placeholders with your actual interview details.`;
 
+const TALE_TEMPLATE = `## Tale from PICT: [Your Story Title]
 
-export default function MdxEditorPage({ showThemeToggle = false }) {
+Share your authentic journey here—whether it was a hackathon, a challenging project, a competition, or even a failure that taught you a valuable lesson. 
+
+---
+
+### 1. The Context
+- **Event/Topic:** [e.g., Credenz Hackathon, Personal Web Project, Robotics Competition]
+- **When:** [e.g., Jan 2024, Second Year]
+- **Team Size:** [e.g., Solo, Team of 4]
+
+---
+
+### 2. The Story
+[Describe what happened. What was the goal? What challenges did you face? Keep it relatable and fun!]
+
+---
+
+### 3. Key Lessons & Takeaways
+[What did you learn? What would you do differently next time? Any advice for others embarking on a similar journey?]
+
+---
+
+### 4. 🖼️ Memories
+![image](https://i.imgflip.com/9jbjc6.jpg)
+[Upload any photos of your team, your project, or the event itself!]
+`;
+
+
+export default function MdxEditorPage({ showThemeToggle = false, contentType = "interview" }) {
   const { resolvedTheme } = useTheme();
   const [mountedTheme, setMountedTheme] = useState(false);
   useEffect(() => setMountedTheme(true), []);
   const isDarkMode = mountedTheme && resolvedTheme === "dark";
+
+  const [title, setTitle] = useState("");
 
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -160,6 +190,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     branch: false,
     company: false,
     role: false,
+    title: false,
     markdown: false,
   });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -288,10 +319,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       if (!session?.user?.email) return;
 
       try {
-        const response = await fetch(`/api/drafts?email=${session.user.email}`);
+        const response = await fetch(`/api/drafts?email=${session.user.email}&contentType=${contentType}`);
         if (response.ok) {
           const draftData = await response.json();
           setMarkdown(draftData.exp_text || "");
+          setTitle(draftData.title || "");
           setCollege(draftData.college || "");
           setCustomCollege(draftData.customCollege || "");
           setBatch(draftData.batch || "");
@@ -313,20 +345,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     };
 
     loadDraft();
-  }, [session?.user?.email]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 768);
-      setBottomMargin(window.innerWidth < 768 ? "80px" : "0");
-      setHeight(window.innerWidth < 768 ? "calc(100vh - 50px)" : "calc(100vh)"); // Adjust height based on screen size
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  }, [session?.user?.email, contentType]);
 
   // Create debounced save function
   const saveDraft = useCallback(
@@ -342,13 +361,14 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
             email: session.user.email,
             name: session.user.name,
             profile_pic: session.user.image,
+            content_type: contentType
           }),
         });
       } catch (error) {
         console.error("Error saving draft:", error);
       }
     }, 2000),
-    [session]
+    [session, contentType]
   );
 
 
@@ -363,9 +383,13 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       case 'branch':
         return !value;
       case 'company':
-        return !value || (value === 'others' && !customCompany); // Checks if company is empty or "others" without custom name
+        if (contentType === 'tale') return false; // Optional for tales
+        return !value || (value === 'others' && !customCompany);
       case 'role':
-        return !value || (value === 'others' && !customRole); // Checks if role is empty or "Others" without custom role
+        if (contentType === 'tale') return false; // Optional for tales
+        return !value || (value === 'others' && !customRole);
+      case 'title':
+        return contentType === 'tale' && !value.trim();
       case 'markdown':
         return !getEditorPlainText(value);
       default:
@@ -517,9 +541,11 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           college: finalCollege,
           batch,
           branch,
-          company: finalCompany, // Use final company value
-          role: finalRole, // Use final role value
+          company: finalCompany,
+          role: finalRole,
           email: session.user.email,
+          content_type: contentType,
+          title: title
         }),
       });
 
@@ -533,12 +559,14 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
       setCompany("");
       setRole("");
       setMarkdown("");
+      setTitle("");
       setErrors({
         college: false,
         batch: false,
         branch: false,
         company: false,
         role: false,
+        title: false,
         markdown: false,
       });
 
@@ -548,12 +576,18 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: session.user.email,
+          content_type: contentType
         }),
       });
 
-      // Invalidate frontend feed cache so the user sees their new post immediately
-      sessionStorage.removeItem("feed_state_v2:latest");
-      sessionStorage.removeItem("feed_state_v2:trending");
+      // Invalidate frontend feed cache
+      if (contentType === 'tale') {
+        sessionStorage.removeItem("tales_state_v1:latest");
+        sessionStorage.removeItem("tales_state_v1:trending");
+      } else {
+        sessionStorage.removeItem("feed_state_v2:latest");
+        sessionStorage.removeItem("feed_state_v2:trending");
+      }
 
       // Show success message
       setSuccessMessage("Your experience has been successfully submitted!");
@@ -575,6 +609,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
     if (session?.user?.email) {
       saveDraft({
         exp_text: markdown,
+        title,
         college,
         customCollege,
         batch,
@@ -588,12 +623,12 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
         currentRound,
       });
     }
-  }, [markdown, college, customCollege, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
+  }, [markdown, title, college, customCollege, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
 
   const handleCopyTemplate = () => {
     setMode("manual");
-    setMarkdown(INTERVIEW_TEMPLATE);
+    setMarkdown(contentType === "tale" ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
     setErrors((prevErrors) => ({
       ...prevErrors,
       markdown: false,
@@ -893,10 +928,12 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
           <div className="relative mx-auto mb-3 max-w-3xl text-center sm:mb-4">
             <h1 className="mb-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-3 sm:text-5xl lg:text-6xl">
-              Share Your Journey
+              {contentType === "tale" ? "Tales From PICT" : "Share Your Journey"}
             </h1>
             <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
-              Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career.
+              {contentType === "tale"
+                ? "Share your authentic stories from hackathons, projects, failures, and the lessons learned along the way."
+                : "Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career."}
             </p>
           </div>
 
@@ -916,154 +953,174 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           </div>
 
           <div className="relative z-[60] mb-6 w-full overflow-visible rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
-          <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
-            {/* College */}
-            <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
+            {contentType === "tale" && (
+              <div className="mb-6 w-full">
+                <div className="flex items-center gap-2 mb-3 px-2">
+                  <PenLine className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                  <label className="text-[10.5px] font-bold tracking-normal text-slate-500 uppercase dark:text-slate-400">Story Title</label>
                 </div>
-                <div className="relative">
-                  <SearchableDropdown
-                    options={[...colleges, "others"]}
-                    value={college}
-                    onChange={handleCollegeChange}
-                    placeholder="Select College"
-                    error={errors.college}
-                  />
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Give your story a catchy title (e.g., My First Hackathon: A Rollercoaster of Bugs)"
+                  className={`w-full rounded-2xl border ${errors.title ? 'border-red-400 bg-red-50/10' : 'border-slate-200 bg-white shadow-sm'} px-5 py-4 text-sm font-semibold text-slate-700 transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20`}
+                />
+                {errors.title && <p className="mt-2 ml-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+              </div>
+            )}
+            <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
+              {/* College */}
+              <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
+                  </div>
+                  <div className="relative">
+                    <SearchableDropdown
+                      options={[...colleges, "others"]}
+                      value={college}
+                      onChange={handleCollegeChange}
+                      placeholder="Select College"
+                      error={errors.college}
+                    />
 
-                  {college === "others" && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mt-3 overflow-hidden"
-                    >
-                      <div className="relative group/input">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/input:text-blue-500 transition-colors">
-                          <GraduationCap size={16} />
+                    {college === "others" && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-3 overflow-hidden"
+                      >
+                        <div className="relative group/input">
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/input:text-blue-500 transition-colors">
+                            <GraduationCap size={16} />
+                          </div>
+                          <input
+                            type="text"
+                            value={customCollege}
+                            onChange={handleCustomCollegeChange}
+                            placeholder="Enter your college name..."
+                            className="w-full rounded-xl border border-slate-200/60 bg-white/50 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/15"
+                            autoFocus
+                          />
                         </div>
-                        <input
-                          type="text"
-                          value={customCollege}
-                          onChange={handleCustomCollegeChange}
-                          placeholder="Enter your college name..."
-                          className="w-full rounded-xl border border-slate-200/60 bg-white/50 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/15"
-                          autoFocus
-                        />
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                    )}
+                  </div>
+                  {errors.college && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                </div>
+              </div>
+
+              {/* Batch */}
+              <div className={`group relative z-[55] rounded-xl p-2 transition-all duration-300 ${errors.batch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
+                  </div>
+                  <div className="relative">
+                    <SearchableDropdown
+                      options={years.map(String)}
+                      value={batch ? String(batch) : ""}
+                      onChange={(val) => handleBatchChange({ target: { value: val } })}
+                      placeholder="Select Year"
+                      error={errors.batch}
+                    />
+                  </div>
+                  {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                </div>
+              </div>
+
+              {/* Department */}
+              <div className={`group relative z-[54] rounded-xl p-2 transition-all duration-300 ${errors.branch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
+                  </div>
+                  <div className="relative">
+                    <SearchableDropdown
+                      options={branchOptions}
+                      value={branch}
+                      onChange={(val) => handleBranchChange({ target: { value: val } })}
+                      placeholder="Select Dept"
+                      error={errors.branch}
+                    />
+                  </div>
+                  {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                </div>
+              </div>
+
+              {/* Company */}
+              <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
+                      {contentType === "tale" ? "Event / Topic" : "Company"}
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <SearchableDropdown
+                      options={companies}
+                      value={company}
+                      onChange={handleCompanyChange}
+                      placeholder={contentType === "tale" ? "Select Event/Topic" : "Select Company"}
+                      error={errors.company}
+                      addActionLabel={contentType === "tale" ? "Add New Topic" : "Add New Company"}
+                      onAddActionClick={handleAddCompanyAction}
+                    />
+                  </div>
+                  {company === "others" && (
+                    <motion.input
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                      type="text"
+                      onChange={handleCustomCompanyChange}
+                      placeholder={contentType === "tale" ? "Enter Topic" : "Enter Company"}
+                      value={customCompany}
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                    />
                   )}
+                  {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
                 </div>
-                {errors.college && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
-            </div>
 
-            {/* Batch */}
-            <div className={`group relative z-[55] rounded-xl p-2 transition-all duration-300 ${errors.batch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
+              {/* Role */}
+              <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
+                      {contentType === "tale" ? "Subject" : "Role"}
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <SearchableDropdown
+                      options={roles}
+                      value={role}
+                      onChange={handleRoleChange}
+                      placeholder={contentType === "tale" ? "Select Subject" : "Select Role"}
+                      error={errors.role}
+                    />
+                  </div>
+                  {role === "others" && (
+                    <motion.input
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                      type="text"
+                      onChange={handleCustomRoleChange}
+                      placeholder={contentType === "tale" ? "Enter Subject" : "Enter Role"}
+                      value={customRole}
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                    />
+                  )}
+                  {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
                 </div>
-                <div className="relative">
-                  <SearchableDropdown
-                    options={years.map(String)}
-                    value={batch ? String(batch) : ""}
-                    onChange={(val) => handleBatchChange({ target: { value: val } })}
-                    placeholder="Select Year"
-                    error={errors.batch}
-                  />
-                </div>
-                {errors.batch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
               </div>
             </div>
-
-            {/* Department */}
-            <div className={`group relative z-[54] rounded-xl p-2 transition-all duration-300 ${errors.branch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
-                </div>
-                <div className="relative">
-                  <SearchableDropdown
-                    options={branchOptions}
-                    value={branch}
-                    onChange={(val) => handleBranchChange({ target: { value: val } })}
-                    placeholder="Select Dept"
-                    error={errors.branch}
-                  />
-                </div>
-                {errors.branch && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
-              </div>
-            </div>
-
-            {/* Company */}
-            <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Company</label>
-                </div>
-                <div className="relative">
-                  <SearchableDropdown
-                    options={companies}
-                    value={company}
-                    onChange={handleCompanyChange}
-                    placeholder="Select Company"
-                    error={errors.company}
-                    addActionLabel="Add New Company"
-                    onAddActionClick={handleAddCompanyAction}
-                  />
-                </div>
-                {company === "others" && (
-                  <motion.input
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: "auto", marginTop: 8 }}
-                    type="text"
-                    onChange={handleCustomCompanyChange}
-                    placeholder="Enter Company"
-                    value={customCompany}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
-                  />
-                )}
-                {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
-              </div>
-            </div>
-
-            {/* Role */}
-            <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                  <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Role</label>
-                </div>
-                <div className="relative">
-                  <SearchableDropdown
-                    options={roles}
-                    value={role}
-                    onChange={handleRoleChange}
-                    placeholder="Select Role"
-                    error={errors.role}
-                  />
-                </div>
-                {role === "others" && (
-                  <motion.input
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: "auto", marginTop: 8 }}
-                    type="text"
-                    onChange={handleCustomRoleChange}
-                    placeholder="Enter Role"
-                    value={customRole}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
-                  />
-                )}
-                {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
-              </div>
-            </div>
-          </div>
           </div>
 
           <AnimatePresence>
@@ -1099,166 +1156,166 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
           </AnimatePresence>
           <div className="w-full pb-4 sm:pb-5">
             <div className="relative mt-2 w-full overflow-visible rounded-[2rem] border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
-            <div className="sticky top-4 z-20 w-full rounded-t-[2rem] border-b border-slate-200/70 bg-white/70 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:p-3">
-              <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
-                {/* Toggle (Left) */}
-                <div className="flex w-full justify-center">
-                  <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
-                    <button
-                      onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
-                    >
-                      <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
-                    </button>
-                    <button
-                      onClick={() => handleModeChange('ai')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
-                    >
-                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
-                    </button>
+              <div className="sticky top-4 z-20 w-full rounded-t-[2rem] border-b border-slate-200/70 bg-white/70 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:p-3">
+                <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
+                  {/* Toggle (Left) */}
+                  <div className="flex w-full justify-center">
+                    <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
+                      <button
+                        onClick={() => handleModeChange('manual')}
+                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      >
+                        <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
+                      </button>
+                      <button
+                        onClick={() => handleModeChange('ai')}
+                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      >
+                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
+                      </button>
 
-                    {/* Animated pill background */}
-                    <div
-                      className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
-                      style={{
-                        border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 border-t border-slate-200/70 pt-3 sm:gap-4 sm:justify-end dark:border-slate-700/80">
-                  {/* Copy template button */}
-                  <div className={`hidden sm:flex transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 w-0 -mx-2 overflow-hidden scale-95' : 'opacity-100 w-auto scale-100'}`}>
-                    <button
-                      type="button"
-                      onClick={handleCopyTemplate}
-                      className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
-                    >
-                      Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
-                    </button>
-                  </div>
-
-                  <div className="flex w-full items-center justify-center gap-2.5 sm:gap-3 sm:w-auto">
-                    <button
-                      onClick={handleClearForm}
-                      type="button"
-                      className="group flex w-[35%] items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-900 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
-                    >
-                      <span className="group-hover:text-red-500 transition-colors">Clear</span>
-                    </button>
-                    <button
-                      onClick={handleSubmit}
-                      type="button"
-                      className="group flex w-[65%] items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95 dark:bg-cyan-600 dark:text-slate-950 dark:shadow-cyan-950/45 dark:hover:bg-cyan-500 sm:w-auto sm:px-8 sm:py-3 sm:text-sm"
-                    >
-                      <span>Submit Post</span>
-                      <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-full">
-
-              {/* AI Prompt Area */}
-              {mode === 'ai' && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/65 dark:bg-slate-950/85"
-                >
-                  {/* Chat header */}
-                  <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/85 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 shadow-inner dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50 dark:text-cyan-300">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">Interview AI Guide</h3>
-                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">I'll help structure your experience flawlessly</p>
-                      </div>
+                      {/* Animated pill background */}
+                      <div
+                        className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
+                        style={{
+                          border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
+                        }}
+                      />
                     </div>
                   </div>
 
-                  {/* Chat messages area */}
-                  <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-slate-900/65 sm:p-8">
-                    {chatMessages.map((msg, index) => (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        key={index}
-                        className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 border-t border-slate-200/70 pt-3 sm:gap-4 sm:justify-end dark:border-slate-700/80">
+                    {/* Copy template button */}
+                    <div className={`hidden sm:flex transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 w-0 -mx-2 overflow-hidden scale-95' : 'opacity-100 w-auto scale-100'}`}>
+                      <button
+                        type="button"
+                        onClick={handleCopyTemplate}
+                        className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
                       >
-                        {msg.role !== 'user' && (
+                        Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
+                      </button>
+                    </div>
+
+                    <div className="flex w-full items-center justify-center gap-2.5 sm:gap-3 sm:w-auto">
+                      <button
+                        onClick={handleClearForm}
+                        type="button"
+                        className="group flex w-[35%] items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-900 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
+                      >
+                        <span className="group-hover:text-red-500 transition-colors">Clear</span>
+                      </button>
+                      <button
+                        onClick={handleSubmit}
+                        type="button"
+                        className="group flex w-[65%] items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95 dark:bg-cyan-600 dark:text-slate-950 dark:shadow-cyan-950/45 dark:hover:bg-cyan-500 sm:w-auto sm:px-8 sm:py-3 sm:text-sm"
+                      >
+                        <span>Submit Post</span>
+                        <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full">
+
+                {/* AI Prompt Area */}
+                {mode === 'ai' && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex h-full min-h-[600px] w-full flex-col bg-slate-50/65 dark:bg-slate-950/85"
+                  >
+                    {/* Chat header */}
+                    <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/85 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 shadow-inner dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50 dark:text-cyan-300">
+                          <Sparkles className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">Experience AI Guide</h3>
+                          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">I'll help structure your journey flawlessly</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Chat messages area */}
+                    <div ref={chatContainerRef} className="flex min-h-[400px] flex-1 flex-col gap-6 overflow-y-auto rounded-b-xl bg-[url('/grid-bg.svg')] bg-center p-4 dark:bg-slate-900/65 sm:p-8">
+                      {chatMessages.map((msg, index) => (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{ duration: 0.3 }}
+                          key={index}
+                          className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          {msg.role !== 'user' && (
+                            <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
+                              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
+                            </div>
+                          )}
+                          <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/75 bg-white text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100'}`}>
+                            <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
+                              {msg.text}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+
+                      {/* Loader for typing / processing */}
+                      {isGenerating && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex w-full justify-start"
+                        >
                           <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
                             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
                           </div>
-                        )}
-                        <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/75 bg-white text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100'}`}>
-                          <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
-                            {msg.text}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-
-                    {/* Loader for typing / processing */}
-                    {isGenerating && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex w-full justify-start"
-                      >
-                        <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
-                          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
-                        </div>
-                        <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/70 bg-white px-6 py-4 shadow-sm dark:border-slate-600 dark:bg-slate-800/95">
-                          <div className="flex items-center gap-1.5">
-                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
-                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
-                            <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                          <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/70 bg-white px-6 py-4 shadow-sm dark:border-slate-600 dark:bg-slate-800/95">
+                            <div className="flex items-center gap-1.5">
+                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                              <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
+                            </div>
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Processing response...</p>
                           </div>
-                          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Processing response...</p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </div>
+                        </motion.div>
+                      )}
+                    </div>
 
-                  {/* Chat input form */}
-                  <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
-                    <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                      <input
-                        type="text"
-                        value={chatInput}
-                        onChange={(e) => setChatInput(e.target.value)}
-                        disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
-                        placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
-                      />
-                      <button
-                        type="submit"
-                        disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
-                      >
-                        <Send className="w-4 h-4 ml-0.5" />
-                      </button>
-                    </form>
-                  </div>
-                </motion.div>
-              )}
-              {/* Markdown Editor */}
-              <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
-                <ExperienceTiptapEditor
-                  value={markdown}
-                  onChange={handleMarkdownChange}
-                  onError={handleEditorError}
-                  minHeight={650}
-                />
+                    {/* Chat input form */}
+                    <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
+                      <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                        <input
+                          type="text"
+                          value={chatInput}
+                          onChange={(e) => setChatInput(e.target.value)}
+                          disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                          className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                          placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
+                        />
+                        <button
+                          type="submit"
+                          disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
+                          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                        >
+                          <Send className="w-4 h-4 ml-0.5" />
+                        </button>
+                      </form>
+                    </div>
+                  </motion.div>
+                )}
+                {/* Markdown Editor */}
+                <div className={`w-full ${mode === 'ai' ? 'hidden' : 'block'}`}>
+                  <ExperienceTiptapEditor
+                    value={markdown}
+                    onChange={handleMarkdownChange}
+                    onError={handleEditorError}
+                    minHeight={650}
+                  />
+                </div>
               </div>
             </div>
-              </div>
 
           </div>
         </motion.div>

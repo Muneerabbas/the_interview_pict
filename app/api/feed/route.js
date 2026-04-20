@@ -18,17 +18,16 @@ function buildPipeline({
   collegeFilter,
   branchFilter,
   batchFilter,
+  contentType,
 }) {
   const pipeline = [];
-  const match = {};
+  const match = { content_type: contentType || "interview" };
   if (companyFilter) match.company = companyFilter;
   if (collegeFilter) match.college = collegeFilter;
   if (branchFilter) match.branch = branchFilter;
   if (batchFilter) match.batch = batchFilter;
 
-  if (Object.keys(match).length > 0) {
-    pipeline.push({ $match: match });
-  }
+  pipeline.push({ $match: match });
 
   pipeline.push(
     {
@@ -81,11 +80,12 @@ export async function GET(req) {
     const collegeFilter = req.nextUrl.searchParams.get("college");
     const branchFilter = req.nextUrl.searchParams.get("branch");
     const batchFilter = req.nextUrl.searchParams.get("batch");
+    const contentType = req.nextUrl.searchParams.get("contentType") || "interview";
     const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
 
     const db = await getMongoDb();
     const experience = db.collection("experience");
-    const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter });
+    const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, contentType });
     const feed = await experience.aggregate(pipeline).toArray();
     const data = processFeedResults(feed);
 

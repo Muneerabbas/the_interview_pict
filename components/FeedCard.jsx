@@ -12,6 +12,7 @@ import {
   Heart,
   Pencil,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
@@ -79,8 +80,9 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
   const profilePic = resolveProfileImage(profile);
   const profileName = resolveProfileName(profile);
-  const companyName = profile?.company || "Company not shared";
-  const roleName = profile?.role || "Role not shared";
+  const companyName = profile?.company;
+  const roleName = profile?.role;
+  const isTale = profile?.content_type === "tale";
   const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
   const readPath = `/single/${profile?.uid || profile?._id}`;
   const editPath = profile?.uid ? `/edit/${profile.uid}` : null;
@@ -146,6 +148,12 @@ const FeedCard = ({ profile, width = "w-full" }) => {
               <div className="mt-0.5 flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500 sm:text-[11px]">
                 <Clock size={10} className="text-slate-400/80 dark:text-slate-500" />
                 {formattedDate}
+                {isTale && (
+                  <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-950/35 dark:text-indigo-300">
+                    <BookOpen size={9} />
+                    Tale
+                  </span>
+                )}
                 {isToday && (
                   <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
                     <Sparkles size={9} />
@@ -156,37 +164,29 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
               {/* Tags: Tucked directly beneath Info */}
               <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 border-blue-300/70 bg-blue-50/90 py-0.5 pl-2 pr-1 text-[10.5px] font-semibold text-blue-700 dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-cyan-200">
-                  <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
-                  {companySlug ? (
-                    <Link
-                      href={`/companies/${companySlug}`}
-                      prefetch={true}
-                      onClick={(e) => e.stopPropagation()}
-                      className="truncate font-semibold hover:underline"
-                    >
-                      {companyName}
-                    </Link>
-                  ) : (
-                    <span className="truncate">{companyName}</span>
-                  )}
-                  {/* isOwner && editPath && (
-                    <Link
-                      href={editPath}
-                      prefetch={true}
-                      onClick={(e) => e.stopPropagation()}
-                      title="Edit post details"
-                      className="ml-0.5 inline-flex shrink-0 items-center gap-0.5 rounded px-1 py-0.5 text-[10px] font-bold text-blue-700 hover:bg-blue-50 dark:text-cyan-300 dark:hover:bg-slate-800"
-                    >
-                      <Pencil size={10} strokeWidth={2.5} />
-                      <span className="hidden sm:inline">Edit</span>
-                    </Link>
-                  ) */}
-                </div>
-                <div className="ui-tag ui-tag-role inline-flex items-center gap-1 border-slate-300/60 bg-slate-100/80 px-2 py-0.5 text-[10.5px] font-medium text-slate-600 dark:border-slate-600/60 dark:bg-slate-800/70 dark:text-slate-300">
-                  <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />
-                  <span className="truncate">{roleName}</span>
-                </div>
+                {companyName && (
+                  <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 border-blue-300/70 bg-blue-50/90 py-0.5 pl-2 pr-1 text-[10.5px] font-semibold text-blue-700 dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-cyan-200">
+                    <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
+                    {companySlug ? (
+                      <Link
+                        href={`/companies/${companySlug}`}
+                        prefetch={true}
+                        onClick={(e) => e.stopPropagation()}
+                        className="truncate font-semibold hover:underline"
+                      >
+                        {companyName}
+                      </Link>
+                    ) : (
+                      <span className="truncate">{companyName}</span>
+                    )}
+                  </div>
+                )}
+                {roleName && (
+                  <div className="ui-tag ui-tag-role inline-flex items-center gap-1 border-slate-300/60 bg-slate-100/80 px-2 py-0.5 text-[10.5px] font-medium text-slate-600 dark:border-slate-600/60 dark:bg-slate-800/70 dark:text-slate-300">
+                    <Briefcase size={11} strokeWidth={2.5} className="shrink-0" />
+                    <span className="truncate">{roleName}</span>
+                  </div>
+                )}
                 <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 border-slate-200/70 bg-slate-50/70 px-2 py-0.5 text-[10.5px] font-medium text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-400">
                   <GraduationCap size={11} strokeWidth={2.5} className="shrink-0" />
                   <span className="truncate">{branchAndBatch}</span>
@@ -202,6 +202,11 @@ const FeedCard = ({ profile, width = "w-full" }) => {
             Experience Snapshot
           </div>
           <div className="pl-1">
+            {isTale && profile?.title && (
+              <h3 className="mb-2 line-clamp-1 text-[16px] font-bold text-slate-800 dark:text-slate-200 underline decoration-indigo-500/30 decoration-2 underline-offset-4">
+                {profile.title}
+              </h3>
+            )}
             <p className="line-clamp-3 text-[14px] leading-[1.82] text-slate-600 dark:text-slate-300">
               {previewText}
             </p>
@@ -237,7 +242,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
             </div>
 
             <div className="inline-flex items-center text-[13px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
-              <span>Read full experience</span>
+              <span>{isTale ? "Read full story" : "Read full experience"}</span>
               <ChevronRight size={16} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
             </div>
           </div>

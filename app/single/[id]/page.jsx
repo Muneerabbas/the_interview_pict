@@ -277,31 +277,27 @@ export default async function SimilarExperience({ params }) {
                               )}
                             </div>
 
-                            {publicProfilePath ? (
-                              <Link
-                                href={publicProfilePath}
-                                className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition hover:text-blue-700 dark:text-slate-100 dark:hover:text-cyan-300 lg:text-4xl"
-                              >
-                                {data?.name}
-                              </Link>
-                            ) : (
-                              <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
-                                {data?.name}
-                              </h1>
-                            )}
+                            <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition dark:text-slate-100 lg:text-5xl">
+                              {data?.title || data?.name}
+                            </h1>
 
-                            {data?.title && (
-                              <h2 className="mt-3 max-w-3xl text-2xl font-black leading-tight text-slate-900 dark:text-slate-100 sm:text-[2.6rem]">
-                                {data.title}
-                              </h2>
-                            )}
+                            <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400">
+                              <span className="text-blue-600 dark:text-cyan-400">By</span>
+                              {publicProfilePath ? (
+                                <Link
+                                  href={publicProfilePath}
+                                  className="text-slate-900 underline decoration-slate-200/50 underline-offset-4 transition hover:text-blue-700 hover:decoration-blue-400 dark:text-slate-200 dark:decoration-slate-700/50 dark:hover:text-cyan-300"
+                                >
+                                  {data?.name}
+                                </Link>
+                              ) : (
+                                <span className="text-slate-900 dark:text-slate-200">{data?.name}</span>
+                              )}
 
-                            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400">
                               {(data?.college || data?.company) && (
-                                <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/80 px-3 py-1.5 text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
-                                  <BookOpen size={14} />
+                                <span className="flex items-center gap-2 before:content-['•'] before:text-slate-300 dark:before:text-slate-700">
                                   {data?.college || data?.company}
-                                </div>
+                                </span>
                               )}
                             </div>
 

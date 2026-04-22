@@ -47,7 +47,7 @@ async function fetchFeaturedStories() {
         const db = await getMongoDb();
         return await db
             .collection("experience")
-            .find({})
+            .find({ content_type: "interview" })
             .sort({ date: -1, _id: -1 })
             .limit(30)
             .toArray();
@@ -63,6 +63,9 @@ async function fetchTopStories() {
         return await db
             .collection("experience")
             .aggregate([
+                {
+                    $match: { content_type: "interview" }
+                },
                 {
                     $addFields: {
                         viewsInt: {
@@ -89,11 +92,16 @@ async function fetchTopStories() {
 
 // This is a Server Component (default in app/)
 export default async function Home() {
-    const [tales, featuredStories, topStories] = await Promise.all([
+    const [rawTales, rawFeaturedStories, rawTopStories] = await Promise.all([
         fetchTales(),
         fetchFeaturedStories(),
         fetchTopStories(),
     ]);
+
+    // Sanitize MongoDB documents for Client Components
+    const tales = JSON.parse(JSON.stringify(rawTales));
+    const featuredStories = JSON.parse(JSON.stringify(rawFeaturedStories));
+    const topStories = JSON.parse(JSON.stringify(rawTopStories));
 
     return (
         <>

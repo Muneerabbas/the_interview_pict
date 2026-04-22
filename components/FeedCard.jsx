@@ -10,7 +10,6 @@ import {
   Eye,
   GraduationCap,
   Heart,
-  Pencil,
   Sparkles,
   BookOpen,
 } from "lucide-react";
@@ -42,7 +41,6 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
   const [likes, setLikes] = useState(profile?.likes || []);
 
-  // Synchronize state with props when the feed data refreshes
   useEffect(() => {
     setLikes(profile?.likes || []);
   }, [profile?.likes]);
@@ -73,7 +71,6 @@ const FeedCard = ({ profile, width = "w-full" }) => {
       if (!res.ok) throw new Error("Failed to like");
     } catch (err) {
       console.error(err);
-      // Revert on error
       setLikes(likes);
     }
   };
@@ -85,13 +82,8 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   const roleName = isTale ? "" : profile?.role;
   const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
   const readPath = `/single/${profile?.uid || profile?._id}`;
-  const editPath = profile?.uid ? `/edit/${profile.uid}` : null;
   const companySlug = isTale ? "" : companySlugFromName(companyName);
   const authorEmail = profile?.email ? String(profile.email) : "";
-  const isOwner =
-    userEmail &&
-    authorEmail &&
-    userEmail.toLowerCase() === authorEmail.toLowerCase();
 
   const openPost = () => router.push(readPath);
 
@@ -110,7 +102,6 @@ const FeedCard = ({ profile, width = "w-full" }) => {
   const totalViews = Number(profile?.views) || 0;
   const readTime = Math.max(1, Math.round(previewText.split(/\s+/).filter(Boolean).length / 180));
 
-
   return (
     <div
       role="link"
@@ -122,17 +113,14 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           openPost();
         }
       }}
-      className={`${width} group relative mx-auto block h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200/90 border-l-4 border-l-blue-600 bg-white/95 shadow-[0_10px_26px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:border-slate-700/90 dark:border-l-cyan-400 dark:bg-slate-900/95 dark:shadow-[0_12px_30px_rgba(2,6,23,0.6)] dark:hover:shadow-[0_18px_42px_rgba(2,6,23,0.7)]`}
+      className={`${width} group relative mx-auto block h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200/90 border-l-4 border-l-blue-600 bg-white/95 shadow-[0_10px_26px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:border-slate-700/90 dark:border-l-blue-600 dark:bg-slate-900/95 dark:shadow-[0_12px_30px_rgba(2,6,23,0.6)] dark:hover:shadow-[0_18px_42px_rgba(2,6,23,0.7)]`}
     >
       <div className="relative flex h-full flex-col p-5 sm:p-6">
         {/* Header Row: Avatar + Info */}
         <div className="flex items-start gap-4">
-          <div
-            className="flex min-w-0 items-start gap-3"
-            aria-label={`View experience by ${profileName || "user"}`}
-          >
+          <div className="flex min-w-0 items-start gap-3" aria-label={`View experience by ${profileName || "user"}`}>
             <div className="relative shrink-0 mt-0.5">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
               <ProfileAvatar
                 src={profilePic}
                 name={profileName}
@@ -149,7 +137,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
                 <Clock size={10} className="text-slate-400/80 dark:text-slate-500" />
                 {formattedDate}
                 {isTale && (
-                  <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-indigo-50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-950/35 dark:text-indigo-300">
+                  <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-900/35 dark:text-blue-300">
                     <BookOpen size={9} />
                     Tale
                   </span>
@@ -162,10 +150,10 @@ const FeedCard = ({ profile, width = "w-full" }) => {
                 )}
               </div>
 
-              {/* Tags: Tucked directly beneath Info */}
+              {/* Tags */}
               <div className="mt-3 flex flex-wrap items-center gap-1.5">
                 {companyName && (
-                  <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 border-blue-300/70 bg-blue-50/90 py-0.5 pl-2 pr-1 text-[10.5px] font-semibold text-blue-700 dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-cyan-200">
+                  <div className="ui-tag ui-tag-company inline-flex max-w-full items-center gap-1 border-blue-300/70 bg-blue-50/90 py-0.5 pl-2 pr-1 text-[10.5px] font-semibold text-blue-700 dark:border-blue-500/40 dark:bg-blue-950/35 dark:text-blue-200">
                     <Building2 size={11} strokeWidth={2.5} className="shrink-0" />
                     {companySlug ? (
                       <Link
@@ -196,14 +184,14 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           </div>
         </div>
 
-        {/* Content Zone: Experience Snapshot */}
+        {/* Content Zone */}
         <div className="mt-5">
           <div className="mb-1 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-slate-400/80 dark:text-slate-500/80">
             Experience Snapshot
           </div>
           <div className="pl-1">
             {isTale && profile?.title && (
-              <h3 className="mb-2 line-clamp-1 text-[16px] font-bold text-slate-800 dark:text-slate-200 underline decoration-indigo-500/30 decoration-2 underline-offset-4">
+              <h3 className="mb-2 line-clamp-1 text-[16px] font-bold text-slate-800 dark:text-slate-200 underline decoration-blue-500/30 decoration-2 underline-offset-4">
                 {profile.title}
               </h3>
             )}
@@ -213,7 +201,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           </div>
         </div>
 
-        {/* Footer Row: Stats + Read Link */}
+        {/* Footer Row */}
         <div className="mt-auto border-t border-slate-200/75 pt-3 dark:border-slate-700/75">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -241,7 +229,7 @@ const FeedCard = ({ profile, width = "w-full" }) => {
               </div>
             </div>
 
-            <div className="inline-flex items-center text-[13px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+            <div className="inline-flex items-center text-[13px] font-extrabold text-blue-700 transition-colors group-hover:text-blue-800 dark:text-blue-300 dark:group-hover:text-blue-200">
               <span>{isTale ? "Read full story" : "Read full experience"}</span>
               <ChevronRight size={16} className="ml-0.5 transition-transform duration-300 group-hover:translate-x-1" />
             </div>

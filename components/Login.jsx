@@ -12,7 +12,7 @@ const Login = () => {
   // Function to save user data
   const saveUserData = useCallback(async (userData) => {
     console.log("🚀 Attempting to save user data:", userData);
-    
+
     try {
       const response = await fetch("/api/saveUser", {
         method: "POST",
@@ -21,7 +21,7 @@ const Login = () => {
         },
         body: JSON.stringify(userData),
       });
-      
+      0
       if (!response.ok) {
         const errorData = await response.json();
         console.error("❌ Server returned error:", errorData);
@@ -45,9 +45,9 @@ const Login = () => {
         redirect: false,
         callbackUrl: window.location.href,
       });
-      
+
       console.log("📡 Sign in result:", result);
-      
+
       if (result?.error) {
         console.error("❌ Sign in error:", result.error);
       }
@@ -65,7 +65,7 @@ const Login = () => {
       if (session?.user && !saveAttempted.current) {
         console.log("🎯 Starting save user process");
         saveAttempted.current = true;
-        
+
         try {
           const { email, name, image } = session.user;
           await saveUserData({
@@ -73,7 +73,7 @@ const Login = () => {
             name,
             image,
           });
-          
+
           if (window.location.pathname === "/login") {
             console.log("🚪 Redirecting to home");
             router.push("/feed");
@@ -104,8 +104,8 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-[300px] sm:min-h-[400px] px-4 sm:p-8">
-      <div className="w-full max-w-[320px] sm:max-w-md backdrop-blur-lg bg-white/30 p-6 sm:p-8 rounded-2xl shadow-lg border border-white/20 dark:border-slate-700 dark:bg-slate-900/70">
+    <div className="flex w-full items-center justify-center">
+      <div className="w-full">
         {session ? (
           <div className="flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />

@@ -13,8 +13,9 @@ import {
   Menu,
   X,
   List,
-  BookOpen,
   Flame,
+  Info,
+  Building2,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,6 +36,8 @@ export default function Navbar({ showThemeToggle = false }) {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isDeepScrolled, setIsDeepScrolled] = useState(false);
   const desktopNotificationsRef = useRef(null);
   const mobileNotificationsRef = useRef(null);
 
@@ -165,8 +168,6 @@ export default function Navbar({ showThemeToggle = false }) {
     router.push("/login");
   };
 
-
-
   const handleNotificationsToggle = useCallback(async () => {
     if (!session?.user) {
       openAuthModal();
@@ -196,14 +197,22 @@ export default function Navbar({ showThemeToggle = false }) {
     }
   }, [loadNotifications, notificationsOpen, openAuthModal, session?.user, unreadNotifications]);
 
+  // Scroll handler for premium dynamics
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      setIsDeepScrolled(window.scrollY > 120);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navItems = useMemo(
     () => [
       { href: "/", label: "Home", Icon: Home },
-      { href: "/tales", label: "Hackathons", Icon: BookOpen },
       { href: "/feed", label: "Feed", Icon: List },
-      { href: "/#topstories", label: "Featured Stories", Icon: Flame },
-      { href: "/post", label: "Post", Icon: FileText },
-      { href: "/profile", label: "Profile", Icon: User },
+      { href: "/tales", label: "Featured Stories", Icon: Flame },
+      { href: "/companies", label: "Companies", Icon: Building2 },
     ],
     []
   );
@@ -215,163 +224,214 @@ export default function Navbar({ showThemeToggle = false }) {
 
   return (
     <>
-      <nav
-        className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/85 dark:shadow-[0_12px_36px_rgba(2,6,23,0.65)] dark:supports-[backdrop-filter]:bg-slate-950/65"
+      <header
+        className={[
+          "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
+          isScrolled
+            ? "border-b border-slate-200/70 bg-white/85 shadow-md backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/85 dark:shadow-[0_12px_36px_rgba(2,6,23,0.65)] dark:supports-[backdrop-filter]:bg-slate-950/65"
+            : "border-b-transparent bg-transparent backdrop-blur-none",
+        ].join(" ")}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 lg:gap-3 lg:px-5 xl:px-6">
-          {/* Brand */}
-          <Link
-            href="/"
-            className="group flex min-w-0 shrink-0 items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100"
-            prefetch={true}
-          >
-            <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
-              <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
-            </div>
-            <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
-              the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span>Room</span>
-            </span>
-          </Link>
-
-          {/* Desktop: search + links */}
-          <div className="hidden min-w-0 flex-1 items-center justify-center px-3 lg:flex xl:px-6">
-            <form onSubmit={handleSearch} className="w-full max-w-xl xl:max-w-2xl">
-              <div className="group relative">
-                <Search
-                  size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-cyan-300"
-                />
-                <input
-                  type="text"
-                  value={searchText}
-                  className="min-w-0 w-full rounded-2xl border border-slate-200/80 bg-white/90 py-2.5 pl-11 pr-12 text-sm text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.08)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
-                  onChange={(e) => setSearchText(e.target.value)}
-                  placeholder=""
-                />
-
-                {!searchText && (
-                  <div className="pointer-events-none absolute inset-y-0 left-11 right-12 flex items-center gap-1.5 overflow-hidden">
-                    <span className="shrink-0 text-sm text-slate-400 dark:text-slate-500">Search for</span>
-                    <div className="relative h-5 min-w-0 flex-1 overflow-hidden">
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.span
-                          key={index}
-                          initial={{ y: 14, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          exit={{ y: -14, opacity: 0 }}
-                          transition={{ duration: 0.28, ease: "easeOut" }}
-                          className="absolute inset-0 truncate text-sm font-medium text-blue-500 dark:text-cyan-300"
-                        >
-                          {texts[index]}
-                        </motion.span>
-                      </AnimatePresence>
-                    </div>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  aria-label="Submit search"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 transition-colors duration-300 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/35 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                >
-                  <Search size={16} strokeWidth={2.5} />
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Desktop: nav items + auth */}
-          <div className="hidden shrink-0 items-center gap-1.5 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-[0_8px_20px_rgba(2,6,23,0.55)] lg:flex">
-            {navItems.map(({ href, label, Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-label={label}
-                className={[
-                  "group flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-sm font-semibold transition-all active:scale-95 xl:gap-2 xl:px-3",
-                  isActive(href)
-                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300"
-                    : "text-slate-600 hover:bg-slate-100/90 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/90 dark:hover:text-slate-100",
-                ].join(" ")
-                }
-              >
-                <Icon
-                  size={18}
-                  className={`transition-colors duration-200 ${isActive(href) ? "text-blue-600 dark:text-cyan-300" : "text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-200"}`}
-                />
-                <span className="hidden xl:inline">{label}</span>
-              </Link>
-            ))}
-
-            {session ? (
-              <div ref={desktopNotificationsRef}>
-                <NotificationsMenu
-                  isOpen={notificationsOpen}
-                  isLoading={notificationsLoading}
-                  unreadCount={unreadNotifications}
-                  notifications={notifications}
-                  onToggle={handleNotificationsToggle}
-                  onClose={() => setNotificationsOpen(false)}
-                  buttonClassName="relative ml-1 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_20px_rgba(59,130,246,0.2)] active:scale-95 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.15)]"
-                />
-              </div>
-            ) : null}
-
-            {showThemeToggle && (
-              <ThemeToggle className="ml-1" />
-            )}
-
-            <div className="ml-1 h-8 w-px bg-slate-200/80 dark:bg-slate-700/80" />
-
-            {session ? (
-              <button
-                onClick={handleLogout}
-                aria-label="Logout"
-                className="ml-1 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 transition-all hover:-translate-y-[0.5px] hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:ring-slate-600/45 xl:px-4"
-              >
-                <LogOut size={16} />
-                <span className="hidden xl:inline">Logout</span>
-              </button>
-            ) : (
-              <button
-                onClick={handleLogin}
-                aria-label="Login"
-                className="ml-1 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-3 py-2 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:-translate-y-[0.5px] hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40 xl:px-4"
-              >
-                <LogIn size={16} />
-                <span className="hidden xl:inline">Login</span>
-              </button>
-            )}
-          </div>
-
-          {/* Mobile: search + menu */}
-          <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
-            <button
-              onClick={() => router.push("/search")}
-              className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
-              aria-label="Search"
+        <div
+          className={[
+            "relative mx-auto flex w-full items-center justify-between transition-all duration-300 ease-in-out",
+            isScrolled
+              ? "px-4 py-3.5 sm:px-6 sm:py-4 lg:px-8 xl:px-10"
+              : "px-4 py-6 sm:px-6 sm:py-7 lg:px-8 xl:px-10",
+          ].join(" ")}
+        >
+          {/* Left: Brand (Extreme Left) */}
+          <div className="flex items-center">
+            <Link
+              href="/"
+              className={[
+                "group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100",
+                isScrolled ? "scale-95" : "scale-100",
+              ].join(" ")}
+              prefetch={true}
             >
-              <Search size={18} />
-            </button>
-            {showThemeToggle && (
-              <ThemeToggle />
-            )}
-            {session ? (
-              <div ref={mobileNotificationsRef}>
-                <NotificationsMenu
-                  isOpen={notificationsOpen}
-                  isLoading={notificationsLoading}
-                  unreadCount={unreadNotifications}
-                  notifications={notifications}
-                  onToggle={handleNotificationsToggle}
-                  onClose={() => setNotificationsOpen(false)}
-                  buttonClassName="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
+              <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
+                <Image
+                  src={logo}
+                  alt="theInterview Logo"
+                  width={isScrolled ? 42 : 46}
+                  height={isScrolled ? 42 : 46}
+                  priority
+                  className="object-contain transition-all duration-300"
                 />
               </div>
-            ) : null}
+              <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
+                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span>Room</span>
+              </span>
+            </Link>
+            <div
+              className={[
+                "mx-3 hidden h-6 w-px bg-slate-200 transition-all duration-300 dark:bg-slate-800 lg:block",
+                isScrolled ? "h-5 opacity-60" : "h-6 opacity-100",
+              ].join(" ")}
+            />
+          </div>
+
+          {/* Absolute Center: Nav Items (Perfectly Centered) */}
+          <div
+            className={[
+              "absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex transition-all duration-300",
+              isDeepScrolled ? "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto" : "opacity-100",
+            ].join(" ")}
+          >
+            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80">
+              {navItems.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={[
+                    "group flex items-center gap-1.5 rounded-[14px] px-4 py-1.5 text-[15px] font-bold transition-all active:scale-95",
+                    isActive(href)
+                      ? "bg-blue-100 text-blue-700 shadow-sm border border-blue-200/50 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800/40"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
+                  ].join(" ")}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Search & Actions */}
+          <div className="hidden items-center gap-4 lg:flex">
+            {/* Search Bar */}
+            <div className="min-w-0 max-w-[260px] xl:max-w-md">
+              <form onSubmit={handleSearch}>
+                <div className="group relative">
+                  <Search
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-blue-400"
+                  />
+                  <input
+                    type="text"
+                    value={searchText}
+                    className="w-full rounded-2xl border border-slate-200/90 bg-white/95 py-2.5 pl-11 pr-12 text-[14px] font-medium text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.05)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/15"
+                    onChange={(e) => setSearchText(e.target.value)}
+                    placeholder=""
+                  />
+
+                  {!searchText && (
+                    <div className="pointer-events-none absolute inset-y-0 left-10 right-10 flex items-center gap-1.5 overflow-hidden">
+                      <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">Search</span>
+                      <div className="relative h-5 min-w-0 flex-1 overflow-hidden">
+                        <AnimatePresence mode="wait" initial={false}>
+                          <motion.span
+                            key={index}
+                            initial={{ y: 14, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -14, opacity: 0 }}
+                            transition={{ duration: 0.28, ease: "easeOut" }}
+                            className="absolute inset-0 truncate text-xs font-medium text-blue-500 dark:text-blue-400"
+                          >
+                            {texts[index]}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    aria-label="Submit search"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md transition-all hover:scale-105 active:scale-95"
+                  >
+                    <Search size={16} strokeWidth={2.5} />
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <ThemeToggle />
+
+            <div className="flex items-center gap-2.5">
+              <div ref={desktopNotificationsRef} className="flex items-center gap-2.5">
+                {session ? (
+                  <>
+                    <NotificationsMenu
+                      isOpen={notificationsOpen}
+                      isLoading={notificationsLoading}
+                      unreadCount={unreadNotifications}
+                      notifications={notifications}
+                      onToggle={handleNotificationsToggle}
+                      onClose={() => setNotificationsOpen(false)}
+                      buttonClassName="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:-translate-y-[1px] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    />
+                    <Link
+                      href="/profile"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                    >
+                      <User size={18} />
+                    </Link>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleLogin}
+                    className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white/50 px-5 text-[14px] font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
+
+              <Link
+                href="/post"
+                prefetch={true}
+                className="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-500 px-6 text-[14px] font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-[0.98]"
+              >
+                Share Experience
+              </Link>
+            </div>
+          </div>
+
+          {/* Mobile: Search + Menu + CTA */}
+          <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
+            <div
+              className={[
+                "flex items-center gap-1.5 transition-all duration-500 sm:gap-2",
+                isDeepScrolled ? "pointer-events-none -translate-x-4 opacity-0" : "opacity-100",
+              ].join(" ")}
+            >
+              <button
+                onClick={() => router.push("/search")}
+                className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 sm:h-10 sm:w-10"
+                aria-label="Search"
+              >
+                <Search size={18} />
+              </button>
+              {showThemeToggle && <ThemeToggle />}
+              {session && (
+                <div ref={mobileNotificationsRef}>
+                  <NotificationsMenu
+                    isOpen={notificationsOpen}
+                    isLoading={notificationsLoading}
+                    unreadCount={unreadNotifications}
+                    notifications={notifications}
+                    onToggle={handleNotificationsToggle}
+                    onClose={() => setNotificationsOpen(false)}
+                    buttonClassName="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-blue-500/45 dark:hover:bg-slate-800 dark:hover:text-blue-300 sm:h-10 sm:w-10"
+                  />
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/post"
+              className={[
+                "inline-flex h-9 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-500 px-5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 active:scale-[0.98] sm:text-sm",
+                isDeepScrolled ? "scale-105 shadow-blue-500/40" : "scale-100",
+              ].join(" ")}
+            >
+              Share
+            </Link>
+
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 hover:shadow-[0_8px_18px_rgba(59,130,246,0.2)] dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:h-10 sm:w-10"
+              className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 sm:h-10 sm:w-10"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
             >
@@ -379,7 +439,7 @@ export default function Navbar({ showThemeToggle = false }) {
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Mobile menu overlay */}
       <AnimatePresence>
@@ -408,12 +468,12 @@ export default function Navbar({ showThemeToggle = false }) {
                     <div className="relative group">
                       <Search
                         size={18}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors dark:text-slate-500 dark:group-focus-within:text-cyan-300"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors dark:text-slate-500 dark:group-focus-within:text-blue-400"
                       />
                       <input
                         type="text"
                         value={searchText}
-                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 py-3 pl-11 pr-4 text-sm text-slate-700 shadow-inner outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/15"
+                        className="w-full rounded-2xl border border-slate-200/80 bg-slate-50/80 py-2.5 pl-11 pr-4 text-sm text-slate-700 shadow-inner outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/15"
                         onChange={(e) => setSearchText(e.target.value)}
                         placeholder="Search for companies or roles..."
                         autoFocus
@@ -436,11 +496,11 @@ export default function Navbar({ showThemeToggle = false }) {
                       className={[
                         "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all active:scale-[0.98]",
                         isActive(href)
-                          ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300"
+                          ? "bg-blue-100 text-blue-700 shadow-sm dark:bg-blue-900/40 dark:text-blue-300"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
                       ].join(" ")}
                     >
-                      <Icon size={18} className={isActive(href) ? "text-blue-600 dark:text-cyan-300" : "text-slate-400 dark:text-slate-500"} />
+                      <Icon size={18} className={isActive(href) ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"} />
                       {label}
                     </Link>
                   ))}
@@ -448,17 +508,17 @@ export default function Navbar({ showThemeToggle = false }) {
 
                 <div className="border-t border-slate-100 p-3 dark:border-slate-800">
                   {session ? (
-                    <button
-                      onClick={handleLogout}
+                    <Link
+                      href="/profile"
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-100 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus:ring-slate-600/45"
                     >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
+                      <User size={16} />
+                      View Profile
+                    </Link>
                   ) : (
                     <button
                       onClick={handleLogin}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-cyan-700 dark:to-blue-700 dark:shadow-cyan-950/45 dark:hover:from-cyan-600 dark:hover:to-blue-600 dark:focus:ring-cyan-400/40"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-blue-700 dark:to-indigo-700 dark:shadow-blue-950/45 dark:hover:from-blue-600 dark:hover:to-indigo-600 dark:focus:ring-blue-400/40"
                     >
                       <LogIn size={16} />
                       Login

@@ -335,45 +335,32 @@ export default function HomePage() {
         {/* Hero Section */}
         <FeedHero isDarkMode={isDarkMode} />
 
-        <div className="mb-8 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-slate-300 dark:via-slate-700 dark:to-slate-700" />
-          <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:text-slate-400">
-            Feed Stories
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-slate-300 via-slate-300 to-transparent dark:from-slate-700 dark:via-slate-700" />
-        </div>
 
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
           {/* Header & Tabs */}
           <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
             {/* Tab Switcher */}
             <div className="flex items-center justify-between gap-3">
-              <div className="flex gap-6">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100/85 p-1.5 shadow-inner dark:border-slate-800 dark:bg-slate-900/40">
                 <button
                   onClick={() => setActiveTab("latest")}
-                  className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "latest"
-                    ? "text-blue-600 dark:text-cyan-400"
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "latest"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
                     : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                     }`}
                 >
                   <Clock size={16} />
                   Latest
-                  {activeTab === "latest" && (
-                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
-                  )}
                 </button>
                 <button
                   onClick={() => setActiveTab("trending")}
-                  className={`flex items-center gap-2 pb-3 text-sm font-bold transition-all relative ${activeTab === "trending"
-                    ? "text-blue-600 dark:text-cyan-400"
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "trending"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
                     : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                     }`}
                 >
                   <Zap size={16} />
                   Trending
-                  {activeTab === "trending" && (
-                    <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-cyan-400" />
-                  )}
                 </button>
               </div>
 
@@ -382,7 +369,7 @@ export default function HomePage() {
                 onClick={handleShareExperienceClick}
                 prefetch={true}
                 scroll={false}
-                className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/30 transition hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-blue-500/45 active:scale-95 dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400 sm:px-5 sm:text-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-[1.5px] hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-95 dark:shadow-blue-500/20 sm:text-sm"
               >
                 <Send className="h-4 w-4" />
                 Post Your Story
@@ -509,14 +496,19 @@ export default function HomePage() {
             <div ref={lastProfileElementRef} className="h-4 w-full" />
 
             {profiles.length === 0 && !pageLoading && (
-              <div className="py-12 text-center">
-                <p className="text-slate-500 dark:text-slate-400 font-medium italic">No stories found for this category.</p>
+              <div className="py-20 text-center">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
+                  <Clock size={32} />
+                </div>
+                <p className="text-base font-medium text-slate-500 dark:text-slate-400">
+                  No stories found for this category yet.
+                </p>
                 <button
                   onClick={() => {
                     setActiveTab("latest");
                     clearFilters();
                   }}
-                  className="mt-4 text-sm font-bold text-blue-600 hover:underline dark:text-cyan-400"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-50 px-5 py-2.5 text-sm font-bold text-blue-600 transition hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
                 >
                   Clear all filters
                 </button>

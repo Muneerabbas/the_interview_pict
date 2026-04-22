@@ -120,69 +120,63 @@ export default function TalesPage() {
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
         <section className="mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/82 p-6 shadow-[0_12px_36px_rgba(15,23,42,0.07)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/76 dark:shadow-[0_16px_42px_rgba(2,6,23,0.62)] sm:p-7">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-6">
             <div className="max-w-2xl">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
-                <BookOpen className="h-3.5 w-3.5" />
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-blue-500/25 dark:bg-blue-900/30 dark:text-blue-300">
+                <BookOpen className="h-4 w-4" />
                 Hackathon Takes
               </div>
-              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.5rem]">
+              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.75rem]">
                 Stories in the same rhythm as the feed
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-[15px]">
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
                 Project journeys, late-night fixes, team chaos, lessons, wins, and failures. Same reading flow as the main feed, focused on tales.
               </p>
             </div>
 
             <Link
               href="/post/tale"
-              className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_14px_30px_rgba(37,99,235,0.28)] dark:bg-cyan-400 dark:text-slate-950 dark:shadow-[0_10px_24px_rgba(34,211,238,0.18)] dark:hover:bg-cyan-300 dark:hover:shadow-[0_14px_30px_rgba(34,211,238,0.22)] sm:self-auto"
+              className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-95 dark:shadow-blue-500/20"
             >
-              <Send className="h-3.5 w-3.5" />
+              <Send className="h-4 w-4" />
               Share your tale
             </Link>
           </div>
         </section>
 
-        <div className="mb-8 flex items-center gap-3">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-slate-300 dark:via-slate-700 dark:to-slate-700" />
-          <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:text-slate-400">
-            Tale Stories
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-slate-300 via-slate-300 to-transparent dark:from-slate-700 dark:via-slate-700" />
-        </div>
 
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
           <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="inline-flex w-fit items-center gap-1 rounded-full border border-slate-200/80 bg-slate-100/85 p-1 shadow-sm dark:border-slate-700/80 dark:bg-slate-800/75">
+              <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100/85 p-1.5 shadow-inner dark:border-slate-800 dark:bg-slate-900/40">
                 <button
                   onClick={() => setActiveTab("latest")}
-                  className={`relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-bold transition-all ${activeTab === "latest"
-                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-cyan-300"
-                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "latest"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                     }`}
                 >
-                  <Clock className="h-3.5 w-3.5" />
+                  <Clock className="h-4 w-4" />
                   Latest
                 </button>
-
                 <button
                   onClick={() => setActiveTab("trending")}
-                  className={`relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-bold transition-all ${activeTab === "trending"
-                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-cyan-300"
-                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "trending"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
                     }`}
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Sparkles className="h-4 w-4" />
                   Trending
                 </button>
               </div>
 
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-                <BookOpen className="h-3.5 w-3.5" />
-                {tales.length} loaded
-              </div>
+              {tales.length > 0 && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+                  <BookOpen className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
+                  {tales.length} loaded
+                </div>
+              )}
             </div>
           </div>
 
@@ -208,16 +202,19 @@ export default function TalesPage() {
             <div ref={lastStoryElementRef} className="h-4 w-full" />
 
             {tales.length === 0 && !pageLoading && (
-              <div className="py-12 text-center">
-                <p className="font-medium italic text-slate-500 dark:text-slate-400">
-                  No tales found yet.
+              <div className="py-20 text-center">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
+                  <BookOpen size={32} />
+                </div>
+                <p className="text-base font-medium text-slate-500 dark:text-slate-400">
+                  No tales found yet. Be the first to share the rhythm!
                 </p>
                 <Link
                   href="/post/tale"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:underline dark:text-cyan-400"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-blue-50 px-5 py-2.5 text-sm font-bold text-blue-600 transition hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
                 >
                   <Send className="h-4 w-4" />
-                  Post the first tale
+                  Post your story
                 </Link>
               </div>
             )}

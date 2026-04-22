@@ -25,17 +25,8 @@ import {
 import { cn } from '@/lib/utils'
 import { useTheme } from "next-themes"
 import ThemeToggle from "./ThemeToggle"
+import Navbar from "./Navbar"
 
-const NAV_ITEMS = [
-  { href: '/', label: 'Home', sectionId: 'hero' },
-  { href: '/feed', label: 'Feed', sectionId: 'feed' },
-  { href: '#featured', label: 'Featured Stories', sectionId: 'featured' },
-  { href: '#tales', label: 'Hackathons', sectionId: 'tales' },
-  { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' },
-  { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' },
-  { href: '/post', label: 'Share Experience', sectionId: 'share' },
-  { href: '/about', label: 'About Us', sectionId: 'about' },
-]
 
 const BLOG_POSTS = [
   {
@@ -250,25 +241,16 @@ const StoryCard = ({ story }) => {
     </article>
   )
 }
-
 export default function Home({ tales, featuredStories, topStories }) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
-  const isDarkMode = mounted && resolvedTheme === 'dark'
 
   const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTales, setFetchedTales] = useState(tales || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
-  const [activeSection, setActiveSection] = useState('Home')
-
-  const mobileMenuRef = useRef(null)
-  const mobileMenuButtonRef = useRef(null)
 
   const batchYears = useMemo(() => Array.from({ length: 2027 - 2019 }, (_, i) => 2027 - i), [])
-
-
 
   useEffect(() => {
     if (mounted) {
@@ -309,163 +291,11 @@ export default function Home({ tales, featuredStories, topStories }) {
     }
   }, [])
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        !(mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(event.target))
-      ) {
-        setIsMobileMenuOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = NAV_ITEMS.map((item) => document.getElementById(item.sectionId)).filter(Boolean)
-      let currentSection = 'Home'
-
-      for (const section of sections) {
-        const rect = section.getBoundingClientRect()
-        if (rect.top <= 150 && rect.bottom >= 150) {
-          currentSection = NAV_ITEMS.find((item) => item.sectionId === section.id)?.label || currentSection
-          break
-        }
-      }
-
-      setActiveSection(currentSection)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   return (
     <main className="relative min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.18),transparent_36%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] text-slate-900 dark:bg-[radial-gradient(circle_at_14%_14%,rgba(56,189,248,0.16),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(99,102,241,0.2),transparent_36%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#111827_100%)] dark:text-slate-100">
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.45),transparent_42%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.05),transparent_42%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.82),transparent_50%)]" />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:42px_42px] opacity-60 dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.28)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.28)_1px,transparent_1px)] dark:opacity-45" />
-      <nav className="fixed top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/80 dark:shadow-[0_10px_30px_rgba(2,6,23,0.55)]">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
-          <div className="hidden items-center justify-between lg:flex">
-            <Link href="/" prefetch={true} className="group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all dark:text-slate-100">
-              <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
-                <Image src={logo} alt="theInterview Logo" width={46} height={46} priority />
-              </div>
-              <span className="text-xl font-bold">
-                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
-              </span>
-            </Link>
-
-            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/75 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/75">
-              {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  prefetch={true}
-                  className={[
-                    'rounded-xl px-3.5 py-2 text-sm font-semibold transition',
-                    activeSection === item.label
-                      ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 shadow-sm dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300 dark:shadow-cyan-950/30'
-                      : 'text-slate-600 hover:bg-cyan-50/80 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/80 dark:hover:text-slate-100',
-                  ].join(' ')}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Link
-                href="/search"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-[0.5px] hover:border-cyan-300/50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-slate-100"
-              >
-                <Search size={17} className="text-slate-500 dark:text-slate-400" />
-                Search
-              </Link>
-              <Link
-                href="/post"
-                prefetch={true}
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/30 transition hover:-translate-y-[0.5px] hover:from-blue-500 hover:to-indigo-400 dark:shadow-indigo-500/20"
-              >
-                Share Experience
-              </Link>
-            </div>
-          </div>
-
-          <div className="lg:hidden">
-            <div className="flex items-center justify-between">
-              <Link href="/" prefetch={true} className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                <div className="relative flex items-center justify-center transition-transform">
-                  <Image src={logo} alt="theInterview Logo" width={42} height={42} priority />
-                </div>
-                <span className="text-base font-bold sm:text-lg">
-                  the<span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Interview</span>Room
-                </span>
-              </Link>
-              <div className="flex items-center gap-2">
-                <ThemeToggle />
-                <button
-                  onClick={() => setIsMobileMenuOpen((open) => !open)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300/80 bg-white/90 text-slate-700 shadow-sm transition hover:border-cyan-300/50 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
-                  ref={mobileMenuButtonRef}
-                >
-                  {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-                </button>
-              </div>
-            </div>
-
-            {isMobileMenuOpen && (
-              <div
-                className="absolute left-0 right-0 top-full border-b border-slate-200/80 bg-white/95 shadow-[0_18px_36px_rgba(15,23,42,0.14)] backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_18px_36px_rgba(2,6,23,0.65)]"
-                ref={mobileMenuRef}
-              >
-                <div className="space-y-1 p-3">
-                  <Link
-                    href="/search"
-                    className="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-cyan-200/60 hover:bg-cyan-50/60 dark:text-slate-200 dark:hover:border-cyan-500/30 dark:hover:bg-slate-800/80"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Search size={18} className="text-slate-500 dark:text-slate-400" />
-                    Search
-                  </Link>
-
-                  {NAV_ITEMS.filter((item) => item.label !== 'Search Experience' && item.label !== 'Share Experience').map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      prefetch={true}
-                      className={[
-                        'block rounded-xl px-3 py-2.5 text-sm font-semibold transition',
-                        activeSection === item.label
-                          ? 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 dark:from-cyan-950/45 dark:to-blue-950/45 dark:text-cyan-300'
-                          : 'text-slate-700 hover:bg-cyan-50 dark:text-slate-200 dark:hover:bg-slate-800/80',
-                      ].join(' ')}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-
-                  <Link
-                    href="/post"
-                    prefetch={true}
-                    className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/30 transition hover:from-blue-500 hover:to-indigo-400 dark:shadow-indigo-500/20"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Share Experience
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+      <Navbar showThemeToggle={true} />
 
       <section id="hero" className="relative overflow-hidden px-4 pb-24 pt-28 sm:pb-28">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#EFF3FF_0%,#F4F6FB_55%,transparent_80%),linear-gradient(to_right,rgba(148,163,184,0.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.3)_1px,transparent_1px)] bg-[size:auto,46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)] dark:bg-[size:46px_46px]" />
@@ -538,28 +368,7 @@ export default function Home({ tales, featuredStories, topStories }) {
         </div>
       </section>
 
-      <section id="tales" className="relative px-4 pb-20 pt-4 sm:pb-24">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
-          <SectionHeader
-            icon={Sparkles}
-            eyebrow="Hackathons"
-            title="Student Hackathons"
-            description="Project journeys, event stories, and student experiences beyond interview prep."
-            ctaHref="/tales"
-            ctaLabel="View all hackathons"
-          />
-
-          <div className="mt-10">
-            <ScrollableSection>
-              {fetchedTales.map((story, index) => (
-                <Link key={`${story?.uid || 'tale'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
-                  <StoryCard story={story} />
-                </Link>
-              ))}
-            </ScrollableSection>
-          </div>
-        </div>
-      </section>
+      {/* Moved Tales section below Featured Stories */}
 
       <section id="featured" className="relative px-4 pb-20 pt-4 sm:pb-24">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
@@ -576,6 +385,29 @@ export default function Home({ tales, featuredStories, topStories }) {
             <ScrollableSection>
               {fetchedFeaturedStories.map((story, index) => (
                 <Link key={`${story?.uid || 'featured'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+                  <StoryCard story={story} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
+        </div>
+      </section>
+
+      <section id="tales" className="relative px-4 pb-20 pt-4 sm:pb-24">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={Sparkles}
+            eyebrow="Narratives"
+            title="Featured Tales"
+            description="Project journeys, late-night fixes, and student stories beyond the interview room."
+            ctaHref="/tales"
+            ctaLabel="View all tales"
+          />
+
+          <div className="mt-10">
+            <ScrollableSection>
+              {fetchedTales.map((story, index) => (
+                <Link key={`${story?.uid || 'tale'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
                   <StoryCard story={story} />
                 </Link>
               ))}

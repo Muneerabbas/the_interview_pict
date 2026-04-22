@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { Mail, PlusCircle, Loader2, FileText, CalendarDays, Edit3, Github, Linkedin, Twitter, Globe, Facebook, Youtube, Instagram, Trash2, Save, X, Award, Eye, Building2, Briefcase, ThumbsUp } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import { Mail, PlusCircle, Loader2, FileText, CalendarDays, Edit3, Github, Linkedin, Twitter, Globe, Facebook, Youtube, Instagram, Trash2, Save, X, Award, Eye, Building2, Briefcase, ThumbsUp, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '../../components/Navbar';
@@ -426,7 +426,7 @@ const ProfilePage = () => {
       <div className="relative mx-auto mt-2 max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
         <div className="rounded-3xl border border-slate-300/80 dark:border-slate-600/80 bg-white/90 dark:bg-slate-800/90 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-8 transition-colors duration-500">
           <div className="flex flex-col items-start gap-6 md:flex-row">
-              <div className="relative group">
+            <div className="relative group">
               <div className="h-36 w-36 overflow-hidden rounded-full border-4 border-white ring-4 ring-blue-500/40 dark:border-slate-800 shadow-[0_16px_32px_rgba(15,23,42,0.18)] transition-all duration-300 group-hover:scale-105 dark:ring-cyan-400/35">
                 <ProfileAvatar src={profile_pic || null} alt={`${name}'s profile picture`} name={name} className="h-full w-full object-cover" />
               </div>
@@ -436,8 +436,15 @@ const ProfilePage = () => {
               <div className="flex flex-col gap-2">
                 <div className="flex w-full items-center justify-between">
                   <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{name}</h1>
-                  <div className="ml-3 shrink-0">
+                  <div className="ml-3 shrink-0 flex items-center gap-2">
                     <ShareProfileButton email={email} name={name} />
+                    <button
+                      onClick={() => signOut({ callbackUrl: '/' })}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 shadow-sm transition-all hover:bg-red-50 hover:text-red-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-red-900/20"
+                      title="Logout"
+                    >
+                      <LogOut size={20} />
+                    </button>
                   </div>
                 </div>
 

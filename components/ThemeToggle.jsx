@@ -59,11 +59,11 @@ export default function ThemeToggle({ className = "" }) {
                         transition={{ duration: 0.2 }}
                     >
                         {theme === "system" ? (
-                            <Monitor size={16} className="text-slate-500 dark:text-slate-400" />
+                            <Monitor size={18} className="text-slate-500 dark:text-slate-400" />
                         ) : resolvedTheme === "dark" ? (
-                            <Moon size={16} className="text-blue-400" />
+                            <Moon size={18} className="text-blue-400" />
                         ) : (
-                            <Sun size={16} className="text-amber-500" />
+                            <Sun size={18} className="text-amber-500" />
                         )}
                     </motion.div>
                 </AnimatePresence>

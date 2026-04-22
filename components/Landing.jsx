@@ -28,8 +28,8 @@ import ThemeToggle from "./ThemeToggle"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
-  { href: '/companies', label: 'Companies', sectionId: 'companies' },
   { href: '/feed', label: 'Feed', sectionId: 'feed' },
+  { href: '#featured', label: 'Featured Stories', sectionId: 'featured' },
   { href: '#tales', label: 'Hackathons', sectionId: 'tales' },
   { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' },
   { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' },
@@ -251,13 +251,14 @@ const StoryCard = ({ story }) => {
   )
 }
 
-export default function Home({ tales, topStories }) {
+export default function Home({ tales, featuredStories, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const isDarkMode = mounted && resolvedTheme === 'dark'
 
+  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
   const [fetchedTales, setFetchedTales] = useState(tales || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
   const [activeSection, setActiveSection] = useState('Home')
@@ -283,6 +284,15 @@ export default function Home({ tales, topStories }) {
       setFetchedTales([]);
     }
   }, [tales])
+
+  useEffect(() => {
+    if (Array.isArray(featuredStories)) {
+      const shuffled = [...featuredStories].sort(() => Math.random() - 0.5);
+      setFetchedFeaturedStories(shuffled);
+    } else {
+      setFetchedFeaturedStories([]);
+    }
+  }, [featuredStories])
 
   useEffect(() => {
     if (Array.isArray(topStories)) {
@@ -551,6 +561,29 @@ export default function Home({ tales, topStories }) {
         </div>
       </section>
 
+      <section id="featured" className="relative px-4 pb-20 pt-4 sm:pb-24">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
+          <SectionHeader
+            icon={Sparkles}
+            eyebrow="Featured"
+            title="Featured Stories"
+            description="Handpicked interview journeys from students who recently cracked top opportunities."
+            ctaHref="/feed"
+            ctaLabel="View all stories"
+          />
+
+          <div className="mt-10">
+            <ScrollableSection>
+              {fetchedFeaturedStories.map((story, index) => (
+                <Link key={`${story?.uid || 'featured'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+                  <StoryCard story={story} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
+        </div>
+      </section>
+
       <section id="companyspecific" className="relative px-4 py-14 sm:py-16">
         <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl dark:bg-amber-500/15" />
         <div className="mx-auto max-w-5xl rounded-3xl border border-slate-300/85 bg-white/85 px-4 py-8 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-10">
@@ -651,7 +684,7 @@ export default function Home({ tales, topStories }) {
           <SectionHeader
             icon={Flame}
             eyebrow="Trending"
-            title="Top Interview Stories"
+            title="Top Stories"
             description="The most-read experiences from the community, ranked by what helped candidates most."
             align="left"
           />

@@ -5,10 +5,19 @@ import MdxEditorPage from "../../components/ExpForm";
 import Login from "../../components/Login";
 import Navbar from "../../components/Navbar";
 import { useSession } from 'next-auth/react';
-import { Loader2, FileText } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Loader2, FileText, BookOpen, Briefcase } from "lucide-react";
 
 export default function Post() {
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const [contentType, setContentType] = useState("interview");
+  const isHackathon = contentType === "tale";
+
+  useEffect(() => {
+    const requestedType = searchParams.get("type");
+    setContentType(requestedType === "tale" ? "tale" : "interview");
+  }, [searchParams]);
 
   // Lock or unlock scroll when the login overlay is shown
   useEffect(() => {
@@ -57,10 +66,40 @@ export default function Post() {
               <div className="rounded-3xl border border-slate-200/80 bg-white/85 px-6 py-12 shadow-[0_14px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/85 dark:shadow-[0_16px_44px_rgba(2,6,23,0.65)] sm:px-10">
                 <div className="flex flex-col items-center text-center space-y-4">
                   <FileText size={48} className="text-blue-600 dark:text-cyan-300" />
-                  <h1 className="text-3xl font-bold text-[#1D1D1D] dark:text-slate-100">Share Your Experience</h1>
+                  <h1 className="text-3xl font-bold text-[#1D1D1D] dark:text-slate-100">
+                    {isHackathon ? "Share Your Hackathon Story" : "Share Your Experience"}
+                  </h1>
                   <p className="text-lg text-[#1D1D1D] dark:text-slate-300 max-w-2xl">
-                      Help others by sharing your interview experiences and insights
+                    {isHackathon
+                      ? "Share your hackathon, project, or event journey with juniors."
+                      : "Help others by sharing your interview experiences and insights"}
                   </p>
+                  <div className="inline-flex rounded-full border border-slate-200 bg-slate-100/80 p-1 dark:border-slate-700 dark:bg-slate-800/80">
+                    <button
+                      type="button"
+                      onClick={() => setContentType("interview")}
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                        contentType === "interview"
+                          ? "bg-white text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100"
+                          : "text-slate-500 dark:text-slate-400"
+                      }`}
+                    >
+                      <Briefcase size={16} />
+                      Interview
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setContentType("tale")}
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                        contentType === "tale"
+                          ? "bg-white text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100"
+                          : "text-slate-500 dark:text-slate-400"
+                      }`}
+                    >
+                      <BookOpen size={16} />
+                      Hackathon
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -76,7 +115,37 @@ export default function Post() {
         ) : (
           // Content when the user is logged in
           <div className="relative min-h-screen">
-            <MdxEditorPage showThemeToggle />
+            <div className="relative z-10 mx-auto max-w-7xl px-4 pt-24 sm:px-6">
+              <div className="mb-5 flex justify-center">
+                <div className="inline-flex rounded-full border border-slate-200 bg-white/80 p-1 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80">
+                  <button
+                    type="button"
+                    onClick={() => setContentType("interview")}
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                      contentType === "interview"
+                        ? "bg-slate-900 text-white dark:bg-cyan-400 dark:text-slate-950"
+                        : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                    }`}
+                  >
+                    <Briefcase size={16} />
+                    Interview
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContentType("tale")}
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                      contentType === "tale"
+                        ? "bg-slate-900 text-white dark:bg-cyan-400 dark:text-slate-950"
+                        : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                    }`}
+                  >
+                    <BookOpen size={16} />
+                    Hackathon
+                  </button>
+                </div>
+              </div>
+            </div>
+            <MdxEditorPage key={contentType} showThemeToggle contentType={contentType} />
             <div className="pb-8 sm:pb-10 md:pb-12"></div>
           </div>
         )}

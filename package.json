@@ -8,6 +8,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "analyze": "ANALYZE=true next build",
+    "seed:colleges": "node scripts/seed-colleges.mjs",
+    "seed:colleges:dry": "node scripts/seed-colleges.mjs --dry-run",
     "seed:companies": "node scripts/seed-post-companies.mjs",
     "seed:companies:dry": "node scripts/seed-post-companies.mjs --dry-run --limit=5"
   },

@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   { href: '/', label: 'Home', sectionId: 'hero' },
   { href: '/companies', label: 'Companies', sectionId: 'companies' },
   { href: '/feed', label: 'Feed', sectionId: 'feed' },
-  { href: '#featured', label: 'Featured Stories', sectionId: 'featured' },
+  { href: '#tales', label: 'Hackathons', sectionId: 'tales' },
   { href: '#topstories', label: 'Top Stories', sectionId: 'topstories' },
   { href: '#companyspecific', label: 'Search Experience', sectionId: 'companyspecific' },
   { href: '/post', label: 'Share Experience', sectionId: 'share' },
@@ -143,6 +143,7 @@ const SectionHeader = ({ title, description, ctaHref, ctaLabel, align = 'center'
 }
 
 const StoryCard = ({ story }) => {
+  const isTale = story?.content_type === 'tale'
   let plainText = story?.exp_text || ''
   plainText = plainText.replace(/<[^>]*>?/g, ' ') /* Strip HTML tags inserted by rich text editors */
   plainText = plainText.replace(/\*\*|__/g, '')
@@ -164,27 +165,61 @@ const StoryCard = ({ story }) => {
 
   const seed = String(story?.uid || story?.company || story?.role || 'story')
   const avatarColor = getAvatarColor(seed)
+  const primaryLabel = isTale ? (story?.title || 'Untitled Tale') : (story?.company || 'Top Company')
+  const secondaryLabel = isTale ? (story?.college || 'Tale') : (story?.role || 'Interview Experience')
+  const authorLabel = story?.name || 'Anonymous'
 
   return (
     <article className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-300/90 bg-white/90 p-6 shadow-[0_14px_32px_rgba(15,23,42,0.11)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300/50 hover:shadow-[0_18px_34px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:!bg-slate-950/95 dark:shadow-[0_16px_34px_rgba(2,6,23,0.78)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_18px_34px_rgba(8,145,178,0.3)]">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div
-            className={`${avatarColor} flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white`}
-            aria-hidden="true"
-          >
-            {story?.name?.charAt(0)?.toUpperCase() || story?.company?.charAt(0)?.toUpperCase() || 'T'}
+      {isTale ? (
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div
+              className={`${avatarColor} flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white`}
+              aria-hidden="true"
+            >
+              {authorLabel?.charAt(0)?.toUpperCase() || 'T'}
+            </div>
+            <div className="min-w-0 text-left">
+              <p className="truncate text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">{authorLabel}</p>
+              <p className="truncate text-xs font-medium uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">Tale</p>
+            </div>
           </div>
-          <div className="min-w-0 text-left">
-            <p className="truncate text-sm font-semibold leading-tight text-slate-900 dark:text-slate-100">{story?.company || 'Top Company'}</p>
-            <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-300">{story?.role || 'Interview Experience'}</p>
-          </div>
+          <Quote size={18} className="shrink-0 fill-slate-300 text-slate-300 opacity-[0.12] dark:fill-slate-500 dark:text-slate-500" />
         </div>
-        <Quote size={18} className="shrink-0 fill-slate-300 text-slate-300 opacity-[0.12] dark:fill-slate-500 dark:text-slate-500" />
-      </div>
+      ) : (
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div
+              className={`${avatarColor} flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white`}
+              aria-hidden="true"
+            >
+              {story?.name?.charAt(0)?.toUpperCase() || primaryLabel?.charAt(0)?.toUpperCase() || 'T'}
+            </div>
+            <div className="min-w-0 text-left">
+              <p className="truncate text-sm font-semibold leading-tight text-slate-900 dark:text-slate-100">{primaryLabel}</p>
+              <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-300">{secondaryLabel}</p>
+            </div>
+          </div>
+          <Quote size={18} className="shrink-0 fill-slate-300 text-slate-300 opacity-[0.12] dark:fill-slate-500 dark:text-slate-500" />
+        </div>
+      )}
 
       <div className="relative mt-4 space-y-2 text-left">
-        {bullets.length > 0 ? (
+        {isTale ? (
+          <>
+            <h3 className="line-clamp-2 text-[15px] font-black leading-snug text-slate-900 dark:text-slate-50 sm:text-[1.15rem]">
+              {primaryLabel}
+            </h3>
+            <div className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/80 px-2.5 py-1 text-[11px] font-semibold text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
+              <GraduationCap size={12} className="shrink-0" />
+              <span className="truncate">{secondaryLabel}</span>
+            </div>
+            <p className="line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-[15px]">
+              {plainText || 'Personal story, project journey, and lessons from a real student tale.'}
+            </p>
+          </>
+        ) : bullets.length > 0 ? (
           <>
             <p className="line-clamp-1 text-[15px] font-semibold leading-relaxed text-slate-800 dark:text-slate-50 sm:text-base">
               {bullets[0]}
@@ -216,14 +251,14 @@ const StoryCard = ({ story }) => {
   )
 }
 
-export default function Home({ featuredStories, topStories }) {
+export default function Home({ tales, topStories }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const isDarkMode = mounted && resolvedTheme === 'dark'
 
-  const [fetchedFeaturedStories, setFetchedFeaturedStories] = useState(featuredStories || [])
+  const [fetchedTales, setFetchedTales] = useState(tales || [])
   const [fetchedTopStories, setFetchedTopStories] = useState(topStories || [])
   const [activeSection, setActiveSection] = useState('Home')
 
@@ -241,13 +276,13 @@ export default function Home({ featuredStories, topStories }) {
   }, [resolvedTheme, mounted])
 
   useEffect(() => {
-    if (Array.isArray(featuredStories)) {
-      const shuffled = [...featuredStories].sort(() => Math.random() - 0.5);
-      setFetchedFeaturedStories(shuffled);
+    if (Array.isArray(tales)) {
+      const shuffled = [...tales].sort(() => Math.random() - 0.5);
+      setFetchedTales(shuffled);
     } else {
-      setFetchedFeaturedStories([]);
+      setFetchedTales([]);
     }
-  }, [featuredStories])
+  }, [tales])
 
   useEffect(() => {
     if (Array.isArray(topStories)) {
@@ -493,21 +528,21 @@ export default function Home({ featuredStories, topStories }) {
         </div>
       </section>
 
-      <section id="featured" className="relative px-4 pb-20 pt-4 sm:pb-24">
+      <section id="tales" className="relative px-4 pb-20 pt-4 sm:pb-24">
         <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
           <SectionHeader
             icon={Sparkles}
-            eyebrow="Featured"
-            title="Featured Stories"
-            description="Handpicked interview journeys from students who recently cracked top opportunities."
-            ctaHref="/feed"
-            ctaLabel="View all stories"
+            eyebrow="Hackathons"
+            title="Student Hackathons"
+            description="Project journeys, event stories, and student experiences beyond interview prep."
+            ctaHref="/tales"
+            ctaLabel="View all hackathons"
           />
 
           <div className="mt-10">
             <ScrollableSection>
-              {fetchedFeaturedStories.map((story, index) => (
-                <Link key={`${story?.uid || 'featured'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
+              {fetchedTales.map((story, index) => (
+                <Link key={`${story?.uid || 'tale'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
                   <StoryCard story={story} />
                 </Link>
               ))}

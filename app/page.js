@@ -27,17 +27,17 @@ export const metadata = {
     },
 };
 
-async function fetchFeaturedStories() {
+async function fetchTales() {
     try {
         const db = await getMongoDb();
         return await db
             .collection("experience")
-            .find({})
+            .find({ content_type: "tale" })
             .sort({ date: -1, _id: -1 })
             .limit(30)
             .toArray();
     } catch (error) {
-        console.error("Fetching featured stories failed:", error);
+        console.error("Fetching tales failed:", error);
         return [];
     }
 }
@@ -74,8 +74,8 @@ async function fetchTopStories() {
 
 // This is a Server Component (default in app/)
 export default async function Home() {
-    const [featuredStories, topStories] = await Promise.all([
-        fetchFeaturedStories(),
+    const [tales, topStories] = await Promise.all([
+        fetchTales(),
         fetchTopStories(),
     ]);
 
@@ -111,7 +111,7 @@ export default async function Home() {
                     }),
                 }}
             />
-            <LandingPage featuredStories={featuredStories} topStories={topStories} />
+            <LandingPage tales={tales} topStories={topStories} />
         </>
     );
 }

@@ -1,13 +1,27 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { ChevronDown, Search, Check } from 'lucide-react';
+import { ChevronDown, Search, Check, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function SearchableDropdown({ options, value, onChange, placeholder = "Select option", error = false, addActionLabel, onAddActionClick }) {
+export default function SearchableDropdown({
+    options,
+    value,
+    onChange,
+    placeholder = "Select option",
+    error = false,
+    addActionLabel,
+    onAddActionClick,
+    remoteSearch = false,
+    loading = false,
+    hasMore = false,
+    onSearchTermChange,
+    onLoadMore,
+}) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dropdownRef = useRef(null);
+    const listRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -22,10 +36,21 @@ export default function SearchableDropdown({ options, value, onChange, placehold
     const normalizeOption = (opt) => typeof opt === 'object' ? opt : { label: opt === "others" ? "Others..." : String(opt), value: String(opt) };
     const normalizedOptions = useMemo(() => options.map(normalizeOption), [options]);
 
+    useEffect(() => {
+        if (!remoteSearch || !onSearchTermChange) return;
+
+        const timeoutId = window.setTimeout(() => {
+            onSearchTermChange(searchTerm);
+        }, 250);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [remoteSearch, onSearchTermChange, searchTerm]);
+
     const filteredOptions = useMemo(() => {
+        if (remoteSearch) return normalizedOptions;
         if (!searchTerm) return normalizedOptions;
         return normalizedOptions.filter(opt => opt.label.toLowerCase().includes(searchTerm.toLowerCase()));
-    }, [normalizedOptions, searchTerm]);
+    }, [normalizedOptions, remoteSearch, searchTerm]);
 
     const currentLabel = useMemo(() => {
         const selected = normalizedOptions.find(opt => opt.value === String(value));
@@ -38,16 +63,30 @@ export default function SearchableDropdown({ options, value, onChange, placehold
         setSearchTerm("");
     };
 
+    const handleScroll = (event) => {
+        if (!remoteSearch || !onLoadMore || loading || !hasMore) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+        if (scrollHeight - scrollTop - clientHeight < 32) {
+            onLoadMore();
+        }
+    };
+
     return (
         <div className={`relative w-full ${isOpen ? 'z-[320]' : 'z-20'}`} ref={dropdownRef}>
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                className={`group w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
                     } dark:text-slate-200 cursor-pointer`}
             >
-                <span title={currentLabel || placeholder} className={`block min-w-0 flex-1 truncate pr-3 text-[13px] sm:text-sm ${!value ? 'font-medium text-slate-500 dark:text-slate-300' : 'text-slate-700 dark:text-slate-200'}`}>
+                <span title={currentLabel || placeholder} className={`relative block min-w-0 flex-1 truncate pr-3 text-[13px] sm:text-sm ${!value ? 'font-medium text-slate-500 dark:text-slate-300' : 'text-slate-700 dark:text-slate-200'}`}>
                     {currentLabel || placeholder}
+                    {value && currentLabel ? (
+                        <span className="pointer-events-none absolute left-0 top-full z-[380] mt-2 hidden max-w-[28rem] whitespace-normal rounded-lg bg-slate-950 px-3 py-2 text-left text-xs font-medium text-white shadow-xl group-hover:block dark:bg-slate-100 dark:text-slate-950">
+                            {currentLabel}
+                        </span>
+                    ) : null}
                 </span>
                 <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-500 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
             </button>
@@ -73,10 +112,14 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                             />
                         </div>
 
-                        <ul className="max-h-56 overflow-y-auto p-1">
+                        <ul
+                            ref={listRef}
+                            onScroll={handleScroll}
+                            className="max-h-56 overflow-y-auto p-1"
+                        >
                             {filteredOptions.length === 0 ? (
                                 <li className="px-3 py-3 text-center text-[13px] font-medium text-slate-500 dark:text-slate-400 sm:text-sm">
-                                    No results found.
+                                    {loading ? "Loading..." : "No results found."}
                                 </li>
                             ) : (
                                 filteredOptions.map((option) => {
@@ -96,6 +139,17 @@ export default function SearchableDropdown({ options, value, onChange, placehold
                                         </li>
                                     );
                                 })
+                            )}
+                            {loading && filteredOptions.length > 0 && (
+                                <li className="flex items-center justify-center gap-2 px-3 py-3 text-[13px] font-medium text-slate-500 dark:text-slate-400 sm:text-sm">
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    Loading...
+                                </li>
+                            )}
+                            {!loading && remoteSearch && hasMore && (
+                                <li className="px-3 py-2 text-center text-[12px] font-medium text-slate-400 dark:text-slate-500 sm:text-sm">
+                                    Scroll for more
+                                </li>
                             )}
                         </ul>
                         {addActionLabel && (

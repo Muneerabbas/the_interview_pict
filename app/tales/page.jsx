@@ -1,302 +1,236 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useAnimationFrame, animate, useVelocity } from "framer-motion";
-import { Send, ArrowUpRight, Loader2, MousePointer2, Move, Layers, Zap } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
+import { BookOpen, Loader2, Send, Sparkles, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../../components/Navbar";
-import VisualTaleCard from "../../components/VisualTaleCard";
-import { useRouter } from "next/navigation";
+import FeedCard from "../../components/FeedCard";
+import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 
-// Constants for the Virtual Grid
-const ITEM_WIDTH = 400;
-const ITEM_HEIGHT = 380;
-const GAP = 24;
-const GRID_COLS_SIZE = ITEM_WIDTH + GAP;
-const GRID_ROWS_SIZE = ITEM_HEIGHT + GAP;
+const ITEMS_PER_PAGE = 10;
 
-// Helper to generate massive static data for the canvas
-const generateStaticTales = (count) => {
-  const images = [
-    "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1481487196290-c152efe083f5?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1522071823991-b9671f30c46f?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516116216624-53e697fedbea?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1000&auto=format&fit=crop",
-  ];
+export default function TalesPage() {
+  const [tales, setTales] = useState([]);
+  const [page, setPage] = useState(0);
+  const [activeTab, setActiveTab] = useState("latest");
+  const [pageLoading, setPageLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef(null);
+  const isFetchingRef = useRef(false);
 
-  const titles = [
-    "Nexus", "Pulse", "Synthetica", "Aether", "Glimmer", "Vortex", "Horizon", "Catalyst", "Prism", "Echo"
-  ];
+  const fetchTales = useCallback(async (pageNumber, sort) => {
+    if (isFetchingRef.current && pageNumber > 0) return;
 
-  const names = ["Aarav", "Neha", "Ishan", "Sanya", "Rohan", "Kavya", "Arjun", "Mira", "Vikram"];
+    setPageLoading(true);
+    isFetchingRef.current = true;
 
-  return Array.from({ length: count }, (_, i) => ({
-    _id: `s-${i}`,
-    title: `${titles[i % titles.length]} #${i + 1}`,
-    profileName: names[i % names.length],
-    views: `${(Math.random() * 9 + 1).toFixed(1)}k`,
-    likes: Array(Math.floor(Math.random() * 500) + 50).fill(0),
-    image: images[i % images.length],
-    gridX: (i % 20), // 20 columns wide
-    gridY: Math.floor(i / 20),
-  }));
-};
+    try {
+      const params = new URLSearchParams({
+        page: String(pageNumber),
+        itemsPerPage: String(ITEMS_PER_PAGE),
+        sort,
+        contentType: "tale",
+      });
 
-const STATIC_TALES = generateStaticTales(400); // 20x20 massive grid
+      const response = await fetch(`/api/feed?${params.toString()}`, {
+        cache: "no-store",
+      });
 
-export default function TalesCanvasPage() {
-  const { resolvedTheme } = useTheme();
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const canvasRef = useRef(null);
+      if (!response.ok) {
+        throw new Error("Failed to fetch tales");
+      }
 
-  // Tracking mouse movement for the follow-drift effect
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+      const incoming = await response.json();
+      const nextTales = Array.isArray(incoming) ? incoming : [];
 
-  // Physical mouse tracking for cursor UI
-  const absMouseX = useMotionValue(0);
-  const absMouseY = useMotionValue(0);
-
-  // Grid position values
-  const x = useMotionValue(-500);
-  const y = useMotionValue(-500);
-
-  // FIXED: Moving Hooks to top level for silky consistency
-  const smoothX = useSpring(x, { damping: 50, stiffness: 400 });
-  const smoothY = useSpring(y, { damping: 50, stiffness: 400 });
-  const cursorX = useSpring(absMouseX, { damping: 60, stiffness: 1000 });
-  const cursorY = useSpring(absMouseY, { damping: 60, stiffness: 1000 });
-
-  // Viewport state
-  const [viewport, setViewport] = useState({ w: 1920, h: 1080 });
-  const [isInsideGrid, setIsInsideGrid] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const updateSize = () => setViewport({ w: window.innerWidth, h: window.innerHeight * 0.7 });
-    updateSize();
-    window.addEventListener("resize", updateSize);
-
-    const handleMouseMove = (e) => {
-      absMouseX.set(e.clientX);
-      absMouseY.set(e.clientY);
-
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = (e.clientY / (window.innerHeight * 0.7)) * 2 - 1;
-      mouseX.set(nx);
-      mouseY.set(ny);
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("resize", updateSize);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+      setTales((prev) => {
+        if (pageNumber === 0) return nextTales;
+        const combined = [...prev, ...nextTales];
+        return [...new Map(combined.map((item) => [item._id || item.uid, item])).values()];
+      });
+      setHasMore(nextTales.length === ITEMS_PER_PAGE);
+    } catch (error) {
+      console.error("Error fetching tales:", error);
+      if (pageNumber === 0) setTales([]);
+      setHasMore(false);
+    } finally {
+      setPageLoading(false);
+      isFetchingRef.current = false;
+    }
   }, []);
 
-  // Heavy Optimization: Debounced Search Input
-  const [searchQuery, setSearchQuery] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  useEffect(() => {
+    setTales([]);
+    setPage(0);
+    setHasMore(true);
+    fetchTales(0, activeTab);
+  }, [activeTab, fetchTales]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchQuery(inputValue);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [inputValue]);
+    if (page === 0) return;
+    fetchTales(page, activeTab);
+  }, [page, activeTab, fetchTales]);
 
-  const filteredTales = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
-    if (!query) return STATIC_TALES;
-    return STATIC_TALES.filter(tale =>
-      tale.title.toLowerCase().includes(query) ||
-      tale.profileName.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
+  const lastStoryElementRef = useCallback(
+    (node) => {
+      if (pageLoading || !hasMore) return;
+      if (observer.current) observer.current.disconnect();
 
-  // High-Performance Virtualization State
-  const [visibleItems, setVisibleItems] = useState([]);
-  const lastUpdatePos = useRef({ x: 0, y: 0 });
-  const lastUpdateTime = useRef(0);
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !isFetchingRef.current && tales.length > 0) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        { rootMargin: "400px" }
+      );
 
-  useAnimationFrame((time, delta) => {
-    if (!isInsideGrid) return;
+      if (node) observer.current.observe(node);
+    },
+    [pageLoading, hasMore, tales.length]
+  );
 
-    // Smooth Physics Integration
-    const speed = 0.0012;
-    const dx = mouseX.get();
-    const dy = mouseY.get();
-    const threshold = 0.08;
-    const driftX = Math.abs(dx) > threshold ? dx * speed * delta : 0;
-    const driftY = Math.abs(dy) > threshold ? dy * speed * delta : 0;
-
-    x.set(x.get() - driftX * 100);
-    y.set(y.get() - driftY * 100);
-
-    const curX = x.get();
-    const curY = y.get();
-
-    // Proper Optimization: Frame throttling (max 30Hz for state updates) + 120px threshold
-    const now = performance.now();
-    if (now - lastUpdateTime.current < 32) return;
-
-    const distMoved = Math.sqrt(
-      Math.pow(curX - lastUpdatePos.current.x, 2) +
-      Math.pow(curY - lastUpdatePos.current.y, 2)
-    );
-
-    if (distMoved < 120 && visibleItems.length > 0) return;
-
-    lastUpdatePos.current = { x: curX, y: curY };
-    lastUpdateTime.current = now;
-
-    const startCol = Math.floor(-curX / GRID_COLS_SIZE) - 2;
-    const endCol = Math.floor((-curX + viewport.w) / GRID_COLS_SIZE) + 2;
-    const startRow = Math.floor(-curY / GRID_ROWS_SIZE) - 2;
-    const endRow = Math.floor((-curY + viewport.h) / GRID_ROWS_SIZE) + 2;
-
-    const visible = [];
-    const GRID_DIM = 20;
-
-    for (let col = startCol; col <= endCol; col++) {
-      for (let row = startRow; row <= endRow; row++) {
-        const internalIndex = (Math.abs(row * GRID_DIM + col)) % (filteredTales.length || 1);
-        const tale = filteredTales[internalIndex];
-        if (tale) {
-          visible.push({ id: `tale-${col}-${row}`, data: tale, globalX: col, globalY: row });
-        }
-      }
-    }
-    setVisibleItems(visible);
-  });
-
-  const handleCardClick = useCallback((id) => {
-    router.push(`/single/${id}`);
-  }, [router]);
-
-  if (!mounted) return null;
+  const skeletonCards = Array.from({ length: 3 });
 
   return (
-    <main className="relative min-h-screen bg-[#020617] font-sans overflow-hidden">
+    <main className="relative min-h-screen overflow-x-clip font-sans bg-transparent">
+      <div className="fixed inset-0 -z-30 bg-[#f8fbff] dark:bg-[#020617]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]" />
+      </div>
+
+      <div className="fixed inset-0 -z-20 pointer-events-none">
+        <div className="absolute left-[-140px] top-24 h-[400px] w-[400px] rounded-full bg-sky-300/20 blur-[120px] dark:bg-sky-500/15" />
+        <div className="absolute right-[-120px] top-[320px] h-[400px] w-[400px] rounded-full bg-indigo-300/20 blur-[120px] dark:bg-indigo-500/15" />
+      </div>
+
+      <div
+        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]"
+        style={{
+          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
+        }}
+      />
+
+      <div className="fixed inset-0 -z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.38),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.08),transparent_42%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.07),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.65),transparent_45%)]" />
+
+      <div className="fixed inset-y-0 left-1/2 w-full max-w-[800px] -translate-x-1/2 -z-10 bg-slate-100/10 dark:bg-slate-900/20 pointer-events-none" />
+
       <Navbar showThemeToggle />
 
-      {/* Dynamic Cursor UI - Silky follow logic */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: isInsideGrid ? 1 : 0,
-          scale: isHovering ? 1.8 : 1,
-          backgroundColor: isHovering ? "rgba(34, 211, 238, 0.1)" : "rgba(255, 255, 255, 0.02)",
-          borderColor: isHovering ? "rgba(34, 211, 238, 0.8)" : "rgba(255, 255, 255, 0.2)"
-        }}
-        className="pointer-events-none fixed z-[100] h-10 w-10 rounded-full border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-[2px] transition-all duration-700 ease-out"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          left: 0,
-          top: 0,
-          translateX: "-50%",
-          translateY: "-50%"
-        }}
-      >
-        <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,1)]" />
-      </motion.div>
+      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
+        <section className="mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/82 p-6 shadow-[0_12px_36px_rgba(15,23,42,0.07)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/76 dark:shadow-[0_16px_42px_rgba(2,6,23,0.62)] sm:p-7">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
+                <BookOpen className="h-3.5 w-3.5" />
+                Hackathon Takes
+              </div>
+              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.5rem]">
+                Stories in the same rhythm as the feed
+              </h1>
+              <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-[15px]">
+                Project journeys, late-night fixes, team chaos, lessons, wins, and failures. Same reading flow as the main feed, focused on tales.
+              </p>
+            </div>
 
-      {/* Interactive Grid Viewport - Highly Optimized */}
-      <div className="mx-12 mb-16 -mt-1">
-        <section
-          onMouseEnter={() => setIsInsideGrid(true)}
-          onMouseLeave={() => setIsInsideGrid(false)}
-          className="relative h-[70vh] w-full overflow-hidden cursor-none rounded-[4rem] bg-black/40"
-        >
-          {/* Visual Layer Masks */}
-          <div className="absolute inset-0 z-40 pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse 65% 55% at 50% 50%, transparent 65%, rgba(2, 6, 23, 0.95) 100%)",
-              boxShadow: "inset 0 0 180px 40px rgba(2, 6, 23, 1)"
-            }} />
+            <Link
+              href="/post/tale"
+              className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_14px_30px_rgba(37,99,235,0.28)] dark:bg-cyan-400 dark:text-slate-950 dark:shadow-[0_10px_24px_rgba(34,211,238,0.18)] dark:hover:bg-cyan-300 dark:hover:shadow-[0_14px_30px_rgba(34,211,238,0.22)] sm:self-auto"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Share your tale
+            </Link>
+          </div>
+        </section>
 
-          <div className="absolute inset-0 z-30 pointer-events-none backdrop-blur-[16px]"
-            style={{
-              WebkitMaskImage: "radial-gradient(ellipse 75% 55% at 50% 50%, transparent 50%, black 100%)",
-              maskImage: "radial-gradient(ellipse 75% 55% at 50% 50%, transparent 50%, black 100%)"
-            }} />
+        <div className="mb-8 flex items-center gap-3">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-300 to-slate-300 dark:via-slate-700 dark:to-slate-700" />
+          <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:text-slate-400">
+            Tale Stories
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-slate-300 via-slate-300 to-transparent dark:from-slate-700 dark:via-slate-700" />
+        </div>
 
-          {/* Background Detail */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.05),transparent_50%)]" />
-            <div className="absolute inset-0 opacity-[0.015] pointer-events-none"
-              style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "120px 120px" }} />
+        <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
+          <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="inline-flex w-fit items-center gap-1 rounded-full border border-slate-200/80 bg-slate-100/85 p-1 shadow-sm dark:border-slate-700/80 dark:bg-slate-800/75">
+                <button
+                  onClick={() => setActiveTab("latest")}
+                  className={`relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-bold transition-all ${activeTab === "latest"
+                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-cyan-300"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                    }`}
+                >
+                  <Clock className="h-3.5 w-3.5" />
+                  Latest
+                </button>
+
+                <button
+                  onClick={() => setActiveTab("trending")}
+                  className={`relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-bold transition-all ${activeTab === "trending"
+                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-cyan-300"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                    }`}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Trending
+                </button>
+              </div>
+
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                <BookOpen className="h-3.5 w-3.5" />
+                {tales.length} loaded
+              </div>
+            </div>
           </div>
 
-          {/* Infinite Grid Container (GPU Accelerated) */}
-          <motion.div
-            ref={canvasRef}
-            className="absolute inset-0 pointer-events-none"
-            style={{ x: smoothX, y: smoothY, willChange: "transform" }}
-          >
-            {visibleItems.map(item => (
-              <div
-                key={item.id}
-                className="absolute pointer-events-auto"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                onClick={() => handleCardClick(item.data._id)}
-                style={{
-                  left: item.globalX * GRID_COLS_SIZE,
-                  top: item.globalY * GRID_ROWS_SIZE,
-                  width: ITEM_WIDTH,
-                  height: ITEM_HEIGHT,
-                  contain: "content"
-                }}
-              >
-                <VisualTaleCard profile={item.data} disableLink />
+          <div className="relative z-10 space-y-6">
+            {pageLoading && page === 0 && tales.length === 0 ? (
+              skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
+            ) : (
+              <AnimatePresence mode="popLayout">
+                {tales.map((tale, index) => (
+                  <motion.div
+                    key={tale._id || tale.uid}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.35, delay: (index % 10) * 0.03 }}
+                  >
+                    <FeedCard profile={tale} width="w-full" />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
+
+            <div ref={lastStoryElementRef} className="h-4 w-full" />
+
+            {tales.length === 0 && !pageLoading && (
+              <div className="py-12 text-center">
+                <p className="font-medium italic text-slate-500 dark:text-slate-400">
+                  No tales found yet.
+                </p>
+                <Link
+                  href="/post/tale"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:underline dark:text-cyan-400"
+                >
+                  <Send className="h-4 w-4" />
+                  Post the first tale
+                </Link>
               </div>
-            ))}
-          </motion.div>
+            )}
 
-          {/* Cinematic Professional Search Interface */}
-
+            {pageLoading && tales.length > 0 && (
+              <div className="flex items-center justify-center py-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading more tales...
+              </div>
+            )}
+          </div>
         </section>
       </div>
-
-      {/* Discovery Area */}
-      <div className="relative z-10 px-8 py-16 text-center">
-        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-cyan-400/50 mb-4 block">Endless Narratives</span>
-        <h2 className="text-5xl font-black text-white mb-8 tracking-tighter">Discover PICT's Legacy</h2>
-        <p className="text-slate-400 max-w-xl mx-auto mb-12 text-lg leading-relaxed">
-          Journey through the boundless grid of student experiences. Each square represents a milestone in someone's career.
-        </p>
-        <Link
-          href="/post/tale"
-          className="group inline-flex items-center gap-6 rounded-full bg-white px-12 py-8 text-[13px] font-black uppercase tracking-[0.3em] text-slate-950 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-105 hover:bg-cyan-400"
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white group-hover:scale-110 group-hover:rotate-12 transition-transform">
-            <Send size={14} strokeWidth={3} />
-          </div>
-          Share Your Tale
-        </Link>
-      </div>
-
-      <style jsx global>{`
-        body {
-          user-select: none;
-          background: #020617;
-        }
-      `}</style>
     </main>
   );
 }

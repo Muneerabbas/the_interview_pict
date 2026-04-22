@@ -196,6 +196,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [previousMarkdown, setPreviousMarkdown] = useState("");
   const [mode, setMode] = useState("manual");
+  const isTale = contentType === "tale";
 
   const initialMessage = "Hi! I'll help you write a useful interview post for juniors. First, what were the exact eligibility/shortlisting criteria (CGPA cutoff, branches allowed, backlogs, resume screening, OA shortlist, etc.)?";
 
@@ -259,23 +260,46 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     { label: "Mechatronics", value: "MECHATRONICS" },
     { label: "Environmental Engineering", value: "ENV" },
   ];
-  const colleges = [
-    "COEP Technological University",
-    "Pune Institute of Computer Technology (PICT)",
-    "Vishwakarma Institute of Technology (VIT Pune)",
-    "Pimpri Chinchwad College of Engineering (PCCOE)",
-    "MIT World Peace University (MIT-WPU)",
-    "Cummins College of Engineering for Women",
-    "AISSMS Institute of Information Technology",
-    "Sinhgad College of Engineering",
-    "JSPM Rajarshi Shahu College of Engineering",
-    "Dr. D. Y. Patil Institute of Technology, Akurdi",
-    "others"
-  ];
+  const COLLEGE_PAGE_SIZE = 20;
+  const [colleges, setColleges] = useState([]);
+  const [collegeSearchTerm, setCollegeSearchTerm] = useState("");
+  const [collegePage, setCollegePage] = useState(1);
+  const [collegeHasMore, setCollegeHasMore] = useState(false);
+  const [collegeLoading, setCollegeLoading] = useState(false);
   const [companies, setCompanies] = useState(postCompanies);
 
   const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
   const [newCompanyInitialName, setNewCompanyInitialName] = useState("");
+
+  const loadColleges = async (query, pageToLoad) => {
+    setCollegeLoading(true);
+    try {
+      const params = new URLSearchParams({
+        q: query,
+        page: String(pageToLoad),
+        limit: String(COLLEGE_PAGE_SIZE),
+      });
+      const res = await fetch(`/api/colleges?${params.toString()}`);
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) {
+        setColleges((prev) => (
+          pageToLoad === 1
+            ? data.data
+            : Array.from(new Set([...prev, ...data.data]))
+        ));
+        setCollegePage(pageToLoad);
+        setCollegeHasMore(Boolean(data.pagination?.hasMore));
+      }
+    } catch (err) {
+      console.error("Could not fetch colleges", err);
+    } finally {
+      setCollegeLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadColleges(collegeSearchTerm, 1);
+  }, [collegeSearchTerm]);
 
   useEffect(() => {
     fetch("/api/getCompanies")
@@ -383,13 +407,13 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       case 'branch':
         return !value;
       case 'company':
-        if (contentType === 'tale') return false; // Optional for tales
+        if (isTale) return false;
         return !value || (value === 'others' && !customCompany);
       case 'role':
-        if (contentType === 'tale') return false; // Optional for tales
+        if (isTale) return false;
         return !value || (value === 'others' && !customRole);
       case 'title':
-        return contentType === 'tale' && !value.trim();
+        return isTale && !value.trim();
       case 'markdown':
         return !getEditorPlainText(value);
       default:
@@ -433,7 +457,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const handleCompanyChange = (value) => {
     setCompany(value);
-    if (value !== "others") {
+    if (!isTale && value !== "others") {
       setCustomCompany(""); // Reset custom company when a predefined one is selected
     }
     setErrors((prevErrors) => ({
@@ -448,7 +472,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const handleRoleChange = (value) => {
     setRole(value);
-    if (value !== "others") {
+    if (!isTale && value !== "others") {
       setCustomRole(""); // Reset custom role when a predefined one is selected
     }
     setErrors((prevErrors) => ({
@@ -462,6 +486,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   };
 
   const validateRequiredMetaForAI = () => {
+    if (isTale) {
+      alert("AI writer for hackathon posts is under development.");
+      return false;
+    }
+
     const requiredErrors = {
       college: validateField('college', college),
       batch: validateField('batch', batch),
@@ -479,6 +508,10 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   };
 
   const handleModeChange = (nextMode) => {
+    if (nextMode === 'ai' && isTale) {
+      alert("AI writer for hackathon posts is under development.");
+      return;
+    }
     if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
       alert("Please select College, Batch, Department, Company, and Role before using AI.");
       return;
@@ -525,8 +558,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
     // Determine the final values (use custom values if "Others..." is selected)
     const finalCollege = college === 'others' ? customCollege : college;
-    const finalCompany = company === 'others' ? customCompany : company;
-    const finalRole = role === 'others' ? customRole : role;
+    const finalCompany = isTale ? "" : company === 'others' ? customCompany : company;
+    const finalRole = isTale ? "" : role === 'others' ? customRole : role;
 
     setIsLoading(true); // Set loading to true before submission
 
@@ -581,7 +614,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       });
 
       // Invalidate frontend feed cache
-      if (contentType === 'tale') {
+      if (isTale) {
         sessionStorage.removeItem("tales_state_v1:latest");
         sessionStorage.removeItem("tales_state_v1:trending");
       } else {
@@ -625,10 +658,16 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     }
   }, [markdown, title, college, customCollege, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
+  useEffect(() => {
+    setMode("manual");
+    setIsGenerating(false);
+    setChatInput("");
+  }, [contentType]);
+
 
   const handleCopyTemplate = () => {
     setMode("manual");
-    setMarkdown(contentType === "tale" ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
+    setMarkdown(isTale ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
     setErrors((prevErrors) => ({
       ...prevErrors,
       markdown: false,
@@ -636,6 +675,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   };
 
   const handleClearForm = () => {
+    setTitle("");
     setCollege("");
     setCustomCollege("");
     setBatch("");
@@ -652,6 +692,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       branch: false,
       company: false,
       role: false,
+      title: false,
       markdown: false,
     });
     setMode("manual");
@@ -697,8 +738,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     try {
       const roundsList = finalAnswers.roundDetails.join("\n\n");
       const finalPayload = {
-        company: company === 'others' ? customCompany : company || "Not specified",
-        role: role === 'others' ? customRole : role || "Not specified",
+        company: isTale ? company || "Not specified" : company === 'others' ? customCompany : company || "Not specified",
+        role: isTale ? role || "Not specified" : role === 'others' ? customRole : role || "Not specified",
         college: (college === 'others' ? customCollege : college) || "Not specified",
         batch: batch || "Not specified",
         branch: branch || "Not specified",
@@ -928,10 +969,10 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
           <div className="relative mx-auto mb-3 max-w-3xl text-center sm:mb-4">
             <h1 className="mb-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-3 sm:text-5xl lg:text-6xl">
-              {contentType === "tale" ? "Tales From PICT" : "Share Your Journey"}
+              {isTale ? "Hackathon Takes" : "Share Your Journey"}
             </h1>
             <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
-              {contentType === "tale"
+              {isTale
                 ? "Share your authentic stories from hackathons, projects, failures, and the lessons learned along the way."
                 : "Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career."}
             </p>
@@ -940,7 +981,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           <div className="mb-4 w-full animate-fade-in-up">
             <div className="flex flex-col gap-2 rounded-xl border border-slate-200/65 bg-white/30 px-3 py-2.5 backdrop-blur-md dark:border-slate-700/65 dark:bg-slate-900/35 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 sm:text-[13px]">
-                Fill details below, then choose Manual or AI mode.
+                {isTale ? "Fill details below and write your post manually. AI writer is under development for hackathon posts." : "Fill details below, then choose Manual or AI mode."}
               </p>
               <div className="flex items-center gap-2 px-1 sm:px-0">
                 <span className="relative flex h-2 w-2">
@@ -953,7 +994,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           </div>
 
           <div className="relative z-[60] mb-6 w-full overflow-visible rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
-            {contentType === "tale" && (
+            {isTale && (
               <div className="mb-6 w-full">
                 <div className="flex items-center gap-2 mb-3 px-2">
                   <PenLine className="h-4 w-4 text-slate-400 dark:text-slate-500" />
@@ -984,6 +1025,15 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                       onChange={handleCollegeChange}
                       placeholder="Select College"
                       error={errors.college}
+                      remoteSearch
+                      loading={collegeLoading}
+                      hasMore={collegeHasMore}
+                      onSearchTermChange={setCollegeSearchTerm}
+                      onLoadMore={() => {
+                        if (!collegeLoading && collegeHasMore) {
+                          loadColleges(collegeSearchTerm, collegePage + 1);
+                        }
+                      }}
                     />
 
                     {college === "others" && (
@@ -1053,73 +1103,77 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                 </div>
               </div>
 
-              {/* Company */}
-              <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
-                      {contentType === "tale" ? "Event / Topic" : "Company"}
-                    </label>
+              {!isTale ? (
+                <>
+                  {/* Company */}
+                  <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                        <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
+                          Company
+                        </label>
+                      </div>
+                      <div className="relative">
+                        <SearchableDropdown
+                          options={companies}
+                          value={company}
+                          onChange={handleCompanyChange}
+                          placeholder="Select Company"
+                          error={errors.company}
+                          addActionLabel="Add New Company"
+                          onAddActionClick={handleAddCompanyAction}
+                        />
+                      </div>
+                      {company === "others" && (
+                        <motion.input
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                          type="text"
+                          onChange={handleCustomCompanyChange}
+                          placeholder="Enter Company"
+                          value={customCompany}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                        />
+                      )}
+                      {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                    </div>
                   </div>
-                  <div className="relative">
-                    <SearchableDropdown
-                      options={companies}
-                      value={company}
-                      onChange={handleCompanyChange}
-                      placeholder={contentType === "tale" ? "Select Event/Topic" : "Select Company"}
-                      error={errors.company}
-                      addActionLabel={contentType === "tale" ? "Add New Topic" : "Add New Company"}
-                      onAddActionClick={handleAddCompanyAction}
-                    />
-                  </div>
-                  {company === "others" && (
-                    <motion.input
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: "auto", marginTop: 8 }}
-                      type="text"
-                      onChange={handleCustomCompanyChange}
-                      placeholder={contentType === "tale" ? "Enter Topic" : "Enter Company"}
-                      value={customCompany}
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
-                    />
-                  )}
-                  {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
-                </div>
-              </div>
 
-              {/* Role */}
-              <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
-                    <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
-                      {contentType === "tale" ? "Subject" : "Role"}
-                    </label>
+                  {/* Role */}
+                  <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                        <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
+                          Role
+                        </label>
+                      </div>
+                      <div className="relative">
+                        <SearchableDropdown
+                          options={roles}
+                          value={role}
+                          onChange={handleRoleChange}
+                          placeholder="Select Role"
+                          error={errors.role}
+                        />
+                      </div>
+                      {role === "others" && (
+                        <motion.input
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                          type="text"
+                          onChange={handleCustomRoleChange}
+                          placeholder="Enter Role"
+                          value={customRole}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                        />
+                      )}
+                      {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                    </div>
                   </div>
-                  <div className="relative">
-                    <SearchableDropdown
-                      options={roles}
-                      value={role}
-                      onChange={handleRoleChange}
-                      placeholder={contentType === "tale" ? "Select Subject" : "Select Role"}
-                      error={errors.role}
-                    />
-                  </div>
-                  {role === "others" && (
-                    <motion.input
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: "auto", marginTop: 8 }}
-                      type="text"
-                      onChange={handleCustomRoleChange}
-                      placeholder={contentType === "tale" ? "Enter Subject" : "Enter Role"}
-                      value={customRole}
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
-                    />
-                  )}
-                  {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
-                </div>
-              </div>
+                </>
+              ) : null}
             </div>
           </div>
 
@@ -1169,9 +1223,9 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                       </button>
                       <button
                         onClick={() => handleModeChange('ai')}
-                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'} ${isTale ? 'opacity-60' : ''}`}
                       >
-                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
+                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {isTale ? "AI Under Dev" : "AI Assistant"}
                       </button>
 
                       {/* Animated pill background */}

@@ -80,13 +80,13 @@ const FeedCard = ({ profile, width = "w-full" }) => {
 
   const profilePic = resolveProfileImage(profile);
   const profileName = resolveProfileName(profile);
-  const companyName = profile?.company;
-  const roleName = profile?.role;
   const isTale = profile?.content_type === "tale";
+  const companyName = isTale ? profile?.college : profile?.company;
+  const roleName = isTale ? "" : profile?.role;
   const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
   const readPath = `/single/${profile?.uid || profile?._id}`;
   const editPath = profile?.uid ? `/edit/${profile.uid}` : null;
-  const companySlug = companySlugFromName(companyName);
+  const companySlug = isTale ? "" : companySlugFromName(companyName);
   const authorEmail = profile?.email ? String(profile.email) : "";
   const isOwner =
     userEmail &&

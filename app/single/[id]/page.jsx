@@ -4,6 +4,7 @@ import MarkdownRenderer from "@/components/Markdown";
 import SingleExperienceThemeShell from "@/components/SingleExperienceThemeShell";
 import {
   ArrowLeft,
+  BookOpen,
   Briefcase,
   Building2,
   CalendarDays,
@@ -161,7 +162,10 @@ export default async function SimilarExperience({ params }) {
     });
   };
   const articleUrl = `${baseUrl}/single/${id}`;
-  const articleDescription = `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
+  const isTale = data?.content_type === "tale";
+  const articleDescription = isTale
+    ? `Read ${data?.name}'s tale about ${data?.company || "their experience"}.`
+    : `Read ${data?.name}'s detailed interview experience as ${data?.role} at ${data?.company}.`;
   const profilePicUrl = data?.profile_pic || `${baseUrl}/app_icon.png`;
   const publicProfilePath = data?.email ? `/profile/public/${encodeURIComponent(data.email)}` : null;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
@@ -214,149 +218,254 @@ export default async function SimilarExperience({ params }) {
 
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
               <Link
-                href="/feed"
+                href={isTale ? "/tales" : "/feed"}
                 prefetch={true}
                 className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300"
               >
                 <ArrowLeft size={16} />
-                Back to feed
+                {isTale ? "Back to tales" : "Back to feed"}
               </Link>
               <div className="inline-flex items-center rounded-full border border-slate-200/70 bg-slate-50/70 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] text-slate-400 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-500">
-                {isTale ? "Tales From PICT" : "Single Experience"}
+                {isTale ? "Tales" : "Single Experience"}
               </div>
             </div>
 
             <div className="grid gap-6">
               <article className="overflow-hidden rounded-3xl border border-slate-300/80 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/80 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
-                <header className="relative overflow-hidden border-b border-slate-100/80 bg-gradient-to-br from-slate-50/50 to-blue-50/30 px-4 py-8 pr-14 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-blue-950/20 sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
-                  <ShareButton id={id} data={data} />
+                {isTale ? (
+                  <>
+                    <header className="relative overflow-hidden border-b border-slate-100/80 bg-[radial-gradient(circle_at_top_left,rgba(191,219,254,0.55),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(248,250,252,0.92)_100%)] px-4 py-8 pr-14 dark:border-slate-700/50 dark:bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.92)_0%,rgba(2,6,23,0.92)_100%)] sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
+                      <div className="pointer-events-none absolute -right-12 top-0 h-40 w-40 rounded-full bg-blue-200/30 blur-3xl dark:bg-cyan-500/15" />
+                      <ShareButton id={id} data={data} />
 
-                  <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-                    {publicProfilePath ? (
-                      <Link
-                        href={publicProfilePath}
-                        className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg transition hover:scale-[1.02] dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26"
-                        aria-label={`View ${data?.name || "user"} profile`}
-                      >
-                        <ProfileAvatar
-                          src={data?.profile_pic}
-                          alt={`${data?.name}'s profile picture`}
-                          name={data?.name}
-                          className="h-full w-full object-cover"
-                        />
-                      </Link>
-                    ) : (
-                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26">
-                        <ProfileAvatar
-                          src={data?.profile_pic}
-                          alt={`${data?.name}'s profile picture`}
-                          name={data?.name}
-                          className="h-full w-full object-cover"
-                        />
+                      <div className="relative">
+                        <div className="flex flex-col gap-6 md:flex-row md:items-start">
+                          {publicProfilePath ? (
+                            <Link
+                              href={publicProfilePath}
+                              className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg transition hover:scale-[1.02] dark:border-slate-900 sm:h-24 sm:w-24"
+                              aria-label={`View ${data?.name || "user"} profile`}
+                            >
+                              <ProfileAvatar
+                                src={data?.profile_pic}
+                                alt={`${data?.name}'s profile picture`}
+                                name={data?.name}
+                                className="h-full w-full object-cover"
+                              />
+                            </Link>
+                          ) : (
+                            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24">
+                              <ProfileAvatar
+                                src={data?.profile_pic}
+                                alt={`${data?.name}'s profile picture`}
+                                name={data?.name}
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                          )}
+
+                          <div className="min-w-0 flex-1">
+                            <div className="mb-3 flex flex-wrap items-center gap-2">
+                              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:border-slate-700/70 dark:bg-slate-800/70 dark:text-slate-400">
+                                Tales
+                              </span>
+                              {isToday && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+                                  <Sparkles size={11} />
+                                  Fresh
+                                </span>
+                              )}
+                            </div>
+
+                            {publicProfilePath ? (
+                              <Link
+                                href={publicProfilePath}
+                                className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition hover:text-blue-700 dark:text-slate-100 dark:hover:text-cyan-300 lg:text-4xl"
+                              >
+                                {data?.name}
+                              </Link>
+                            ) : (
+                              <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
+                                {data?.name}
+                              </h1>
+                            )}
+
+                            {data?.title && (
+                              <h2 className="mt-3 max-w-3xl text-2xl font-black leading-tight text-slate-900 dark:text-slate-100 sm:text-[2.6rem]">
+                                {data.title}
+                              </h2>
+                            )}
+
+                            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500 dark:text-slate-400">
+                              {(data?.college || data?.company) && (
+                                <div className="inline-flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/80 px-3 py-1.5 text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
+                                  <BookOpen size={14} />
+                                  {data?.college || data?.company}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
+                              <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                                <GraduationCap size={13} />
+                                {data?.branch} {data?.batch}
+                              </div>
+                              <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                                <CalendarDays size={13} />
+                                {data?.date ? formatLongDate(data.date) : "Date unavailable"}
+                              </div>
+                              <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11.5px] font-bold text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">
+                                <Eye size={13} />
+                                {data?.views} reads
+                              </div>
+                              <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+                                <span className="text-[13px]">✦</span>
+                                {readMinutes} min read
+                              </div>
+                              <div className="ml-auto inline-flex items-center gap-2">
+                                <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    </header>
 
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-1 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:bg-cyan-500/10 dark:text-slate-500">
-                          {isTale ? "Tales From PICT" : "Interview Experience"}
-                        </span>
-                        {isToday && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
-                            <Sparkles size={11} />
-                            Fresh
-                          </span>
-                        )}
+                    <section className="border-t border-slate-100/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.7)_0%,rgba(255,255,255,0.96)_100%)] px-4 py-8 dark:border-slate-700/60 dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.72)_0%,rgba(15,23,42,0.92)_100%)] sm:px-8 sm:py-10 lg:px-12">
+                      <div className="mx-auto w-full max-w-[760px] rounded-[2rem] border border-slate-200/80 bg-white/95 p-5 text-slate-700 shadow-[0_12px_34px_rgba(15,23,42,0.06)] dark:border-slate-700/70 dark:bg-slate-900/92 dark:text-slate-300 sm:p-8">
+                        <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
+                    </section>
 
-                      {publicProfilePath ? (
-                        <Link
-                          href={publicProfilePath}
-                          className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition hover:text-blue-700 dark:text-slate-100 dark:hover:text-cyan-300 lg:text-4xl"
-                        >
-                          {data?.name}
-                        </Link>
-                      ) : (
-                        <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
-                          {data?.name}
-                        </h1>
-                      )}
+                    <footer className="flex flex-col gap-2 border-t border-slate-200/90 bg-gradient-to-r from-slate-50/95 to-blue-50/50 px-4 py-4 text-sm text-slate-600 dark:border-slate-700/80 dark:from-slate-900/90 dark:to-slate-800/80 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                      <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 dark:text-slate-200">
+                        <Eye size={14} className="text-blue-600 dark:text-cyan-300" />
+                        {data?.views} reads
+                      </p>
+                      <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">Shared on theInterview tales feed</p>
+                    </footer>
+                  </>
+                ) : (
+                  <>
+                    <header className="relative overflow-hidden border-b border-slate-100/80 bg-gradient-to-br from-slate-50/50 to-blue-50/30 px-4 py-8 pr-14 dark:border-slate-700/50 dark:from-slate-900/50 dark:to-blue-950/20 sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
+                      <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/35 blur-3xl dark:bg-cyan-500/20" />
+                      <ShareButton id={id} data={data} />
 
-                      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-                        {data?.company && (
-                          <div className="flex items-center gap-1.5">
-                            <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
-                            <span className="text-slate-900 dark:text-slate-200 font-bold">
-                              {isTale ? "Event / Topic: " : ""}
-                              {data?.company}
-                            </span>
+                      <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+                        {publicProfilePath ? (
+                          <Link
+                            href={publicProfilePath}
+                            className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg transition hover:scale-[1.02] dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26"
+                            aria-label={`View ${data?.name || "user"} profile`}
+                          >
+                            <ProfileAvatar
+                              src={data?.profile_pic}
+                              alt={`${data?.name}'s profile picture`}
+                              name={data?.name}
+                              className="h-full w-full object-cover"
+                            />
+                          </Link>
+                        ) : (
+                          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-slate-900 sm:h-24 sm:w-24 lg:h-26 lg:w-26">
+                            <ProfileAvatar
+                              src={data?.profile_pic}
+                              alt={`${data?.name}'s profile picture`}
+                              name={data?.name}
+                              className="h-full w-full object-cover"
+                            />
                           </div>
                         )}
-                        {data?.role && (
-                          <div className="flex items-center gap-1.5">
-                            <Briefcase size={15} className="text-blue-600 dark:text-cyan-300" />
-                            <span>
-                              {isTale ? "Subject: " : ""}
-                              {data?.role}
+
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-1 flex flex-wrap items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-600/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:bg-cyan-500/10 dark:text-slate-500">
+                              Interview Experience
                             </span>
+                            {isToday && (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+                                <Sparkles size={11} />
+                                Fresh
+                              </span>
+                            )}
                           </div>
-                        )}
+
+                          {publicProfilePath ? (
+                            <Link
+                              href={publicProfilePath}
+                              className="text-3xl font-black leading-tight tracking-tight text-slate-900 transition hover:text-blue-700 dark:text-slate-100 dark:hover:text-cyan-300 lg:text-4xl"
+                            >
+                              {data?.name}
+                            </Link>
+                          ) : (
+                            <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 lg:text-4xl">
+                              {data?.name}
+                            </h1>
+                          )}
+
+                          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+                            {data?.company && (
+                              <div className="flex items-center gap-1.5">
+                                <Building2 size={15} className="text-blue-600 dark:text-cyan-300" />
+                                <span className="font-bold text-slate-900 dark:text-slate-200">
+                                  {data?.company}
+                                </span>
+                              </div>
+                            )}
+                            {data?.role && (
+                              <div className="flex items-center gap-1.5">
+                                <Briefcase size={15} className="text-blue-600 dark:text-cyan-300" />
+                                <span>{data?.role}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          <PostCompanyActions
+                            companyName={data?.company}
+                            experienceUid={id}
+                            authorEmail={typeof data?.email === "string" ? data.email : ""}
+                            className="mt-4"
+                          />
+
+                          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
+                            <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                              <GraduationCap size={13} />
+                              {data?.branch} {data?.batch}
+                            </div>
+                            <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                              <CalendarDays size={13} />
+                              {data?.date ? formatLongDate(data.date) : "Date unavailable"}
+                            </div>
+                            <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11.5px] font-bold text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">
+                              <Eye size={13} />
+                              {data?.views} reads
+                            </div>
+                            <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
+                              <span className="text-[13px]">✦</span>
+                              {readMinutes} min read
+                            </div>
+                            <div className="ml-auto inline-flex items-center gap-2">
+                              <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                    </header>
 
-                      <PostCompanyActions
-                        companyName={data?.company}
-                        experienceUid={id}
-                        authorEmail={typeof data?.email === "string" ? data.email : ""}
-                        className="mt-4"
-                      />
-
-                      {/* Header Meta: Flattened Inline Row */}
-                      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-slate-100/80 pt-5 dark:border-slate-700/50">
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
-                          <GraduationCap size={13} />
-                          {data?.branch} {data?.batch}
-                        </div>
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-100/45 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
-                          <CalendarDays size={13} />
-                          {data?.date ? formatLongDate(data.date) : "Date unavailable"}
-                        </div>
-                        <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-[11.5px] font-bold text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">
-                          <Eye size={13} />
-                          {data?.views} reads
-                        </div>
-                        <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300">
-                          <span className="text-[13px]">✦</span>
-                          {readMinutes} min read
-                        </div>
-                        <div className="ml-auto inline-flex items-center gap-2">
-                          <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
-                        </div>
+                    <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
+                      <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/90 dark:text-slate-300 sm:p-6">
+                        <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
-                    </div>
-                    {isTale && data?.title && (
-                      <div className="mt-8 border-t border-slate-100/80 pt-8 dark:border-slate-700/50">
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-slate-100 sm:text-3xl">
-                          {data.title}
-                        </h2>
-                      </div>
-                    )}
-                  </div>
-                </header>
+                    </section>
 
-                <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
-                  <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/90 dark:text-slate-300 sm:p-6">
-                    <MarkdownRenderer content={data?.exp_text || ""} />
-                  </div>
-                </section>
-
-                <footer className="flex flex-col gap-2 border-t border-slate-200/90 bg-gradient-to-r from-slate-50/95 to-blue-50/50 px-4 py-4 text-sm text-slate-600 dark:border-slate-700/80 dark:from-slate-900/90 dark:to-slate-800/80 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-                  <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 dark:text-slate-200">
-                    <Eye size={14} className="text-blue-600 dark:text-cyan-300" />
-                    {data?.views} reads
-                  </p>
-                  <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">Shared on theInterview community feed</p>
-                </footer>
+                    <footer className="flex flex-col gap-2 border-t border-slate-200/90 bg-gradient-to-r from-slate-50/95 to-blue-50/50 px-4 py-4 text-sm text-slate-600 dark:border-slate-700/80 dark:from-slate-900/90 dark:to-slate-800/80 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                      <p className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 dark:text-slate-200">
+                        <Eye size={14} className="text-blue-600 dark:text-cyan-300" />
+                        {data?.views} reads
+                      </p>
+                      <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">Shared on theInterview community feed</p>
+                    </footer>
+                  </>
+                )}
               </article>
 
             </div>
@@ -365,7 +474,7 @@ export default async function SimilarExperience({ params }) {
 
             <CommentsSection
               experienceId={experienceObjectId}
-              companyName={data?.company}
+              companyName={isTale ? (data?.college || data?.company) : data?.company}
               articleAuthorName={data?.name}
             />
           </div>

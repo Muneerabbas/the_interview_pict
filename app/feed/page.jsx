@@ -13,18 +13,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
 const FEED_CACHE_PREFIX = "feed_state_v2";
-const COLLEGE_OPTIONS = [
-  "COEP Technological University",
-  "Pune Institute of Computer Technology (PICT)",
-  "Vishwakarma Institute of Technology (VIT Pune)",
-  "Pimpri Chinchwad College of Engineering (PCCOE)",
-  "MIT World Peace University (MIT-WPU)",
-  "Cummins College of Engineering for Women",
-  "AISSMS Institute of Information Technology",
-  "Sinhgad College of Engineering",
-  "JSPM Rajarshi Shahu College of Engineering",
-  "Dr. D. Y. Patil Institute of Technology, Akurdi",
-];
 const BRANCH_OPTIONS = [
   { label: "Computer Science", value: "CS" },
   { label: "Information Technology", value: "IT" },
@@ -32,6 +20,7 @@ const BRANCH_OPTIONS = [
   { label: "AI & Data Science", value: "AIDS" },
   { label: "Electronics & Comp", value: "EC" },
 ];
+const COLLEGE_PAGE_SIZE = 20;
 const YEAR_OPTIONS = Array.from({ length: 28 }, (_, index) => String(2000 + index)).reverse();
 const getFeedCacheKey = (tab, filters) =>
   `${FEED_CACHE_PREFIX}:${tab}:${filters.college || "all"}:${filters.branch || "all"}:${filters.batch || "all"}`;
@@ -47,6 +36,11 @@ const LoadingScreen = ({ isDarkMode }) => (
 
 export default function HomePage() {
   const [profiles, setProfiles] = useState([]);
+  const [collegeOptions, setCollegeOptions] = useState([]);
+  const [collegeSearchTerm, setCollegeSearchTerm] = useState("");
+  const [collegePage, setCollegePage] = useState(1);
+  const [collegeHasMore, setCollegeHasMore] = useState(false);
+  const [collegeLoading, setCollegeLoading] = useState(false);
   const [page, setPage] = useState(0);
   const itemsPerPage = 10;
   const [activeTab, setActiveTab] = useState("latest"); // 'latest' or 'trending'
@@ -64,6 +58,36 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const isDarkMode = mounted && resolvedTheme === "dark";
+
+  const loadCollegeOptions = async (query, pageToLoad) => {
+    setCollegeLoading(true);
+    try {
+      const params = new URLSearchParams({
+        q: query,
+        page: String(pageToLoad),
+        limit: String(COLLEGE_PAGE_SIZE),
+      });
+      const res = await fetch(`/api/colleges?${params.toString()}`);
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) {
+        setCollegeOptions((prev) => (
+          pageToLoad === 1
+            ? data.data
+            : Array.from(new Set([...prev, ...data.data]))
+        ));
+        setCollegePage(pageToLoad);
+        setCollegeHasMore(Boolean(data.pagination?.hasMore));
+      }
+    } catch (error) {
+      console.error("Error fetching colleges:", error);
+    } finally {
+      setCollegeLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCollegeOptions(collegeSearchTerm, 1);
+  }, [collegeSearchTerm]);
 
   const isFetchingRef = useRef(false);
   const skipNextFetchRef = useRef(false);
@@ -413,10 +437,19 @@ export default function HomePage() {
                 </span>
                 <div className="relative z-[30]">
                   <SearchableDropdown
-                    options={[{ label: "All colleges", value: "" }, ...COLLEGE_OPTIONS.map((college) => ({ label: college, value: college }))]}
+                    options={[{ label: "All colleges", value: "" }, ...collegeOptions.map((college) => ({ label: college, value: college }))]}
                     value={filters.college}
                     onChange={(value) => handleFilterChange("college", value)}
                     placeholder="All colleges"
+                    remoteSearch
+                    loading={collegeLoading}
+                    hasMore={collegeHasMore}
+                    onSearchTermChange={setCollegeSearchTerm}
+                    onLoadMore={() => {
+                      if (!collegeLoading && collegeHasMore) {
+                        loadCollegeOptions(collegeSearchTerm, collegePage + 1);
+                      }
+                    }}
                   />
                 </div>
               </label>

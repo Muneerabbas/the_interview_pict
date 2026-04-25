@@ -49,14 +49,21 @@ const revalidateTime = 60;
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
 const getExperienceData = cache(async (id, baseUrl) => {
   try {
-    const [expResponse, relatedResponse] = await Promise.all([
-      fetch(`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
-      fetch(`${baseUrl}/api/topStories?itemsPerPage=12&_ts=${Date.now()}`, { cache: "no-store", next: { revalidate: 0 } }),
-    ]);
+    const expResponse = await fetch(`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now()}`, {
+      cache: "no-store",
+      next: { revalidate: 0 }
+    });
 
     if (!expResponse.ok) return { data: null, articles: [] };
 
     const expData = await expResponse.json();
+    const isTale = expData?.content_type === "tale";
+
+    const relatedResponse = await fetch(`${baseUrl}/api/topStories?itemsPerPage=12&type=${isTale ? "tale" : "interview"}&_ts=${Date.now()}`, {
+      cache: "no-store",
+      next: { revalidate: 0 }
+    });
+
     const relatedData = relatedResponse.ok ? await relatedResponse.json() : [];
 
     const data = {
@@ -231,7 +238,7 @@ export default async function SimilarExperience({ params }) {
             </div>
 
             <div className="grid gap-6">
-              <article className="overflow-hidden rounded-3xl border border-slate-300/80 bg-white/95 shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/80 dark:bg-slate-900/90 dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
+              <article className="overflow-hidden rounded-3xl border border-slate-300/80 bg-white shadow-[0_14px_42px_rgba(15,23,42,0.1)] backdrop-blur-sm dark:border-slate-600/80 dark:bg-[#0B1222] dark:shadow-[0_18px_46px_rgba(2,6,23,0.65)]">
                 {isTale ? (
                   <>
                     <header className="relative overflow-hidden border-b border-slate-100/80 bg-[radial-gradient(circle_at_top_left,rgba(191,219,254,0.55),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(248,250,252,0.92)_100%)] px-4 py-8 pr-14 dark:border-slate-700/50 dark:bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_24%),linear-gradient(180deg,rgba(15,23,42,0.92)_0%,rgba(2,6,23,0.92)_100%)] sm:px-8 sm:py-10 sm:pr-8 lg:px-10">
@@ -327,8 +334,8 @@ export default async function SimilarExperience({ params }) {
                       </div>
                     </header>
 
-                    <section className="border-t border-slate-100/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.7)_0%,rgba(255,255,255,0.96)_100%)] px-4 py-8 dark:border-slate-700/60 dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.72)_0%,rgba(15,23,42,0.92)_100%)] sm:px-8 sm:py-10 lg:px-12">
-                      <div className="mx-auto w-full max-w-[760px] rounded-[2rem] border border-slate-200/80 bg-white/95 p-5 text-slate-700 shadow-[0_12px_34px_rgba(15,23,42,0.06)] dark:border-slate-700/70 dark:bg-slate-900/92 dark:text-slate-300 sm:p-8">
+                    <section className="border-t border-slate-100/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.7)_0%,rgba(255,255,255,0.96)_100%)] px-4 py-8 dark:border-slate-700/60 dark:bg-[#0B1222]/50 sm:px-8 sm:py-10 lg:px-12">
+                      <div className="mx-auto w-full max-w-[760px] rounded-[2rem] border border-slate-200/80 bg-white p-5 text-slate-700 shadow-[0_12px_34px_rgba(15,23,42,0.06)] dark:border-slate-700/70 dark:bg-[#0B1222]/95 dark:text-slate-300 sm:p-8">
                         <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
                     </section>
@@ -447,8 +454,8 @@ export default async function SimilarExperience({ params }) {
                       </div>
                     </header>
 
-                    <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/55 sm:px-8 sm:py-10 lg:px-12">
-                      <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/90 dark:text-slate-300 sm:p-6">
+                    <section className="border-t border-slate-100/80 bg-slate-50/40 px-4 py-8 dark:border-slate-700/60 dark:bg-slate-900/40 sm:px-8 sm:py-10 lg:px-12">
+                      <div className="mx-auto w-full max-w-[760px] rounded-2xl border border-slate-200/80 bg-white p-4 text-slate-700 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700/70 dark:bg-slate-900/90 dark:text-slate-300 sm:p-6">
                         <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>
                     </section>

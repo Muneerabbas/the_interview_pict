@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   try {
     const db = await getMongoDb();
-    const collection = db.collection("experience");
+    const experienceCol = db.collection("experience");
+    const talesCol = db.collection("tales");
     const uid = req.nextUrl.searchParams.get("uid");
 
     if (!uid) {
@@ -18,10 +19,10 @@ export async function GET(req) {
     const isObjectId = mongoose.Types.ObjectId.isValid(uid);
     const matchStage = isObjectId
       ? {
-          $match: {
-            $or: [{ uid }, { _id: new mongoose.Types.ObjectId(uid) }],
-          },
-        }
+        $match: {
+          $or: [{ uid }, { _id: new mongoose.Types.ObjectId(uid) }],
+        },
+      }
       : { $match: { uid } };
 
     // Fetch document and join with user info to get fresh profile image/data
@@ -47,7 +48,11 @@ export async function GET(req) {
       }
     ];
 
-    const results = await collection.aggregate(pipeline).toArray();
+    let results = await experienceCol.aggregate(pipeline).toArray();
+
+    if (results.length === 0) {
+      results = await talesCol.aggregate(pipeline).toArray();
+    }
     const data = results[0];
 
     if (!data) {

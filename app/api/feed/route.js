@@ -27,6 +27,13 @@ function buildPipeline({
   if (branchFilter) match.branch = branchFilter;
   if (batchFilter) match.batch = batchFilter;
 
+  // Real "Trending this week" logic
+  if (sort === FEED_SORT_TRENDING) {
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 14); // Extended to 14 days just in case low volume
+    match.date = { $gte: lastWeek.toISOString() };
+  }
+
   pipeline.push({ $match: match });
 
   pipeline.push(
@@ -81,12 +88,38 @@ export async function GET(req) {
     const branchFilter = req.nextUrl.searchParams.get("branch");
     const batchFilter = req.nextUrl.searchParams.get("batch");
     const contentType = req.nextUrl.searchParams.get("contentType") || "interview";
-    const sort = normalizeFeedSort(req.nextUrl.searchParams.get("sort"));
+    const sort = req.nextUrl.searchParams.get("sort") || "latest";
 
     const db = await getMongoDb();
-    const experience = db.collection("experience");
-    const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, contentType });
-    const feed = await experience.aggregate(pipeline).toArray();
+
+    // Check which collection to hit: tales or experience
+    const collectionName = contentType === "tale" ? "tales" : "experience";
+    const collection = db.collection(collectionName);
+
+    let feed = [];
+
+    if (sort === "random") {
+      feed = await collection.aggregate([
+        { $match: { content_type: contentType } },
+        { $sample: { size: itemsPerPage } },
+        {
+          $lookup: { from: "user", localField: "email", foreignField: "gmail", as: "author_info" },
+        },
+        { $addFields: { author: { $arrayElemAt: ["$author_info", 0] } } },
+        { $project: { author_info: 0 } }
+      ]).toArray();
+    } else {
+      const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, contentType });
+
+      // If trending but no results, fallback to all-time views
+      const matchStage = pipeline.find(s => s.$match);
+      if (sort === "trending" && matchStage && matchStage.$match.date) {
+        delete matchStage.$match.date;
+      }
+
+      feed = await collection.aggregate(pipeline).toArray();
+    }
+
     const data = processFeedResults(feed);
 
     return NextResponse.json(data, {

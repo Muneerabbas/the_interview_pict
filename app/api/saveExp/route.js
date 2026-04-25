@@ -31,13 +31,17 @@ export async function POST(req) {
     // For interviews, company and name are required.
     // For tales, title and name are required.
     const isTale = content_type === "tale";
-    if (!exp_text || !name || (!isTale && !company) || (isTale && !title)) {
-      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
-    }
+
+    if (!exp_text) return NextResponse.json({ message: "Content (exp_text) is required" }, { status: 400 });
+    if (!name) return NextResponse.json({ message: "User name is required" }, { status: 400 });
+    if (!isTale && !company) return NextResponse.json({ message: "Company is required for interview experiences" }, { status: 400 });
+    if (isTale && !title) return NextResponse.json({ message: "Title is required for stories" }, { status: 400 });
 
     const db = await getMongoDb();
-    const experience = db.collection("experience");
-    const backup = db.collection("backup");
+    const collectionName = isTale ? "tales" : "experience";
+    const experience = db.collection(collectionName);
+    const backupName = isTale ? "tales_backup" : "backup";
+    const backup = db.collection(backupName);
 
     // Generate a meaningful UID
     let baseSlug;

@@ -24,6 +24,8 @@ const SearchPage = () => {
   const [debouncedSearch, setDebouncedSearch] = useState(decodedSearch);
   const [globalLoading, setGlobalLoading] = useState(false);
 
+  const [activeTab, setActiveTab] = useState("experience"); // 'experience' or 'tale'
+
   const observer = useRef();
   const lastProfileElementRef = useCallback((node) => {
     if (loadingMore) return;
@@ -49,45 +51,45 @@ const SearchPage = () => {
     return () => clearTimeout(timer);
   }, [searchText]);
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (debouncedSearch.trim() === "") return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `/api/search?search=${debouncedSearch}&page=1`
-        );
-        setResults(response.data.result);
-        setHasMore(response.data.result.length === 10);
-        setPage(1); // Reset page on new search
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (debouncedSearch) {
-      fetchResults();
-    }
-  }, [debouncedSearch]);
+  const fetchResults = useCallback(async (isLoadMore = false) => {
+    if (!debouncedSearch) return;
 
-  const loadMore = async () => {
-    if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
+    if (isLoadMore) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setResults([]);
+    }
+
     try {
-      const nextPage = page + 1;
+      const pageToFetch = isLoadMore ? page + 1 : 1;
       const response = await axios.get(
-        `/api/search?search=${debouncedSearch}&page=${nextPage}`
+        `/api/search?search=${debouncedSearch}&page=${pageToFetch}&type=${activeTab}`
       );
+
       const newResults = response.data.result;
-      setResults(prev => [...prev, ...newResults]);
-      setPage(nextPage);
+      if (isLoadMore) {
+        setResults(prev => [...prev, ...newResults]);
+        setPage(pageToFetch);
+      } else {
+        setResults(newResults);
+        setPage(1);
+      }
       setHasMore(newResults.length === 10);
     } catch (error) {
-      console.error("Error loading more results:", error);
+      console.error("Error fetching search results:", error);
     } finally {
+      setLoading(false);
       setLoadingMore(false);
     }
+  }, [debouncedSearch, activeTab, page]);
+
+  useEffect(() => {
+    fetchResults(false);
+  }, [debouncedSearch, activeTab]);
+
+  const loadMore = () => {
+    fetchResults(true);
   };
 
   const handleSearch = (e) => {
@@ -120,7 +122,7 @@ const SearchPage = () => {
       )}
 
       <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
-        <form onSubmit={handleSearch} className="mb-10 mt-6 flex items-center gap-3 sm:gap-4 relative z-20">
+        <form onSubmit={handleSearch} className="mb-6 mt-6 flex items-center gap-3 sm:gap-4 relative z-20">
           <button
             type="button"
             onClick={() => router.push("/feed")}
@@ -131,14 +133,11 @@ const SearchPage = () => {
           </button>
 
           <div className="group relative flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 p-1.5 sm:p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-xl transition-all focus-within:border-blue-400 focus-within:bg-white focus-within:ring-[4px] focus-within:ring-blue-500/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.1)] dark:border-slate-700/60 dark:bg-slate-900/80 dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] dark:focus-within:border-cyan-500/50 dark:focus-within:bg-slate-900 dark:focus-within:ring-[4px] dark:focus-within:ring-cyan-500/20">
-            {/* Ambient Background Glow on Focus */}
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5 opacity-0 transition-opacity duration-500 group-focus-within:opacity-100 dark:from-cyan-500/10 dark:via-blue-500/10 dark:to-indigo-500/10"></div>
-
             <div className="relative z-10 flex flex-1 items-center">
               <Search size={22} className="absolute left-3 sm:left-4 text-slate-400 transition-colors group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-cyan-400" />
               <input
                 type="text"
-                placeholder="Search by company, role, skills..."
+                placeholder="Search..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 className="w-full bg-transparent py-2.5 pl-11 pr-4 text-[15px] font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500 sm:py-3.5 sm:pl-12 sm:text-lg"
@@ -155,6 +154,29 @@ const SearchPage = () => {
             </button>
           </div>
         </form>
+
+        <div className="mb-8 flex items-center justify-center">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/80 p-1.5 shadow-sm backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80">
+            <button
+              onClick={() => setActiveTab("experience")}
+              className={`px-6 py-2.5 text-sm font-bold rounded-full transition-all ${activeTab === "experience"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
+                : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                }`}
+            >
+              Interviews
+            </button>
+            <button
+              onClick={() => setActiveTab("tale")}
+              className={`px-6 py-2.5 text-sm font-bold rounded-full transition-all ${activeTab === "tale"
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
+                : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                }`}
+            >
+              Tales
+            </button>
+          </div>
+        </div>
 
         {loading && (
           <div className="flex items-center justify-center py-10">

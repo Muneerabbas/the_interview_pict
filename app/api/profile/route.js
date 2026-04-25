@@ -16,11 +16,22 @@ export async function POST(req) {
 
     const posts = await fetchWithCache(cacheKey, 60, async () => {
       const db = await getMongoDb();
-      const collection = db.collection("experience");
-      return collection
-        .find({ email })
-        .sort({ date: -1 })
-        .toArray();
+      const experienceCol = db.collection("experience");
+      const talesCol = db.collection("tales");
+
+      const [interviews, tales] = await Promise.all([
+        experienceCol.find({ email }).toArray(),
+        talesCol.find({ email }).toArray()
+      ]);
+
+      // Combine and sort by date descending
+      const allPosts = [...interviews, ...tales].sort((a, b) => {
+        const dateA = new Date(a.date || 0);
+        const dateB = new Date(b.date || 0);
+        return dateB - dateA;
+      });
+
+      return allPosts;
     });
 
     return NextResponse.json({ posts }, { status: 200 });

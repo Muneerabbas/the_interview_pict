@@ -30,9 +30,14 @@ export async function DELETE(req) {
     }
 
     const db = await getMongoDb();
-    const collection = db.collection("experience");
+    const experience = db.collection("experience");
+    const tales = db.collection("tales");
 
-    const result = await collection.deleteOne({ uid, email });
+    let result = await experience.deleteOne({ uid, email });
+
+    if (result.deletedCount === 0) {
+      result = await tales.deleteOne({ uid, email });
+    }
 
     if (result.deletedCount === 0) {
       return NextResponse.json({ message: "No matching experience found" }, { status: 404 });

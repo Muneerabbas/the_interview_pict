@@ -18,7 +18,7 @@ const LoadingScreen = ({ isDarkMode = false }) => (
       <span className={`pointer-events-none absolute inset-0 rounded-2xl blur-xl animate-pulse ${isDarkMode ? "bg-cyan-400/10" : "bg-blue-500/10"}`} />
       <span className={`absolute h-16 w-16 rounded-full border ${isDarkMode ? "border-cyan-400/25 border-t-cyan-300" : "border-blue-500/25 border-t-blue-600"} animate-spin`} />
       <div className="relative h-11 w-11">
-        <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
+        <Image src="/app_icon.png" alt="theInterview loading" fill sizes="44px" className="object-contain" />
       </div>
     </div>
   </div>
@@ -133,32 +133,59 @@ def merge(left, right):
 
 Be as detailed as possible, and replace the placeholders with your actual interview details.`;
 
-const TALE_TEMPLATE = `## Tale from PICT: [Your Story Title]
+const TALE_TEMPLATE = `# 🏆 [Insert an Epic & Clicky Title Here]
 
-Share your authentic journey here—whether it was a hackathon, a challenging project, a competition, or even a failure that taught you a valuable lesson. 
-
----
-
-### 1. The Context
-- **Event/Topic:** [e.g., Credenz Hackathon, Personal Web Project, Robotics Competition]
-- **When:** [e.g., Jan 2024, Second Year]
-- **Team Size:** [e.g., Solo, Team of 4]
+> *"Sometimes the best code is the code you delete." — Share a hook, a quote, or the craziest thing that happened right at the start.* 🤯
 
 ---
 
-### 2. The Story
-[Describe what happened. What was the goal? What challenges did you face? Keep it relatable and fun!]
+## 🧭 The Context
+Before we dive into the chaos, here’s the TL;DR:
+- **🎯 What was it?** [e.g., SIH Hackathon, College Project, Scaling my first SaaS, Solving a prod bug]
+- **🕒 Timeline:** [e.g., 48 intense hours, A gruelling 2-month grind]
+- **💻 Tech Stack:** \`[React, Node.js, Postgres, Duct Tape & Prayers]\`
+- **👥 The Squad:** [e.g., Me + 2 friends who didn't know how to center a div]
 
 ---
 
-### 3. Key Lessons & Takeaways
-[What did you learn? What would you do differently next time? Any advice for others embarking on a similar journey?]
+## 🚀 The Launch (Expectation)
+*Every great journey starts with a naive sense of optimism. What was the original grand vision? What were you trying to build or achieve?*
+
+[Type your grand vision here...]
+
+## 💥 The Crash (Reality)
+*Then it all went wrong. Every great story needs a villain. Was it a nasty bug? A server crash? A teammate disappearing?*
+
+- **The moment we realized:** [Ouch]
+- **The biggest roadblock:** [Yikes]
+- **Our reaction:** [Panic]
+
+## 🛠️ The Pivot & The Fix
+*How did you survive? How did you pivot? Share the late-night hacks, the Stack Overflow thread that saved you, or the chaotic redesign.*
+
+[Type your redemption arc here...]
 
 ---
 
-### 4. 🖼️ Memories
-![image](https://i.imgflip.com/9jbjc6.jpg)
-[Upload any photos of your team, your project, or the event itself!]
+## 🧠 Platinum Takeaways
+If someone else is trying this tomorrow, here is my raw advice:
+1. **✅ Do This:** [e.g., Always test on mobile FIRST.]
+2. **❌ Avoid This:** [e.g., Don't try to learn a new framework 12 hours before submission.]
+3. **💡 Unspoken Truth:** [e.g., Sleep > 3 extra hours of buggy coding.]
+
+---
+
+## 📸 Hall of Fame (or Shame)
+*(Pro tip: Hit ENTER and drag/drop your behind-the-scenes pics here!)*
+![Memories](https://i.imgflip.com/9jbjc6.jpg)
+
+---
+
+### 🏁 Final Verdict
+**Would I do it again?** [Yes / No / Maybe if paid]  
+**Rating:** ⭐⭐⭐⭐⭐
+
+*Liked my story? Feel free to connect with me or drop a comment if you've been in the same boat!*
 `;
 
 
@@ -362,6 +389,19 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           }
           if (draftData.totalRounds) setTotalRounds(draftData.totalRounds);
           if (draftData.currentRound) setCurrentRound(draftData.currentRound);
+        } else if (response.status === 404) {
+          // Reset to default if no draft found for this type
+          setMarkdown(isTale ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
+          setTitle("");
+          setCollege("");
+          setCustomCollege("");
+          setBatch("");
+          setBranch("");
+          setCompany("");
+          setRole("");
+          setChatAnswers({ eligibility: "", applicationRoute: "", roundsText: "", roundDetails: [], timeline: "", difficulty: "", keyTopics: "", codingSpecifics: "", interviewFocus: "", projectDeepDive: "", hrBehavioral: "" });
+          setChatStage('eligibility');
+          setChatMessages([{ role: 'assistant', text: initialMessage }]);
         }
       } catch (error) {
         console.error("Error loading draft:", error);
@@ -401,10 +441,13 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   const validateField = (fieldName, value) => {
     switch (fieldName) {
       case 'college':
+        if (isTale) return false;
         return !value || (value === 'others' && !customCollege);
       case 'batch':
+        if (isTale) return false;
         return !value;
       case 'branch':
+        if (isTale) return false;
         return !value;
       case 'company':
         if (isTale) return false;
@@ -558,32 +601,38 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
     // Determine the final values (use custom values if "Others..." is selected)
     const finalCollege = college === 'others' ? customCollege : college;
-    const finalCompany = isTale ? "" : company === 'others' ? customCompany : company;
+    const finalCompany = isTale ? (finalCollege || "General Story") : (company === 'others' ? customCompany : company);
     const finalRole = isTale ? "" : role === 'others' ? customRole : role;
 
-    setIsLoading(true); // Set loading to true before submission
+    const payload = {
+      exp_text: markdown,
+      name: session?.user?.name || session?.user?.email?.split('@')[0] || "Contributor",
+      profile_pic: session?.user?.image,
+      college: finalCollege || "",
+      batch: batch || "",
+      branch: branch || "",
+      company: finalCompany || "General Story",
+      role: finalRole || "",
+      email: session?.user?.email,
+      content_type: contentType,
+      title: title || (isTale ? "Untitled Story" : "")
+    };
+
+    console.log("📤 Submitting Payload:", payload);
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/saveExp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          exp_text: markdown,
-          name: session.user.name,
-          profile_pic: session.user.image,
-          college: finalCollege,
-          batch,
-          branch,
-          company: finalCompany,
-          role: finalRole,
-          email: session.user.email,
-          content_type: contentType,
-          title: title
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error("Failed to submit markdown");
+      if (!response.ok) {
+        console.error("❌ Server Error Details:", data);
+        throw new Error(data.message || "Failed to submit markdown");
+      }
 
       // After successful submission, reset the draft
       setCollege("");
@@ -628,7 +677,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
       // Redirect to home after 2 seconds (for smooth UX)
       // Loading will be true until new page loads and this component unmounts
-      window.location.href = `/single/${data.uid}`;
+      window.location.href = `/ single / ${data.uid} `;
 
 
     } catch (error) {
@@ -844,7 +893,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         setTotalRounds(clampedNum);
         setCurrentRound(1);
         newStage = 'round_loop';
-        nextAssistantMsg = `Alright, ${clampedNum} round(s) it is. Let's break down Round 1. What type of round was it (e.g. OA, Technical, HR) and what were the main questions or tasks?`;
+        nextAssistantMsg = `Alright, ${clampedNum} round(s) it is.Let's break down Round 1. What type of round was it (e.g. OA, Technical, HR) and what were the main questions or tasks?`;
       }
       else if (chatStage === 'round_loop') {
         newAnswers.roundDetails = [...newAnswers.roundDetails, `Round ${currentRound}: ${userMsg}`];
@@ -939,11 +988,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#eff6ff_0%,#f8fafc_55%,#f1f5f9_100%)] pb-2 dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)] sm:pb-4">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:46px_46px] [mask-image:radial-gradient(ellipse_at_top,black_42%,transparent_85%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]" />
-      <div className="pointer-events-none absolute left-[-140px] top-24 h-96 w-96 rounded-full bg-sky-300/20 blur-[100px] dark:bg-sky-500/20" />
-      <div className="pointer-events-none absolute right-[-120px] top-[320px] h-96 w-96 rounded-full bg-indigo-400/20 blur-[100px] dark:bg-indigo-500/20" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.35),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.06),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.06),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.7),transparent_52%)]" />
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-transparent pb-2 sm:pb-4">
       <Navbar showThemeToggle={showThemeToggle} />
       {isLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
@@ -969,11 +1014,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
           <div className="relative mx-auto mb-3 max-w-3xl text-center sm:mb-4">
             <h1 className="mb-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-3 sm:text-5xl lg:text-6xl">
-              {isTale ? "Hackathon Takes" : "Share Your Journey"}
+              {isTale ? "Share Your Story" : "Share Your Journey"}
             </h1>
             <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
               {isTale
-                ? "Share your authentic stories from hackathons, projects, failures, and the lessons learned along the way."
+                ? "Share your authentic stories from hackathons, general events, projects, and experiences worth sharing—plus the lessons learned along the way."
                 : "Help others succeed by sharing your authentic interview insights. Your experience can be the roadmap for someone else's career."}
             </p>
           </div>
@@ -981,7 +1026,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           <div className="mb-4 w-full animate-fade-in-up">
             <div className="flex flex-col gap-2 rounded-xl border border-slate-200/65 bg-white/30 px-3 py-2.5 backdrop-blur-md dark:border-slate-700/65 dark:bg-slate-900/35 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 sm:text-[13px]">
-                {isTale ? "Fill details below and write your post manually. AI writer is under development for hackathon posts." : "Fill details below, then choose Manual or AI mode."}
+                {isTale ? "Fill details below and write your post manually. AI writer is under development for story posts." : "Fill details below, then choose Manual or AI mode."}
               </p>
               <div className="flex items-center gap-2 px-1 sm:px-0">
                 <span className="relative flex h-2 w-2">

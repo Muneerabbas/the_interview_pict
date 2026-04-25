@@ -210,8 +210,8 @@ export default function Navbar({ showThemeToggle = false }) {
   const navItems = useMemo(
     () => [
       { href: "/", label: "Home", Icon: Home },
-      { href: "/feed", label: "Feed", Icon: List },
-      { href: "/tales", label: "Featured Stories", Icon: Flame },
+      { href: "/feed", label: "Interviews", Icon: List },
+      { href: "/tales", label: "Tales", Icon: Flame },
       { href: "/companies", label: "Companies", Icon: Building2 },
     ],
     []
@@ -390,19 +390,7 @@ export default function Navbar({ showThemeToggle = false }) {
 
           {/* Mobile: Search + Menu + CTA */}
           <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
-            <div
-              className={[
-                "flex items-center gap-1.5 transition-all duration-500 sm:gap-2",
-                isDeepScrolled ? "pointer-events-none -translate-x-4 opacity-0" : "opacity-100",
-              ].join(" ")}
-            >
-              <button
-                onClick={() => router.push("/search")}
-                className="hidden min-[380px]:inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 sm:h-10 sm:w-10"
-                aria-label="Search"
-              >
-                <Search size={18} />
-              </button>
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {showThemeToggle && <ThemeToggle />}
               {session && (
                 <div ref={mobileNotificationsRef}>
@@ -419,15 +407,7 @@ export default function Navbar({ showThemeToggle = false }) {
               )}
             </div>
 
-            <Link
-              href="/post"
-              className={[
-                "inline-flex h-9 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-500 px-5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 active:scale-[0.98] sm:text-sm",
-                isDeepScrolled ? "scale-105 shadow-blue-500/40" : "scale-100",
-              ].join(" ")}
-            >
-              Share
-            </Link>
+
 
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
@@ -504,6 +484,12 @@ export default function Navbar({ showThemeToggle = false }) {
                       {label}
                     </Link>
                   ))}
+                  <Link
+                    href="/post"
+                    className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  >
+                    Share Experience
+                  </Link>
                 </div>
 
                 <div className="border-t border-slate-100 p-3 dark:border-slate-800">

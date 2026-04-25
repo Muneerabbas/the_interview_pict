@@ -12,7 +12,7 @@ function PostContent() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const [contentType, setContentType] = useState("interview");
-  const isHackathon = contentType === "tale";
+  const isStory = contentType === "tale";
 
   useEffect(() => {
     const requestedType = searchParams.get("type");
@@ -54,11 +54,11 @@ function PostContent() {
               <div className="flex flex-col items-center text-center space-y-4">
                 <FileText size={48} className="text-blue-600 dark:text-cyan-300" />
                 <h1 className="text-3xl font-bold text-[#1D1D1D] dark:text-slate-100">
-                  {isHackathon ? "Share Your Hackathon Story" : "Share Your Experience"}
+                  {isStory ? "Share Your Story" : "Share Your Experience"}
                 </h1>
                 <p className="text-lg text-[#1D1D1D] dark:text-slate-300 max-w-2xl">
-                  {isHackathon
-                    ? "Share your hackathon, project, or event journey with juniors."
+                  {isStory
+                    ? "Share your stories from hackathons, general events, projects, and experiences worth sharing."
                     : "Help others by sharing your interview experiences and insights"}
                 </p>
                 <div className="inline-flex rounded-full border border-slate-200 bg-slate-100/80 p-1 dark:border-slate-700 dark:bg-slate-800/80">
@@ -82,7 +82,7 @@ function PostContent() {
                       }`}
                   >
                     <BookOpen size={16} />
-                    Hackathon
+                    Story
                   </button>
                 </div>
               </div>
@@ -123,12 +123,12 @@ function PostContent() {
                     }`}
                 >
                   <BookOpen size={16} />
-                  Hackathon
+                  Story
                 </button>
               </div>
             </div>
           </div>
-          <MdxEditorPage key={contentType} showThemeToggle contentType={contentType} />
+          <MdxEditorPage showThemeToggle contentType={contentType} />
           <div className="pb-8 sm:pb-10 md:pb-12"></div>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Loader2, Send, Sparkles, Clock } from "lucide-react";
+import { BookOpen, Loader2, Send, Sparkles, Clock, RefreshCw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../../components/Navbar";
 import FeedCard from "../../components/FeedCard";
@@ -31,6 +31,7 @@ export default function TalesPage() {
         itemsPerPage: String(ITEMS_PER_PAGE),
         sort,
         contentType: "tale",
+        _ts: Date.now().toString(),
       });
 
       const response = await fetch(`/api/feed?${params.toString()}`, {
@@ -118,19 +119,19 @@ export default function TalesPage() {
 
       <Navbar showThemeToggle />
 
-      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
+      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-24 mt-8 sm:px-6 md:pt-32 md:mt-12">
         <section className="mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/82 p-6 shadow-[0_12px_36px_rgba(15,23,42,0.07)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/76 dark:shadow-[0_16px_42px_rgba(2,6,23,0.62)] sm:p-7">
           <div className="flex flex-col gap-6">
             <div className="max-w-2xl">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-blue-500/25 dark:bg-blue-900/30 dark:text-blue-300">
                 <BookOpen className="h-4 w-4" />
-                Hackathon Takes
+                Share Your Story
               </div>
               <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.75rem]">
-                Stories in the same rhythm as the feed
+                Real Stories, Real Experiences Worth Sharing
               </h1>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-                Project journeys, late-night fixes, team chaos, lessons, wins, and failures. Same reading flow as the main feed, focused on tales.
+                Hackathons, general events, project journeys, lessons learned, wins, and failures worth sharing.
               </p>
             </div>
 
@@ -139,7 +140,7 @@ export default function TalesPage() {
               className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-95 dark:shadow-blue-500/20"
             >
               <Send className="h-4 w-4" />
-              Share your tale
+              Share your story
             </Link>
           </div>
         </section>
@@ -168,6 +169,16 @@ export default function TalesPage() {
                 >
                   <Sparkles className="h-4 w-4" />
                   Trending
+                </button>
+                <button
+                  onClick={() => setActiveTab("random")}
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "random"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                    }`}
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Feed
                 </button>
               </div>
 

@@ -8,12 +8,14 @@ export async function GET(req) {
     const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
     const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "30", 10);
 
+    const type = req.nextUrl.searchParams.get("type") || "interview";
     const db = await getMongoDb();
-    const experience = db.collection("experience");
+    const collectionName = type === "tale" ? "tales" : "experience";
+    const collection = db.collection(collectionName);
 
     const pipeline = [
       {
-        $match: { content_type: "interview" }
+        $match: { content_type: type }
       },
       {
         $addFields: {
@@ -33,7 +35,7 @@ export async function GET(req) {
       { $project: { viewsInt: 0 } },
     ];
 
-    const data = await experience.aggregate(pipeline).toArray();
+    const data = await collection.aggregate(pipeline).toArray();
 
     return NextResponse.json(data, {
       headers: {

@@ -123,6 +123,7 @@ export default function HomePage() {
         page: String(pageNumber),
         itemsPerPage: String(limit),
         sort,
+        _ts: Date.now().toString(), // Cache busting
       });
       if (activeFilters.college) params.set("college", activeFilters.college);
       if (activeFilters.branch) params.set("branch", activeFilters.branch);
@@ -172,6 +173,16 @@ export default function HomePage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Skip persistence for random discovery tab to ensure variety
+    if (activeTab === "random") {
+      setProfiles([]);
+      setPage(0);
+      setHasMoreProfiles(true);
+      skipNextFetchRef.current = false;
+      setTabReady(true);
+      return;
+    }
 
     let restored = false;
     try {
@@ -225,7 +236,7 @@ export default function HomePage() {
   }, [tabReady, page, activeTab, filters, fetchProfiles, itemsPerPage]);
 
   useEffect(() => {
-    if (!tabReady || typeof window === "undefined") return;
+    if (!tabReady || typeof window === "undefined" || activeTab === "random") return;
     try {
       sessionStorage.setItem(
         getFeedCacheKey(activeTab, filters),
@@ -331,7 +342,7 @@ export default function HomePage() {
       <Navbar showThemeToggle />
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
-      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-16 sm:px-6 md:pt-24">
+      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-24 mt-8 sm:px-6 md:pt-32 md:mt-12">
         {/* Hero Section */}
         <FeedHero isDarkMode={isDarkMode} />
 
@@ -362,10 +373,20 @@ export default function HomePage() {
                   <Zap size={16} />
                   Trending
                 </button>
+                <button
+                  onClick={() => setActiveTab("random")}
+                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "random"
+                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
+                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                    }`}
+                >
+                  <RefreshCw size={16} />
+                  Feed
+                </button>
               </div>
 
               <Link
-                href="/post"
+                href="/post?type=interview"
                 onClick={handleShareExperienceClick}
                 prefetch={true}
                 scroll={false}

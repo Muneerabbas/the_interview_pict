@@ -4,9 +4,10 @@ import { getMongoDb } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
 
-async function main(search_text, page = 1) {
+async function main(search_text, page = 1, contentType = "experience") {
   const db = await getMongoDb();
-  const experience = db.collection("experience");
+  const collectionName = contentType === "tale" ? "tales" : "experience";
+  const collection = db.collection(collectionName);
 
   const skip = (page - 1) * 10;
 
@@ -15,7 +16,6 @@ async function main(search_text, page = 1) {
 
   let query = {};
   if (!isDefault) {
-    // For robust matching, split query by space and match ALL terms (AND logic across terms)
     const terms = queryText.trim().split(/\s+/).filter(Boolean);
     if (terms.length > 0) {
       const conditions = terms.map(term => {
@@ -27,7 +27,8 @@ async function main(search_text, page = 1) {
             { name: { $regex: regexStr, $options: 'i' } },
             { branch: { $regex: regexStr, $options: 'i' } },
             { batch: { $regex: regexStr, $options: 'i' } },
-            { exp_text: { $regex: regexStr, $options: 'i' } }
+            { exp_text: { $regex: regexStr, $options: 'i' } },
+            { title: { $regex: regexStr, $options: 'i' } }
           ]
         };
       });
@@ -35,7 +36,7 @@ async function main(search_text, page = 1) {
     }
   }
 
-  const result = await experience
+  const result = await collection
     .find(query)
     .sort({ createdAt: -1 })
     .skip(skip)
@@ -49,12 +50,13 @@ export async function GET(req) {
   try {
     const search = req.nextUrl.searchParams.get("search");
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
+    const type = req.nextUrl.searchParams.get("type") || "experience";
 
     if (!search) {
       return NextResponse.json({ message: "Search query is required" }, { status: 400 });
     }
 
-    const result = await main(search, page);
+    const result = await main(search, page, type);
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });

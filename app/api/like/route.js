@@ -15,27 +15,30 @@ export async function POST(req) {
         await client.connect();
         const db = client.db();
         const experience = db.collection("experience");
-
+        const tales = db.collection("tales");
 
         const now = new Date();
 
-        await experience.updateOne(
-            { uid: id },
-            [
-                {
-                    $set: {
-                        likes: {
-                            $cond: [
-                                { $in: [email, { $ifNull: ["$likes", []] }] },
-                                { $setDifference: ["$likes", [email]] },
-                                { $concatArrays: [{ $ifNull: ["$likes", []] }, [email]] }
-                            ]
-                        },
-                        likesUpdatedAt: now,
-                    }
+        const updatePipeline = [
+            {
+                $set: {
+                    likes: {
+                        $cond: [
+                            { $in: [email, { $ifNull: ["$likes", []] }] },
+                            { $setDifference: ["$likes", [email]] },
+                            { $concatArrays: [{ $ifNull: ["$likes", []] }, [email]] }
+                        ]
+                    },
+                    likesUpdatedAt: now,
                 }
-            ]
-        );
+            }
+        ];
+
+        let result = await experience.updateOne({ uid: id }, updatePipeline);
+
+        if (result.matchedCount === 0) {
+            result = await tales.updateOne({ uid: id }, updatePipeline);
+        }
 
         revalidatePath("/feed");
         revalidatePath("/topStories");

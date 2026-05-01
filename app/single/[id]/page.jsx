@@ -334,7 +334,7 @@ export default async function SimilarExperience({ params }) {
                       </div>
                     </header>
 
-                    <section className="border-t border-slate-100/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.7)_0%,rgba(255,255,255,0.96)_100%)] px-4 py-8 dark:border-slate-700/60 dark:bg-[#0B1222]/50 sm:px-8 sm:py-10 lg:px-12">
+                    <section className="border-t border-slate-100/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.7)_0%,rgba(255,255,255,0.96)_100%)] px-4 py-8 dark:border-slate-700/60 dark:bg-[#0B1222]/50 dark:bg-none sm:px-8 sm:py-10 lg:px-12">
                       <div className="mx-auto w-full max-w-[760px] rounded-[2rem] border border-slate-200/80 bg-white p-5 text-slate-700 shadow-[0_12px_34px_rgba(15,23,42,0.06)] dark:border-slate-700/70 dark:bg-[#0B1222]/95 dark:text-slate-300 sm:p-8">
                         <MarkdownRenderer content={data?.exp_text || ""} />
                       </div>

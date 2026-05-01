@@ -1106,15 +1106,19 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                   <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
                     <button
                       onClick={() => handleModeChange('manual')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      className={`relative z-10 flex min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[11px] font-bold transition-colors duration-300 sm:gap-2 sm:px-4 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
-                      <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
+                      <PenLine className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                      <span className="max-[360px]:hidden">Manual Writer</span>
+                      <span className="hidden max-[360px]:inline">Manual</span>
                     </button>
                     <button
                       onClick={() => handleModeChange('ai')}
-                      className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                      className={`relative z-10 flex min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[11px] font-bold transition-colors duration-300 sm:gap-2 sm:px-4 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                     >
-                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> AI Assistant
+                      <Sparkles className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                      <span className="max-[360px]:hidden">AI Assistant</span>
+                      <span className="hidden max-[360px]:inline">AI</span>
                     </button>
 
                     {/* Animated pill background */}
@@ -1227,20 +1231,20 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
                   </div>
 
                   {/* Chat input form */}
-                  <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
-                    <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                  <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-3 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
+                    <form onSubmit={handleSendChatMessage} className="mx-auto flex w-full max-w-4xl items-center gap-2 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:gap-3">
                       <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                        className="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20 sm:px-4 sm:py-3 sm:text-[15px]"
                         placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
                       />
                       <button
                         type="submit"
                         disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                        className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400 sm:h-11 sm:w-11"
                       >
                         <Send className="w-4 h-4 ml-0.5" />
                       </button>

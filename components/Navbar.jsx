@@ -234,10 +234,10 @@ export default function Navbar({ showThemeToggle = false }) {
       >
         <div
           className={[
-            "relative mx-auto flex w-full items-center justify-between transition-all duration-300 ease-in-out",
+            "relative mx-auto flex w-full items-center justify-between transition-all duration-300 ease-in-out lg:grid lg:grid-cols-[auto_1fr_auto] lg:justify-normal lg:gap-8 xl:gap-10 2xl:max-w-[1520px]",
             isScrolled
-              ? "px-4 py-3.5 sm:px-6 sm:py-4 lg:px-8 xl:px-10"
-              : "px-4 py-6 sm:px-6 sm:py-7 lg:px-8 xl:px-10",
+              ? "px-3 py-2.5 min-[360px]:px-4 sm:px-5 sm:py-3 md:px-6 lg:px-8 xl:px-10"
+              : "px-3 py-3 min-[360px]:px-4 sm:px-6 sm:py-4 md:px-6 lg:px-8 lg:py-5 xl:px-10",
           ].join(" ")}
         >
           {/* Left: Brand (Extreme Left) */}
@@ -245,7 +245,7 @@ export default function Navbar({ showThemeToggle = false }) {
             <Link
               href="/"
               className={[
-                "group flex items-center gap-2.5 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 dark:text-slate-100",
+                "group flex items-center gap-2 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 min-[380px]:gap-2.5 dark:text-slate-100",
                 isScrolled ? "scale-95" : "scale-100",
               ].join(" ")}
               prefetch={true}
@@ -254,13 +254,13 @@ export default function Navbar({ showThemeToggle = false }) {
                 <Image
                   src={logo}
                   alt="theInterview Logo"
-                  width={isScrolled ? 42 : 46}
-                  height={isScrolled ? 42 : 46}
+                  width={isScrolled ? 38 : 42}
+                  height={isScrolled ? 38 : 42}
                   priority
                   className="object-contain transition-all duration-300"
                 />
               </div>
-              <span className="hidden text-base font-bold min-[360px]:inline sm:text-xl">
+              <span className="hidden text-[15px] font-bold min-[400px]:inline sm:text-lg md:text-xl">
                 the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span>Room</span>
               </span>
             </Link>
@@ -275,17 +275,17 @@ export default function Navbar({ showThemeToggle = false }) {
           {/* Absolute Center: Nav Items (Perfectly Centered) */}
           <div
             className={[
-              "absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex transition-all duration-300",
+              "hidden items-center justify-center transition-all duration-300 lg:justify-self-center lg:flex lg:px-4 xl:px-6",
               isDeepScrolled ? "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto" : "opacity-100",
             ].join(" ")}
           >
-            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/80">
+            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm lg:rounded-3xl lg:p-1.5 dark:border-slate-700/80 dark:bg-slate-900/80">
               {navItems.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}
                   className={[
-                    "group flex items-center gap-1.5 rounded-[14px] px-4 py-1.5 text-[15px] font-bold transition-all active:scale-95",
+                    "group flex items-center gap-1.5 rounded-[14px] px-4 py-1.5 text-[15px] font-bold transition-all active:scale-95 lg:px-5 lg:py-2",
                     isActive(href)
                       ? "bg-blue-100 text-blue-700 shadow-sm border border-blue-200/50 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800/40"
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
@@ -298,9 +298,9 @@ export default function Navbar({ showThemeToggle = false }) {
           </div>
 
           {/* Right: Search & Actions */}
-          <div className="hidden items-center gap-4 lg:flex">
+          <div className="hidden items-center gap-4 lg:ml-auto lg:flex lg:justify-self-end lg:rounded-2xl lg:border lg:border-slate-200/70 lg:bg-white/60 lg:px-2.5 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-md lg:dark:border-slate-700/70 lg:dark:bg-slate-900/60">
             {/* Search Bar */}
-            <div className="min-w-0 max-w-[260px] xl:max-w-md">
+            <div className="min-w-0 max-w-[260px] lg:w-[230px] xl:w-[280px] 2xl:w-[330px]">
               <form onSubmit={handleSearch}>
                 <div className="group relative">
                   <Search
@@ -389,8 +389,8 @@ export default function Navbar({ showThemeToggle = false }) {
           </div>
 
           {/* Mobile: Search + Menu + CTA */}
-          <div className="flex items-center gap-1.5 lg:hidden sm:gap-2">
-            <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 lg:hidden min-[400px]:gap-2">
+            <div className="flex items-center gap-1.5 min-[400px]:gap-2">
               {showThemeToggle && <ThemeToggle />}
               {session && (
                 <div ref={mobileNotificationsRef}>
@@ -440,7 +440,7 @@ export default function Navbar({ showThemeToggle = false }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed left-0 right-0 top-[62px] z-50 mx-auto w-full max-w-7xl px-4 sm:top-[68px] lg:hidden"
+              className="fixed left-0 right-0 top-[calc(env(safe-area-inset-top)+66px)] z-50 mx-auto w-full max-w-2xl px-3 min-[400px]:px-4 sm:top-[calc(env(safe-area-inset-top)+72px)] sm:px-5 md:top-[calc(env(safe-area-inset-top)+78px)] lg:hidden"
             >
               <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_24px_50px_rgba(2,6,23,0.7)] dark:supports-[backdrop-filter]:bg-slate-950/90">
                 <div className="p-4">
@@ -468,31 +468,33 @@ export default function Navbar({ showThemeToggle = false }) {
                   </form>
                 </div>
 
-                <div className="border-t border-slate-100 p-2 dark:border-slate-800">
-                  {navItems.map(({ href, label, Icon }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      className={[
-                        "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all active:scale-[0.98]",
-                        isActive(href)
-                          ? "bg-blue-100 text-blue-700 shadow-sm dark:bg-blue-900/40 dark:text-blue-300"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
-                      ].join(" ")}
-                    >
-                      <Icon size={18} className={isActive(href) ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"} />
-                      {label}
-                    </Link>
-                  ))}
+                <div className="border-t border-slate-100 p-3 sm:p-4 dark:border-slate-800">
+                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                    {navItems.map(({ href, label, Icon }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className={[
+                          "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all active:scale-[0.98]",
+                          isActive(href)
+                            ? "bg-blue-100 text-blue-700 shadow-sm dark:bg-blue-900/40 dark:text-blue-300"
+                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
+                        ].join(" ")}
+                      >
+                        <Icon size={18} className={isActive(href) ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"} />
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
                   <Link
                     href="/post"
-                    className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                   >
                     Share Experience
                   </Link>
                 </div>
 
-                <div className="border-t border-slate-100 p-3 dark:border-slate-800">
+                <div className="border-t border-slate-100 p-3 sm:p-4 dark:border-slate-800">
                   {session ? (
                     <Link
                       href="/profile"

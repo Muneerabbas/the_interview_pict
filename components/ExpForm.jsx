@@ -1262,15 +1262,15 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                     <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
                       <button
                         onClick={() => handleModeChange('manual')}
-                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                       >
-                        <PenLine className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Manual Writer
+                        <PenLine className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">Manual Writer</span>
                       </button>
                       <button
                         onClick={() => handleModeChange('ai')}
-                        className={`relative z-10 flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'} ${isTale ? 'opacity-60' : ''}`}
+                        className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'} ${isTale ? 'opacity-60' : ''}`}
                       >
-                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {isTale ? "AI Under Dev" : "AI Assistant"}
+                        <Sparkles className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">{isTale ? "AI Under Dev" : "AI Assistant"}</span>
                       </button>
 
                       {/* Animated pill background */}
@@ -1390,7 +1390,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                          className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                          className="flex-1 min-w-0 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-sm sm:text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
                           placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
                         />
                         <button

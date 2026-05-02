@@ -326,7 +326,7 @@ export default function Navbar({ showThemeToggle = false }) {
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -14, opacity: 0 }}
                             transition={{ duration: 0.28, ease: "easeOut" }}
-                            className="absolute inset-0 truncate text-xs font-medium text-blue-500 dark:text-blue-400"
+                            className="absolute inset-0 truncate text-sm font-medium text-blue-500 dark:text-blue-400"
                           >
                             {texts[index]}
                           </motion.span>

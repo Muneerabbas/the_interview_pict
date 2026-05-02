@@ -120,30 +120,62 @@ export default function TalesPage() {
       <Navbar showThemeToggle />
 
       <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-24 mt-8 sm:px-6 md:pt-32 md:mt-12">
-        <section className="mb-8 overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/82 p-6 shadow-[0_12px_36px_rgba(15,23,42,0.07)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/76 dark:shadow-[0_16px_42px_rgba(2,6,23,0.62)] sm:p-7">
-          <div className="flex flex-col gap-6">
-            <div className="max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-blue-500/25 dark:bg-blue-900/30 dark:text-blue-300">
-                <BookOpen className="h-4 w-4" />
+        <motion.section 
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="relative mb-8 overflow-hidden rounded-2xl border border-white/60 bg-white/50 p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-900/40 dark:shadow-[0_12px_30px_rgba(0,0,0,0.4)] sm:p-6"
+        >
+          {/* Decorative Ambient Background */}
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-blue-400/20 to-indigo-400/20 blur-2xl dark:from-blue-500/15 dark:to-indigo-500/15"></div>
+          <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-gradient-to-tr from-cyan-400/15 to-blue-400/15 blur-2xl dark:from-cyan-500/10 dark:to-blue-500/10"></div>
+          
+          <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-50/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-700 backdrop-blur-md dark:border-blue-400/20 dark:bg-blue-500/10 dark:text-blue-300"
+              >
+                <BookOpen className="h-3 w-3" />
                 Share Your Story
-              </div>
-              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[2.75rem]">
-                Real Stories, Real Experiences Worth Sharing
-              </h1>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
-                Hackathons, general events, project journeys, lessons learned, wins, and failures worth sharing.
-              </p>
+              </motion.div>
+              <motion.h1 
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="text-2xl font-black tracking-tight text-slate-900 dark:text-white sm:text-3xl"
+              >
+                Real Stories, Real <span className="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">Experiences</span> Worth Sharing
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="mt-2 max-w-lg text-sm leading-relaxed text-slate-600 dark:text-slate-300/80"
+              >
+                Hackathons, general events, project journeys, lessons learned, wins, and failures.
+              </motion.p>
             </div>
 
-            <Link
-              href="/post/tale"
-              className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-95 dark:shadow-blue-500/20"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+              className="shrink-0 self-start md:self-auto"
             >
-              <Send className="h-4 w-4" />
-              Share your story
-            </Link>
+              <Link
+                href="/post/tale"
+                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-500/30 active:scale-95 dark:from-blue-500 dark:to-indigo-500 dark:shadow-blue-500/10"
+              >
+                <span className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span className="relative">Share your story</span>
+              </Link>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
 
         <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">

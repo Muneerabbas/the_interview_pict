@@ -128,6 +128,12 @@ export default function Navbar({ showThemeToggle = true }) {
     };
   }, [notificationsOpen]);
 
+  // eb69968 fixed logout so it stops wiping every cookie (it was clearing the
+  // NextAuth CSRF cookie along with them). This navbar no longer has a logout or
+  // search form at all -- both moved out in the redesign -- so there is nothing
+  // left here to fix; keeping that commit's handlers would reintroduce dead code
+  // referencing state this component no longer holds.
+
   const handleLogin = () => {
     router.push("/login");
   };

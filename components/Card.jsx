@@ -9,6 +9,7 @@ import { toPlainText } from "@/lib/text-preview";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import Alert from "@/components/ui/Alert";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const ProfileCard = ({
   profile,
@@ -31,8 +32,8 @@ const ProfileCard = ({
   // markup whenever the 150th character landed mid-tag.
   const preview = toPlainText(profile?.exp_text || "", 180);
 
-  const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
-  const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const profilePic = resolveProfileImage(profile) || "";
+  const profileName = resolveProfileName(profile);
   const articleId = profile?.uid || profile?._id?.toString?.() || profile?._id || "";
   const isProfileContext = edit && deletePost;
 

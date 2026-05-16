@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getMongoDb } from "@/lib/mongodb";
 import { jsonError } from "@/lib/api-response";
 import { toPublicPost } from "@/lib/post-shape";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 /** Clamp a query param to a sane range: `?page=abc` produced $skip: NaN -> a 500. */
 function clampInt(raw, fallback, min, max) {
@@ -41,12 +42,39 @@ export async function GET(req) {
       { $sort: { viewsInt: -1, date: -1, _id: -1 } },
       { $skip: page * itemsPerPage },
       { $limit: itemsPerPage },
-      { $project: { viewsInt: 0 } },
+      {
+        $lookup: {
+          from: "user",
+          localField: "email",
+          foreignField: "gmail",
+          as: "author_info",
+        },
+      },
+      {
+        $addFields: {
+          author: { $arrayElemAt: ["$author_info", 0] },
+        },
+      },
+      // author_info is the raw joined user doc; strip it here, and toPublicPost
+      // drops the `author` copy of it.
+      { $project: { viewsInt: 0, author_info: 0 } },
     ];
 
     const raw = await collection.aggregate(pipeline).toArray();
-    // Was returning whole documents: author email plus every liker's address.
-    const data = raw.map((post) => toPublicPost(post, { previewChars: 400 }));
+
+    // Resolve the author's live Google photo/name from the joined user doc FIRST,
+    // then shape: toPublicPost drops that joined doc along with the author email
+    // and the array of liker emails, which this route used to return whole.
+    const data = raw.map((item) =>
+      toPublicPost(
+        {
+          ...item,
+          profile_pic: resolveProfileImage(item),
+          name: resolveProfileName(item),
+        },
+        { previewChars: 400 }
+      )
+    );
 
     return NextResponse.json(data, {
       headers: {

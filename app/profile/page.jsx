@@ -82,18 +82,20 @@ const ProfilePage = () => {
   const [skillInput, setSkillInput] = useState('');
 
   useEffect(() => {
-    if (status === 'loading' || !session) {
+    if (status !== 'authenticated') {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     };
   }, [status, session]);
 
   useEffect(() => {
-    if (!email) {
+    // Gate on `status`, not just on `email`: while the session is still loading
+    // `email` is "" and this used to leave the spinner running forever (eb69968).
+    if (status !== "authenticated" || !email) {
       setLoadingPosts(false);
       return undefined;
     }
@@ -157,9 +159,7 @@ const ProfilePage = () => {
     };
 
     fetchPosts();
-    if (status === 'authenticated') {
-      fetchProfileData();
-    }
+    fetchProfileData();
 
     return () => controller.abort();
   }, [email, status]);

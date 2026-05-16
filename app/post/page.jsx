@@ -11,6 +11,12 @@ import { TALES_ENABLED } from "@/lib/feature-flags";
 
 function PostContent() {
   const { data: session, status } = useSession();
+  // Drive the UI off `status`, never off the truthiness of `session`: during
+  // "loading" the session is null, which used to flash the logged-out banner and
+  // lock body scroll for signed-in users (eb69968).
+  // (No isAuthenticated companion: the "loading" state already returns early
+  // above, so the other branch is only ever reached when authenticated.)
+  const isUnauthenticated = status === "unauthenticated";
   const searchParams = useSearchParams();
   const [contentType, setContentType] = useState("interview");
   const isStory = contentType === "tale";
@@ -23,7 +29,7 @@ function PostContent() {
 
   // Lock or unlock scroll when the login overlay is shown
   useEffect(() => {
-    if (!session) {
+    if (isUnauthenticated) {
       document.body.style.overflow = 'hidden'; // Lock scroll
     } else {
       document.body.style.overflow = ''; // Unlock scroll
@@ -33,7 +39,7 @@ function PostContent() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [session]);
+  }, [isUnauthenticated]);
 
   if (status === "loading") {
     return (
@@ -48,7 +54,7 @@ function PostContent() {
 
   return (
     <div className="relative min-h-screen">
-      {!session ? (
+      {isUnauthenticated ? (
         // Displaying the login overlay and banner when the user is not logged in
         <div className="relative min-h-screen pt-24">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">

@@ -4,6 +4,7 @@ import { getMongoDb } from "@/lib/mongodb";
 import { requireSession } from "@/lib/auth";
 import { jsonError } from "@/lib/api-response";
 import { TALES_ENABLED } from "@/lib/feature-flags";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -23,16 +24,41 @@ export async function POST() {
       // back a snapshot without their new post -- which then gets cached for 60s.
       const db = await getMongoDb({ mode: "write" });
 
+      // The $lookup into `user` is what makes the author's live Google photo and
+      // current display name show up on their own cards (eb69968); the raw post
+      // fields go stale as soon as the user changes either.
+      const withAuthor = [
+        { $sort: { date: -1, _id: -1 } },
+        {
+          $lookup: {
+            from: "user",
+            localField: "email",
+            foreignField: "gmail",
+            as: "author_info",
+          },
+        },
+        { $addFields: { author: { $arrayElemAt: ["$author_info", 0] } } },
+        { $project: { author_info: 0 } },
+        { $limit: 200 },
+      ];
+
       const [interviews, tales] = await Promise.all([
-        db.collection("experience").find({ email }).limit(200).toArray(),
+        db.collection("experience").aggregate([{ $match: { email } }, ...withAuthor]).toArray(),
         // Tales are hidden, and their /single pages 404 -- do not list posts the
         // user cannot open.
-        TALES_ENABLED ? db.collection("tales").find({ email }).limit(200).toArray() : [],
+        TALES_ENABLED
+          ? db.collection("tales").aggregate([{ $match: { email } }, ...withAuthor]).toArray()
+          : [],
       ]);
 
       return [...interviews, ...tales]
         .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
-        .map((post) => ({ ...post, _id: String(post._id) }));
+        .map(({ author, ...post }) => ({
+          ...post,
+          _id: String(post._id),
+          profile_pic: resolveProfileImage({ ...post, author }),
+          name: resolveProfileName({ ...post, author }),
+        }));
     });
 
     return NextResponse.json({ posts }, { status: 200 });

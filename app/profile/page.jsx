@@ -27,7 +27,7 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const email = session?.user?.email || "john.doe@example.com";
+  const email = session?.user?.email || "";
   const [globalLoading, setGlobalLoading] = useState(false);
 
   // New states for profile fields
@@ -64,18 +64,21 @@ const ProfilePage = () => {
   const [skillInput, setSkillInput] = useState('');
 
   useEffect(() => {
-    if (status === 'loading' || !session) {
+    if (status !== 'authenticated') {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     };
   }, [status, session]);
 
   useEffect(() => {
-    if (!email) return;
+    if (status !== "authenticated" || !email) {
+      setLoadingPosts(false);
+      return;
+    }
 
     const fetchPosts = async () => {
       try {
@@ -130,10 +133,8 @@ const ProfilePage = () => {
     };
 
     fetchPosts();
-    if (status === 'authenticated' && session?.user?.email) {
-      fetchProfileData();
-    }
-  }, [email, status]);
+    fetchProfileData();
+  }, [email, status, session?.user?.email]);
 
   const stats = React.useMemo(() => {
     if (!posts || posts.length === 0) return null;

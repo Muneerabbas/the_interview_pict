@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getMongoDb } from "@/lib/mongodb";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -27,10 +28,28 @@ export async function GET(req) {
       { $sort: { viewsInt: -1, date: -1, _id: -1 } },
       { $skip: page * itemsPerPage },
       { $limit: itemsPerPage },
+      {
+        $lookup: {
+          from: "user",
+          localField: "email",
+          foreignField: "gmail",
+          as: "author_info",
+        },
+      },
+      {
+        $addFields: {
+          author: { $arrayElemAt: ["$author_info", 0] },
+        },
+      },
       { $project: { viewsInt: 0 } },
     ];
 
-    const data = await experience.aggregate(pipeline).toArray();
+    const rawData = await experience.aggregate(pipeline).toArray();
+    const data = rawData.map((item) => ({
+      ...item,
+      profile_pic: resolveProfileImage(item),
+      name: resolveProfileName(item),
+    }));
 
     return NextResponse.json(data, {
       headers: {

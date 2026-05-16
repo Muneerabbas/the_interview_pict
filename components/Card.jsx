@@ -5,6 +5,7 @@ import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-
 import { useState } from "react";
 import ProfileAvatar from './ProfileAvatar';
 import Image from "next/image";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const ProfileCard = ({
   profile,
@@ -24,8 +25,8 @@ const ProfileCard = ({
   const truncatedText = fullText.slice(0, 150) + "...";
   const htmlTruncatedText = marked(truncatedText);
 
-  const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
-  const profileName = profile?.name?.replace(/\"/g, "") || "";
+  const profilePic = resolveProfileImage(profile) || "";
+  const profileName = resolveProfileName(profile);
   const articleId = profile?.uid || profile?._id?.toString?.() || profile?._id || "";
   const isProfileContext = edit && deletePost;
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { fetchWithCache } from "@/lib/cache";
 import { getMongoDb } from "@/lib/mongodb";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +18,35 @@ export async function POST(req) {
     const posts = await fetchWithCache(cacheKey, 60, async () => {
       const db = await getMongoDb();
       const collection = db.collection("experience");
-      return collection
-        .find({ email })
-        .sort({ date: -1 })
-        .toArray();
+      const pipeline = [
+        { $match: { email } },
+        { $sort: { date: -1, _id: -1 } },
+        {
+          $lookup: {
+            from: "user",
+            localField: "email",
+            foreignField: "gmail",
+            as: "author_info",
+          },
+        },
+        {
+          $addFields: {
+            author: { $arrayElemAt: ["$author_info", 0] },
+          },
+        },
+        {
+          $project: {
+            author_info: 0,
+          },
+        },
+      ];
+
+      const rawPosts = await collection.aggregate(pipeline).toArray();
+      return rawPosts.map((item) => ({
+        ...item,
+        profile_pic: resolveProfileImage(item),
+        name: resolveProfileName(item),
+      }));
     });
 
     return NextResponse.json({ posts }, { status: 200 });

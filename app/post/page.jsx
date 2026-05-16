@@ -9,10 +9,12 @@ import { Loader2, FileText } from "lucide-react";
 
 export default function Post() {
   const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const isUnauthenticated = status === "unauthenticated";
 
   // Lock or unlock scroll when the login overlay is shown
   useEffect(() => {
-    if (!session) {
+    if (isUnauthenticated) {
       document.body.style.overflow = 'hidden'; // Lock scroll
     } else {
       document.body.style.overflow = ''; // Unlock scroll
@@ -22,7 +24,7 @@ export default function Post() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [session]);
+  }, [isUnauthenticated]);
 
   if (status === "loading") {
     return (
@@ -46,11 +48,11 @@ export default function Post() {
       <div className="pointer-events-none absolute left-[-140px] top-24 h-72 w-72 rounded-full bg-sky-300/30 blur-3xl dark:bg-sky-500/20" />
       <div className="pointer-events-none absolute right-[-120px] top-[320px] h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-500/20" />
 
-      {!session && (
+      {isUnauthenticated && (
         <Navbar showThemeToggle />
       )}
       <div className="relative min-h-screen">
-        {!session ? (
+        {isUnauthenticated ? (
           // Displaying the login overlay and banner when the user is not logged in
           <div className="relative min-h-screen pt-24">
             <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -73,13 +75,13 @@ export default function Post() {
               </div>
             </div>
           </div>
-        ) : (
+        ) : isAuthenticated ? (
           // Content when the user is logged in
           <div className="relative min-h-screen">
             <MdxEditorPage showThemeToggle />
             <div className="pb-8 sm:pb-10 md:pb-12"></div>
           </div>
-        )}
+        ) : null}
       </div>
     </main>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Building2, ArrowUpRight } from "lucide-react";
 import ProfileAvatar from "./ProfileAvatar";
+import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 
 const stripMarkdown = (value = "") => {
   return value
@@ -17,8 +18,9 @@ const stripMarkdown = (value = "") => {
 };
 
 const ArticleCard = ({ article }) => {
-  const { profile_pic, name, company, uid, exp_text } = article || {};
-  const displayName = name || "Anonymous Candidate";
+  const { company, uid, exp_text } = article || {};
+  const profilePic = resolveProfileImage(article);
+  const displayName = resolveProfileName(article);
 
   const plainText = stripMarkdown(exp_text || "");
   const previewText =
@@ -37,7 +39,7 @@ const ArticleCard = ({ article }) => {
         <div className="flex items-start gap-4">
           <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md ring-1 ring-slate-100 dark:border-slate-800 dark:ring-slate-800">
             <ProfileAvatar
-              src={profile_pic}
+              src={profilePic}
               alt={displayName}
               name={displayName}
               className="h-full w-full object-cover"

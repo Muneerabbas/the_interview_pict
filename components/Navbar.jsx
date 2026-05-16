@@ -139,17 +139,8 @@ export default function Navbar({ showThemeToggle = false }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const clearAllSessionData = () => {
-    document.cookie.split(";").forEach((cookie) => {
-      const cookieName = cookie.split("=")[0].trim();
-      document.cookie = `${cookieName}=; max-age=0; path=/`;
-    });
-    sessionStorage.clear();
-    // Preserve UI preferences like theme while clearing auth/session state.
-  };
-
   const handleLogout = async () => {
-    clearAllSessionData();
+    sessionStorage.clear();
     await signOut({ callbackUrl: "/" });
   };
 

@@ -1133,7 +1133,7 @@ export default function MdxEditorPage({ showThemeToggle = false }) {
 
                 <div className="flex w-full flex-row flex-wrap items-center justify-start gap-3 border-t border-slate-200/70 pt-3 sm:gap-4 sm:justify-end dark:border-slate-700/80">
                   {/* Copy template button */}
-                  <div className={`hidden sm:flex transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 w-0 -mx-2 overflow-hidden scale-95' : 'opacity-100 w-auto scale-100'}`}>
+                  <div className={`flex w-full sm:w-auto transition-all duration-300 transform-gpu ${mode !== 'manual' ? 'pointer-events-none opacity-0 max-h-0 sm:w-0 overflow-hidden scale-95' : 'opacity-100 max-h-20 sm:max-h-none scale-100'}`}>
                     <button
                       type="button"
                       onClick={handleCopyTemplate}

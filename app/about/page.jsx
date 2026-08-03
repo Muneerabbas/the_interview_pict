@@ -23,52 +23,30 @@ export default function Aboutus() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-clip font-sans bg-transparent">
-      {/* Fixed Premium Background Layer */}
-      <div className="fixed inset-0 -z-30 bg-[#f8fbff] dark:bg-[#020617]">
-        {/* Base Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]" />
-      </div>
-
-      {/* Glow Layer */}
-      <div className="fixed inset-0 -z-20 pointer-events-none">
-        <div className="absolute left-[-140px] top-24 h-[400px] w-[400px] rounded-full bg-sky-300/20 blur-[120px] dark:bg-sky-500/15" />
-        <div className="absolute right-[-120px] top-[320px] h-[400px] w-[400px] rounded-full bg-indigo-300/20 blur-[120px] dark:bg-indigo-500/15" />
-      </div>
-
-      {/* Grid layer */}
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]"
-        style={{
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
-          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
-        }}
-      />
-
+    <main className="relative min-h-screen overflow-x-clip bg-slate-50 font-sans dark:bg-slate-950">
       <Navbar showThemeToggle />
 
       {/* First Screen */}
       <div className='relative flex min-h-screen flex-col pt-16'>
         {/* Header - added padding so it doesn't overlap navbar */}
         <header className="w-full pb-3 pt-12 lg:pt-14">
-          <div className="group mx-auto flex w-fit flex-col items-center gap-3">
-            <div className="relative h-32 w-32 sm:h-40 sm:w-40">
-              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-2xl transition duration-300 group-hover:bg-blue-600/20 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/20" />
+          <div className="group mx-auto flex w-fit flex-col items-center gap-4">
+            <div className="relative h-20 w-20 sm:h-24 sm:w-24">
               <Image
                 src={logo}
-                alt="theInterview Logo"
+                alt="The Interview Room logo"
                 fill
-                sizes="160px"
-                className="relative object-contain drop-shadow-lg group-hover:animate-logo-spin"
+                sizes="96px"
+                className="object-contain"
                 priority
               />
             </div>
 
             <div className="text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                the<span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 bg-clip-text text-transparent dark:from-cyan-400 dark:via-blue-500 dark:to-indigo-400">Interview</span>Room
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                the<span className="text-blue-600 dark:text-blue-500">Interview</span>Room
               </h1>
-              <p className="mx-auto mt-3 max-w-2xl px-4 text-base font-medium leading-relaxed text-slate-700 dark:text-slate-300 sm:text-lg">
+              <p className="mx-auto mt-3 max-w-xl px-4 text-base leading-relaxed text-slate-500 dark:text-slate-400">
                 Students building a simple place to share and learn from real interview experiences.
               </p>
             </div>
@@ -78,16 +56,16 @@ export default function Aboutus() {
         {/* Team Content */}
         <div className='flex flex-grow flex-col pb-12 pt-5'>
           <div className='container mx-auto px-6'>
-            <div className="mx-auto mb-8 w-full max-w-5xl border-t border-slate-200/70 pt-6 text-center dark:border-slate-700/70">
-              <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl">
+            <div className="mx-auto mb-8 w-full max-w-5xl border-t border-slate-200 pt-6 text-center dark:border-slate-800">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                 Team
               </h2>
-              <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400 sm:text-base">
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 sm:text-base">
                 Built by students who have been through the same interview journey.
               </p>
             </div>
 
-            <div className="mx-auto mt-7 max-w-5xl rounded-3xl border border-slate-200/80 bg-white/35 p-4 shadow-[0_12px_34px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-5">
+            <div className="mx-auto mt-6 max-w-5xl">
               <div className="grid grid-cols-1 place-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:sm:col-span-2 [&>*:last-child]:lg:col-span-1 [&>*:last-child]:lg:col-start-2">
                 <TeamMemberCard img={himg} name="Himanshu Gholse" subtitle="PICT'26 ENTC" linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/" github="https://github.com/himanshug-08" email="himanshugholse08@gmail.com" />
                 <TeamMemberCard img={nimg} name="Neeraj Magdum" subtitle="PICT'26 CE" linkedin="https://www.linkedin.com/in/neerajmagdum/" github="https://github.com/nirz306" email="neerajmagdum10@gmail.com" />
@@ -103,27 +81,26 @@ export default function Aboutus() {
 
         {/* Scroll Arrow - Only visible on desktop */}
         <div className="absolute bottom-3 hidden w-full flex-col items-center gap-2 lg:flex">
-          <div className="h-8 w-px bg-gradient-to-b from-transparent via-blue-400/70 to-transparent dark:via-cyan-400/70" />
           <button
             onClick={scrollToStory}
-            className="p-2 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-500/35 hover:bg-blue-700 hover:shadow-blue-500/50 transition-all duration-300 animate-bounce dark:bg-cyan-500 dark:shadow-cyan-500/30 dark:hover:bg-cyan-400"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white"
             aria-label="Scroll to Our Story"
           >
-            <ChevronDown size={24} />
+            <ChevronDown size={20} />
           </button>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 dark:text-slate-500">
             Continue to Our Story
           </span>
         </div>
       </div>
 
       {/* Second Screen */}
-      <div ref={storyRef} className='relative flex flex-col overflow-hidden'>
-        <div className='container relative z-10 mx-auto px-6 pb-8 pt-10 sm:pt-12'>
-          <div className="mx-auto mb-6 h-px max-w-5xl bg-gradient-to-r from-transparent via-slate-300/80 to-transparent dark:via-slate-700/80" />
-          <section className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-12">
-            <h2 className="relative z-20 mb-6 text-left text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">Our Story</h2>
-            <div className="relative z-20 mx-auto max-w-2xl space-y-5 text-left text-slate-700 dark:text-slate-300">
+      <div ref={storyRef} className='relative flex flex-col'>
+        <div className='container relative z-10 mx-auto px-6 pb-12 pt-8 sm:pt-10'>
+          <div className="mx-auto mb-8 h-px max-w-4xl bg-slate-200 dark:bg-slate-800" />
+          <section className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10">
+            <h2 className="mb-5 text-left text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">Our Story</h2>
+            <div className="mx-auto max-w-2xl space-y-5 text-left text-slate-700 dark:text-slate-300">
               <p className="text-[16px] leading-[1.75]">
                 We all know that preparing for job interviews can be a daunting task 😬. But what if there was a way to make it a little easier? That's when the idea for our website came to life 💡.
               </p>
@@ -137,8 +114,8 @@ export default function Aboutus() {
                 Through our website, we hope to build a community of people supporting each other 🤝, sharing knowledge, and making the interview process a little less intimidating. Because we believe that understanding the process is just as important as preparing the answers.
               </p>
               {/* Pull-quote tagline */}
-              <blockquote className="mt-6 rounded-r-xl border-l-4 border-blue-500 bg-blue-50/55 py-3 pl-4 pr-3 dark:border-cyan-500 dark:bg-cyan-950/20">
-                <p className="text-[19px] font-bold leading-[1.55] text-blue-800 dark:text-cyan-300 sm:text-[21px]">By the students, for the students 👋</p>
+              <blockquote className="mt-6 rounded-r-xl border-l-4 border-blue-500 bg-blue-50/55 py-3 pl-4 pr-3 dark:border-blue-500 dark:bg-blue-950/30">
+                <p className="text-[19px] font-bold leading-[1.55] text-blue-800 dark:text-blue-300 sm:text-[21px]">By the students, for the students 👋</p>
               </blockquote>
             </div>
           </section>

@@ -48,16 +48,16 @@ export default function TypingSentence() {
   }, [phase, typedWord, currentWord]);
 
   return (
-    <div className="mt-5 w-full px-2 sm:px-0">
-      <p className="mx-auto min-h-[3.2rem] max-w-3xl text-center text-base font-medium leading-relaxed text-slate-600 dark:text-slate-300 sm:min-h-[2.4rem] sm:text-lg md:text-xl">
+    <div className="mt-4 w-full px-2 sm:px-0">
+      <p className="mx-auto min-h-[3.2rem] max-w-2xl text-center text-base leading-relaxed text-slate-500 dark:text-slate-400 sm:min-h-[2.4rem] sm:text-lg">
         Turn interview stress into preparation that feels{" "}
-        <span className="relative inline-block align-baseline text-left font-extrabold text-blue-700 drop-shadow-[0_0_10px_rgba(37,99,235,0.2)] dark:text-cyan-200 dark:drop-shadow-[0_0_14px_rgba(34,211,238,0.32)]">
+        <span className="relative inline-block align-baseline text-left font-semibold text-blue-600 dark:text-blue-500">
           <span className="invisible select-none">{longestWord}</span>
           <span className="absolute inset-0 inline-flex items-center">
             {typedWord}
             <span
               aria-hidden="true"
-              className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-700 dark:bg-cyan-200"
+              className="ml-0.5 inline-block h-[1.1em] w-[2px] animate-pulse rounded bg-blue-600 dark:bg-blue-500"
             />
           </span>
         </span>

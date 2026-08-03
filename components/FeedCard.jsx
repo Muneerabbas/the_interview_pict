@@ -33,7 +33,7 @@ const stripMarkdown = (value = "") => {
     .trim();
 };
 
-const FeedCard = ({ profile, width = "w-full" }) => {
+const FeedCard = ({ profile, width = "w-full", compact = false }) => {
   const router = useRouter();
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
@@ -113,24 +113,23 @@ const FeedCard = ({ profile, width = "w-full" }) => {
           openPost();
         }
       }}
-      className={`${width} group relative mx-auto block h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200/90 border-l-4 border-l-blue-600 bg-white/95 shadow-[0_10px_26px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-[3px] hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)] dark:border-slate-700/90 dark:border-l-blue-600 dark:bg-slate-900/95 dark:shadow-[0_12px_30px_rgba(2,6,23,0.6)] dark:hover:shadow-[0_18px_42px_rgba(2,6,23,0.7)]`}
+      className={`${width} group relative mx-auto block h-full cursor-pointer overflow-hidden rounded-xl border border-slate-200 border-l-2 border-l-blue-600 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:border-l-blue-600 dark:bg-slate-900 dark:hover:border-slate-700`}
     >
-      <div className="relative flex h-full flex-col p-5 sm:p-6">
+      <div className={`relative flex h-full flex-col ${compact ? "p-4" : "p-5 sm:p-6"}`}>
         {/* Header Row: Avatar + Info */}
         <div className="flex items-start gap-4">
           <div className="flex min-w-0 items-start gap-3" aria-label={`View experience by ${profileName || "user"}`}>
             <div className="relative shrink-0 mt-0.5">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 opacity-20 blur-sm transition-opacity group-hover:opacity-35" />
               <ProfileAvatar
                 src={profilePic}
                 name={profileName}
                 alt={profileName}
-                className="relative z-10 h-11 w-11 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 sm:h-12 sm:w-12"
+                className="relative z-10 h-11 w-11 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-800 sm:h-12 sm:w-12"
               />
             </div>
 
             <div className="min-w-0 flex-1">
-              <h2 className="line-clamp-1 text-[17px] font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-[18px]">
+              <h2 className="line-clamp-1 text-[16px] font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[17px]">
                 {profileName || "Anonymous Candidate"}
               </h2>
               <div className="mt-0.5 flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500 sm:text-[11px]">
@@ -185,24 +184,26 @@ const FeedCard = ({ profile, width = "w-full" }) => {
         </div>
 
         {/* Content Zone */}
-        <div className="mt-5">
-          <div className="mb-1 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-slate-400/80 dark:text-slate-500/80">
-            Experience Snapshot
+        {!compact && (
+          <div className="mt-5">
+            <div className="mb-1 text-[9.5px] font-semibold uppercase tracking-[0.12em] text-slate-400/80 dark:text-slate-500/80">
+              Experience Snapshot
+            </div>
+            <div className="pl-1">
+              {isTale && profile?.title && (
+                <h3 className="mb-2 line-clamp-1 text-[16px] font-bold text-slate-800 dark:text-slate-200 underline decoration-blue-500/30 decoration-2 underline-offset-4">
+                  {profile.title}
+                </h3>
+              )}
+              <p className="line-clamp-3 text-[14px] leading-[1.82] text-slate-600 dark:text-slate-300">
+                {previewText}
+              </p>
+            </div>
           </div>
-          <div className="pl-1">
-            {isTale && profile?.title && (
-              <h3 className="mb-2 line-clamp-1 text-[16px] font-bold text-slate-800 dark:text-slate-200 underline decoration-blue-500/30 decoration-2 underline-offset-4">
-                {profile.title}
-              </h3>
-            )}
-            <p className="line-clamp-3 text-[14px] leading-[1.82] text-slate-600 dark:text-slate-300">
-              {previewText}
-            </p>
-          </div>
-        </div>
+        )}
 
         {/* Footer Row */}
-        <div className="mt-auto border-t border-slate-200/75 pt-3 dark:border-slate-700/75">
+        <div className={`border-t border-slate-200/75 pt-3 dark:border-slate-700/75 ${compact ? "mt-4" : "mt-auto"}`}>
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200/60 bg-slate-50/70 px-2 py-0.5 text-[10px] font-medium text-slate-400 dark:border-slate-700/60 dark:bg-slate-800/50 dark:text-slate-500">

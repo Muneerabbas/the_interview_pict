@@ -37,7 +37,6 @@ export default function Navbar({ showThemeToggle = false }) {
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDeepScrolled, setIsDeepScrolled] = useState(false);
   const desktopNotificationsRef = useRef(null);
   const mobileNotificationsRef = useRef(null);
 
@@ -46,16 +45,6 @@ export default function Navbar({ showThemeToggle = false }) {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  const texts = ["Company", "Batch", "Role", "Candidate"];
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 2000);
-    return () => clearInterval(interval);
   }, []);
 
   const router = useRouter();
@@ -197,11 +186,10 @@ export default function Navbar({ showThemeToggle = false }) {
     }
   }, [loadNotifications, notificationsOpen, openAuthModal, session?.user, unreadNotifications]);
 
-  // Scroll handler for premium dynamics
+  // Toggle the solid header background once the page is scrolled.
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      setIsDeepScrolled(window.scrollY > 120);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -226,130 +214,77 @@ export default function Navbar({ showThemeToggle = false }) {
     <>
       <header
         className={[
-          "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
+          "fixed top-0 z-50 w-full transition-colors duration-200",
           isScrolled
-            ? "border-b border-slate-200/70 bg-white/85 shadow-md backdrop-blur-2xl supports-[backdrop-filter]:bg-white/65 dark:border-slate-800/80 dark:bg-slate-950/85 dark:shadow-[0_12px_36px_rgba(2,6,23,0.65)] dark:supports-[backdrop-filter]:bg-slate-950/65"
-            : "border-b-transparent bg-transparent backdrop-blur-none",
+            ? "border-b border-slate-200 bg-white/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90"
+            : "border-b border-transparent",
         ].join(" ")}
       >
-        <div
-          className={[
-            "relative mx-auto flex w-full items-center justify-between transition-all duration-300 ease-in-out lg:grid lg:grid-cols-[auto_1fr_auto] lg:justify-normal lg:gap-8 xl:gap-10 2xl:max-w-[1520px]",
-            isScrolled
-              ? "px-3 py-2.5 min-[360px]:px-4 sm:px-5 sm:py-3 md:px-6 lg:px-8 xl:px-10"
-              : "px-3 py-3 min-[360px]:px-4 sm:px-6 sm:py-4 md:px-6 lg:px-8 lg:py-5 xl:px-10",
-          ].join(" ")}
-        >
-          {/* Left: Brand (Extreme Left) */}
+        <div className="relative mx-auto flex w-full items-center justify-between gap-2 px-4 py-3 sm:px-6 lg:grid lg:grid-cols-[auto_1fr_auto] lg:gap-4 lg:px-6 xl:gap-6 xl:px-8 2xl:max-w-[1520px]">
+          {/* Left: Brand */}
           <div className="flex items-center">
             <Link
               href="/"
-              className={[
-                "group flex items-center gap-2 font-semibold tracking-tight text-slate-900 transition-all active:scale-95 min-[380px]:gap-2.5 dark:text-slate-100",
-                isScrolled ? "scale-95" : "scale-100",
-              ].join(" ")}
               prefetch={true}
+              className="group flex items-center gap-2 font-semibold tracking-tight text-slate-900 transition active:scale-95 dark:text-slate-100"
             >
-              <div className="relative flex items-center justify-center transition-transform group-hover:scale-105">
-                <Image
-                  src={logo}
-                  alt="theInterview Logo"
-                  width={isScrolled ? 38 : 42}
-                  height={isScrolled ? 38 : 42}
-                  priority
-                  className="object-contain transition-all duration-300"
-                />
-              </div>
-              <span className="hidden text-[15px] font-bold min-[400px]:inline sm:text-lg md:text-xl">
-                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span><span>Room</span>
+              <Image
+                src={logo}
+                alt="The Interview Room logo"
+                width={34}
+                height={34}
+                priority
+                className="object-contain"
+              />
+              <span className="hidden text-[15px] font-bold min-[400px]:inline sm:text-lg xl:text-xl">
+                the<span className="text-blue-600 dark:text-blue-500">Interview</span>Room
               </span>
             </Link>
-            <div
-              className={[
-                "mx-3 hidden h-6 w-px bg-slate-200 transition-all duration-300 dark:bg-slate-800 lg:block",
-                isScrolled ? "h-5 opacity-60" : "h-6 opacity-100",
-              ].join(" ")}
-            />
           </div>
 
-          {/* Absolute Center: Nav Items (Perfectly Centered) */}
-          <div
-            className={[
-              "hidden items-center justify-center transition-all duration-300 lg:justify-self-center lg:flex lg:px-4 xl:px-6",
-              isDeepScrolled ? "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto" : "opacity-100",
-            ].join(" ")}
-          >
-            <div className="flex items-center gap-1 rounded-2xl border border-slate-200/70 bg-white/70 p-1.5 shadow-sm backdrop-blur-sm lg:rounded-3xl lg:p-1.5 dark:border-slate-700/80 dark:bg-slate-900/80">
-              {navItems.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={[
-                    "group flex items-center gap-1.5 rounded-[14px] px-4 py-1.5 text-[15px] font-bold transition-all active:scale-95 lg:px-5 lg:py-2",
-                    isActive(href)
-                      ? "bg-blue-100 text-blue-700 shadow-sm border border-blue-200/50 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800/40"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100",
-                  ].join(" ")}
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
+          {/* Center: Nav Links */}
+          <nav className="hidden items-center gap-1 lg:flex lg:justify-self-center">
+            {navItems.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={[
+                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                  isActive(href)
+                    ? "bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
+                ].join(" ")}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Right: Search & Actions */}
-          <div className="hidden items-center gap-4 lg:ml-auto lg:flex lg:justify-self-end lg:rounded-2xl lg:border lg:border-slate-200/70 lg:bg-white/60 lg:px-2.5 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-md lg:dark:border-slate-700/70 lg:dark:bg-slate-900/60">
+          <div className="hidden items-center gap-2 lg:ml-auto lg:flex lg:justify-self-end xl:gap-3">
             {/* Search Bar */}
-            <div className="min-w-0 max-w-[260px] lg:w-[230px] xl:w-[280px] 2xl:w-[330px]">
+            <div className="min-w-0 lg:w-[150px] xl:w-[220px] 2xl:w-[280px]">
               <form onSubmit={handleSearch}>
                 <div className="group relative">
                   <Search
-                    size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-blue-400"
+                    size={16}
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-slate-600 dark:text-slate-500"
                   />
                   <input
                     type="text"
                     value={searchText}
-                    className="w-full rounded-2xl border border-slate-200/90 bg-white/95 py-2.5 pl-11 pr-12 text-[14px] font-medium text-slate-700 shadow-[inset_0_1px_2px_rgba(15,23,42,0.05)] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/15"
                     onChange={(e) => setSearchText(e.target.value)}
-                    placeholder=""
+                    placeholder="Search experiences…"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-700"
                   />
-
-                  {!searchText && (
-                    <div className="pointer-events-none absolute inset-y-0 left-10 right-10 flex items-center gap-1.5 overflow-hidden">
-                      <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">Search</span>
-                      <div className="relative h-5 min-w-0 flex-1 overflow-hidden">
-                        <AnimatePresence mode="wait" initial={false}>
-                          <motion.span
-                            key={index}
-                            initial={{ y: 14, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: -14, opacity: 0 }}
-                            transition={{ duration: 0.28, ease: "easeOut" }}
-                            className="absolute inset-0 truncate text-sm font-medium text-blue-500 dark:text-blue-400"
-                          >
-                            {texts[index]}
-                          </motion.span>
-                        </AnimatePresence>
-                      </div>
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    aria-label="Submit search"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md transition-all hover:scale-105 active:scale-95"
-                  >
-                    <Search size={16} strokeWidth={2.5} />
-                  </button>
                 </div>
               </form>
             </div>
 
             <ThemeToggle />
 
-            <div className="flex items-center gap-2.5">
-              <div ref={desktopNotificationsRef} className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
+              <div ref={desktopNotificationsRef} className="flex items-center gap-2">
                 {session ? (
                   <>
                     <NotificationsMenu
@@ -371,7 +306,7 @@ export default function Navbar({ showThemeToggle = false }) {
                 ) : (
                   <button
                     onClick={handleLogin}
-                    className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white/50 px-5 text-[14px] font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+                    className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white/50 px-4 text-sm font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                   >
                     Login
                   </button>
@@ -381,7 +316,7 @@ export default function Navbar({ showThemeToggle = false }) {
               <Link
                 href="/post"
                 prefetch={true}
-                className="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-500 px-6 text-[14px] font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-[0.98]"
+                className="inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-blue-600 px-4 text-sm font-bold text-white shadow-sm transition-all hover:bg-blue-700 active:scale-[0.98]"
               >
                 Share Experience
               </Link>
@@ -461,7 +396,7 @@ export default function Navbar({ showThemeToggle = false }) {
                     </div>
                     <button
                       type="submit"
-                      className="mt-3 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      className="mt-3 w-full rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
                       Search
                     </button>
@@ -488,7 +423,7 @@ export default function Navbar({ showThemeToggle = false }) {
                   </div>
                   <Link
                     href="/post"
-                    className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-colors hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   >
                     Share Experience
                   </Link>
@@ -506,7 +441,7 @@ export default function Navbar({ showThemeToggle = false }) {
                   ) : (
                     <button
                       onClick={handleLogin}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/20 transition-all hover:from-slate-800 hover:to-slate-700 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:from-blue-700 dark:to-indigo-700 dark:shadow-blue-950/45 dark:hover:from-blue-600 dark:hover:to-indigo-600 dark:focus:ring-blue-400/40"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-400/40"
                     >
                       <LogIn size={16} />
                       Login

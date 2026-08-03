@@ -28,14 +28,12 @@ const ArticleCard = ({ article }) => {
     <Link
       href={`/single/${uid}`}
       prefetch={true}
-      className="group relative block overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.03)] backdrop-blur-sm transition-all duration-400 hover:-translate-y-1.5 hover:border-blue-200 hover:shadow-[0_20px_40px_rgba(37,99,235,0.12)] dark:border-slate-800/80 dark:bg-slate-900/60 dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)] dark:hover:border-cyan-500/30 dark:hover:shadow-[0_20px_44px_rgba(2,6,23,0.8)]"
+      className="group relative block overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
       aria-label={`Read the experience of ${displayName}`}
     >
-      <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 opacity-80" />
-
       <div className="p-5">
-        <div className="flex items-start gap-4">
-          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md ring-1 ring-slate-100 dark:border-slate-800 dark:ring-slate-800">
+        <div className="flex items-start gap-3">
+          <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full ring-1 ring-slate-200 dark:ring-slate-800">
             <ProfileAvatar
               src={profile_pic}
               alt={displayName}
@@ -44,28 +42,26 @@ const ArticleCard = ({ article }) => {
             />
           </div>
 
-          <div className="min-w-0 flex-1 pt-0.5">
-            <h3 className="truncate text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-[15px] font-semibold tracking-tight text-slate-900 dark:text-white">
               {displayName}
             </h3>
-            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] font-semibold text-slate-500 dark:text-slate-400">
-              <span className="text-blue-600 dark:text-cyan-400">{company}</span>
+            <div className="mt-0.5 flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+              <Building2 size={12} className="text-slate-400" />
+              <span className="truncate text-slate-600 dark:text-slate-300">{company}</span>
             </div>
           </div>
         </div>
 
-        {/* Content Zone: Experience Snapshot */}
-        <div className="mt-4 border-l-[3px] border-blue-600 pl-3.5 transition-colors group-hover:border-blue-500 dark:border-blue-500/60 dark:group-hover:border-blue-400">
-          <p className="line-clamp-3 text-[13px] leading-[1.65] text-slate-600 dark:text-slate-300">
-            {previewText}
-          </p>
-        </div>
+        <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
+          {previewText}
+        </p>
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-100/80 bg-slate-50/50 px-5 py-3.5 dark:border-slate-800/50 dark:bg-slate-800/20">
-        <span className="inline-flex items-center gap-1.5 text-sm font-black tracking-tight text-blue-700 transition-colors group-hover:text-blue-800 dark:text-cyan-300 dark:group-hover:text-cyan-200">
+      <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 dark:border-slate-800">
+        <span className="inline-flex items-center gap-1 text-[13px] font-medium text-blue-600 transition group-hover:gap-1.5 dark:text-blue-400">
           Read Experience
-          <ArrowUpRight size={16} strokeWidth={2.5} />
+          <ArrowUpRight size={15} />
         </span>
       </div>
     </Link>

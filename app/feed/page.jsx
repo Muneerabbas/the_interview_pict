@@ -1,12 +1,12 @@
 "use client";
 
 import Navbar from "../../components/Navbar";
-import FeedCard from "../../components/FeedCard";
+import FeedPostCard from "../../components/FeedPostCard";
 import FeedHero from "../../components/FeedHero";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { ArrowUpRight, Loader2, Send, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X, RefreshCw } from "lucide-react";
+import { ArrowUpRight, Loader2, Send, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, X, RefreshCw, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,7 +30,7 @@ const LoadingScreen = ({ isDarkMode }) => (
     className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center backdrop-blur-sm ${isDarkMode ? "bg-slate-950/80" : "bg-white/80"
       }`}
   >
-    <Loader2 className={`h-10 w-10 animate-spin ${isDarkMode ? "text-cyan-300" : "text-blue-600"}`} />
+    <Loader2 className={`h-10 w-10 animate-spin ${isDarkMode ? "text-blue-400" : "text-blue-600"}`} />
   </div>
 );
 
@@ -48,6 +48,7 @@ export default function HomePage() {
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
   const [tabReady, setTabReady] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState({
     college: "",
     branch: "",
@@ -312,52 +313,26 @@ export default function HomePage() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-clip font-sans bg-transparent">
-      {/* Fixed Premium Background Layer */}
-      <div className="fixed inset-0 -z-30 bg-[#f8fbff] dark:bg-[#020617]">
-        {/* Base Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_14%,rgba(125,211,252,0.22),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.2),transparent_34%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] dark:bg-[radial-gradient(circle_at_10%_14%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_86%_12%,rgba(45,212,191,0.14),transparent_34%),linear-gradient(180deg,#020617_0%,#0b1120_55%,#111827_100%)]" />
-      </div>
-
-      {/* Glow Layer */}
-      <div className="fixed inset-0 -z-20 pointer-events-none">
-        <div className="absolute left-[-140px] top-24 h-[400px] w-[400px] rounded-full bg-sky-300/20 blur-[120px] dark:bg-sky-500/15" />
-        <div className="absolute right-[-120px] top-[320px] h-[400px] w-[400px] rounded-full bg-indigo-300/20 blur-[120px] dark:bg-indigo-500/15" />
-      </div>
-
-      {/* Grid layer - matching Companies tab style */}
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none bg-[linear-gradient(to_right,rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.12)_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)]"
-        style={{
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
-          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
-        }}
-      />
-
-      <div className="fixed inset-0 -z-10 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.38),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.08),transparent_42%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.07),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.65),transparent_45%)]" />
-
-      {/* Center Reading Track */}
-      <div className="fixed inset-y-0 left-1/2 w-full max-w-[800px] -translate-x-1/2 -z-10 bg-slate-100/10 dark:bg-slate-900/20 pointer-events-none" />
-
+    <main className="relative min-h-screen overflow-x-clip bg-slate-50 font-sans dark:bg-slate-950">
       <Navbar showThemeToggle />
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
-      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-24 mt-8 sm:px-6 md:pt-32 md:mt-12">
+      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-20 sm:px-6 md:pt-24">
         {/* Hero Section */}
         <FeedHero isDarkMode={isDarkMode} />
 
 
-        <section className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-900/75 dark:shadow-[0_14px_40px_rgba(2,6,23,0.6)] sm:p-6">
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
           {/* Header & Tabs */}
-          <div className="mb-6 border-b border-slate-200 pb-2 dark:border-slate-700">
+          <div className="mb-6 border-b border-slate-100 pb-4 dark:border-slate-800">
             {/* Tab Switcher */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-100/85 p-1.5 shadow-inner dark:border-slate-800 dark:bg-slate-900/40">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="inline-flex w-fit items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
                 <button
                   onClick={() => setActiveTab("latest")}
-                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "latest"
-                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
-                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "latest"
+                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                     }`}
                 >
                   <Clock size={16} />
@@ -365,9 +340,9 @@ export default function HomePage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("trending")}
-                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "trending"
-                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
-                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "trending"
+                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                     }`}
                 >
                   <Zap size={16} />
@@ -375,9 +350,9 @@ export default function HomePage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("random")}
-                  className={`relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${activeTab === "random"
-                    ? "bg-white text-blue-600 shadow-md ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-300 dark:ring-slate-700"
-                    : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "random"
+                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                     }`}
                 >
                   <RefreshCw size={16} />
@@ -390,7 +365,7 @@ export default function HomePage() {
                 onClick={handleShareExperienceClick}
                 prefetch={true}
                 scroll={false}
-                className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-[1.5px] hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-95 dark:shadow-blue-500/20 sm:text-sm"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 sm:w-auto sm:py-2 sm:text-sm"
               >
                 <Send className="h-4 w-4" />
                 Post Your Story
@@ -399,22 +374,27 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-20 mb-6 rounded-3xl border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(248,250,252,0.82)_100%)] shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.84)_0%,rgba(2,6,23,0.8)_100%)] dark:shadow-[0_16px_40px_rgba(2,6,23,0.45)]">
-            <div className="flex flex-col gap-3 border-b border-slate-200/70 px-4 py-4 dark:border-slate-700/80 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300">
+          <div className="relative z-20 mb-4 rounded-xl border border-slate-200 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-800/20">
+            <div className={`flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 ${filtersOpen ? "border-b border-slate-100 dark:border-slate-800" : ""}`}>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                className="flex items-center gap-2.5 text-left"
+                aria-expanded={filtersOpen}
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
                   <SlidersHorizontal className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Refine The Feed</h3>
-                </div>
-              </div>
+                </span>
+                <span className="text-sm font-bold text-slate-900 dark:text-slate-100">Refine The Feed</span>
+                {activeFilterCount > 0 && (
+                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1.5 text-[11px] font-semibold text-white">
+                    {activeFilterCount}
+                  </span>
+                )}
+                <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${filtersOpen ? "rotate-180" : ""}`} />
+              </button>
 
               <div className="flex items-center gap-2">
-                <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${activeFilterCount > 0 ? "bg-blue-600 text-white dark:bg-cyan-400 dark:text-slate-950" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"}`}>
-                  <span>{activeFilterCount}</span>
-                  <span>{activeFilterCount === 1 ? "filter active" : "filters active"}</span>
-                </div>
                 <button
                   type="button"
                   onClick={() => fetchProfiles(0, itemsPerPage, activeTab, filters, true)}
@@ -437,6 +417,7 @@ export default function HomePage() {
               </div>
             </div>
 
+            {filtersOpen && (
             <div className="grid gap-3 p-4 sm:p-5 md:grid-cols-[1.4fr_1fr_1fr]">
               <label className="space-y-2">
                 <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
@@ -492,26 +473,28 @@ export default function HomePage() {
                 </div>
               </label>
             </div>
-          </div>
-
-          <div className="relative z-10 space-y-6">
-            {pageLoading && page === 0 && profiles.length === 0 ? (
-              skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
-            ) : (
-              <AnimatePresence mode="popLayout">
-                {profiles.map((profile, index) => (
-                  <motion.div
-                    key={profile._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35, delay: (index % 10) * 0.03 }}
-                  >
-                    <FeedCard profile={profile} width="w-full" />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
             )}
+          </div>
+        </section>
+
+        <div className="mt-4 space-y-2.5">
+          {pageLoading && page === 0 && profiles.length === 0 ? (
+            skeletonCards.map((_, index) => <ProfileCardSkeleton key={index} />)
+          ) : (
+            <AnimatePresence mode="popLayout">
+              {profiles.map((profile, index) => (
+                <motion.div
+                  key={profile._id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.28, delay: (index % 10) * 0.025 }}
+                >
+                  <FeedPostCard profile={profile} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          )}
 
             {/* Sentinel for Intersection Observer */}
             <div ref={lastProfileElementRef} className="h-4 w-full" />
@@ -553,7 +536,6 @@ export default function HomePage() {
               </div>
             )}
           </div>
-        </section>
       </div>
     </main>
   );

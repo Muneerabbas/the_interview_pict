@@ -35,7 +35,7 @@ export default function TeamMemberCard({
 
   return (
     <article
-      className="group relative isolate w-full max-w-[19rem] aspect-[3/4] overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900 shadow-2xl transition-all duration-500 hover:shadow-blue-500/20"
+      className="group relative isolate aspect-[3/4] w-full max-w-[19rem] overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800"
     >
       {/* Background Image */}
       <div className="absolute inset-0">
@@ -44,7 +44,7 @@ export default function TeamMemberCard({
           alt={name}
           fill
           sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
           priority={priority}
         />
         {/* Overlays */}
@@ -59,11 +59,11 @@ export default function TeamMemberCard({
           <h3 className="mb-2 text-xl font-bold leading-tight tracking-tight text-white [text-shadow:0_2px_14px_rgba(2,6,23,0.7)]">
             {name}
           </h3>
-          <div className="h-1.5 w-10 bg-blue-500 rounded-full mb-3 origin-left transition-all duration-500 group-hover:w-16 group-hover:bg-cyan-400" />
+          <div className="mb-3 h-1 w-10 origin-left rounded-full bg-blue-500 transition-all duration-300 group-hover:w-14" />
 
-          {/* Subtitle with better contrast and visibility */}
-          <div className="inline-flex rounded-lg border border-white/15 bg-black/35 px-3.5 py-1.5 backdrop-blur-sm transition-colors group-hover:bg-black/40">
-            <p className="text-xs font-bold uppercase tracking-wider text-cyan-300 drop-shadow-sm">
+          {/* Subtitle */}
+          <div className="inline-flex rounded-md border border-white/15 bg-black/40 px-3 py-1">
+            <p className="text-xs font-semibold uppercase tracking-wider text-blue-200">
               {subtitle}
             </p>
           </div>

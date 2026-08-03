@@ -1,52 +1,30 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import logo from '../public/app_icon.png'
-import { CanvasText } from "@/components/ui/canvas-text";
-import TypingSentence from "@/components/TypingSentence";
 import {
   ArrowRight,
+  ArrowUpRight,
+  BadgeCheck,
   Blocks,
+  Bookmark,
   Building2,
   ChevronLeft,
   ChevronRight,
   Flame,
   GraduationCap,
-  Menu,
-  MessageSquareText,
-  Quote,
-  Search,
-  Sparkles,
-  X,
-  Plus,
+  Lightbulb,
+  PenLine,
+  ShieldCheck,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useTheme } from "next-themes"
-import ThemeToggle from "./ThemeToggle"
-import Navbar from "./Navbar"
+import { useTheme } from 'next-themes'
+import Navbar from './Navbar'
 
-
-const BLOG_POSTS = [
-  {
-    author: 'Siddhant Vishnu',
-    content: '"Unbelievable stuff from seniors. Could not ask for more."',
-    avatarBg: 'bg-emerald-500',
-    avatar: 'S',
-  },
-  {
-    author: 'Shlok S',
-    content: '"Bro, now placement prep finally feels manageable."',
-    avatarBg: 'bg-orange-500',
-    avatar: 'S',
-  },
-  {
-    author: 'Shreya Hiwarkar',
-    content: '"Great work, super helpful and easy to follow."',
-    avatarBg: 'bg-sky-500',
-    avatar: 'S',
-  },
+const TRUST_BADGES = [
+  { icon: ShieldCheck, label: 'Real Experiences' },
+  { icon: BadgeCheck, label: 'Verified Students' },
+  { icon: Building2, label: 'Top Companies' },
+  { icon: Lightbulb, label: 'Interview Tips' },
 ]
 
 const DEPARTMENTS = [
@@ -59,7 +37,14 @@ const DEPARTMENTS = [
 
 const COMPANIES = ['Barclays', 'Mastercard', 'BNY', 'Siemens', 'Arista', 'Tracelink', 'PhonePe']
 
-const AVATAR_COLORS = ['bg-sky-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-indigo-500', 'bg-cyan-500']
+const AVATAR_COLORS = [
+  'bg-blue-600',
+  'bg-emerald-600',
+  'bg-amber-600',
+  'bg-rose-600',
+  'bg-indigo-600',
+  'bg-cyan-600',
+]
 
 const getAvatarColor = (seed = '') => {
   let hash = 0
@@ -69,14 +54,29 @@ const getAvatarColor = (seed = '') => {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]
 }
 
+const stripToText = (raw = '') => {
+  let text = raw.replace(/<[^>]*>?/g, ' ')
+  text = text.replace(/\*\*|__/g, '')
+  text = text.replace(/\*/g, '')
+  text = text.replace(/_/g, '')
+  text = text.replace(/^#{1,6}\s/gm, '')
+  text = text.replace(/^[\s]*[*+-]\s/gm, '')
+  text = text.replace(/^[\s]*\d+\.\s/gm, '')
+  text = text.replace(/^>\s/gm, '')
+  text = text.replace(/`([^`]+)`/g, '$1')
+  text = text.replace(/^[-*_]{3,}$/gm, '')
+  text = text.replace(/[\r\n]+/g, ' ').trim()
+  return text
+}
+
+/* Horizontal scroller with edge controls — dashboard-style rail. */
 const ScrollableSection = ({ children }) => {
   const scrollContainerRef = useRef(null)
 
   const scroll = (direction) => {
     const container = scrollContainerRef.current
     if (!container) return
-
-    const scrollAmount = container.offsetWidth
+    const scrollAmount = Math.min(container.offsetWidth, 640)
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -87,160 +87,140 @@ const ScrollableSection = ({ children }) => {
     <div className="relative">
       <button
         onClick={() => scroll('left')}
-        className="absolute -left-5 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/90 bg-white/95 text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-[0_16px_30px_rgba(2,6,23,0.72)] dark:hover:border-cyan-500/55 dark:hover:text-cyan-200 sm:inline-flex"
+        className="absolute -left-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white sm:inline-flex"
         aria-label="Scroll left"
       >
-        <ChevronLeft size={20} />
+        <ChevronLeft size={18} />
       </button>
 
       <div
         ref={scrollContainerRef}
-        className="flex gap-5 overflow-x-auto scroll-smooth px-1 py-1 sm:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </div>
 
       <button
         onClick={() => scroll('right')}
-        className="absolute -right-5 top-1/2 z-10 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/90 bg-white/95 text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.18)] transition hover:scale-105 hover:border-cyan-300/60 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:shadow-[0_16px_30px_rgba(2,6,23,0.72)] dark:hover:border-cyan-500/55 dark:hover:text-cyan-200 sm:inline-flex"
+        className="absolute -right-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white sm:inline-flex"
         aria-label="Scroll right"
       >
-        <ChevronRight size={20} />
+        <ChevronRight size={18} />
       </button>
     </div>
   )
 }
 
-const SectionHeader = ({ title, description, ctaHref, ctaLabel, align = 'center' }) => {
-  const isLeftAligned = align === 'left'
-  return (
-    <div className={isLeftAligned ? 'text-left' : 'text-center'}>
-      <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">{title}</h2>
-      <p className={cn('mt-3 max-w-2xl text-sm text-slate-600 dark:text-slate-400 sm:text-base', isLeftAligned ? '' : 'mx-auto')}>{description}</p>
-      {ctaHref && ctaLabel && (
-        <div className="mt-5">
-          <Link
-            href={ctaHref}
-            prefetch={true}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 transition hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200"
-          >
-            {ctaLabel}
-            <ArrowRight size={15} />
-          </Link>
-        </div>
-      )}
+/* Section header — title left, optional action link right (Linear/Vercel pattern). */
+const SectionHeader = ({ icon: Icon, title, description, ctaHref, ctaLabel }) => (
+  <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className="max-w-2xl">
+      <div className="flex items-center gap-2">
+        {Icon ? (
+          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
+            <Icon size={15} />
+          </span>
+        ) : null}
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
+          {title}
+        </h2>
+      </div>
+      {description ? (
+        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          {description}
+        </p>
+      ) : null}
     </div>
-  )
-}
+    {ctaHref && ctaLabel ? (
+      <Link
+        href={ctaHref}
+        prefetch
+        className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+      >
+        {ctaLabel}
+        <ArrowRight size={14} />
+      </Link>
+    ) : null}
+  </div>
+)
 
 const StoryCard = ({ story }) => {
   const isTale = story?.content_type === 'tale'
-  let plainText = story?.exp_text || ''
-  plainText = plainText.replace(/<[^>]*>?/g, ' ') /* Strip HTML tags inserted by rich text editors */
-  plainText = plainText.replace(/\*\*|__/g, '')
-  plainText = plainText.replace(/\*/g, '')
-  plainText = plainText.replace(/_/g, '')
-  plainText = plainText.replace(/^#{1,6}\s/gm, '')
-  plainText = plainText.replace(/^[\s]*[*+-]\s/gm, '')
-  plainText = plainText.replace(/^[\s]*\d+\.\s/gm, '')
-  plainText = plainText.replace(/^>\s/gm, '')
-  plainText = plainText.replace(/`([^`]+)`/g, '$1')
-  plainText = plainText.replace(/^[-*_]{3,}$/gm, '')
-  plainText = plainText.replace(/[\r\n]+/g, ' ').trim()
-
-  const bullets = plainText
-    .split(/[.!?]\s+/g)
-    .map((segment) => segment.trim())
-    .filter(Boolean)
-    .slice(0, 2)
+  const plainText = stripToText(story?.exp_text || '')
 
   const seed = String(story?.uid || story?.company || story?.role || 'story')
   const avatarColor = getAvatarColor(seed)
-  const primaryLabel = isTale ? (story?.title || 'Untitled Tale') : (story?.company || 'Top Company')
-  const secondaryLabel = isTale ? (story?.college || 'Tale') : (story?.role || 'Interview Experience')
   const authorLabel = story?.name || 'Anonymous'
+  const headerTitle = isTale ? authorLabel : story?.company || 'Top Company'
+  const headerSub = isTale ? story?.college || 'Tale' : story?.role || 'Interview'
+  const cardTitle = isTale
+    ? story?.title || 'Untitled Tale'
+    : story?.title || `${story?.company || 'Company'} Interview Experience`
+  const initial = headerTitle?.charAt(0)?.toUpperCase() || 'T'
+
+  const batchBranch = [story?.branch, story?.batch].filter(Boolean).join(' · ')
+  const chipLabel = isTale ? 'Tale' : batchBranch || 'Interview Experience'
 
   return (
-    <article className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-300/90 bg-white/90 p-6 shadow-[0_14px_32px_rgba(15,23,42,0.11)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300/50 hover:shadow-[0_18px_34px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:!bg-slate-950/95 dark:shadow-[0_16px_34px_rgba(2,6,23,0.78)] dark:hover:border-cyan-500/45 dark:hover:shadow-[0_18px_34px_rgba(8,145,178,0.3)]">
-      {isTale ? (
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div
-              className={`${avatarColor} flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white`}
-              aria-hidden="true"
-            >
-              {authorLabel?.charAt(0)?.toUpperCase() || 'T'}
-            </div>
-            <div className="min-w-0 text-left">
-              <p className="truncate text-sm font-bold leading-tight text-slate-900 dark:text-slate-100">{authorLabel}</p>
-              <p className="truncate text-xs font-medium uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">Tale</p>
-            </div>
-          </div>
-          <Quote size={18} className="shrink-0 fill-slate-300 text-slate-300 opacity-[0.12] dark:fill-slate-500 dark:text-slate-500" />
+    <article className="group flex h-full w-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
+      <div className="flex items-center gap-3">
+        <div
+          className={`${avatarColor} flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-base font-semibold text-white`}
+          aria-hidden="true"
+        >
+          {initial}
         </div>
-      ) : (
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div
-              className={`${avatarColor} flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white`}
-              aria-hidden="true"
-            >
-              {story?.name?.charAt(0)?.toUpperCase() || primaryLabel?.charAt(0)?.toUpperCase() || 'T'}
-            </div>
-            <div className="min-w-0 text-left">
-              <p className="truncate text-sm font-semibold leading-tight text-slate-900 dark:text-slate-100">{primaryLabel}</p>
-              <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-300">{secondaryLabel}</p>
-            </div>
-          </div>
-          <Quote size={18} className="shrink-0 fill-slate-300 text-slate-300 opacity-[0.12] dark:fill-slate-500 dark:text-slate-500" />
+        <div className="min-w-0">
+          <p className="truncate text-[15px] font-semibold leading-tight text-slate-900 dark:text-white">
+            {headerTitle}
+          </p>
+          <p className="truncate text-xs text-slate-500 dark:text-slate-400">{headerSub}</p>
         </div>
-      )}
-
-      <div className="relative mt-4 space-y-2 text-left">
-        {isTale ? (
-          <>
-            <h3 className="line-clamp-2 text-[15px] font-black leading-snug text-slate-900 dark:text-slate-50 sm:text-[1.15rem]">
-              {primaryLabel}
-            </h3>
-            <div className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/80 px-2.5 py-1 text-[11px] font-semibold text-blue-700 dark:border-cyan-500/25 dark:bg-cyan-950/35 dark:text-cyan-300">
-              <GraduationCap size={12} className="shrink-0" />
-              <span className="truncate">{secondaryLabel}</span>
-            </div>
-            <p className="line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-[15px]">
-              {plainText || 'Personal story, project journey, and lessons from a real student tale.'}
-            </p>
-          </>
-        ) : bullets.length > 0 ? (
-          <>
-            <p className="line-clamp-1 text-[15px] font-semibold leading-relaxed text-slate-800 dark:text-slate-50 sm:text-base">
-              {bullets[0]}
-            </p>
-            {bullets[1] ? (
-              <p className="line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-[15px]">
-                {bullets[1]}
-              </p>
-            ) : null}
-          </>
-        ) : (
-          <p className="line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-[15px]">{plainText || 'Practical preparation tips from real rounds and real candidates.'}</p>
-        )}
-        {/* Gradient fade-out on text */}
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white/80 to-transparent dark:from-slate-950/95" />
       </div>
 
-      <div className="mt-6 flex items-center justify-between border-t border-slate-200/90 pt-4 dark:border-slate-700/80">
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 dark:text-slate-400">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg>
-          {story?.views ?? 0}
+      <h3 className="mt-4 line-clamp-1 text-[15px] font-semibold text-slate-900 dark:text-white">
+        {cardTitle}
+      </h3>
+      <p className="mt-1.5 line-clamp-2 flex-1 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
+        {plainText ||
+          (isTale
+            ? 'A personal story, project journey, and lessons from a real student.'
+            : 'Practical preparation notes from real interview rounds.')}
+      </p>
+
+      <span className="mt-4 inline-flex w-fit max-w-full items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+        <span className="truncate">{chipLabel}</span>
+      </span>
+
+      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800">
+        <span className="truncate text-xs text-slate-500 dark:text-slate-400">
+          By <span className="font-semibold text-slate-700 dark:text-slate-200">{authorLabel}</span>
         </span>
-        <span className="group inline-flex items-center gap-1 text-[14px] font-bold text-blue-700 transition-all hover:gap-1.5 dark:text-cyan-200">
-          Read story
-          <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-        </span>
+        <Bookmark
+          size={16}
+          className="shrink-0 text-slate-300 transition group-hover:text-blue-500 dark:text-slate-600"
+        />
       </div>
     </article>
   )
 }
+
+/* Filter group — company / batch / department chips. */
+const FilterGroup = ({ icon: Icon, label, children }) => (
+  <div className="flex flex-col gap-3 border-b border-slate-100 py-4 last:border-0 last:pb-0 dark:border-slate-800 sm:flex-row sm:items-center first:pt-0">
+    <div className="flex w-full items-center gap-2 sm:w-44 sm:shrink-0">
+      <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+        <Icon size={15} />
+      </span>
+      <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{label}</p>
+    </div>
+    <div className="flex flex-1 flex-wrap gap-2">{children}</div>
+  </div>
+)
+
+const chipClass =
+  'rounded-md border border-slate-200 bg-white px-3 py-1 text-[13px] font-medium text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-800 dark:hover:bg-blue-950/40 dark:hover:text-blue-300'
+
 export default function Home({ tales, featuredStories, topStories }) {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -260,28 +240,25 @@ export default function Home({ tales, featuredStories, topStories }) {
 
   useEffect(() => {
     if (Array.isArray(tales)) {
-      const shuffled = [...tales].sort(() => Math.random() - 0.5);
-      setFetchedTales(shuffled);
+      setFetchedTales([...tales].sort(() => Math.random() - 0.5))
     } else {
-      setFetchedTales([]);
+      setFetchedTales([])
     }
   }, [tales])
 
   useEffect(() => {
     if (Array.isArray(featuredStories)) {
-      const shuffled = [...featuredStories].sort(() => Math.random() - 0.5);
-      setFetchedFeaturedStories(shuffled);
+      setFetchedFeaturedStories([...featuredStories].sort(() => Math.random() - 0.5))
     } else {
-      setFetchedFeaturedStories([]);
+      setFetchedFeaturedStories([])
     }
   }, [featuredStories])
 
   useEffect(() => {
     if (Array.isArray(topStories)) {
-      const shuffled = [...topStories].sort(() => Math.random() - 0.5);
-      setFetchedTopStories(shuffled);
+      setFetchedTopStories([...topStories].sort(() => Math.random() - 0.5))
     } else {
-      setFetchedTopStories([]);
+      setFetchedTopStories([])
     }
   }, [topStories])
 
@@ -292,305 +269,207 @@ export default function Home({ tales, featuredStories, topStories }) {
   }, [])
 
   return (
-    <main className="relative min-h-screen bg-[radial-gradient(circle_at_14%_14%,rgba(59,130,246,0.2),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(129,140,248,0.18),transparent_36%),linear-gradient(180deg,#f8fbff_0%,#f4f7fb_55%,#eef2f7_100%)] text-slate-900 dark:bg-[radial-gradient(circle_at_14%_14%,rgba(56,189,248,0.16),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(99,102,241,0.2),transparent_36%),linear-gradient(180deg,#020617_0%,#0f172a_55%,#111827_100%)] dark:text-slate-100">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.45),transparent_42%),radial-gradient(circle_at_50%_100%,rgba(15,23,42,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(148,163,184,0.05),transparent_42%),radial-gradient(circle_at_50%_100%,rgba(2,6,23,0.82),transparent_50%)]" />
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:42px_42px] opacity-60 dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.28)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.28)_1px,transparent_1px)] dark:opacity-45" />
+    <main className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar showThemeToggle={true} />
 
-      <section id="hero" className="relative overflow-hidden px-4 pb-24 pt-28 sm:pb-28">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#EFF3FF_0%,#F4F6FB_55%,transparent_80%),linear-gradient(to_right,rgba(148,163,184,0.3)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.3)_1px,transparent_1px)] bg-[size:auto,46px_46px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)] dark:bg-[linear-gradient(to_right,rgba(51,65,85,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(51,65,85,0.45)_1px,transparent_1px)] dark:bg-[size:46px_46px]" />
-        <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl dark:bg-blue-500/25" />
-        <div className="pointer-events-none absolute -right-12 top-16 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl dark:bg-cyan-500/25" />
+      {/* ── Hero ──────────────────────────────────────────────── */}
+      <section id="hero" className="border-b border-slate-100 dark:border-slate-900">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-28 sm:pt-32 lg:grid-cols-2 lg:gap-6 lg:pb-16">
+          {/* Left: copy + CTAs + trust badges */}
+          <div className="max-w-xl">
+            <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-[3.35rem]">
+              Prepare Better.
+              <br />
+              <span className="text-blue-600 dark:text-blue-500">Perform</span> Confidently.
+            </h1>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-500 dark:text-slate-400">
+              Real interview experiences from students who cracked top companies.
+            </p>
 
-        <div className="relative mx-auto max-w-6xl text-center">
-          <div className="group mx-auto flex w-fit items-center justify-center mb-1 sm:mb-2">
-            <div className="relative h-28 w-28 sm:h-32 sm:w-32 md:h-40 md:w-40 transition-transform duration-500 hover:scale-105">
-              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-2xl transition duration-500 group-hover:bg-blue-600/20 dark:bg-cyan-500/10 dark:group-hover:bg-cyan-400/20" />
-              <Image
-                src={logo}
-                alt="theInterviewRoom Logo"
-                fill
-                sizes="(max-width: 768px) 128px, 160px"
-                className="relative object-contain drop-shadow-lg transition-all duration-500 group-hover:drop-shadow-2xl"
-                priority
-              />
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                href="/feed"
+                prefetch
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+              >
+                Read Stories
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/post"
+                prefetch
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-800"
+              >
+                Share Your Story
+                <PenLine size={15} />
+              </Link>
+            </div>
+
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
+              {TRUST_BADGES.map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-blue-400">
+                    <Icon size={16} />
+                  </span>
+                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                    {label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          <h2
-            className={cn(
-              "group relative w-full flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 md:gap-x-4 text-center text-4xl leading-[1.1] font-bold tracking-tight text-slate-700 sm:text-5xl md:text-6xl xl:text-[4.75rem] dark:text-slate-100",
-            )}
-          >
-            <span>The</span>
-            <CanvasText
-              text="Interview"
-              backgroundClassName="bg-blue-600 dark:bg-blue-700"
-              colors={[
-                "rgba(0, 153, 255, 1)",
-                "rgba(0, 153, 255, 0.9)",
-                "rgba(0, 153, 255, 0.8)",
-                "rgba(0, 153, 255, 0.7)",
-                "rgba(0, 153, 255, 0.6)",
-                "rgba(0, 153, 255, 0.5)",
-                "rgba(0, 153, 255, 0.4)",
-                "rgba(0, 153, 255, 0.3)",
-                "rgba(0, 153, 255, 0.2)",
-                "rgba(0, 153, 255, 0.1)",
-              ]}
-              lineGap={4}
-              animationDuration={20}
+          {/* Right: illustration */}
+          <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-illustration.svg"
+              alt="Student preparing for an interview"
+              className="mx-auto h-auto w-full max-w-md lg:max-w-none"
+              loading="eager"
             />
-            <span>Room</span>
-          </h2>
-          <TypingSentence />
-
-          <div className="mt-8 flex flex-row items-center justify-center gap-3">
-            {/* PRIMARY: Read Stories — filled accent blue */}
-            <Link
-              href="/feed"
-              prefetch={true}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-blue-600 px-7 py-3 text-[13.5px] font-semibold text-white shadow-[0_14px_28px_rgba(37,99,235,0.35)] transition hover:-translate-y-[1px] hover:bg-blue-700 hover:shadow-[0_18px_34px_rgba(37,99,235,0.45)] active:scale-95 sm:flex-none sm:text-sm"
-            >
-              <span className="truncate whitespace-nowrap">Read Stories</span>
-              <ArrowRight className="h-4 w-4 shrink-0" />
-            </Link>
-            {/* SECONDARY: Share Your Story — outlined */}
-            <Link
-              href="/post"
-              prefetch={true}
-              className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-300 bg-white/88 px-7 py-3 text-[13.5px] font-semibold text-slate-700 shadow-sm transition hover:border-blue-300 hover:bg-white hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-100 dark:hover:border-blue-500/60 dark:hover:text-blue-300 active:scale-95 sm:flex-none sm:text-sm"
-            >
-              <span className="truncate whitespace-nowrap">Share Your Story</span>
-            </Link>
           </div>
-
         </div>
       </section>
 
-      {/* Moved Tales section below Featured Stories */}
-
-      <section id="featured" className="relative px-4 pb-20 pt-4 sm:pb-24">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
+      {/* ── Featured Stories ───────────────────────────────────── */}
+      <section id="featured" className="border-b border-slate-100 bg-slate-50/70 dark:border-slate-900 dark:bg-slate-900/30">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <SectionHeader
-            icon={Sparkles}
-            eyebrow="Featured"
+            icon={Flame}
             title="Featured Stories"
             description="Handpicked interview journeys from students who recently cracked top opportunities."
             ctaHref="/feed"
             ctaLabel="View all stories"
           />
-
-          <div className="mt-10">
-            <ScrollableSection>
-              {fetchedFeaturedStories.map((story, index) => (
-                <Link key={`${story?.uid || 'featured'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
-                  <StoryCard story={story} />
-                </Link>
-              ))}
-            </ScrollableSection>
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {fetchedFeaturedStories.slice(0, 4).map((story, index) => (
+              <Link
+                key={`${story?.uid || 'featured'}-${index}`}
+                href={`/single/${story.uid}`}
+                prefetch
+                className="block"
+              >
+                <StoryCard story={story} />
+              </Link>
+            ))}
           </div>
-        </div>
-      </section>
 
-      <section id="tales" className="relative px-4 pb-20 pt-4 sm:pb-24">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
-          <SectionHeader
-            icon={Sparkles}
-            eyebrow="Narratives"
-            title="Featured Tales"
-            description="Project journeys, late-night fixes, and student stories beyond the interview room."
-            ctaHref="/tales"
-            ctaLabel="View all tales"
-          />
-
-          <div className="mt-10">
-            <ScrollableSection>
-              {fetchedTales.map((story, index) => (
-                <Link key={`${story?.uid || 'tale'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
-                  <StoryCard story={story} />
-                </Link>
-              ))}
-            </ScrollableSection>
-          </div>
-        </div>
-      </section>
-
-      <section id="companyspecific" className="relative px-4 py-14 sm:py-16">
-        <div className="pointer-events-none absolute right-0 top-14 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl dark:bg-amber-500/15" />
-        <div className="mx-auto max-w-5xl rounded-3xl border border-slate-300/85 bg-white/85 px-4 py-8 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-10">
-          <SectionHeader
-            icon={Search}
-            eyebrow="Search Smarter"
-            title="Find Experiences That Match Your Goal"
-            description="Filter by company, batch, or branch and jump straight to relevant interview patterns."
-          />
-
-          <div className="mt-8 space-y-4">
-            {/* -- Company filter -- */}
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-3.5 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-slate-950/70 sm:p-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[230px]">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 text-blue-700">
-                      <Building2 size={18} />
-                    </div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Company</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-wrap gap-2">
-                  {COMPANIES.map((company) => (
-                    <Link
-                      key={company}
-                      href={`/search/${company}`}
-                      prefetch={true}
-                      className="ui-tag ui-tag-company border-blue-300/70 bg-blue-50/85 font-semibold text-blue-700 transition hover:-translate-y-[1px] hover:shadow-sm dark:border-cyan-500/45 dark:bg-cyan-950/35 dark:text-cyan-200"
-                    >
-                      {company}
-                    </Link>
-                  ))}
-                </div>
+          {/* Resources banner */}
+          <div className="mt-6 flex flex-col items-start gap-4 rounded-xl border border-blue-100 bg-blue-50/60 px-5 py-4 dark:border-blue-950/60 dark:bg-blue-950/20 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400">
+                <GraduationCap size={20} />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                  New to interviews?
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Read real experiences and company-specific insights to prepare.
+                </p>
               </div>
             </div>
-
-            {/* -- Batch Year filter -- */}
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-3.5 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-slate-950/70 sm:p-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[230px]">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/15 text-teal-700 dark:text-teal-300">
-                      <GraduationCap size={18} />
-                    </div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Batch Year</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-wrap gap-2">
-                  {batchYears.map((year) => (
-                    <Link
-                      key={year}
-                      href={`/search/${year}`}
-                      prefetch={true}
-                      className="ui-tag ui-tag-batch border-emerald-300/65 bg-emerald-50/85 font-semibold text-emerald-700 transition hover:-translate-y-[1px] hover:shadow-sm dark:border-emerald-500/40 dark:bg-emerald-950/35 dark:text-emerald-300"
-                    >
-                      {year}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* -- Department filter -- */}
-            <div className="rounded-2xl border border-slate-200 bg-white/85 p-3.5 shadow-lg shadow-slate-200/80 dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-slate-950/70 sm:p-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="sm:max-w-[230px]">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-300">
-                      <Blocks size={18} />
-                    </div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">By Department</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-wrap gap-2">
-                  {DEPARTMENTS.map((dept) => (
-                    <Link
-                      key={dept.key}
-                      href={`/search/${dept.key}`}
-                      prefetch={true}
-                      className="ui-tag ui-tag-role border-violet-300/65 bg-violet-50/80 font-semibold text-violet-700 transition hover:-translate-y-[1px] hover:shadow-sm dark:border-violet-500/45 dark:bg-violet-950/35 dark:text-violet-300"
-                    >
-                      {dept.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="topstories" className="px-4 py-14 sm:py-16">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-300/85 bg-white/90 px-4 py-9 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-slate-700 dark:bg-slate-950/85 dark:shadow-[0_16px_38px_rgba(2,6,23,0.62)] sm:px-8 sm:py-11">
-          <SectionHeader
-            icon={Flame}
-            eyebrow="Trending"
-            title="Top Stories"
-            description="The most-read experiences from the community, ranked by what helped candidates most."
-            align="left"
-          />
-
-          <div className="mt-10">
-            <ScrollableSection>
-              {fetchedTopStories.map((story, index) => (
-                <Link key={`${story?.uid || 'top'}-${index}`} href={`/single/${story.uid}`} prefetch={true} className="block h-full">
-                  <StoryCard story={story} />
-                </Link>
-              ))}
-            </ScrollableSection>
-          </div>
-        </div>
-      </section>
-
-      {/* 
-      <section className="px-4 pb-12 pt-8 sm:pb-14 sm:pt-10">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white/90 px-4 py-9 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:px-8 sm:py-11">
-          <SectionHeader
-            icon={MessageSquareText}
-            eyebrow="Community Voice"
-            title="What Students Are Saying"
-            description="Feedback from candidates who used theInterview to prepare and build confidence."
-          />
-
-          <div className="mt-10">
-            <ScrollableSection>
-              {BLOG_POSTS.map((post, index) => (
-                <article
-                  key={`${post.author}-${index}`}
-                  className="min-w-[300px] max-w-[360px] rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-lg shadow-slate-200/80 transition hover:-translate-y-1 hover:border-cyan-300/30 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-slate-950/60 dark:hover:border-cyan-500/40"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`${post.avatarBg} flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white`}
-                        aria-hidden="true"
-                      >
-                        {post.avatar}
-                      </div>
-                      <div className="text-left">
-                        <p className="font-semibold leading-tight text-slate-900 dark:text-slate-100">{post.author}</p>
-                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Student</p>
-                      </div>
-                    </div>
-                    <Quote size={24} className="fill-slate-700 text-slate-700 dark:fill-slate-300 dark:text-slate-300" />
-                  </div>
-
-                  <p className="mt-4 line-clamp-4 text-left text-sm italic leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                    {post.content}
-                  </p>
-                </article>
-              ))}
-            </ScrollableSection>
-          </div>
-        </div>
-      </section>
-      <section className="px-4 pb-20 pt-4">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">Help the Community</h2>
-          <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-lg mx-auto">Don't see a company listed in the directory? Add it to help others find relevant interview histories.</p>
-          <div className="mt-8 flex justify-center">
             <Link
-              href="/add-company"
-              className="inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition-all hover:-translate-y-[1px] hover:from-black hover:to-slate-900 focus:outline-none ring-offset-2 ring-slate-900 focus:ring-2"
+              href="/feed"
+              prefetch
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-800"
             >
-              <Plus size={18} /> Add a Company
+              Explore Resources
+              <ArrowRight size={15} />
             </Link>
           </div>
         </div>
       </section>
-      */}
 
+      {/* ── Find experiences (company / batch / department) ────── */}
+      <section id="companyspecific" className="border-y border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900/30">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+          <SectionHeader
+            icon={Building2}
+            title="Find experiences that match your goal"
+            description="Filter by company, batch, or branch and jump straight to the relevant interview patterns."
+          />
+          <div className="mt-6 rounded-xl border border-slate-200 bg-white px-5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <FilterGroup icon={Building2} label="By company">
+              {COMPANIES.map((company) => (
+                <Link key={company} href={`/search/${company}`} prefetch className={chipClass}>
+                  {company}
+                </Link>
+              ))}
+            </FilterGroup>
+            <FilterGroup icon={GraduationCap} label="By batch year">
+              {batchYears.map((year) => (
+                <Link key={year} href={`/search/${year}`} prefetch className={chipClass}>
+                  {year}
+                </Link>
+              ))}
+            </FilterGroup>
+            <FilterGroup icon={Blocks} label="By department">
+              {DEPARTMENTS.map((dept) => (
+                <Link key={dept.key} href={`/search/${dept.key}`} prefetch className={chipClass}>
+                  {dept.label}
+                </Link>
+              ))}
+            </FilterGroup>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Featured Tales ─────────────────────────────────────── */}
+      <section id="tales" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <SectionHeader
+          icon={GraduationCap}
+          title="Featured Tales"
+          description="Project journeys, late-night fixes, and student stories beyond the interview room."
+          ctaHref="/tales"
+          ctaLabel="View all"
+        />
+        <div className="mt-6">
+          <ScrollableSection>
+            {fetchedTales.map((story, index) => (
+              <Link
+                key={`${story?.uid || 'tale'}-${index}`}
+                href={`/single/${story.uid}`}
+                prefetch
+                className="block w-[290px] shrink-0"
+              >
+                <StoryCard story={story} />
+              </Link>
+            ))}
+          </ScrollableSection>
+        </div>
+      </section>
+
+      {/* ── Top Stories ────────────────────────────────────────── */}
+      <section
+        id="topstories"
+        className="border-t border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900/30"
+      >
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+          <SectionHeader
+            icon={ArrowUpRight}
+            title="Top Stories"
+            description="The most-read experiences from the community, ranked by what helped candidates most."
+            ctaHref="/feed"
+            ctaLabel="View all"
+          />
+          <div className="mt-6">
+            <ScrollableSection>
+              {fetchedTopStories.map((story, index) => (
+                <Link
+                  key={`${story?.uid || 'top'}-${index}`}
+                  href={`/single/${story.uid}`}
+                  prefetch
+                  className="block w-[290px] shrink-0"
+                >
+                  <StoryCard story={story} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
+        </div>
+      </section>
     </main>
   )
 }

@@ -52,12 +52,8 @@ export default function Footer({ isLandingPage = false }) {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-slate-200/60 bg-white/80 text-slate-900 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/90 dark:text-slate-100">
-      {/* Decorative background blurs */}
-      <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-blue-100/50 blur-[120px] dark:bg-cyan-900/20" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-indigo-100/50 blur-[120px] dark:bg-indigo-900/20" />
-
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer className="relative border-t border-slate-200 bg-white text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100">
+      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
           {/* Brand & Socials (takes more space) */}
           <div className="lg:col-span-4 space-y-6">
@@ -66,7 +62,7 @@ export default function Footer({ isLandingPage = false }) {
                 <Image src={logo} alt="theInterview Logo" width={46} height={46} priority className="object-contain" />
               </div>
               <span className="text-xl font-bold">
-                the<span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">Interview</span>Room
+                the<span className="text-blue-600 dark:text-blue-500">Interview</span>Room
               </span>
             </Link>
             <p className="max-w-sm text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
@@ -81,7 +77,7 @@ export default function Footer({ isLandingPage = false }) {
                 <a
                   key={idx}
                   href={social.href}
-                  className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all duration-300 hover:-translate-y-[1px] hover:border-blue-300/70 hover:bg-blue-50 hover:text-blue-600 hover:shadow-[0_10px_20px_rgba(59,130,246,0.2)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-cyan-500/50 dark:hover:bg-slate-700 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.18)]"
+                  className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all duration-300 hover:-translate-y-[1px] hover:border-blue-300/70 hover:bg-blue-50 hover:text-blue-600 hover:shadow-[0_10px_20px_rgba(59,130,246,0.2)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-blue-500/50 dark:hover:bg-slate-700 dark:hover:text-blue-400 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.18)]"
                 >
                   <social.icon size={20} className="transition-transform group-hover:scale-110" />
                 </a>
@@ -100,10 +96,10 @@ export default function Footer({ isLandingPage = false }) {
                 { name: "Privacy Policy", href: "/privacy" }
               ].map((link, idx) => (
                 <li key={idx}>
-                  <Link href={link.href} className="group inline-flex items-center gap-1 text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-cyan-300">
+                  <Link href={link.href} className="group inline-flex items-center gap-1 text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400">
                     <span className="relative overflow-hidden">
                       {link.name}
-                      <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-cyan-300"></span>
+                      <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-blue-500"></span>
                     </span>
                   </Link>
                 </li>
@@ -121,7 +117,7 @@ export default function Footer({ isLandingPage = false }) {
                 rel="noopener noreferrer"
                 className="group flex items-start gap-4 text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
               >
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-cyan-300 dark:group-hover:bg-slate-700">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-blue-400 dark:group-hover:bg-slate-700">
                   <MapPin size={16} />
                 </div>
                 <span className="leading-relaxed">PICT, Pune, <br />Maharashtra 411045</span>
@@ -130,12 +126,12 @@ export default function Footer({ isLandingPage = false }) {
                 href="mailto:theinterviewroom.in@gmail.com"
                 className="group flex items-center gap-4 text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-cyan-300 dark:group-hover:bg-slate-700">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-blue-400 dark:group-hover:bg-slate-700">
                   <Mail size={16} />
                 </div>
                 <span className="relative overflow-hidden">
                   theinterviewroom.in@gmail.com
-                  <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-cyan-300"></span>
+                  <span className="absolute bottom-0 left-0 h-[1px] w-full -translate-x-[101%] transform bg-blue-600 transition-transform duration-300 group-hover:translate-x-0 dark:bg-blue-500"></span>
                 </span>
               </a>
             </div>
@@ -155,14 +151,14 @@ export default function Footer({ isLandingPage = false }) {
                   disabled={isSubmitting}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-800 shadow-inner outline-none transition-all duration-300 disabled:opacity-70 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/10"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50 py-3.5 pl-11 pr-4 text-sm font-medium text-slate-800 shadow-inner outline-none transition-all duration-300 disabled:opacity-70 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-900 dark:focus:ring-blue-500/10"
                 />
-                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-300 group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-cyan-300" />
+                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-300 group-focus-within:text-blue-500 dark:text-slate-500 dark:group-focus-within:text-blue-400" />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:scale-100 disabled:opacity-70 dark:shadow-blue-950/40"
+                className="group relative flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 active:scale-[0.98] disabled:opacity-70"
               >
                 <span>{isSubmitting ? "Subscribing..." : "Subscribe Now"}</span>
                 {!isSubmitting && <Send size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />}

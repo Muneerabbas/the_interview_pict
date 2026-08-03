@@ -405,7 +405,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           "border border-slate-200/80 bg-white/95 dark:border-slate-700/80 dark:bg-slate-900/90",
           isReply ? "mt-2 rounded-xl p-3 scroll-mt-28" : "rounded-2xl p-4 scroll-mt-28 sm:p-5",
           highlightedCommentId === item.id
-            ? "ring-2 ring-blue-300 dark:ring-cyan-400/60"
+            ? "ring-2 ring-blue-300 dark:ring-blue-400/60"
             : ""
         )}
       >
@@ -427,7 +427,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                 <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">Author</span>
               ) : null}
               {item.author?.batch ? (
-                <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">{item.author.batch}</span>
+                <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">{item.author.batch}</span>
               ) : null}
               {!isReply ? (
                 <span className={cn("rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide", typeMeta.badgeClass)}>
@@ -482,7 +482,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                 <button
                   type="button"
                   onClick={() => setExpanded((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 font-medium text-blue-700 hover:bg-blue-100 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 font-medium text-blue-700 hover:bg-blue-100 dark:border-blue-500/35 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-950/50"
                 >
                   {repliesOpen ? "Hide replies" : `View ${item.replyCount} repl${item.replyCount === 1 ? "y" : "ies"}`}
                 </button>
@@ -517,7 +517,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                   readOnly={!isAuthenticated}
                   placeholder="Add a reply..."
                   className={cn(
-                    "w-full rounded-full border border-slate-200 bg-white px-3 text-slate-700 outline-none ring-blue-500 transition focus:border-blue-300 focus:ring-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/30",
+                    "w-full rounded-full border border-slate-200 bg-white px-3 text-slate-700 outline-none ring-blue-500 transition focus:border-blue-300 focus:ring-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/30",
                     isReply ? "h-8 text-xs" : "h-9 text-sm"
                   )}
                 />
@@ -526,7 +526,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                   onClick={() => submitReply(item)}
                   disabled={postingReplyId === item.id || !(replyDrafts[item.id] || "").trim()}
                   className={cn(
-                    "inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700",
+                    "inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-blue-600 dark:hover:bg-blue-500 dark:disabled:bg-slate-700",
                     isReply ? "h-8" : "h-9"
                   )}
                 >
@@ -548,15 +548,15 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   };
 
   return (
-    <section className="relative mt-10 overflow-hidden rounded-3xl border border-violet-200/70 bg-gradient-to-br from-white/95 to-violet-50/55 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-violet-800/40 dark:from-slate-900/90 dark:to-violet-950/20 dark:shadow-[0_18px_44px_rgba(2,6,23,0.65)] sm:p-7">
-      <div className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-cyan-500/15" />
-      <div className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-cyan-200/25 blur-3xl dark:bg-blue-500/15" />
+    <section className="relative mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
+      <div className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-blue-500/15" />
+      <div className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-blue-500/15" />
 
       <div className="relative mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-700">
         <h2 className="inline-flex items-center gap-2 text-xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-          <MessageSquare size={20} className="text-blue-600 dark:text-cyan-300" />
+          <MessageSquare size={20} className="text-blue-600 dark:text-blue-300" />
           Discussion
-          <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300">
+          <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
             {meta.totalComments} comments
           </span>
         </h2>
@@ -570,7 +570,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         </button>
       </div>
 
-      <div className="relative rounded-2xl border border-slate-200/60 bg-slate-50/50 p-4 transition-all focus-within:border-blue-400/50 focus-within:bg-white focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:border-slate-700/50 dark:bg-slate-800/40 dark:focus-within:border-cyan-500/30 dark:focus-within:bg-slate-900/40">
+      <div className="relative rounded-2xl border border-slate-200/60 bg-slate-50/50 p-4 transition-all focus-within:border-blue-400/50 focus-within:bg-white focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:border-slate-700/50 dark:bg-slate-800/40 dark:focus-within:border-blue-500/30 dark:focus-within:bg-slate-900/40">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Tag as:</span>
           <div className="flex flex-wrap gap-1.5">
@@ -582,7 +582,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
                 className={cn(
                   "rounded-lg border px-2.5 py-1 text-[11px] font-bold transition-all duration-200",
                   composeType === type
-                    ? "border-blue-500 bg-blue-100 text-blue-800 shadow-sm ring-2 ring-blue-500/20 dark:border-cyan-400 dark:bg-cyan-950/50 dark:text-cyan-200 dark:ring-cyan-500/20"
+                    ? "border-blue-500 bg-blue-100 text-blue-800 shadow-sm ring-2 ring-blue-500/20 dark:border-blue-400 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-500/20"
                     : "border-slate-200 bg-white text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-600"
                 )}
               >
@@ -613,7 +613,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
             type="button"
             onClick={submitComment}
             disabled={posting || !composeText.trim()}
-            className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:disabled:bg-slate-700"
+            className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-blue-600 dark:hover:bg-blue-500 dark:disabled:bg-slate-700"
           >
             <Send size={14} />
             Post
@@ -637,7 +637,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
             className={cn(
               "relative rounded-full px-3 py-1.5 text-[13px] font-bold transition-all duration-200",
               filter === item.key
-                ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200 dark:bg-cyan-950/35 dark:text-cyan-300 dark:ring-cyan-500/35"
+                ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-500/35"
                 : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
             )}
           >
@@ -658,7 +658,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         <div className="mt-8 rounded-2xl border border-dashed border-slate-300/70 bg-slate-50/60 p-6 dark:border-slate-700/70 dark:bg-slate-800/35">
           <div className="mb-3 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm dark:bg-slate-900/70">
-              <MessageSquare size={22} className="text-blue-500 dark:text-cyan-300" />
+              <MessageSquare size={22} className="text-blue-500 dark:text-blue-300" />
             </div>
             <div>
               <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No comments yet</p>

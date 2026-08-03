@@ -107,7 +107,7 @@ const TeamPage = () => {
                 <TeamMemberCard
                   img={niimg}
                   name="Nilay Tayade"
-                  subtitle="PICT'26 CE • Upcoming Barclays Intern"
+                  subtitle="PICT'26 CE"
                   linkedin="https://www.linkedin.com/in/nilay-tayade/"
                   github="https://github.com/nilaytayade"
                   email="nilaytayadee@gmail.com"

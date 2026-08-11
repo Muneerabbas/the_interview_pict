@@ -3,7 +3,9 @@ import { MongoClient } from "mongodb";
 const siteUrl = "https://theinterviewroom.in";
 
 export default async function sitemap() {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, {
+    readPreference: "secondaryPreferred",
+  });
   await client.connect();
 
   const db = client.db(process.env.MONGODB_DB_NAME);

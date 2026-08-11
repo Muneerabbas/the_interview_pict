@@ -8,7 +8,5 @@ const CollegeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-CollegeSchema.index({ name: 1 });
-
 export default mongoose.models.College ||
   mongoose.model("College", CollegeSchema);

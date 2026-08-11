@@ -1,20 +1,19 @@
 import React from "react";
-import connectToDatabase from "@/lib/mongoose";
-import Company from "@/models/Company";
+import { getMongoDb } from "@/lib/mongodb";
 
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, Globe, MapPin, Pencil, Tag } from "lucide-react";
 import Link from "next/link";
-import { MongoClient } from "mongodb";
 import ArticleCard from "@/components/ArticleCard";
 import Navbar from "@/components/Navbar";
 
 export async function generateMetadata({ params }) {
-    await connectToDatabase();
     const { slug } = await params;
-    const company = await Company.findOne({ slug })
-        .select("name slug about logo location website")
-        .lean();
+    const db = await getMongoDb({ mode: "read" });
+    const company = await db.collection("companies").findOne(
+        { slug },
+        { projection: { name: 1, slug: 1, about: 1, logo: 1, website: 1, location: 1 } }
+    );
 
     if (!company) {
         return {
@@ -52,20 +51,17 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CompanyDetails({ params }) {
-    await connectToDatabase();
-    const client = new MongoClient(process.env.MONGODB_URI);
-
     const { slug } = await params;
-    const company = await Company.findOne({ slug }).lean();
+    const db = await getMongoDb({ mode: "read" });
+    const company = await db.collection("companies").findOne({ slug });
 
     if (!company) {
         return notFound();
     }
-    const db = client.db();
     const experience = db.collection("experience");
     const experiences = await experience.find({
         company: company.name
-    }).toArray();
+    }).sort({ date: -1 }).toArray();
     const interviewsCount = experiences.length;
 
     // Detect if this is an auto-generated generic company stub
@@ -211,9 +207,14 @@ export default async function CompanyDetails({ params }) {
                         <div className="grid gap-4 sm:grid-cols-2">
                             {experiences.map((exp) => (
                                 <ArticleCard
-                                    key={exp._id.toString()}
+                                    key={String(exp._id)}
                                     article={{
-                                        ...exp,
+                                        _id: String(exp._id),
+                                        uid: exp.uid || String(exp._id),
+                                        profile_pic: exp.profile_pic || null,
+                                        name: exp.name || "Anonymous Candidate",
+                                        company: exp.company || company.name,
+                                        exp_text: typeof exp.exp_text === "string" ? exp.exp_text : "",
                                         date: exp.createdAt || exp.date
                                     }}
                                 />

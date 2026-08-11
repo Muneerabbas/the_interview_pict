@@ -151,7 +151,7 @@ export async function GET(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "read" });
     const currentUserId = String(currentUser._id);
     const currentUserEmail = normalizeEmail(currentUser.gmail);
     const notificationState = currentUser.notificationState || {};
@@ -305,7 +305,7 @@ export async function PATCH(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "write" });
     const currentUserEmail = normalizeEmail(currentUser.gmail);
 
     const [ownedComments, ownedPosts] = await Promise.all([

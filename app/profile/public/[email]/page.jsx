@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MongoClient } from "mongodb";
 import {
   ArrowLeft,
   Briefcase,
@@ -34,7 +33,7 @@ async function getPublicProfile(email) {
 
   return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
     try {
-      const db = await getMongoDb();
+      const db = await getMongoDb({ mode: "write" });
       const experience = db.collection("experience");
       const userCollection = db.collection("user");
 

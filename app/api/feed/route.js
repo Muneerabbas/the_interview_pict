@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { resolveProfileName } from "@/lib/utils";
 import { getMongoDb } from "@/lib/mongodb";
 import mongoose from "mongoose";
+import { jsonError } from "@/lib/api-response";
+import { toPlainText } from "@/lib/text-preview";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,7 @@ function buildPipeline({
   branchFilter,
   batchFilter,
   authorFilter,
+  categoryFilter,
   contentType,
   searchQuery,
   authorEmails,
@@ -31,6 +34,7 @@ function buildPipeline({
   if (branchFilter) match.branch = branchFilter;
   if (batchFilter) match.batch = batchFilter;
   if (authorFilter) match.email = authorFilter;
+  if (contentType === "tale" && categoryFilter) match.category = categoryFilter;
   if (searchQuery) {
     const escaped = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const contains = { $regex: escaped, $options: "i" };
@@ -89,9 +93,25 @@ function buildPipeline({
 function processFeedResults(feed) {
   return feed.map((item) => {
     const authorImage = item.author?.image || item.author?.profile_pic || item.author?.profilePic;
+    const preview = toPlainText(item.preview || item.exp_text || "");
+
     return {
-      ...item,
+      _id: item._id,
+      uid: item.uid || null,
+      company: item.company || "",
+      role: item.role || "",
+      college: item.college || "",
+      branch: item.branch || "",
+      batch: item.batch || "",
+      email: item.email || "",
       profile_pic: authorImage || item.profile_pic || null,
+      likes: item.likes || 0,
+      views: item.views || 0,
+      content_type: item.content_type || "interview",
+      title: item.title || "",
+      category: item.category || "",
+      tags: Array.isArray(item.tags) ? item.tags.slice(0, 6) : [],
+      preview,
       name: resolveProfileName({ ...item, ...item.author }),
       date: item.date ? new Date(item.date).toISOString() : new Date().toISOString(),
     };
@@ -100,14 +120,20 @@ function processFeedResults(feed) {
 
 export async function GET(req) {
   try {
-    const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10);
+    const rawPage = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
+    const rawItemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "10", 10);
+    const page = Number.isFinite(rawPage) && rawPage >= 0 ? Math.min(rawPage, 1000) : 0;
+    const itemsPerPage = Number.isFinite(rawItemsPerPage) && rawItemsPerPage > 0
+      ? Math.min(rawItemsPerPage, 20)
+      : 10;
     const companyFilter = req.nextUrl.searchParams.get("company");
     const collegeFilter = req.nextUrl.searchParams.get("college");
     const branchFilter = req.nextUrl.searchParams.get("branch");
     const batchFilter = req.nextUrl.searchParams.get("batch");
     const authorFilter = req.nextUrl.searchParams.get("author");
     const contentType = req.nextUrl.searchParams.get("contentType") || "interview";
+    const categoryFilter = contentType === "tale" ? req.nextUrl.searchParams.get("category") : "";
+    const collectionName = contentType === "tale" ? "tales" : "experience";
     const searchQuery = req.nextUrl.searchParams.get("q")?.trim().slice(0, 80) || "";
     const sort = req.nextUrl.searchParams.get("sort") || "latest";
     const excludedIds = (req.nextUrl.searchParams.get("exclude") || "")
@@ -118,8 +144,8 @@ export async function GET(req) {
 
     const db = await getMongoDb();
     if (req.nextUrl.searchParams.get("options") === "authors") {
-      const authors = await db.collection("experience").aggregate([
-        { $match: { content_type: "interview", email: { $type: "string", $ne: "" } } },
+      const authors = await db.collection(collectionName).aggregate([
+        { $match: { content_type: contentType, email: { $type: "string", $ne: "" } } },
         { $group: { _id: "$email", postName: { $first: "$name" } } },
         { $lookup: { from: "user", localField: "_id", foreignField: "gmail", as: "profile" } },
         { $addFields: { profile: { $arrayElemAt: ["$profile", 0] } } },
@@ -147,7 +173,6 @@ export async function GET(req) {
     }
 
     // Check which collection to hit: tales or experience
-    const collectionName = contentType === "tale" ? "tales" : "experience";
     const collection = db.collection(collectionName);
 
     let feed = [];
@@ -159,6 +184,7 @@ export async function GET(req) {
       if (branchFilter) randomMatch.branch = branchFilter;
       if (batchFilter) randomMatch.batch = batchFilter;
       if (authorFilter) randomMatch.email = authorFilter;
+      if (contentType === "tale" && categoryFilter) randomMatch.category = categoryFilter;
       if (searchQuery) {
         const escaped = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const contains = { $regex: escaped, $options: "i" };
@@ -185,7 +211,7 @@ export async function GET(req) {
         { $project: { author_info: 0 } }
       ]).toArray();
     } else {
-      const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, authorFilter, contentType, searchQuery, authorEmails });
+      const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, authorFilter, categoryFilter, contentType, searchQuery, authorEmails });
 
       // If trending but no results, fallback to all-time views
       const matchStage = pipeline.find(s => s.$match);
@@ -205,7 +231,7 @@ export async function GET(req) {
       },
     });
   } catch (error) {
-    console.error("Error fetching feed:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error("Error fetching feed:", error?.message || error);
+    return jsonError(error, "Unable to load feed");
   }
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Building2, Globe, MapPin, Tag } from "lucide-react";
+import { requestJson } from "@/lib/client-api";
 
 export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialName = "" }) {
     const [formData, setFormData] = useState({
@@ -39,10 +40,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                 }),
             });
 
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || data.error || "Failed to create company");
-            }
+            const data = await requestJson(response, {}, {});
 
             onSuccess(data.company);
             onClose();

@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { requestJson } from "@/lib/client-api";
 
 export default function EditCompanyPage() {
   const { slug } = useParams();
@@ -31,7 +32,7 @@ export default function EditCompanyPage() {
       setError("");
       try {
         const res = await fetch(`/api/postCompanies?slug=${encodeURIComponent(normalizedSlug)}`);
-        const result = await res.json();
+        const result = await requestJson(res, {}, {});
         if (!res.ok || !result.success) {
           throw new Error(result.error || "Failed to load company");
         }
@@ -78,7 +79,7 @@ export default function EditCompanyPage() {
           tags: tagsArray,
         }),
       });
-      const result = await res.json();
+      const result = await requestJson(res, {}, {});
       if (!res.ok || !result.success) {
         throw new Error(result.error || "Failed to update company");
       }

@@ -10,6 +10,7 @@ import ProfileCard from '../../components/Card';
 import ProfileAvatar from '../../components/ProfileAvatar';
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import ShareProfileButton from '../../components/ShareProfileButton';
+import { requestJson } from '../../lib/client-api';
 
 const LoadingScreen = () => (
   <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/25 dark:bg-slate-950/70 backdrop-blur-sm transition-colors duration-500">
@@ -84,9 +85,8 @@ const ProfilePage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         });
-        if (!response.ok) throw new Error('Failed to fetch posts');
-        const data = await response.json();
-        setPosts(data.posts);
+        const data = await requestJson(response, {}, { posts: [] });
+        setPosts(Array.isArray(data.posts) ? data.posts : []);
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
@@ -98,7 +98,7 @@ const ProfilePage = () => {
       try {
         const response = await fetch(`/api/user/profile?email=${email}`);
         if (response.ok) {
-          const data = await response.json();
+          const data = await requestJson(response, {}, { user: null });
           if (data.user) {
             setProfileData({
               headline: data.user.headline || '',

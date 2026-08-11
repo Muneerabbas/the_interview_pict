@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { requestJson } from "@/lib/client-api";
 
 const Login = ({ compact = false }) => {
   const { data: session, status } = useSession();
@@ -22,13 +23,7 @@ const Login = ({ compact = false }) => {
         body: JSON.stringify(userData),
       });
       0
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("❌ Server returned error:", errorData);
-        throw new Error(`Server error: ${response.status}`);
-      }
-
-      const result = await response.json();
+      const result = await requestJson(response, {}, {});
       console.log("✅ User data saved successfully:", result);
       return result;
     } catch (error) {

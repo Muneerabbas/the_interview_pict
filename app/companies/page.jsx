@@ -1,8 +1,6 @@
 import React from "react";
-import connectToDatabase from "@/lib/mongoose";
-import Company from "@/models/Company";
 import CompaniesDirectoryClient from "@/components/CompaniesDirectoryClient";
-import mongoose from "mongoose";
+import { getMongoDb } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
 
@@ -22,15 +20,15 @@ export const metadata = {
 };
 
 export default async function CompaniesDirectory() {
-    await connectToDatabase();
-    const db = mongoose.connection.db;
+    const db = await getMongoDb({ mode: "read" });
     const expCol = db.collection("experience");
 
     const [companies, stats] = await Promise.all([
-        Company.find({})
-            .select("name slug about logo location tags createdAt")
+        db.collection("companies")
+            .find({}, { projection: { name: 1, slug: 1, about: 1, logo: 1, location: 1, tags: 1 } })
             .sort({ createdAt: -1 })
-            .lean(),
+            .limit(2000)
+            .toArray(),
         expCol
             .aggregate([
                 { $match: { company: { $type: "string", $ne: "" } } },

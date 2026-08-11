@@ -9,7 +9,7 @@ export async function POST(req) {
             return NextResponse.json({ message: "Missing id" }, { status: 400 });
         }
 
-        const db = await getMongoDb();
+        const db = await getMongoDb({ mode: "write" });
         const experience = db.collection("experience");
         const tales = db.collection("tales");
         const viewLogs = db.collection("view_logs");

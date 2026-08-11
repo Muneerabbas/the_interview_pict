@@ -30,12 +30,22 @@ export const metadata = {
 async function fetchTales() {
     try {
         const db = await getMongoDb();
-        return await db
-            .collection("experience")
-            .find({ content_type: "tale" })
-            .sort({ date: -1, _id: -1 })
-            .limit(30)
-            .toArray();
+        const [tales, legacyTales] = await Promise.all([
+            db.collection("tales")
+                .find({ content_type: "tale" })
+                .sort({ date: -1, _id: -1 })
+                .limit(30)
+                .toArray(),
+            db.collection("experience")
+                .find({ content_type: "tale" })
+                .sort({ date: -1, _id: -1 })
+                .limit(30)
+                .toArray(),
+        ]);
+
+        return [...new Map([...tales, ...legacyTales].map((tale) => [tale.uid || tale._id.toString(), tale])).values()]
+            .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+            .slice(0, 30);
     } catch (error) {
         console.error("Fetching tales failed:", error);
         return [];

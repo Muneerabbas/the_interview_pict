@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Eye, Heart, TrendingUp } from "lucide-react";
-import axios from "axios";
 import ProfileAvatar from "./ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { requestJson } from "@/lib/client-api";
 
 const MiniTrendingCard = ({ profile }) => {
     const isTale = profile?.content_type === "tale";
@@ -24,7 +24,7 @@ const MiniTrendingCard = ({ profile }) => {
         <Link
             href={href}
             prefetch
-            className="flex w-[230px] shrink-0 snap-start flex-col rounded-xl border border-slate-200 bg-white p-3.5 transition duration-150 hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 sm:w-[260px]"
+            className="flex min-w-0 w-full flex-col rounded-xl border border-slate-200 bg-white p-3 transition duration-150 hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
         >
             <div className="flex items-center gap-2.5">
                 <ProfileAvatar
@@ -57,32 +57,49 @@ const MiniTrendingCard = ({ profile }) => {
     );
 };
 
-const FeedHero = ({ isDarkMode, contentType = "interview" }) => {
+const FeedHero = ({ isDarkMode, contentType = "interview", layout = "sidebar" }) => {
     const [trending, setTrending] = useState([]);
     const [loading, setLoading] = useState(true);
-    const scrollRef = useRef(null);
+    const [page, setPage] = useState(0);
+    const [isWideLayout, setIsWideLayout] = useState(false);
 
     useEffect(() => {
+        if (layout !== "responsive") return undefined;
+
+        const mediaQuery = window.matchMedia("(min-width: 1280px)");
+        const updateLayout = () => {
+            setIsWideLayout(mediaQuery.matches);
+            setPage(0);
+        };
+
+        updateLayout();
+        mediaQuery.addEventListener("change", updateLayout);
+        return () => mediaQuery.removeEventListener("change", updateLayout);
+    }, [layout]);
+
+    useEffect(() => {
+        const controller = new AbortController();
         const fetchTrending = async () => {
             try {
-                const res = await axios.get(`/api/feed?sort=trending&itemsPerPage=8&contentType=${contentType}`);
-                setTrending(res.data);
+                const data = await requestJson(`/api/feed?sort=trending&itemsPerPage=8&contentType=${contentType}`, { signal: controller.signal }, []);
+                setTrending(Array.isArray(data) ? data : []);
+                setPage(0);
             } catch (err) {
+                if (err?.name === "AbortError") return;
                 console.error("Failed to fetch trending:", err);
+                setTrending([]);
             } finally {
-                setLoading(false);
+                if (!controller.signal.aborted) setLoading(false);
             }
         };
         fetchTrending();
+        return () => controller.abort();
     }, [contentType]);
 
-    const scroll = (direction) => {
-        if (scrollRef.current) {
-            const { scrollLeft, clientWidth } = scrollRef.current;
-            const scrollTo = direction === "left" ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-            scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-        }
-    };
+    const isSidebar = layout === "sidebar" || (layout === "responsive" && isWideLayout);
+    const cardsPerPage = isSidebar ? 1 : 2;
+    const pageCount = Math.max(1, Math.ceil(trending.length / cardsPerPage));
+    const visibleTrending = trending.slice(page * cardsPerPage, (page + 1) * cardsPerPage);
 
     if (!loading && trending.length === 0) return null;
 
@@ -102,43 +119,41 @@ const FeedHero = ({ isDarkMode, contentType = "interview" }) => {
                 </div>
                 <div className="flex gap-1.5">
                     <button
-                        onClick={() => scroll("left")}
+                        onClick={() => setPage((current) => Math.max(0, current - 1))}
+                        disabled={page === 0}
                         aria-label="Scroll left"
-                        className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
+                        className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
                     >
                         <ChevronLeft size={16} />
                     </button>
                     <button
-                        onClick={() => scroll("right")}
+                        onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                        disabled={page >= pageCount - 1}
                         aria-label="Scroll right"
-                        className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
+                        className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700"
                     >
                         <ChevronRight size={16} />
                     </button>
                 </div>
             </div>
 
-            <div
-                ref={scrollRef}
-                className="flex items-stretch gap-3 overflow-x-auto pb-1 scrollbar-hide snap-x"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
+            <div className={`grid gap-2 pb-1 ${cardsPerPage === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
                 {loading ? (
-                    Array.from({ length: 5 }).map((_, i) => (
+                    Array.from({ length: cardsPerPage }).map((_, i) => (
                         <div
                             key={i}
-                            className="h-[104px] w-[230px] shrink-0 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800 sm:w-[260px]"
+                            className="h-[104px] w-full animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800"
                         />
                     ))
                 ) : (
                     <AnimatePresence>
-                        {trending.map((profile, i) => (
+                        {visibleTrending.map((profile, i) => (
                             <motion.div
-                                key={profile._id}
+                                key={`${page}-${profile._id}`}
                                 initial={{ opacity: 0, scale: 0.96 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.35, delay: i * 0.07 }}
-                                className="shrink-0"
+                                className="min-w-0"
                             >
                                 <MiniTrendingCard profile={profile} />
                             </motion.div>

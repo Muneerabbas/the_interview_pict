@@ -1,21 +1,17 @@
 import { NextResponse } from "next/server";
-const { MongoClient } = require("mongodb");
-
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getMongoDb } from "@/lib/mongodb";
+import { jsonError } from "@/lib/api-response";
 
 export async function POST(req) {
     try {
         const { email } = await req.json();
 
         // Check if the email is a Gmail address
-        if (!email.endsWith("@gmail.com")) {
-            return NextResponse.json({ message: "Only Gmail addresses are allowed" }, { status: 400 });
+        if (typeof email !== "string" || !email.endsWith("@gmail.com")) {
+            return NextResponse.json({ success: false, error: "Only Gmail addresses are allowed", code: "VALIDATION_ERROR" }, { status: 400 });
         }
 
-        await client.connect();
-        console.log("Connected to MongoDB");
-
-        const db = client.db();
+        const db = await getMongoDb({ mode: "write" });
         const newsletters = db.collection("newsletter");
 
         // Check if the email already exists
@@ -25,8 +21,9 @@ export async function POST(req) {
             await newsletters.insertOne({ email });
         }
 
-        return NextResponse.json({ message: "Email saved successfully" }, { status: 200 });
+        return NextResponse.json({ success: true, message: "Email saved successfully" }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ message: error.message }, { status: 500 });
+        console.error("Newsletter API error:", error?.message || error);
+        return jsonError(error, "Unable to subscribe");
     }
 }

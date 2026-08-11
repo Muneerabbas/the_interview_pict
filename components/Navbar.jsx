@@ -23,6 +23,7 @@ import logo from "../public/app_icon.png";
 import NotificationsMenu from "./NotificationsMenu";
 import { useAuthModal } from "./AuthModalProvider";
 import ThemeToggle from "./ThemeToggle";
+import { requestJson } from "@/lib/client-api";
 
 import { useTheme } from "next-themes";
 
@@ -64,10 +65,7 @@ export default function Navbar({ showThemeToggle = false }) {
     setNotificationsLoading(true);
     try {
       const res = await fetch("/api/notifications", { cache: "no-store" });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json?.error || "Failed to fetch notifications");
-      }
+      const json = await requestJson(res, {}, { notifications: [], unreadCount: 0 });
 
       setNotifications(Array.isArray(json.notifications) ? json.notifications : []);
       setUnreadNotifications(Number(json.unreadCount) || 0);

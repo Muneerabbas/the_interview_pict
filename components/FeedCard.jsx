@@ -19,6 +19,7 @@ import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { companySlugFromName } from "@/lib/companySlug";
+import { toPlainText } from "@/lib/text-preview";
 
 const stripMarkdown = (value = "") => {
   return value
@@ -80,7 +81,8 @@ const FeedCard = ({ profile, width = "w-full", compact = false }) => {
   const isTale = profile?.content_type === "tale";
   const companyName = isTale ? profile?.college : profile?.company;
   const roleName = isTale ? "" : profile?.role;
-  const branchAndBatch = `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
+  const branchAndBatch = isTale ? "" : `${profile?.branch || "Branch"} ${profile?.batch || ""}`.trim();
+  const taleCategory = isTale ? profile?.category : "";
   const readPath = `/single/${profile?.uid || profile?._id}`;
   const companySlug = isTale ? "" : companySlugFromName(companyName);
   const authorEmail = profile?.email ? String(profile.email) : "";
@@ -96,11 +98,12 @@ const FeedCard = ({ profile, width = "w-full", compact = false }) => {
       : dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "Date unavailable";
 
-  const plainText = stripMarkdown(profile?.exp_text || "");
+  const plainText = toPlainText(profile?.preview || profile?.exp_text || "", 320) || stripMarkdown(profile?.exp_text || "");
   const previewText =
     plainText.length > 300 ? `${plainText.slice(0, 300).trim()}...` : plainText || "No experience details shared yet.";
   const totalViews = Number(profile?.views) || 0;
   const readTime = Math.max(1, Math.round(previewText.split(/\s+/).filter(Boolean).length / 180));
+  const postTags = Array.isArray(profile?.tags) ? profile.tags.filter(Boolean).slice(0, 6) : [];
 
   return (
     <div
@@ -174,10 +177,22 @@ const FeedCard = ({ profile, width = "w-full", compact = false }) => {
                     <span className="truncate">{roleName}</span>
                   </div>
                 )}
-                <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 border-slate-200/70 bg-slate-50/70 px-2 py-0.5 text-[10.5px] font-medium text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-400">
-                  <GraduationCap size={11} strokeWidth={2.5} className="shrink-0" />
-                  <span className="truncate">{branchAndBatch}</span>
-                </div>
+                {branchAndBatch && (
+                  <div className="ui-tag ui-tag-batch inline-flex items-center gap-1 border-slate-200/70 bg-slate-50/70 px-2 py-0.5 text-[10.5px] font-medium text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-400">
+                    <GraduationCap size={11} strokeWidth={2.5} className="shrink-0" />
+                    <span className="truncate">{branchAndBatch}</span>
+                  </div>
+                )}
+                {taleCategory && (
+                  <span className="ui-tag inline-flex max-w-full items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[10.5px] font-semibold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+                    <span className="truncate">{taleCategory}</span>
+                  </span>
+                )}
+                {postTags.map((tag) => (
+                  <span key={tag} className="ui-tag inline-flex max-w-full items-center rounded-md bg-blue-50 px-2 py-0.5 text-[10.5px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+                    <span className="truncate">#{tag}</span>
+                  </span>
+                ))}
               </div>
             </div>
           </div>

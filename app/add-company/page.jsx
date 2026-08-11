@@ -5,6 +5,7 @@ import { Plus, Building2, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import { requestJson } from "@/lib/client-api";
 
 export default function AddCompanyPage() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function AddCompanyPage() {
         }),
       });
 
-      const result = await res.json();
+      const result = await requestJson(res, {}, {});
 
       if (result.success) {
         // Rediect to the companies directory

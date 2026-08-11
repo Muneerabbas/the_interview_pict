@@ -159,10 +159,11 @@ const StoryCard = ({ story }) => {
   const initial = headerTitle?.charAt(0)?.toUpperCase() || 'T'
 
   const batchBranch = [story?.branch, story?.batch].filter(Boolean).join(' · ')
-  const chipLabel = isTale ? 'Tale' : batchBranch || 'Interview Experience'
+  const chipLabel = isTale ? story?.category || 'Tale' : batchBranch || 'Interview Experience'
+  const tags = Array.isArray(story?.tags) ? story.tags.filter(Boolean).slice(0, 3) : []
 
   return (
-    <article className="group flex h-full w-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
+    <article className={`group flex h-full w-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 ${isTale ? 'border-l-2 border-l-emerald-500 dark:border-l-emerald-400' : ''}`}>
       <div className="flex items-center gap-3">
         <div
           className={`${avatarColor} flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-base font-semibold text-white`}
@@ -191,6 +192,15 @@ const StoryCard = ({ story }) => {
       <span className="mt-4 inline-flex w-fit max-w-full items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
         <span className="truncate">{chipLabel}</span>
       </span>
+      {tags.length > 0 ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {tags.map((tag) => (
+            <span key={tag} className="max-w-full truncate rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      ) : null}
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800">
         <span className="truncate text-xs text-slate-500 dark:text-slate-400">
@@ -337,7 +347,7 @@ export default function Home({ tales, featuredStories, topStories }) {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <SectionHeader
             icon={Flame}
-            title="Featured Stories"
+            title="Featured Interviews"
             description="Handpicked interview journeys from students who recently cracked top opportunities."
             ctaHref="/feed"
             ctaLabel="View all stories"

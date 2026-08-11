@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/mongoose";
+import connectToDatabase, { readQuery } from "@/lib/mongoose";
 import College from "@/models/College";
+import { jsonError } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +30,12 @@ export async function GET(request) {
     const skip = (page - 1) * limit;
 
     const [items, total] = await Promise.all([
-      College.find(filter, { _id: 0, name: 1 })
+      readQuery(College.find(filter, { _id: 0, name: 1 }))
         .sort({ name: 1 })
         .skip(skip)
         .limit(limit)
         .lean(),
-      College.countDocuments(filter),
+      readQuery(College.countDocuments(filter)),
     ]);
 
     const data = items.map((college) => college.name);
@@ -52,9 +53,7 @@ export async function GET(request) {
       query: q,
     });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    console.error("Error fetching colleges:", error?.message || error);
+    return jsonError(error, "Unable to load colleges");
   }
 }

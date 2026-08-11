@@ -6,14 +6,14 @@ import FeedHero from "../../components/FeedHero";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import FeedSearch from "../../components/FeedSearch";
 import { useEffect, useState, useRef, useCallback } from "react";
-import axios from "axios";
+import { requestJson } from "../../lib/client-api";
 import { ArrowUpRight, Loader2, Send, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, Building2, UserRound, X, RefreshCw, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
-const FEED_CACHE_PREFIX = "feed_state_v2";
+const FEED_CACHE_PREFIX = "feed_state_v3";
 const BRANCH_OPTIONS = [
   { label: "Computer Science", value: "CS" },
   { label: "Information Technology", value: "IT" },
@@ -73,7 +73,7 @@ export default function HomePage() {
       setCompaniesLoading(true);
       try {
         const res = await fetch("/api/getCompanies");
-        const data = await res.json();
+        const data = await requestJson(res.url, {}, { success: false, data: [] });
         if (data.success && Array.isArray(data.data)) {
           const names = data.data.map((company) => company.name).filter(Boolean);
           setCompanyOptions(Array.from(new Set(names)).sort((a, b) => a.localeCompare(b)));
@@ -93,7 +93,7 @@ export default function HomePage() {
       setAuthorsLoading(true);
       try {
         const response = await fetch("/api/feed?options=authors");
-        const data = await response.json();
+        const data = await requestJson(response.url, {}, []);
         setAuthorOptions(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching authors:", error);
@@ -113,7 +113,7 @@ export default function HomePage() {
         limit: String(COLLEGE_PAGE_SIZE),
       });
       const res = await fetch(`/api/colleges?${params.toString()}`);
-      const data = await res.json();
+      const data = await requestJson(res, {}, { success: false, data: [] });
       if (data.success && Array.isArray(data.data)) {
         setCollegeOptions((prev) => (
           pageToLoad === 1
@@ -131,10 +131,12 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    loadCollegeOptions(collegeSearchTerm, 1);
-  }, [collegeSearchTerm]);
+    if (filtersOpen) loadCollegeOptions(collegeSearchTerm, 1);
+  }, [collegeSearchTerm, filtersOpen]);
 
   const isFetchingRef = useRef(false);
+  const feedRequestIdRef = useRef(0);
+  const feedAbortRef = useRef(null);
   const skipNextFetchRef = useRef(false);
   const observer = useRef();
   const lastProfileElementRef = useCallback(
@@ -163,6 +165,10 @@ export default function HomePage() {
 
     setPageLoading(true);
     isFetchingRef.current = true;
+    const requestId = ++feedRequestIdRef.current;
+    feedAbortRef.current?.abort();
+    const controller = new AbortController();
+    feedAbortRef.current = controller;
     try {
       const params = new URLSearchParams({
         page: String(pageNumber),
@@ -182,12 +188,10 @@ export default function HomePage() {
       }
 
       const url = `/api/feed?${params.toString()}`;
-      const response = await axios.get(url);
+      const incoming = await requestJson(url, { signal: controller.signal }, []);
 
       // Safety check: only update state if this request matches the current active tab
-      if (sort !== activeTab) return;
-
-      const incoming = Array.isArray(response.data) ? response.data : [];
+      if (requestId !== feedRequestIdRef.current || sort !== activeTab) return;
 
       if (incoming.length > 0) {
         setProfiles((prev) => {
@@ -212,13 +216,17 @@ export default function HomePage() {
         }
       }
     } catch (error) {
+      if (error?.name === "AbortError") return;
       console.error("Error fetching profiles:", error);
       if (pageNumber === 0) {
         setHasMoreProfiles(false);
       }
     } finally {
       setPageLoading(false);
-      isFetchingRef.current = false;
+      if (requestId === feedRequestIdRef.current) {
+        setPageLoading(false);
+        isFetchingRef.current = false;
+      }
     }
   }, [activeTab, searchQuery]);
 
@@ -464,10 +472,10 @@ export default function HomePage() {
       <Navbar showThemeToggle />
       {isShareButtonLoading && <LoadingScreen isDarkMode={isDarkMode} />}
 
-      <div className="relative mx-auto max-w-[800px] px-4 pb-14 pt-20 sm:px-6 md:pt-24">
+      <div className="relative mx-auto w-full max-w-[820px] px-4 pb-14 pt-20 sm:px-6 md:pt-24 2xl:px-0">
         <div className="relative">
-          <aside className="hidden xl:absolute xl:bottom-0 xl:right-[calc(100%+20px)] xl:top-0 xl:block xl:w-[300px]">
-          <div className="space-y-3 xl:sticky xl:top-24">
+          <aside className="hidden 2xl:absolute 2xl:bottom-0 2xl:right-[calc(100%+20px)] 2xl:top-0 2xl:block 2xl:w-[300px]">
+          <div className="space-y-3 2xl:sticky 2xl:top-24">
           <div className="flex items-center gap-2">
             <div className="inline-flex min-w-0 flex-1 items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
               {[
@@ -528,19 +536,9 @@ export default function HomePage() {
           </div>
           </aside>
 
-          <aside className="mb-5 xl:absolute xl:bottom-0 xl:left-[calc(100%+20px)] xl:top-0 xl:mb-0 xl:w-[300px]">
-          <div className="space-y-3 xl:sticky xl:top-24">
-          <Link
-            href="/post?type=interview"
-            onClick={handleShareExperienceClick}
-            prefetch={true}
-            scroll={false}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
-          >
-            <Send className="h-4 w-4" />
-            Post Your Story
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
+          <aside className="mb-5 2xl:absolute 2xl:bottom-0 2xl:left-[calc(100%+20px)] 2xl:top-0 2xl:mb-0 2xl:w-[300px]">
+          <div className="space-y-3 2xl:sticky 2xl:top-24">
+
           <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 [&>div]:mb-0">
             <FeedHero isDarkMode={isDarkMode} />
           </div>
@@ -551,12 +549,12 @@ export default function HomePage() {
           <div className="sticky top-[59px] z-30 mb-4 bg-slate-50/95 py-2 backdrop-blur-md dark:bg-slate-950/95">
             <FeedSearch onSearchChange={handleSearchChange} />
           </div>
-          <section className="xl:hidden">
+          <section className="2xl:hidden">
           {/* Header & Tabs */}
           <div className="mb-6 border-b border-slate-100 pb-4 dark:border-slate-800">
             {/* Tab Switcher */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="inline-flex w-fit items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex min-w-0 flex-1 items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
                 <button
                   onClick={() => setActiveTab("latest")}
                   className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "latest"
@@ -589,7 +587,7 @@ export default function HomePage() {
                 </button>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex shrink-0 items-center">
                 <button
                   type="button"
                   onClick={() => fetchProfiles(0, itemsPerPage, activeTab, filters, true)}
@@ -600,12 +598,14 @@ export default function HomePage() {
                 >
                   <RefreshCw className={`h-4 w-4 ${pageLoading ? "animate-spin" : ""}`} />
                 </button>
+              </div>
+              <div className="w-full">
                 <Link
                   href="/post?type=interview"
                   onClick={handleShareExperienceClick}
                   prefetch={true}
                   scroll={false}
-                  className="inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 sm:flex-none sm:py-2 sm:text-sm"
+                  className="inline-flex w-full min-w-0 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 sm:py-2 sm:text-sm"
                 >
                   <Send className="h-4 w-4" />
                   Post Your Story
@@ -615,7 +615,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-20 rounded-xl border border-slate-200 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-800/20 xl:hidden">
+          <div className="relative z-20 rounded-xl border border-slate-200 bg-slate-50/60 dark:border-slate-800 dark:bg-slate-800/20 2xl:hidden">
             <div className={`flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 ${filtersOpen ? "border-b border-slate-100 dark:border-slate-800" : ""}`}>
               <button
                 type="button"

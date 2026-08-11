@@ -5,6 +5,7 @@ import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-
 import { useState } from "react";
 import ProfileAvatar from './ProfileAvatar';
 import Image from "next/image";
+import { readJson } from "@/lib/client-api";
 
 const ProfileCard = ({
   profile,
@@ -72,7 +73,7 @@ const ProfileCard = ({
         }),
       });
 
-      const data = await response.json();
+      const data = await readJson(response, {});
       if (response.ok) {
         setSuccessMessage("Experience deleted successfully!");
         setTimeout(() => {

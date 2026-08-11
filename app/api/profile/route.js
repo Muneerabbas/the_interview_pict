@@ -15,7 +15,7 @@ export async function POST(req) {
     const cacheKey = `profile_posts_${encodeURIComponent(email)}`;
 
     const posts = await fetchWithCache(cacheKey, 60, async () => {
-      const db = await getMongoDb();
+      const db = await getMongoDb({ mode: "write" });
       const experienceCol = db.collection("experience");
       const talesCol = db.collection("tales");
 

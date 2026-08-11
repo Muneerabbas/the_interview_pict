@@ -19,6 +19,7 @@ import ProfileAvatar from "./ProfileAvatar";
 import { useAuthModal } from "@/components/AuthModalProvider";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { companySlugFromName } from "@/lib/companySlug";
+import { toPlainText } from "@/lib/text-preview";
 
 const stripMarkdown = (value = "") =>
   value
@@ -62,12 +63,14 @@ export default function FeedPostCard({ profile }) {
       ? formatDistanceToNowStrict(dateObj, { addSuffix: true })
       : "";
 
-  const plain = stripMarkdown(profile?.exp_text || "");
+  const plain = toPlainText(profile?.preview || profile?.exp_text || "", 320) || stripMarkdown(profile?.exp_text || "");
   const preview =
     plain.length > 280 ? `${plain.slice(0, 280).trim()}…` : plain || "No details shared yet.";
   const title = isTale
     ? profile?.title || "Untitled tale"
     : profile?.title || `${profile?.company || "Company"} Interview Experience`;
+  const category = isTale ? profile?.category : "";
+  const tags = Array.isArray(profile?.tags) ? profile.tags.filter(Boolean).slice(0, 6) : [];
   const views = Number(profile?.views) || 0;
   const branchBatch = [profile?.branch, profile?.batch].filter(Boolean).join(" · ");
 
@@ -117,7 +120,7 @@ export default function FeedPostCard({ profile }) {
           openPost();
         }
       }}
-      className="group cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3.5 transition duration-150 hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 sm:px-5 sm:py-4"
+      className={`group cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3.5 transition duration-150 hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 sm:px-5 sm:py-4 ${isTale ? "border-l-2 border-l-emerald-500 dark:border-l-emerald-400" : ""}`}
     >
       {/* meta row — community · author · time */}
       <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
@@ -168,8 +171,13 @@ export default function FeedPostCard({ profile }) {
       </p>
 
       {/* flair chips */}
-      {role || branchBatch ? (
+      {role || branchBatch || category ? (
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+          {category ? (
+            <span className="inline-flex max-w-full items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950/35 dark:text-emerald-300">
+              <span className="truncate">{category}</span>
+            </span>
+          ) : null}
           {role ? (
             <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
               <Briefcase size={11} />
@@ -182,6 +190,16 @@ export default function FeedPostCard({ profile }) {
               {branchBatch}
             </span>
           ) : null}
+        </div>
+      ) : null}
+
+      {tags.length > 0 ? (
+        <div className="mt-2.5 flex flex-wrap gap-1.5" aria-label="Post tags">
+          {tags.map((tag) => (
+            <span key={tag} className="inline-flex max-w-full items-center rounded-md bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+              <span className="truncate">#{tag}</span>
+            </span>
+          ))}
         </div>
       ) : null}
 

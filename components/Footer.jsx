@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Send
 } from "lucide-react";
+import { requestJson } from "@/lib/client-api";
 
 export default function Footer({ isLandingPage = false }) {
   const [email, setEmail] = useState("");
@@ -37,8 +38,8 @@ export default function Footer({ isLandingPage = false }) {
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
-      if (res.ok) {
+      const data = await requestJson(res, {}, { success: false, error: "Something went wrong." });
+      if (data.success) {
         setMessage("Subscribed successfully! ðŸŽ‰");
         setEmail("");
       } else {
@@ -191,4 +192,3 @@ export default function Footer({ isLandingPage = false }) {
     </footer>
   );
 }
-

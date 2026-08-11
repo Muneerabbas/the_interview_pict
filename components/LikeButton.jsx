@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Heart } from "lucide-react";
 import { useAuthModal } from "@/components/AuthModalProvider";
+import { requestJson } from "@/lib/client-api";
 
 export default function LikeButton({ id, initialLikes = [], className = "" }) {
     const { data: session } = useSession();
@@ -19,10 +20,8 @@ export default function LikeButton({ id, initialLikes = [], className = "" }) {
         const fetchLatest = async () => {
             try {
                 const res = await fetch(`/api/exp?uid=${id}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.likes) setLikes(data.likes);
-                }
+                const data = await requestJson(res, {}, {});
+                if (Array.isArray(data.likes)) setLikes(data.likes);
             } catch (err) {
                 console.error("Failed to sync likes:", err);
             }

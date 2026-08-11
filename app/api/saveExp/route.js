@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
 import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 import { getMongoDb } from "@/lib/mongodb";
+import { TALE_CATEGORIES } from "@/lib/tale-categories";
 
 
 async function invalidateAfterWrite(email) {
@@ -26,18 +27,22 @@ async function invalidateAfterWrite(email) {
 
 export async function POST(req) {
   try {
-    const { exp_text, college, company, branch, batch, profile_pic, name, role, email, content_type, title } = await req.json();
+    const { exp_text, college, company, branch, batch, profile_pic, name, role, email, content_type, title, tags, category } = await req.json();
 
     // For interviews, company and name are required.
     // For tales, title and name are required.
     const isTale = content_type === "tale";
+    const normalizedTags = Array.isArray(tags)
+      ? [...new Set(tags.map((tag) => String(tag).trim()).filter(Boolean))].slice(0, 6)
+      : [];
+    const normalizedCategory = isTale && TALE_CATEGORIES.includes(category) ? category : "";
 
     if (!exp_text) return NextResponse.json({ message: "Content (exp_text) is required" }, { status: 400 });
     if (!name) return NextResponse.json({ message: "User name is required" }, { status: 400 });
     if (!isTale && !company) return NextResponse.json({ message: "Company is required for interview experiences" }, { status: 400 });
     if (isTale && !title) return NextResponse.json({ message: "Title is required for stories" }, { status: 400 });
 
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "write" });
     const collectionName = isTale ? "tales" : "experience";
     const experience = db.collection(collectionName);
     const backupName = isTale ? "tales_backup" : "backup";
@@ -74,7 +79,9 @@ export async function POST(req) {
       role: isTale ? "" : role,
       email,
       content_type: content_type || "interview",
-      title: title || ""
+      title: title || "",
+      tags: normalizedTags,
+      category: normalizedCategory,
     };
 
     const result = await experience.insertOne(doc);

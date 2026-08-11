@@ -29,7 +29,7 @@ export async function DELETE(req) {
       return NextResponse.json({ message: "Missing required fields: uid or email" }, { status: 400 });
     }
 
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "write" });
     const experience = db.collection("experience");
     const tales = db.collection("tales");
 

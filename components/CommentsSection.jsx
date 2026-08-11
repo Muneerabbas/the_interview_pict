@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useAuthModal } from "@/components/AuthModalProvider";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { readJson } from "@/lib/client-api";
 
 const TYPE_META = {
   doubt: { label: "Doubt", badgeClass: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/35 dark:text-amber-300 dark:border-amber-500/35" },
@@ -157,7 +158,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         `/api/comments?experienceId=${encodeURIComponent(experienceId)}&page=1&limit=40&depth=5&sort=${encodeURIComponent(sort)}`,
         { cache: "no-store" }
       );
-      const json = await res.json();
+      const json = await readJson(res, {});
       if (!res.ok) {
         throw new Error(json?.error || "Failed to fetch comments");
       }
@@ -229,7 +230,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           action: "toggle-upvote",
         }),
       });
-      const json = await res.json();
+      const json = await readJson(res, {});
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();
@@ -275,7 +276,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           type: composeType,
         }),
       });
-      const json = await res.json();
+      const json = await readJson(res, {});
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();
@@ -320,7 +321,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           type: "general",
         }),
       });
-      const json = await res.json();
+      const json = await readJson(res, {});
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();
@@ -361,7 +362,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           action,
         }),
       });
-      const json = await res.json();
+      const json = await readJson(res, {});
       if (!res.ok) {
         if (res.status === 401) {
           openAuthModal();

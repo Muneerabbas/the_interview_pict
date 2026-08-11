@@ -4,7 +4,7 @@ import { getMongoDb } from "@/lib/mongodb";
 // Save draft
 export async function POST(req) {
   try {
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "write" });
     const drafts = db.collection("drafts");
     const body = await req.json();
     const {
@@ -22,7 +22,8 @@ export async function POST(req) {
       chatMessages,
       totalRounds,
       currentRound,
-      content_type
+      content_type,
+      tags
     } = body;
 
     // Basic validation
@@ -42,6 +43,9 @@ export async function POST(req) {
       profile_pic: profile_pic || '',
       name: name || '',
       role: role || '',
+      tags: Array.isArray(tags)
+        ? [...new Set(tags.map((tag) => String(tag).trim()).filter(Boolean))].slice(0, 6)
+        : [],
       email,
       chatAnswers: chatAnswers || null,
       chatStage: chatStage || 'eligibility',
@@ -79,7 +83,7 @@ export async function POST(req) {
 // Get draft by email
 export async function GET(req) {
   try {
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "read" });
     const drafts = db.collection("drafts");
     const email = req.nextUrl.searchParams.get('email');
     const contentType = req.nextUrl.searchParams.get('contentType') || 'interview';

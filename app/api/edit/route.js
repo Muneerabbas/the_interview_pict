@@ -23,7 +23,7 @@ export async function PUT(req) {
     const { uid, exp_text, company, college, branch, batch, role, email } = await req.json();
 
     try {
-        const db = await getMongoDb();
+        const db = await getMongoDb({ mode: "write" });
         const experience = db.collection("experience");
 
         const result = await experience.updateOne(

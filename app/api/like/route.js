@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
 import { revalidatePath } from "next/cache";
-
-const client = new MongoClient(process.env.MONGODB_URI);
+import { getMongoDb } from "@/lib/mongodb";
+import { jsonError } from "@/lib/api-response";
 
 export async function POST(req) {
     try {
         const { id, email } = await req.json();
 
         if (!id || !email) {
-            return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+            return NextResponse.json({ success: false, error: "Missing required fields", code: "VALIDATION_ERROR" }, { status: 400 });
         }
 
-        await client.connect();
-        const db = client.db();
+        const db = await getMongoDb({ mode: "write" });
         const experience = db.collection("experience");
         const tales = db.collection("tales");
 
@@ -47,6 +45,6 @@ export async function POST(req) {
         return NextResponse.json({ success: true }, { status: 200 });
     } catch (error) {
         console.error("Error toggling like:", error);
-        return NextResponse.json({ message: error.message }, { status: 500 });
+        return jsonError(error, "Unable to update like");
     }
 }

@@ -1,48 +1,24 @@
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
 import redis from "@/lib/redis";
-
-// Create the client outside the handler
-const uri = process.env.MONGODB_URI;
-let client = null;
-let clientPromise = null;
-
-// Initialize the client connection
-const getClient = async () => {
-  if (!client) {
-    client = new MongoClient(uri);
-    clientPromise = client.connect();
-  }
-  return clientPromise;
-};
+import { getMongoDb } from "@/lib/mongodb";
+import { jsonError } from "@/lib/api-response";
 
 export async function POST(req) {
-  console.log("📥 Received request to save user");
-
   try {
-    // Parse request body
     const { gmail, name, image } = await req.json();
-    console.log("📝 User data received:", { gmail, name, image });
 
     if (!gmail || !name) {
-      console.error("❌ Missing required fields");
       return NextResponse.json(
-        { message: "Gmail and name are required" },
+        { success: false, error: "Gmail and name are required", code: "VALIDATION_ERROR" },
         { status: 400 }
       );
     }
 
-    // Get MongoDB client
-    const client = await getClient();
-    console.log("🔌 Connected to MongoDB");
-
-    const db = client.db();
+    const db = await getMongoDb({ mode: "write" });
     const users = db.collection("user");
 
     // Check if user exists
     const existingUser = await users.findOne({ gmail });
-    console.log("🔍 Existing user check:", existingUser ? "Found" : "Not found");
-
     let result;
     if (existingUser) {
       // Update existing user
@@ -56,7 +32,6 @@ export async function POST(req) {
           }
         }
       );
-      console.log("✏️ User updated:", result);
     } else {
       // Insert new user
       result = await users.insertOne({
@@ -66,10 +41,7 @@ export async function POST(req) {
         createdAt: new Date(),
         updatedAt: new Date()
       });
-      console.log("➕ New user inserted:", result);
     }
-
-    console.log("✅ Operation completed successfully");
 
     // Invalidate cache
     if (redis) {
@@ -79,7 +51,7 @@ export async function POST(req) {
       ]);
     }
 
-    return NextResponse.json({
+    return NextResponse.json({ success: true,
       message: "User saved successfully",
       operation: existingUser ? "updated" : "inserted",
       result
@@ -88,12 +60,7 @@ export async function POST(req) {
     });
 
   } catch (error) {
-    console.error("❌ Error in saveUser API:", error);
-    return NextResponse.json({
-      message: "Failed to save user",
-      error: error.message
-    }, {
-      status: 500
-    });
+    console.error("saveUser API error:", error?.message || error);
+    return jsonError(error, "Failed to save user");
   }
 }

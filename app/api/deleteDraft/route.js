@@ -4,7 +4,7 @@ import { getMongoDb } from "@/lib/mongodb";
 // Delete draft
 export async function POST(req) {
   try {
-    const db = await getMongoDb();
+    const db = await getMongoDb({ mode: "write" });
     const drafts = db.collection("drafts");
     // Parse the JSON request body properly
     const body = await req.json();

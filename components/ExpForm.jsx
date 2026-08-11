@@ -4,13 +4,15 @@ import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, AlertCircle, CheckCircle2, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check } from "lucide-react";
+import { ChevronDown, AlertCircle, CheckCircle2, Send, PenLine, Sparkles, Copy, Calendar, Building2, GraduationCap, Briefcase, FileSignature, Check, Tag, BookOpen } from "lucide-react";
 import ExperienceTiptapEditor from "./ExperienceTiptapEditor";
 import Image from "next/image";
 import postCompanies from "@/data/post-companies.json";
 import { useTheme } from "next-themes";
 import SearchableDropdown from "./SearchableDropdown";
 import AddCompanyModal from "@/components/AddCompanyModal";
+import { readJson } from "@/lib/client-api";
+import { TALE_CATEGORIES } from "@/lib/tale-categories";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
   <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/65" : "bg-slate-900/25"} backdrop-blur-sm`}>
@@ -209,6 +211,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   const [customCompany, setCustomCompany] = useState("");
   const [role, setRole] = useState("");
   const [customRole, setCustomRole] = useState("");
+  const [tags, setTags] = useState("");
+  const [taleCategory, setTaleCategory] = useState("");
   const [height, setHeight] = useState("100vh");
   const [bottomMargin, setBottomMargin] = useState("0");
   const [errors, setErrors] = useState({
@@ -307,7 +311,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         limit: String(COLLEGE_PAGE_SIZE),
       });
       const res = await fetch(`/api/colleges?${params.toString()}`);
-      const data = await res.json();
+      const data = await readJson(res, {});
       if (data.success && Array.isArray(data.data)) {
         setColleges((prev) => (
           pageToLoad === 1
@@ -330,7 +334,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   useEffect(() => {
     fetch("/api/getCompanies")
-      .then((res) => res.json())
+      .then((res) => readJson(res, {}))
       .then((data) => {
         if (data.success && data.data) {
           const dbCompanyNames = data.data.map(c => c.name).filter(Boolean);
@@ -372,7 +376,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       try {
         const response = await fetch(`/api/drafts?email=${session.user.email}&contentType=${contentType}`);
         if (response.ok) {
-          const draftData = await response.json();
+          const draftData = await readJson(response, {});
           setMarkdown(draftData.exp_text || "");
           setTitle(draftData.title || "");
           setCollege(draftData.college || "");
@@ -381,6 +385,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           setBranch(draftData.branch || "");
           setCompany(draftData.company || "");
           setRole(draftData.role || "");
+          setTags(Array.isArray(draftData.tags) ? draftData.tags.join(", ") : draftData.tags || "");
+          setTaleCategory(draftData.category || "");
           // Load AI state
           if (draftData.chatAnswers) setChatAnswers(draftData.chatAnswers);
           if (draftData.chatStage) setChatStage(draftData.chatStage);
@@ -399,6 +405,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           setBranch("");
           setCompany("");
           setRole("");
+          setTags("");
+          setTaleCategory("");
           setChatAnswers({ eligibility: "", applicationRoute: "", roundsText: "", roundDetails: [], timeline: "", difficulty: "", keyTopics: "", codingSpecifics: "", interviewFocus: "", projectDeepDive: "", hrBehavioral: "" });
           setChatStage('eligibility');
           setChatMessages([{ role: 'assistant', text: initialMessage }]);
@@ -530,7 +538,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const validateRequiredMetaForAI = () => {
     if (isTale) {
-      alert("AI writer for hackathon posts is under development.");
+      alert("AI writer is not available for Tales. Please use Manual Writer.");
       return false;
     }
 
@@ -552,7 +560,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const handleModeChange = (nextMode) => {
     if (nextMode === 'ai' && isTale) {
-      alert("AI writer for hackathon posts is under development.");
+      alert("AI writer is not available for Tales. Please use Manual Writer.");
       return;
     }
     if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
@@ -615,7 +623,13 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       role: finalRole || "",
       email: session?.user?.email,
       content_type: contentType,
-      title: title || (isTale ? "Untitled Story" : "")
+      title: title || (isTale ? "Untitled Story" : ""),
+      tags: tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+        .slice(0, 6),
+      category: isTale ? taleCategory : "",
     };
 
     console.log("📤 Submitting Payload:", payload);
@@ -628,7 +642,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const data = await readJson(response, {});
       if (!response.ok) {
         console.error("❌ Server Error Details:", data);
         throw new Error(data.message || "Failed to submit markdown");
@@ -640,6 +654,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       setBranch("");
       setCompany("");
       setRole("");
+      setTags("");
+      setTaleCategory("");
       setMarkdown("");
       setTitle("");
       setErrors({
@@ -698,6 +714,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         branch,
         company,
         role,
+        tags,
+        category: isTale ? taleCategory : "",
         chatAnswers,
         chatStage,
         chatMessages,
@@ -705,7 +723,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         currentRound,
       });
     }
-  }, [markdown, title, college, customCollege, batch, branch, company, role, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
+  }, [markdown, title, college, customCollege, batch, branch, company, role, tags, taleCategory, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
   useEffect(() => {
     setMode("manual");
@@ -732,6 +750,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     setCompany("");
     setCustomCompany("");
     setRole("");
+    setTags("");
     setCustomRole("");
     setMarkdown("");
     setChatInput("");
@@ -818,7 +837,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         body: JSON.stringify({ data: finalPayload }),
       });
 
-      const result = await res.json();
+      const result = await readJson(res, {});
       if (result.text) {
         setMarkdown(result.text);
       } else {
@@ -1040,7 +1059,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
           <div className="relative z-[60] mb-6 w-full overflow-visible rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
             {isTale && (
-              <div className="mb-6 w-full">
+              <div className="mb-6 grid w-full gap-4 sm:grid-cols-2">
+                <div>
                 <div className="flex items-center gap-2 mb-3 px-2">
                   <PenLine className="h-4 w-4 text-slate-400 dark:text-slate-500" />
                   <label className="text-[10.5px] font-bold tracking-normal text-slate-500 uppercase dark:text-slate-400">Story Title</label>
@@ -1053,8 +1073,46 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                   className={`w-full rounded-2xl border ${errors.title ? 'border-red-400 bg-red-50/10' : 'border-slate-200 bg-white shadow-sm'} px-5 py-4 text-sm font-semibold text-slate-700 transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20`}
                 />
                 {errors.title && <p className="mt-2 ml-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
+                </div>
+                <div>
+                  <div className="mb-3 flex items-center gap-2 px-2">
+                    <BookOpen className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                    <label htmlFor="tale-category" className="text-[10.5px] font-bold uppercase tracking-normal text-slate-500 dark:text-slate-400">
+                      Story Category
+                    </label>
+                  </div>
+                  <select
+                    id="tale-category"
+                    value={taleCategory}
+                    onChange={(event) => setTaleCategory(event.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                  >
+                    <option value="">Choose a category</option>
+                    {TALE_CATEGORIES.map((category) => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
+            <div className="mb-6 w-full px-2">
+              <div className="mb-3 flex items-center gap-2">
+                <Tag className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                <label htmlFor="post-tags" className="text-[10.5px] font-bold uppercase tracking-normal text-slate-500 dark:text-slate-400">
+                  Tags
+                </label>
+              </div>
+              <input
+                id="post-tags"
+                type="text"
+                value={tags}
+                onChange={(event) => setTags(event.target.value)}
+                placeholder={isTale ? "e.g. Hackathon, Projects, Lessons learned" : "e.g. DSA, On-campus, SDE"}
+                maxLength={180}
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+              />
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">Separate tags with commas. You can add up to 6.</p>
+            </div>
             <div className="grid w-full grid-cols-1 gap-2.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
               {/* College */}
               <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
@@ -1259,27 +1317,30 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                 <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
                   {/* Toggle (Left) */}
                   <div className="flex w-full justify-center">
-                    <div className="relative mx-auto flex h-[50px] w-full max-w-[440px] items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px]">
+                    <div className={`relative mx-auto flex h-[50px] w-full items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px] ${isTale ? "max-w-[260px]" : "max-w-[440px]"}`}>
                       <button
                         onClick={() => handleModeChange('manual')}
-                        className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`relative z-10 flex min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${isTale ? "w-full" : "flex-1"} ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                       >
                         <PenLine className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">Manual Writer</span>
                       </button>
-                      <button
-                        onClick={() => handleModeChange('ai')}
-                        className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'} ${isTale ? 'opacity-60' : ''}`}
-                      >
-                        <Sparkles className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">{isTale ? "AI Under Dev" : "AI Assistant"}</span>
-                      </button>
+                      {!isTale && (
+                        <>
+                          <button
+                            onClick={() => handleModeChange('ai')}
+                            className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                          >
+                            <Sparkles className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">AI Assistant</span>
+                          </button>
 
-                      {/* Animated pill background */}
-                      <div
-                        className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
-                        style={{
-                          border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
-                        }}
-                      />
+                          <div
+                            className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
+                            style={{
+                              border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
+                            }}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
 

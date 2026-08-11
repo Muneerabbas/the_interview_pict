@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS=--max-old-space-size=3072 next dev --webpack",
+    "dev:turbo": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
+    "smoke:data": "node test/data-smoke.mjs",
     "analyze": "ANALYZE=true next build",
     "seed:colleges": "node scripts/seed-colleges.mjs",
     "seed:colleges:dry": "node scripts/seed-colleges.mjs --dry-run",

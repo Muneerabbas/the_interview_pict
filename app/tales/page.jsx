@@ -9,6 +9,8 @@ import FeedPostCard from "../../components/FeedPostCard";
 import FeedHero from "../../components/FeedHero";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import FeedSearch from "../../components/FeedSearch";
+import { requestJson } from "../../lib/client-api";
+import { TALE_CATEGORIES } from "../../lib/tale-categories";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,14 +21,24 @@ export default function TalesPage() {
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [category, setCategory] = useState("");
+  const [author, setAuthor] = useState("");
+  const [college, setCollege] = useState("");
+  const [authorOptions, setAuthorOptions] = useState([]);
   const observer = useRef(null);
   const isFetchingRef = useRef(false);
+  const requestIdRef = useRef(0);
+  const abortRef = useRef(null);
 
   const fetchTales = useCallback(async (pageNumber, sort, excludedTaleIds = []) => {
     if (isFetchingRef.current && pageNumber > 0) return;
 
     setPageLoading(true);
     isFetchingRef.current = true;
+    const requestId = ++requestIdRef.current;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const params = new URLSearchParams({
@@ -37,19 +49,19 @@ export default function TalesPage() {
         _ts: Date.now().toString(),
       });
       if (searchQuery) params.set("q", searchQuery);
+      if (category) params.set("category", category);
+      if (author) params.set("author", author);
+      if (college.trim()) params.set("college", college.trim());
       if (sort === "random" && pageNumber > 0 && excludedTaleIds.length > 0) {
         params.set("exclude", excludedTaleIds.join(","));
       }
 
       const response = await fetch(`/api/feed?${params.toString()}`, {
         cache: "no-store",
+        signal: controller.signal,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch tales");
-      }
-
-      const incoming = await response.json();
+      const incoming = await requestJson(response, {}, []);
+      if (requestId !== requestIdRef.current) return;
       const nextTales = Array.isArray(incoming) ? incoming : [];
 
       setTales((prev) => {
@@ -59,14 +71,29 @@ export default function TalesPage() {
       });
       setHasMore(nextTales.length === ITEMS_PER_PAGE);
     } catch (error) {
+      if (error?.name === "AbortError") return;
       console.error("Error fetching tales:", error);
       if (pageNumber === 0) setTales([]);
       setHasMore(false);
     } finally {
-      setPageLoading(false);
-      isFetchingRef.current = false;
+      if (requestId === requestIdRef.current) {
+        setPageLoading(false);
+        isFetchingRef.current = false;
+      }
     }
-  }, [searchQuery]);
+  }, [searchQuery, category, author, college]);
+
+  useEffect(() => {
+    let cancelled = false;
+    requestJson("/api/feed?options=authors&contentType=tale", {}, []).then((authors) => {
+      if (!cancelled) setAuthorOptions(Array.isArray(authors) ? authors : []);
+    }).catch(() => {
+      if (!cancelled) setAuthorOptions([]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     setTales([]);
@@ -93,6 +120,15 @@ export default function TalesPage() {
     setHasMore(true);
     setSearchQuery(value);
   }, []);
+
+  const clearFilters = () => {
+    setCategory("");
+    setAuthor("");
+    setCollege("");
+    setTales([]);
+    setPage(0);
+    setHasMore(true);
+  };
 
   const lastStoryElementRef = useCallback(
     (node) => {
@@ -171,7 +207,7 @@ export default function TalesPage() {
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
               <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 [&>div]:mb-0">
-                <FeedHero contentType="tale" />
+                <FeedHero contentType="tale" layout="responsive" />
               </div>
             </div>
           </aside>
@@ -179,6 +215,68 @@ export default function TalesPage() {
           <div className="sticky top-[59px] z-30 mb-4 bg-slate-50/95 py-2 backdrop-blur-md dark:bg-slate-950/95">
             <FeedSearch contentType="tale" onSearchChange={handleSearchChange} />
           </div>
+
+          <header className="mb-5">
+            <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+              Student Tales, Projects &amp; Hackathon Stories
+            </h1>
+            <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              Discover authentic stories about building, competing, working, and learning from setbacks.
+            </p>
+          </header>
+
+          <section className="mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100">Explore tales</h2>
+                <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Filter stories by topic, author, or college.</p>
+              </div>
+              {(category || author || college) && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-blue-600 transition hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+            <div className="grid gap-2 sm:grid-cols-3">
+              <label className="flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Category
+                <select
+                  value={category}
+                  onChange={(event) => setCategory(event.target.value)}
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  <option value="">All categories</option>
+                  {TALE_CATEGORIES.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Author
+                <select
+                  value={author}
+                  onChange={(event) => setAuthor(event.target.value)}
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  <option value="">All authors</option>
+                  {authorOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                College
+                <input
+                  type="search"
+                  value={college}
+                  onChange={(event) => setCollege(event.target.value)}
+                  placeholder="Search college"
+                  maxLength={80}
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                />
+              </label>
+            </div>
+          </section>
 
           <section className="mb-4 flex flex-col gap-3 border-b border-slate-100 pb-4 dark:border-slate-800 xl:hidden sm:flex-row sm:items-center sm:justify-between">
             {renderTabs()}

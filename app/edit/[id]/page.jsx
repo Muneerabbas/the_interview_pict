@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Navbar from "../../../components/Navbar";
 import ExperienceTiptapEditor from "../../../components/ExperienceTiptapEditor";
 import postCompanies from "@/data/post-companies.json";
+import { requestJson } from "@/lib/client-api";
 
 const getEditorPlainText = (value = "") =>
   value
@@ -66,7 +67,7 @@ export default function EditPage() {
     try {
       const response = await fetch(`/api/exp?uid=${id}`);
       if (!response.ok) throw new Error("Failed to fetch data");
-      const data = await response.json();
+      const data = await requestJson(response, {}, {});
       setExpData(data);
       setMarkdown(data.exp_text);
       setBatch(data.batch);
@@ -206,7 +207,7 @@ const handleSubmit = async () => {
       }),
     });
 
-    const data = await response.json();
+    const data = await requestJson(response, {}, {});
 
     // Check both response.ok and data for error messages
     if (!response.ok) {

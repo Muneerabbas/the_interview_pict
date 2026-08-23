@@ -18,6 +18,24 @@ function normalizeFeedSort(sort) {
   return sort === "trending" ? FEED_SORT_TRENDING : "latest";
 }
 
+function addContentTypeFilter(match, contentType) {
+  if (contentType === "interview") {
+    // Older experience documents predate content_type and are interviews by
+    // virtue of living in the experience collection.
+    match.$and = [
+      {
+        $or: [
+          { content_type: "interview" },
+          { content_type: { $exists: false } },
+        ],
+      },
+    ];
+    return;
+  }
+
+  match.content_type = contentType;
+}
+
 function buildPipeline({
   sort,
   page,
@@ -33,7 +51,8 @@ function buildPipeline({
   authorEmails,
 }) {
   const pipeline = [];
-  const match = { content_type: contentType || "interview" };
+  const match = {};
+  addContentTypeFilter(match, contentType || "interview");
   if (companyFilter) match.company = companyNameFilter(companyFilter);
   if (collegeFilter) match.college = collegeFilter;
   if (branchFilter) match.branch = branchFilter;
@@ -204,7 +223,8 @@ export async function GET(req) {
     let feed = [];
 
     if (sort === "random") {
-      const randomMatch = { content_type: contentType };
+      const randomMatch = {};
+      addContentTypeFilter(randomMatch, contentType);
       if (companyFilter) randomMatch.company = companyNameFilter(companyFilter);
       if (collegeFilter) randomMatch.college = collegeFilter;
       if (branchFilter) randomMatch.branch = branchFilter;

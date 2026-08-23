@@ -2,7 +2,6 @@ import LandingPage from "@/components/Landing";
 import { TALES_ENABLED } from "@/lib/feature-flags";
 import { toPublicPost } from "@/lib/post-shape";
 import { companySlugFromName } from "@/lib/companySlug";
-import { fetchWithCache } from "@/lib/cache";
 import Script from "next/script";
 import { getMongoDb } from "@/lib/mongodb";
 
@@ -65,7 +64,9 @@ async function fetchTales() {
  * most-covered first, and hand the chips a genuine slug each.
  */
 async function fetchTopCompanies() {
-    return fetchWithCache("home_top_companies_v2", 600, async () => {
+    // No Redis wrapper here on purpose: an Upstash REST fetch is a no-store fetch,
+    // which would flip this whole page from prerendered to server-rendered.
+    {
         try {
             const db = await getMongoDb();
 
@@ -99,7 +100,7 @@ async function fetchTopCompanies() {
             console.error("Fetching top companies failed:", error);
             return [];
         }
-    });
+    }
 }
 
 async function fetchFeaturedStories() {

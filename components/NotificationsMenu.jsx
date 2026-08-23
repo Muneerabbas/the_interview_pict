@@ -10,7 +10,7 @@ function getNotificationIcon(type) {
 
 function getNotificationAccent(type) {
   if (type === "reply") {
-    return "bg-blue-50 text-blue-700 dark:bg-cyan-950/35 dark:text-cyan-300";
+    return "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300";
   }
 
   return "bg-rose-50 text-rose-700 dark:bg-rose-950/35 dark:text-rose-300";
@@ -43,7 +43,7 @@ export default function NotificationsMenu({
 
       {isOpen ? (
         <div
-          className={`absolute right-0 top-full z-[90] mt-3 w-[min(92vw,360px)] overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/95 dark:shadow-[0_22px_56px_rgba(2,6,23,0.72)] max-sm:fixed max-sm:left-3 max-sm:right-3 max-sm:top-[64px] max-sm:mt-0 max-sm:w-auto max-sm:rounded-2xl ${panelClassName}`}
+          className={`absolute right-0 top-full z-[90] mt-3 w-[min(92vw,360px)] overflow-hidden rounded-xl border border-slate-200/80 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/95 dark:shadow-[0_22px_56px_rgba(2,6,23,0.72)] max-sm:fixed max-sm:left-3 max-sm:right-3 max-sm:top-[64px] max-sm:mt-0 max-sm:w-auto max-sm:rounded-xl ${panelClassName}`}
         >
           <div className="border-b border-slate-200/80 px-4 py-3 dark:border-slate-800">
             <div className="flex items-center justify-between gap-3">
@@ -67,7 +67,7 @@ export default function NotificationsMenu({
                 {[0, 1, 2].map((item) => (
                   <div
                     key={item}
-                    className="h-20 animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800"
+                    className="h-20 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
                   />
                 ))}
               </div>
@@ -85,9 +85,9 @@ export default function NotificationsMenu({
               notifications.map((notification) => {
                 const Icon = getNotificationIcon(notification.type);
                 const content = (
-                  <div className="flex gap-3 rounded-2xl px-3 py-3 transition hover:bg-slate-50 dark:hover:bg-slate-900/80">
+                  <div className="flex gap-3 rounded-xl px-3 py-3 transition hover:bg-slate-50 dark:hover:bg-slate-900/80">
                     <div
-                      className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${getNotificationAccent(notification.type)}`}
+                      className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${getNotificationAccent(notification.type)}`}
                     >
                       <Icon size={16} />
                     </div>

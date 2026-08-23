@@ -139,8 +139,12 @@
    DESIGN TOKENS — Global UI Polish
    ============================================================ */
 :root {
-  --font-sans: "Inter", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* var(--font-inter) is the family next/font generates in app/layout.js. Naming
+     "Inter" directly here never resolved to the self-hosted font, so the whole
+     site fell back to system UI fonts. JetBrains Mono is not loaded anywhere, so
+     it is not claimed here either. */
+  --font-sans: var(--font-inter), "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Typography */
   --ui-font-size-body: 15.5px;
@@ -355,7 +359,6 @@ small {
 @layer base {
   .theme {
     --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
   }
 
   :root {
@@ -518,9 +521,9 @@ small {
 
 /* Batch/year tag — teal tint */
 .ui-tag-batch {
-  background-color: rgba(8, 145, 178, 0.10);
-  color: #0e7490;
-  border-color: rgba(8, 145, 178, 0.22);
+  background-color: rgba(59, 130, 246, 0.10);
+  color: #1d4ed8;
+  border-color: rgba(59, 130, 246, 0.22);
 }
 
 /* Dark mode overrides */
@@ -534,6 +537,14 @@ small {
   background-color: rgba(100, 116, 139, 0.18);
   color: #94a3b8;
   border-color: rgba(100, 116, 139, 0.30);
+}
+
+/* .ui-tag-batch had no dark override, so it kept the light teal pairing
+   (near-unreadable on the dark surface) while its two siblings adapted. */
+.dark .ui-tag-batch {
+  background-color: rgba(59, 130, 246, 0.16);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.30);
 }
 
 

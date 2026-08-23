@@ -1,9 +1,18 @@
 /** @type {import('next-sitemap').IConfig} */
 const { MongoClient } = require("mongodb");
 
+// next-sitemap runs as its own node process during `postbuild`, so it does not
+// inherit the .env files Next loads at build time. Without this, MONGODB_URI is
+// undefined here and the sitemap ships with only the static routes.
+require("@next/env").loadEnvConfig(process.cwd());
+
+// Keep in sync with lib/mongodb.js (this file is CommonJS, loaded by the
+// next-sitemap CLI, so it cannot import the ESM module).
+const DB_NAME = process.env.MONGODB_DB_NAME || "int-exp";
+
 async function getDynamicContentPaths() {
-  if (!process.env.MONGODB_URI || !process.env.MONGODB_DB_NAME) {
-    console.warn("Dynamic sitemap paths skipped: MongoDB environment variables are unavailable.");
+  if (!process.env.MONGODB_URI) {
+    console.warn("Dynamic sitemap paths skipped: MONGODB_URI is unavailable.");
     return [];
   }
 
@@ -16,7 +25,7 @@ async function getDynamicContentPaths() {
 
   try {
     await client.connect();
-    const db = client.db(process.env.MONGODB_DB_NAME);
+    const db = client.db(DB_NAME);
     const [interviews, tales, legacyTales, companies] = await Promise.all([
       db.collection("experience").find(
         { content_type: "interview", uid: { $type: "string", $ne: "" } },
@@ -77,13 +86,15 @@ module.exports = {
     "/edit",
     "/edit-company",
     "/search/*",
-    "/simple",
   ],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: "*",
-        allow: "/",
+        // The public, shareable profile must stay crawlable. A bare
+        // Disallow: /profile also blocked /profile/public/*, which cancelled out
+        // the page's own indexable metadata.
+        allow: ["/", "/profile/public/"],
         disallow: [
           "/login",
           "/profile",
@@ -92,7 +103,6 @@ module.exports = {
           "/edit",
           "/edit-company",
           "/search",
-          "/simple",
         ],
       },
     ],

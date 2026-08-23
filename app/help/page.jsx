@@ -28,7 +28,7 @@ const FAQItem = ({ question, answer }) => {
     <div className="border-b border-slate-200 dark:border-slate-800">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between py-6 text-left transition-all hover:text-blue-600 dark:hover:text-cyan-400"
+        className="flex w-full items-center justify-between py-6 text-left transition-all hover:text-blue-600 dark:hover:text-blue-400"
       >
         <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">{question}</span>
         <motion.div
@@ -201,7 +201,7 @@ Good Luck, and Remember: Stay Confident! 😎
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDFEFF] text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar showThemeToggle />
 
       {/* Hero Section */}
@@ -210,13 +210,13 @@ Good Luck, and Remember: Stay Confident! 😎
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-blue-600 dark:border-slate-800 dark:bg-slate-900/50 dark:text-cyan-400"
+            className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-blue-400"
           >
             <HelpCircle size={14} />
             Help Center
           </motion.div>
           <h1 className="mt-8 text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-            How can we <br className="sm:hidden" /> <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent italic">help you</span> today?
+            How can we <br className="sm:hidden" /> <span className="italic text-blue-600 dark:text-blue-400">help you</span> today?
           </h1>
           <p className="mt-4 text-slate-500 dark:text-slate-400 max-w-xl mx-auto italic font-medium">
             Find guides, templates, and answers to common questions about sharing your interview journey.
@@ -224,7 +224,7 @@ Good Luck, and Remember: Stay Confident! 😎
         </div>
 
         {/* Background Decorative Elements */}
-        <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] bg-blue-200/20 blur-[120px] rounded-full dark:bg-cyan-500/10 pointer-events-none" />
+        <div className="absolute top-[20%] left-[-10%] w-[40%] h-[40%] bg-blue-200/20 blur-[120px] rounded-full dark:bg-blue-500/10 pointer-events-none" />
         <div className="absolute bottom-0 right-[-10%] w-[30%] h-[30%] bg-indigo-200/20 blur-[100px] rounded-full dark:bg-indigo-500/10 pointer-events-none" />
       </section>
 
@@ -240,9 +240,9 @@ Good Luck, and Remember: Stay Confident! 😎
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-8 rounded-[2rem] bg-white border border-slate-200 shadow-sm transition-all hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 dark:bg-slate-900/50 dark:border-slate-800"
+                className="p-8 rounded-xl bg-white border border-slate-200 shadow-sm transition-all hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 dark:bg-slate-900 dark:border-slate-800"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
                   <Icon size={28} />
                 </div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 italic">0{idx + 1}. {step.title}</h3>
@@ -265,14 +265,14 @@ Good Luck, and Remember: Stay Confident! 😎
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCopyClick}
-              className={`flex items-center gap-2 rounded-2xl px-8 py-4 font-black transition-all shadow-xl ${copySuccess ? 'bg-green-500 text-white shadow-green-500/20' : 'bg-slate-900 text-white hover:bg-blue-600 dark:bg-white dark:text-slate-950'}`}
+              className={`flex items-center gap-2 rounded-xl px-8 py-4 font-black transition-all shadow-xl ${copySuccess ? 'bg-green-500 text-white shadow-green-500/20' : 'bg-slate-900 text-white hover:bg-blue-600 dark:bg-white dark:text-slate-950'}`}
             >
               {copySuccess ? <Check size={20} /> : <Copy size={20} />}
               {copySuccess ? 'Copied To Clipboard' : 'Copy Template Text'}
             </motion.button>
           </div>
 
-          <div className="rounded-[2.5rem] overflow-hidden border border-slate-200 bg-white/50 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/30">
+          <div className="rounded-xl overflow-hidden border border-slate-200 bg-white/50 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900">
             <div className="p-1 sm:p-2">
               <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
                 <MDEditor
@@ -288,6 +288,23 @@ Good Luck, and Remember: Stay Confident! 😎
           </div>
         </section>
 
+        {/* FAQs: both FAQItem and this data existed but were never rendered, so
+            the hero promised "answers to common questions" and showed none. */}
+        <section className="container mx-auto px-6 pb-20">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+              Frequently asked questions
+            </h2>
+            <p className="mb-6 text-slate-500 dark:text-slate-400">
+              Everything people usually ask before their first post.
+            </p>
+            <div className="rounded-xl border border-slate-200 bg-white px-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              {faqs.map((faq) => (
+                <FAQItem key={faq.question} question={faq.question} answer={faq.answer} />
+              ))}
+            </div>
+          </div>
+        </section>
 
       </main>
 

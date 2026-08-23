@@ -1,11 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { marked } from "marked";
 import { Pencil, Trash, Eye, Building2, GraduationCap, Briefcase } from "lucide-react";
 import { useState } from "react";
 import ProfileAvatar from './ProfileAvatar';
 import Image from "next/image";
 import { readJson } from "@/lib/client-api";
+import { toPlainText } from "@/lib/text-preview";
+import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
+import Alert from "@/components/ui/Alert";
 
 const ProfileCard = ({
   profile,
@@ -19,11 +22,13 @@ const ProfileCard = ({
   const [successMessage, setSuccessMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const fullText = profile?.exp_text || "";
-  const truncatedText = fullText.slice(0, 150) + "...";
-  const htmlTruncatedText = marked(truncatedText);
+  // Previously this ran marked() over a byte-sliced fragment and injected the
+  // result with dangerouslySetInnerHTML -- unsanitized stored XSS, plus torn
+  // markup whenever the 150th character landed mid-tag.
+  const preview = toPlainText(profile?.exp_text || "", 180);
 
   const profilePic = profile?.profile_pic?.replace(/\"/g, "") || "";
   const profileName = profile?.name?.replace(/\"/g, "") || "";
@@ -39,12 +44,8 @@ const ProfileCard = ({
   const handleReadMore = (e) => {
     e.stopPropagation();
     if (!articleId) return;
-    console.log("ProfileCard: handleReadMore START");
-    setGlobalLoading(true);
-    console.log("ProfileCard: setGlobalLoading(true) called from ReadMore");
+    setGlobalLoading?.(true);
     router.push(`/single/${articleId}`);
-    console.log("ProfileCard: router.push called from ReadMore");
-    console.log("ProfileCard: handleReadMore END");
   };
 
   const handleEdit = (e) => {
@@ -59,48 +60,44 @@ const ProfileCard = ({
   };
 
   const handleDelete = async () => {
+    if (isDeleting) return; // the confirm button used to allow a second DELETE
     setIsDeleting(true);
-    setIsModalOpen(false);
+    setDeleteError("");
     try {
       const response = await fetch('/api/delete', {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          uid: profile.uid,
-          email: profile.email,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        // The author is derived from the session server-side; sending an email
+        // here was the IDOR.
+        body: JSON.stringify({ uid: profile.uid }),
       });
 
       const data = await readJson(response, {});
       if (response.ok) {
+        setIsModalOpen(false);
         setSuccessMessage("Experience deleted successfully!");
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        router.refresh();
       } else {
-        alert(`Error: ${data.message}`);
+        setDeleteError(data?.error || data?.message || "Could not delete this post.");
       }
     } catch (error) {
       console.error('Error deleting experience:', error);
+      setDeleteError("Network error. Please try again.");
     } finally {
       setIsDeleting(false);
     }
   };
 
   const handleCancelDelete = () => {
+    if (isDeleting) return;
     setIsModalOpen(false);
+    setDeleteError("");
   };
 
   const handleCardClick = () => {
     if (!disableCardClick && articleId) {
-      console.log("ProfileCard: handleCardClick START");
-      setGlobalLoading(true);
-      console.log("ProfileCard: setGlobalLoading(true) called from CardClick");
+      setGlobalLoading?.(true);
       router.push(`/single/${articleId}`);
-      console.log("ProfileCard: router.push called from CardClick");
-      console.log("ProfileCard: handleCardClick END");
     }
   };
 
@@ -113,20 +110,20 @@ const ProfileCard = ({
   return (
     <div
       onClick={handleCardClick}
-      className={`${width} mx-auto bg-white dark:bg-slate-800 rounded-xl
+      className={`${width} mx-auto bg-white dark:bg-slate-900 rounded-xl
         ${disableCardClick ? '' : 'shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]'}
         ${disableCardClick ? '' : 'hover:shadow-[0_8px_24px_rgba(24,119,242,0.15)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]'}
         ${disableCardClick ? '' : 'hover:bg-[#F7FAFF] dark:hover:bg-slate-700/50'}
         ${disableCardClick ? '' : 'transform hover:-translate-y-1'}
         ${disableCardClick ? 'cursor-default' : 'cursor-pointer'}
-        transition-all duration-300 border border-[#E7F3FF] dark:border-slate-700
-        h-[230px] sm:h-[250px] flex flex-col relative group`}
+        transition-all duration-300 border border-slate-200 dark:border-slate-800
+        min-h-[230px] sm:min-h-[250px] flex flex-col relative group`}
     >
       {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="relative rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
-            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl animate-pulse dark:bg-cyan-400/10" />
-            <span className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-cyan-400/25 dark:border-t-cyan-300" />
+        <div className="fixed inset-0 bg-slate-950/60 flex justify-center items-center z-[1200]">
+          <div className="relative rounded-xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
+            <span className="pointer-events-none absolute inset-0 rounded-xl bg-blue-500/10 blur-xl animate-pulse dark:bg-blue-400/10" />
+            <span className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-blue-400/25 dark:border-t-blue-300" />
             <div className="relative h-11 w-11">
               <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
             </div>
@@ -164,8 +161,9 @@ const ProfileCard = ({
             <div className={`${isProfileContext ? "w-10 h-10 sm:w-11 sm:h-11 opacity-85" : "w-12 h-12 sm:w-20 sm:h-20"}`}>
               <ProfileAvatar
                 src={profilePic}
-                alt="Profile"
-                className={`w-full h-full rounded-full object-cover ${isProfileContext ? "border border-blue-400/55 dark:border-cyan-400/50" : "border-2 border-blue-600 dark:border-blue-500"}`}
+                name={profileName}
+                alt={profileName ? `${profileName}'s avatar` : ""}
+                className={`w-full h-full rounded-full object-cover ${isProfileContext ? "border border-blue-400/55 dark:border-blue-400/50" : "border-2 border-blue-600 dark:border-blue-500"}`}
               />
             </div>
           </div>
@@ -200,15 +198,16 @@ const ProfileCard = ({
         {/* Experience Text Section */}
         <div className="mt-2 flex-1 overflow-hidden">
           <div className="h-full flex flex-col">
-            <div
-              className="prose prose-sm dark:prose-invert max-w-none overflow-hidden text-slate-700 dark:text-slate-300 transition-colors duration-300"
+            <p
+              className="max-w-none overflow-hidden text-sm leading-relaxed text-slate-700 dark:text-slate-300 transition-colors duration-300"
               style={{
                 display: '-webkit-box',
                 WebkitLineClamp: '4',
                 WebkitBoxOrient: 'vertical',
               }}
-              dangerouslySetInnerHTML={{ __html: htmlTruncatedText }}
-            />
+            >
+              {preview}
+            </p>
           </div>
         </div>
 
@@ -227,6 +226,7 @@ const ProfileCard = ({
                   onClick={handleEdit}
                   className="rounded-md p-2 text-blue-600 transition-colors duration-300 hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/35 dark:hover:text-blue-300"
                   title="Edit Post"
+                  aria-label="Edit post"
                 >
                   <Pencil size={16} />
                 </button>
@@ -236,6 +236,7 @@ const ProfileCard = ({
                   onClick={handleDeleteClick}
                   className="rounded-md p-2 text-[#FF5F5F] transition-colors duration-300 hover:bg-[#FF5F5F] hover:text-white dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white"
                   title="Delete Post"
+                  aria-label="Delete post"
                 >
                   <Trash size={16} />
                 </button>
@@ -248,29 +249,28 @@ const ProfileCard = ({
         </div>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity duration-300">
-          <div className="bg-white dark:bg-slate-800 rounded-xl w-full max-w-sm p-6 shadow-2xl border border-slate-200 dark:border-slate-700 mx-4">
-            <h3 className="text-lg font-bold text-[#1D1D1D] dark:text-white mb-2">Confirm Deletion</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">Are you sure you want to delete this experience? This action cannot be undone.</p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={handleCancelDelete}
-                className="px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors border border-transparent"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors shadow-sm shadow-red-500/20"
-              >
-                Yes, Delete
-              </button>
-            </div>
-          </div>
+      {/* Delete confirmation */}
+      <Modal
+        open={isModalOpen}
+        onClose={handleCancelDelete}
+        title="Confirm Deletion"
+        size="sm"
+        closeOnOutsideClick={!isDeleting}
+      >
+        <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">
+          Are you sure you want to delete this experience? This action cannot be undone.
+        </p>
+        <Alert tone="error" className="mb-4">{deleteError}</Alert>
+        <div className="flex justify-end gap-3">
+          <Button variant="secondary" onClick={handleCancelDelete} disabled={isDeleting}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete} loading={isDeleting}>
+            {isDeleting ? "Deleting..." : "Yes, Delete"}
+          </Button>
         </div>
-      )}
+      </Modal>
+
     </div>
   );
 };

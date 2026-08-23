@@ -8,25 +8,29 @@ import {
   Mail,
   Heart,
   MapPin,
-  Twitter,
-  Linkedin,
   Instagram,
   ArrowRight,
   Send
 } from "lucide-react";
+import Alert from "@/components/ui/Alert";
 import { requestJson } from "@/lib/client-api";
 
-export default function Footer({ isLandingPage = false }) {
+export default function Footer() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  // Explicit status: inferring success from message.includes("success") rendered
+  // "Subscription was unsuccessful" in green.
+  const [status, setStatus] = useState("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setStatus("idle");
 
-    if (!email.includes("@")) {
-      setMessage("Please enter a valid email.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setMessage("Please enter a valid email address.");
+      setStatus("error");
       return;
     }
 
@@ -40,13 +44,16 @@ export default function Footer({ isLandingPage = false }) {
 
       const data = await requestJson(res, {}, { success: false, error: "Something went wrong." });
       if (data.success) {
-        setMessage("Subscribed successfully! ðŸŽ‰");
+        setMessage("Subscribed successfully!");
+        setStatus("ok");
         setEmail("");
       } else {
         setMessage(data.error || "Something went wrong.");
+        setStatus("error");
       }
     } catch (error) {
       setMessage("Error subscribing. Please try again.");
+      setStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -71,13 +78,14 @@ export default function Footer({ isLandingPage = false }) {
             </p>
             <div className="flex items-center gap-5 pt-2">
               {[
-                { icon: Twitter, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Instagram, href: "https://www.instagram.com/theinterviewroom.in/" }
-              ].map((social, idx) => (
+                { icon: Instagram, href: "https://www.instagram.com/theinterviewroom.in/", label: "Instagram" }
+              ].map((social) => (
                 <a
-                  key={idx}
+                  key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${social.label} (opens in a new tab)`}
                   className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-all duration-300 hover:-translate-y-[1px] hover:border-blue-300/70 hover:bg-blue-50 hover:text-blue-600 hover:shadow-[0_10px_20px_rgba(59,130,246,0.2)] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-blue-500/50 dark:hover:bg-slate-700 dark:hover:text-blue-400 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.18)]"
                 >
                   <social.icon size={20} className="transition-transform group-hover:scale-110" />
@@ -164,11 +172,7 @@ export default function Footer({ isLandingPage = false }) {
                 <span>{isSubmitting ? "Subscribing..." : "Subscribe Now"}</span>
                 {!isSubmitting && <Send size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />}
               </button>
-              {message && (
-                <p className={`text-sm font-medium ${message.includes("success") ? 'text-emerald-500' : 'text-rose-500'}`}>
-                  {message}
-                </p>
-              )}
+              <Alert tone={status === "ok" ? "success" : "error"}>{message}</Alert>
             </form>
           </div>
         </div>

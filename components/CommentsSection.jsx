@@ -7,6 +7,7 @@ import { useAuthModal } from "@/components/AuthModalProvider";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { readJson } from "@/lib/client-api";
+import Alert from "@/components/ui/Alert";
 
 const TYPE_META = {
   doubt: { label: "Doubt", badgeClass: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/35 dark:text-amber-300 dark:border-amber-500/35" },
@@ -144,7 +145,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   const [postingReplyId, setPostingReplyId] = useState("");
   const [highlightedCommentId, setHighlightedCommentId] = useState("");
 
-  const loadComments = useCallback(async () => {
+  const loadComments = useCallback(async (signal) => {
     if (!experienceId) {
       setError("Comments unavailable: invalid experience id");
       setLoading(false);
@@ -156,7 +157,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     try {
       const res = await fetch(
         `/api/comments?experienceId=${encodeURIComponent(experienceId)}&page=1&limit=40&depth=5&sort=${encodeURIComponent(sort)}`,
-        { cache: "no-store" }
+        { cache: "no-store", signal }
       );
       const json = await readJson(res, {});
       if (!res.ok) {
@@ -170,14 +171,19 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         uiConfig: json.uiConfig || { maxCommentLength: 1000, allowedTypes: ["doubt", "tip", "experience", "general"] },
       });
     } catch (err) {
+      if (err.name === "AbortError") return;
       setError(err.message || "Failed to fetch comments");
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   }, [experienceId, sort]);
 
   useEffect(() => {
-    loadComments();
+    // Toggling sort refires this; without an abort the responses could land out
+    // of order and show results for the sort the pill no longer says.
+    const controller = new AbortController();
+    loadComments(controller.signal);
+    return () => controller.abort();
   }, [loadComments]);
 
   useEffect(() => {
@@ -213,7 +219,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       return;
     }
 
-    if (likingCommentId) return;
+    if (likingCommentId === item.id) return;
 
     const previousHasUpvoted = Boolean(item.hasUpvoted);
     const previousUpvotesCount = Number(item.upvotesCount) || 0;
@@ -232,11 +238,9 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       });
       const json = await readJson(res, {});
       if (!res.ok) {
-        if (res.status === 401) {
-          openAuthModal();
-          return;
-        }
-        throw new Error(json?.error || "Failed to like comment");
+        if (res.status === 401) openAuthModal();
+        // Throw either way so the catch below rolls the optimistic update back.
+        throw new Error(json?.error || (res.status === 401 ? "Please sign in again." : "Failed to like comment"));
       }
 
       setComments((prev) =>
@@ -278,18 +282,13 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       });
       const json = await readJson(res, {});
       if (!res.ok) {
-        if (res.status === 401) {
-          openAuthModal();
-          return;
-        }
-        throw new Error(json?.error || "Failed to post comment");
+        if (res.status === 401) openAuthModal();
+        throw new Error(json?.error || (res.status === 401 ? "Please sign in again." : "Failed to post comment"));
       }
       const created = json?.comment;
       if (created && !created.parentCommentId) {
         setComments((prev) => {
-          if (sort === "oldest") return [...prev, created];
-          if (sort === "top") return [...prev, created];
-          return [created, ...prev];
+          return sort === "recent" ? [created, ...prev] : [...prev, created];
         });
         setMeta((prev) => updateMetaOnCreate(prev, created.type));
       }
@@ -323,11 +322,8 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       });
       const json = await readJson(res, {});
       if (!res.ok) {
-        if (res.status === 401) {
-          openAuthModal();
-          return;
-        }
-        throw new Error(json?.error || "Failed to post reply");
+        if (res.status === 401) openAuthModal();
+        throw new Error(json?.error || (res.status === 401 ? "Please sign in again." : "Failed to post reply"));
       }
       const createdReply = json?.comment;
       if (createdReply?.parentCommentId) {
@@ -364,11 +360,8 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
       });
       const json = await readJson(res, {});
       if (!res.ok) {
-        if (res.status === 401) {
-          openAuthModal();
-          return;
-        }
-        throw new Error(json?.error || "Failed to update status");
+        if (res.status === 401) openAuthModal();
+        throw new Error(json?.error || (res.status === 401 ? "Please sign in again." : "Failed to update status"));
       }
 
       const nextResolved = Boolean(json?.comment?.isResolved);
@@ -404,7 +397,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         id={`comment-${item.id}`}
         className={cn(
           "border border-slate-200/80 bg-white/95 dark:border-slate-700/80 dark:bg-slate-900/90",
-          isReply ? "mt-2 rounded-xl p-3 scroll-mt-28" : "rounded-2xl p-4 scroll-mt-28 sm:p-5",
+          isReply ? "mt-2 rounded-xl p-3 scroll-mt-28" : "rounded-xl p-4 scroll-mt-28 sm:p-5",
           highlightedCommentId === item.id
             ? "ring-2 ring-blue-300 dark:ring-blue-400/60"
             : ""
@@ -549,7 +542,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
   };
 
   return (
-    <section className="relative mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
+    <section className="relative mt-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
       <div className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-blue-500/15" />
       <div className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-blue-200/25 blur-3xl dark:bg-blue-500/15" />
 
@@ -571,7 +564,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         </button>
       </div>
 
-      <div className="relative rounded-2xl border border-slate-200/60 bg-slate-50/50 p-4 transition-all focus-within:border-blue-400/50 focus-within:bg-white focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:border-slate-700/50 dark:bg-slate-800/40 dark:focus-within:border-blue-500/30 dark:focus-within:bg-slate-900/40">
+      <div className="relative rounded-xl border border-slate-200/60 bg-slate-50/50 p-4 transition-all focus-within:border-blue-400/50 focus-within:bg-white focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:border-slate-700/50 dark:bg-slate-800/40 dark:focus-within:border-blue-500/30 dark:focus-within:bg-slate-900/40">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Tag as:</span>
           <div className="flex flex-wrap gap-1.5">
@@ -647,16 +640,16 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         ))}
       </div>
 
-      {error ? <p className="mt-4 text-sm text-rose-600 font-medium">{error}</p> : null}
+      <Alert tone="error" className="mt-4">{error}</Alert>
 
       {loading ? (
         <div className="mt-6 space-y-4">
           {[0, 1, 2].map((n) => (
-            <div key={n} className="h-28 animate-pulse rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-700/50 dark:bg-slate-800/40" />
+            <div key={n} className="h-28 animate-pulse rounded-xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-700/50 dark:bg-slate-800/40" />
           ))}
         </div>
       ) : filteredComments.length === 0 ? (
-        <div className="mt-8 rounded-2xl border border-dashed border-slate-300/70 bg-slate-50/60 p-6 dark:border-slate-700/70 dark:bg-slate-800/35">
+        <div className="mt-8 rounded-xl border border-dashed border-slate-300/70 bg-slate-50/60 p-6 dark:border-slate-700/70 dark:bg-slate-800/35">
           <div className="mb-3 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm dark:bg-slate-900/70">
               <MessageSquare size={22} className="text-blue-500 dark:text-blue-300" />

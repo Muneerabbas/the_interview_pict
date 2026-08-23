@@ -11,12 +11,14 @@ import ProfileAvatar from '../../components/ProfileAvatar';
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import ShareProfileButton from '../../components/ShareProfileButton';
 import { requestJson } from '../../lib/client-api';
+import Alert from '@/components/ui/Alert';
+import { safeExternalUrl } from '@/lib/utils';
 
 const LoadingScreen = () => (
   <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/25 dark:bg-slate-950/70 backdrop-blur-sm transition-colors duration-500">
-    <div className="relative flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500 dark:border-slate-700/80 dark:bg-slate-900/95">
-      <span className="pointer-events-none absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl animate-pulse dark:bg-cyan-400/10" />
-      <span className="absolute h-16 w-16 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-cyan-400/25 dark:border-t-cyan-300" />
+    <div className="relative flex items-center justify-center rounded-xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500 dark:border-slate-700/80 dark:bg-slate-900/95">
+      <span className="pointer-events-none absolute inset-0 rounded-xl bg-blue-500/10 blur-xl animate-pulse dark:bg-blue-400/10" />
+      <span className="absolute h-16 w-16 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-blue-400/25 dark:border-t-blue-300" />
       <div className="relative h-11 w-11">
         <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
       </div>
@@ -28,7 +30,7 @@ const ProfilePage = () => {
   const { data: session, status } = useSession();
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
-  const email = session?.user?.email || "john.doe@example.com";
+  const email = session?.user?.email || "";
   const [globalLoading, setGlobalLoading] = useState(false);
 
   // New states for profile fields
@@ -62,6 +64,7 @@ const ProfilePage = () => {
   const [editingSocialField, setEditingSocialField] = useState(null); // 'linkedin', 'twitter', etc.
   const [showSocialOptions, setShowSocialOptions] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [skillInput, setSkillInput] = useState('');
 
   useEffect(() => {
@@ -76,18 +79,25 @@ const ProfilePage = () => {
   }, [status, session]);
 
   useEffect(() => {
-    if (!email) return;
+    if (!email) {
+      setLoadingPosts(false);
+      return undefined;
+    }
+
+    const controller = new AbortController();
 
     const fetchPosts = async () => {
       try {
+        // The server derives the author from the session; no email in the body.
         const response = await fetch('/api/profile', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
+          signal: controller.signal,
         });
         const data = await requestJson(response, {}, { posts: [] });
         setPosts(Array.isArray(data.posts) ? data.posts : []);
       } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Error fetching posts:', error);
       } finally {
         setLoadingPosts(false);
@@ -96,7 +106,9 @@ const ProfilePage = () => {
 
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`/api/user/profile?email=${email}`);
+        const response = await fetch(`/api/user/profile?email=${encodeURIComponent(email)}`, {
+          signal: controller.signal,
+        });
         if (response.ok) {
           const data = await requestJson(response, {}, { user: null });
           if (data.user) {
@@ -125,14 +137,17 @@ const ProfilePage = () => {
           }
         }
       } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Error fetching profile data:', error);
       }
     };
 
     fetchPosts();
-    if (status === 'authenticated' && session?.user?.email) {
+    if (status === 'authenticated') {
       fetchProfileData();
     }
+
+    return () => controller.abort();
   }, [email, status]);
 
   const stats = React.useMemo(() => {
@@ -149,7 +164,9 @@ const ProfilePage = () => {
   }, [posts]);
 
   const handleSaveProfile = async (dataToSave = profileData) => {
+    if (savingProfile) return;
     setSavingProfile(true);
+    setSaveError('');
     try {
       if (editingSocialField) setEditingSocialField(null);
       if (showSocialOptions) setShowSocialOptions(false);
@@ -168,7 +185,7 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Failed to save profile. Please try again.');
+      setSaveError('Failed to save profile. Please try again.');
     } finally {
       setSavingProfile(false);
     }
@@ -202,8 +219,11 @@ const ProfilePage = () => {
   };
 
   const handleCustomLinkUpdate = (index, field, value) => {
-    const updatedCustom = [...profileData.socialLinks.custom];
-    updatedCustom[index][field] = value;
+    // Copy the row too -- the spread only cloned the array, so this mutated the
+    // shared link object in place.
+    const updatedCustom = profileData.socialLinks.custom.map((link, i) =>
+      i === index ? { ...link, [field]: value } : link
+    );
     setProfileData({
       ...profileData,
       socialLinks: {
@@ -227,9 +247,9 @@ const ProfilePage = () => {
     return (
       <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
         <div className="relative flex min-h-screen items-center justify-center">
-          <div className="relative flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500 dark:border-slate-700/80 dark:bg-slate-900/95">
-            <span className="pointer-events-none absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl animate-pulse dark:bg-cyan-400/10" />
-            <span className="absolute h-16 w-16 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-cyan-400/25 dark:border-t-cyan-300" />
+          <div className="relative flex items-center justify-center rounded-xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] transition-colors duration-500 dark:border-slate-700/80 dark:bg-slate-900/95">
+            <span className="pointer-events-none absolute inset-0 rounded-xl bg-blue-500/10 blur-xl animate-pulse dark:bg-blue-400/10" />
+            <span className="absolute h-16 w-16 rounded-full border border-blue-500/25 border-t-blue-600 animate-spin dark:border-blue-400/25 dark:border-t-blue-300" />
             <div className="relative h-11 w-11">
               <Image src="/app_icon.png" alt="theInterview loading" fill className="object-contain" />
             </div>
@@ -262,7 +282,7 @@ const ProfilePage = () => {
         </div>
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-slate-900/25 dark:bg-slate-900/60 backdrop-blur-sm" />
-          <div className="relative mx-4 w-full max-w-md rounded-2xl border border-slate-200 bg-white dark:bg-slate-800 p-8 shadow-2xl">
+          <div className="relative mx-4 w-full max-w-md rounded-xl border border-slate-200 bg-white dark:bg-slate-800 p-8 shadow-2xl">
             <Login />
           </div>
         </div>
@@ -278,7 +298,7 @@ const ProfilePage = () => {
       {isEditing && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsEditing(false)} />
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-2xl sm:p-8">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-2xl sm:p-8">
             <div className="mb-6 flex items-center justify-between border-b pb-4 dark:border-slate-800">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Edit Profile</h2>
               <button onClick={() => setIsEditing(false)} className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
@@ -394,6 +414,8 @@ const ProfilePage = () => {
                 </div>
               </div>
 
+              <Alert tone="error" className="mt-6">{saveError}</Alert>
+
               <div className="flex justify-end gap-4 pt-6">
                 <button
                   onClick={() => setIsEditing(false)}
@@ -402,7 +424,7 @@ const ProfilePage = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={handleSaveProfile}
+                  onClick={() => handleSaveProfile()}
                   disabled={savingProfile}
                   className="flex items-center gap-2 rounded-xl bg-blue-600 px-8 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700 disabled:opacity-50"
                 >
@@ -460,7 +482,7 @@ const ProfilePage = () => {
                     ) : (
                       <button
                         onClick={() => setEditingField('headline')}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-100 dark:border-cyan-500/35 dark:bg-cyan-950/30 dark:text-cyan-300"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-100 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300"
                       >
                         <PlusCircle size={14} /> Add headline
                       </button>
@@ -530,6 +552,10 @@ const ProfilePage = () => {
                 <div className="flex items-center gap-3">
                   {Object.entries(profileData.socialLinks).map(([key, value]) => {
                     if (key === 'custom' || !value) return null;
+                    // Never put an unvalidated URL in an href: `javascript:` here
+                    // is stored XSS for everyone who views the profile.
+                    const safeHref = safeExternalUrl(value);
+                    if (!safeHref) return null;
                     const icons = {
                       linkedin: <Linkedin size={18} />,
                       twitter: <Twitter size={18} />,
@@ -542,7 +568,14 @@ const ProfilePage = () => {
                       github: <Github size={18} />,
                     };
                     return (
-                      <a key={key} href={value} target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400">
+                      <a
+                        key={key}
+                        href={safeHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${key} profile`}
+                        className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400"
+                      >
                         {icons[key]}
                       </a>
                     );
@@ -596,7 +629,7 @@ const ProfilePage = () => {
                       </button>
 
                       {showSocialOptions && (
-                        <div className="absolute left-0 top-full mt-2 z-20 flex flex-wrap gap-2 animate-in slide-in-from-top-2 duration-200 p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl w-64">
+                        <div className="absolute left-0 top-full mt-2 z-20 flex flex-wrap gap-2 animate-in slide-in-from-top-2 duration-200 p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl w-64">
                           {['linkedin', 'github', 'twitter', 'leetcode', 'codeforces', 'codechef', 'youtube', 'instagram', 'facebook'].map(platform => (
                             <button
                               key={platform}
@@ -643,7 +676,7 @@ const ProfilePage = () => {
           <div className="mt-8 border-t border-slate-200/90 dark:border-slate-700/80 pt-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">About</h3>
-              {!profileData.about && !editingField === 'about' && (
+              {!profileData.about && editingField !== 'about' && (
                 <button onClick={() => setEditingField('about')} className="text-sm text-blue-600 font-semibold flex items-center gap-1"><PlusCircle size={14} /> Add About</button>
               )}
               {profileData.about && editingField !== 'about' && (
@@ -669,7 +702,7 @@ const ProfilePage = () => {
             ) : profileData.about ? (
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{profileData.about}</p>
             ) : (
-              <div className="cursor-pointer rounded-2xl border-2 border-dashed border-slate-200 py-3 text-slate-400 transition-all hover:border-blue-400 hover:text-blue-500 dark:border-slate-700" onClick={() => setEditingField('about')}>
+              <div className="cursor-pointer rounded-xl border-2 border-dashed border-slate-200 py-3 text-slate-400 transition-all hover:border-blue-400 hover:text-blue-500 dark:border-slate-700" onClick={() => setEditingField('about')}>
                 <div className="flex flex-col items-center justify-center">
                   <PlusCircle size={20} className="mb-1.5" />
                   <span className="text-sm font-medium">Add a bio to let people know you better</span>
@@ -683,19 +716,19 @@ const ProfilePage = () => {
       {stats && (
         <div className="relative mx-auto mt-10 max-w-6xl px-4 sm:px-6">
           <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-blue-200/80 dark:border-blue-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+            <div className="rounded-xl border border-blue-200/80 dark:border-blue-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">Your Articles</div>
               <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><FileText size={18} className="text-blue-600" /> {stats.posts}</div>
             </div>
-            <div className="rounded-2xl border border-indigo-200/80 dark:border-indigo-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+            <div className="rounded-xl border border-indigo-200/80 dark:border-indigo-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">Total Reads</div>
               <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><Eye size={18} className="text-indigo-600" /> {stats.reads}</div>
             </div>
-            <div className="rounded-2xl border border-pink-200/80 dark:border-pink-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+            <div className="rounded-xl border border-pink-200/80 dark:border-pink-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">Total Likes</div>
               <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><ThumbsUp size={18} className="text-pink-600" /> {stats.likes}</div>
             </div>
-            <div className="rounded-2xl border border-emerald-200/80 dark:border-emerald-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
+            <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/45 bg-white/90 dark:bg-slate-900/70 p-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">Companies Impacted</div>
               <div className="mt-1 inline-flex items-center gap-2 text-xl font-extrabold text-slate-900 dark:text-slate-100"><Building2 size={18} className="text-emerald-600" /> {stats.companies}</div>
             </div>
@@ -709,11 +742,11 @@ const ProfilePage = () => {
           <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white sm:text-xl md:text-2xl">
-                Your Experiences{!loadingPosts && <span className="ml-2 inline-flex items-center rounded-full border border-blue-200/80 bg-blue-50/70 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:border-cyan-500/35 dark:bg-cyan-950/30 dark:text-cyan-300">{posts.length}</span>}
+                Your Experiences{!loadingPosts && <span className="ml-2 inline-flex items-center rounded-full border border-blue-200/80 bg-blue-50/70 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300">{posts.length}</span>}
               </h2>
             </div>
             <Link href="/post">
-              <button className="flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[0.5px] hover:border-blue-300 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:px-5 sm:py-2.5 sm:text-sm">
+              <button className="flex items-center gap-2 rounded-xl border border-slate-300/80 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-[0.5px] hover:border-blue-300 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-blue-500/40 dark:hover:text-blue-300 sm:px-5 sm:py-2.5 sm:text-sm">
                 <PlusCircle size={16} />
                 <span>Share Experience</span>
               </button>
@@ -726,8 +759,8 @@ const ProfilePage = () => {
             </div>
           ) : posts.length === 0 ? (
             <div className="py-8 text-center">
-              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-blue-200/80 bg-blue-50/70 dark:border-cyan-700/50 dark:bg-cyan-900/20">
-                <FileText size={26} className="text-blue-600 dark:text-cyan-300" />
+              <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-blue-200/80 bg-blue-50/70 dark:border-blue-700/50 dark:bg-blue-900/30">
+                <FileText size={26} className="text-blue-600 dark:text-blue-300" />
               </div>
               <h3 className="text-xl font-bold dark:text-white mb-2">No experiences shared yet</h3>
               <p className="text-slate-500 mb-6">Your interview story can help seniors prepare smarter.</p>
@@ -738,7 +771,7 @@ const ProfilePage = () => {
           ) : (
             <div className="grid gap-5">
               {posts.map((post) => (
-                <div key={post.uid} className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl">
+                <div key={post.uid} className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl">
                   <ProfileCard profile={{ ...post, profile_pic: profile_pic || post.profile_pic }} edit={true} deletePost={true} setGlobalLoading={setGlobalLoading} disableCardClick={true} />
                 </div>
               ))}

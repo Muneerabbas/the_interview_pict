@@ -3,12 +3,8 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import TeamMemberCard from "../../components/TeamMemberCard";
 
-import himg from "../../public/h1.jpg";
-import nimg from "../../public/n2.jpg";
-import niimg from "../../public/n1.jpg";
-import m1img from "../../public/m1.jpeg";
-import m2img from "../../public/m2.jpeg";
 import logo from "../../public/app_icon.png";
+import { TEAM, TEAM_COUNT } from "@/data/team";
 
 const TeamPage = () => {
   return (
@@ -21,8 +17,8 @@ const TeamPage = () => {
 
               <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-3xl">
-                  <div className="team-fade-up inline-flex items-center gap-3 rounded-full border border-blue-200/80 bg-blue-50/90 px-4 py-2 text-sm font-medium text-blue-700 shadow-sm dark:border-cyan-500/40 dark:bg-cyan-950/35 dark:text-cyan-300">
-                    <span className="team-pulse-dot h-2.5 w-2.5 rounded-full bg-blue-500 dark:bg-cyan-400" />
+                  <div className="team-fade-up inline-flex items-center gap-3 rounded-full border border-blue-200/80 bg-blue-50/90 px-4 py-2 text-sm font-medium text-blue-700 shadow-sm dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300">
+                    <span className="team-pulse-dot h-2.5 w-2.5 rounded-full bg-blue-500 dark:bg-blue-400" />
                     Students building in public
                   </div>
 
@@ -57,7 +53,7 @@ const TeamPage = () => {
 
                 <div className="team-fade-up-delay grid grid-cols-2 gap-4 sm:min-w-[320px]">
                   <div className="rounded-xl border border-slate-800 bg-slate-950 px-5 py-5 text-white dark:border-slate-700 dark:bg-slate-800">
-                    <p className="text-3xl font-bold">5</p>
+                    <p className="text-3xl font-bold">{TEAM_COUNT}</p>
                     <p className="mt-2 text-sm text-slate-300">Builders shipping the platform</p>
                   </div>
                   <div className="rounded-xl border border-blue-100 bg-blue-50 px-5 py-5 text-slate-900 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-slate-100">
@@ -81,46 +77,9 @@ const TeamPage = () => {
               </div>
 
               <div className="mt-10 grid grid-cols-1 gap-6 place-items-center sm:grid-cols-2 lg:grid-cols-3">
-                <TeamMemberCard
-                  img={himg}
-                  name="Himanshu Gholse"
-                  subtitle="PICT'26 ENTC"
-                  linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/"
-                  github="https://github.com/himanshug-08"
-                  email="himanshugholse08@gmail.com"
-                />
-                <TeamMemberCard
-                  img={nimg}
-                  name="Neeraj Magdum"
-                  subtitle="PICT'26 CE"
-                  linkedin="https://www.linkedin.com/in/neerajmagdum/"
-                  github="https://github.com/nirz306"
-                  email="neerajmagdum10@gmail.com"
-                />
-                <TeamMemberCard
-                  img={niimg}
-                  name="Nilay Tayade"
-                  subtitle="PICT'26 CE"
-                  linkedin="https://www.linkedin.com/in/nilay-tayade/"
-                  github="https://github.com/nilaytayade"
-                  email="nilaytayadee@gmail.com"
-                />
-                <TeamMemberCard
-                  img={m1img}
-                  name="Muneer Abbas"
-                  subtitle="PICT'28 CE"
-                  linkedin="https://www.linkedin.com/in/muneer-abass-67a095285/"
-                  github="https://github.com/muneerabbas"
-                  email="muneer.abbas5678@gmail.com"
-                />
-                <TeamMemberCard
-                  img={m2img}
-                  name="Manas Khairnar"
-                  subtitle="PICT CE"
-                  linkedin="https://www.linkedin.com/in/manas-khairnar-98329132b/"
-                  github="https://github.com/derpx06"
-                  email="manaskhairnar1511@gmail.com"
-                />
+                {TEAM.map((member) => (
+                  <TeamMemberCard key={member.name} {...member} />
+                ))}
               </div>
             </div>
           </div>

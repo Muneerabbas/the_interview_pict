@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
 import debounce from "lodash/debounce";
@@ -16,9 +16,9 @@ import { TALE_CATEGORIES } from "@/lib/tale-categories";
 
 const LoadingScreen = ({ isDarkMode = false }) => (
   <div className={`fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center ${isDarkMode ? "bg-black/65" : "bg-slate-900/25"} backdrop-blur-sm`}>
-    <div className="relative flex items-center justify-center rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
-      <span className={`pointer-events-none absolute inset-0 rounded-2xl blur-xl animate-pulse ${isDarkMode ? "bg-cyan-400/10" : "bg-blue-500/10"}`} />
-      <span className={`absolute h-16 w-16 rounded-full border ${isDarkMode ? "border-cyan-400/25 border-t-cyan-300" : "border-blue-500/25 border-t-blue-600"} animate-spin`} />
+    <div className="relative flex items-center justify-center rounded-xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] dark:border-slate-700/80 dark:bg-slate-900/95">
+      <span className={`pointer-events-none absolute inset-0 rounded-xl blur-xl animate-pulse ${isDarkMode ? "bg-blue-400/10" : "bg-blue-500/10"}`} />
+      <span className={`absolute h-16 w-16 rounded-full border ${isDarkMode ? "border-blue-400/25 border-t-blue-300" : "border-blue-500/25 border-t-blue-600"} animate-spin`} />
       <div className="relative h-11 w-11">
         <Image src="/app_icon.png" alt="theInterview loading" fill sizes="44px" className="object-contain" />
       </div>
@@ -225,7 +225,6 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     markdown: false,
   });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [previousMarkdown, setPreviousMarkdown] = useState("");
   const [mode, setMode] = useState("manual");
   const isTale = contentType === "tale";
 
@@ -260,6 +259,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     verdictAndTips: ""
   });
   const chatContainerRef = useRef(null);
+  const draftLoadedFor = useRef(null);
 
   const years = Array.from({ length: 30 }, (_, index) => 2000 + index).reverse();
   const [isLoading, setIsLoading] = useState(false);
@@ -302,7 +302,12 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
   const [newCompanyInitialName, setNewCompanyInitialName] = useState("");
 
+  // Typing fast used to land the slower earlier response last, so the list
+  // showed results for a prefix the user had already replaced.
+  const collegeRequestId = useRef(0);
+
   const loadColleges = async (query, pageToLoad) => {
+    const requestId = ++collegeRequestId.current;
     setCollegeLoading(true);
     try {
       const params = new URLSearchParams({
@@ -312,6 +317,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       });
       const res = await fetch(`/api/colleges?${params.toString()}`);
       const data = await readJson(res, {});
+      if (requestId !== collegeRequestId.current) return; // a newer query won
       if (data.success && Array.isArray(data.data)) {
         setColleges((prev) => (
           pageToLoad === 1
@@ -324,7 +330,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     } catch (err) {
       console.error("Could not fetch colleges", err);
     } finally {
-      setCollegeLoading(false);
+      if (requestId === collegeRequestId.current) setCollegeLoading(false);
     }
   };
 
@@ -356,28 +362,30 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   };
 
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && previousMarkdown) {
-        setMarkdown(previousMarkdown);
-        setPreviousMarkdown('');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [previousMarkdown]);
-
   // Load draft on initial render
   useEffect(() => {
     const loadDraft = async () => {
       if (!session?.user?.email) return;
 
+      // This effect re-runs whenever the session object refreshes. Reloading the
+      // draft over work already in progress destroyed it; only ever load once
+      // per content type.
+      if (draftLoadedFor.current === contentType) return;
+      draftLoadedFor.current = contentType;
+
       try {
-        const response = await fetch(`/api/drafts?email=${session.user.email}&contentType=${contentType}`);
+        // The draft belongs to the session server-side; no ?email= any more.
+        const response = await fetch(`/api/drafts?contentType=${contentType}`);
         if (response.ok) {
           const draftData = await readJson(response, {});
-          setMarkdown(draftData.exp_text || "");
+
+          // A 200 with an empty/partial body used to blank the editor.
+          if (!draftData || typeof draftData.exp_text !== "string" || !draftData.exp_text.trim()) {
+            setMarkdown(isTale ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
+            return;
+          }
+
+          setMarkdown(draftData.exp_text);
           setTitle(draftData.title || "");
           setCollege(draftData.college || "");
           setCustomCollege(draftData.customCollege || "");
@@ -419,29 +427,33 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     loadDraft();
   }, [session?.user?.email, contentType]);
 
-  // Create debounced save function
-  const saveDraft = useCallback(
-    debounce(async (draftData) => {
-      if (!session?.user?.email) return;
+  // Keep the latest values in a ref so the debounced function below never has to
+  // be rebuilt -- rebuilding it orphaned the pending timer and dropped that save.
+  const draftContextRef = useRef({ email: null, contentType });
+  draftContextRef.current = { email: session?.user?.email || null, contentType };
 
-      try {
-        await fetch("/api/drafts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...draftData,
-            email: session.user.email,
-            name: session.user.name,
-            profile_pic: session.user.image,
-            content_type: contentType
-          }),
-        });
-      } catch (error) {
-        console.error("Error saving draft:", error);
-      }
-    }, 2000),
-    [session, contentType]
+  const saveDraft = useMemo(
+    () =>
+      debounce(async (draftData) => {
+        const { email, contentType: type } = draftContextRef.current;
+        if (!email) return;
+
+        try {
+          await fetch("/api/drafts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...draftData, content_type: type }),
+          });
+        } catch (error) {
+          console.error("Error saving draft:", error);
+        }
+      }, 2000),
+    []
   );
+
+  // Flush any pending save before unmounting, so the last 2 seconds of typing
+  // are not silently discarded when the user navigates away.
+  useEffect(() => () => saveDraft.flush?.(), [saveDraft]);
 
 
 
@@ -538,7 +550,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const validateRequiredMetaForAI = () => {
     if (isTale) {
-      alert("AI writer is not available for Tales. Please use Manual Writer.");
+      handleEditorError("AI writer is not available for Tales. Please use Manual Writer.");
       return false;
     }
 
@@ -560,11 +572,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
   const handleModeChange = (nextMode) => {
     if (nextMode === 'ai' && isTale) {
-      alert("AI writer is not available for Tales. Please use Manual Writer.");
+      handleEditorError("AI writer is not available for Tales. Please use Manual Writer.");
       return;
     }
     if (nextMode === 'ai' && !validateRequiredMetaForAI()) {
-      alert("Please select College, Batch, Department, Company, and Role before using AI.");
+      handleEditorError("Please select College, Batch, Department, Company, and Role before using AI.");
       return;
     }
     setMode(nextMode);
@@ -585,8 +597,10 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   };
 
   const handleSubmit = async () => {
+    if (isLoading) return; // the submit button had no disabled state
+
     if (!session) {
-      alert("You need to be logged in to submit!");
+      handleEditorError("You need to be signed in to submit.");
       return;
     }
 
@@ -597,13 +611,16 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       branch: validateField('branch', branch),
       company: validateField('company', company),
       role: validateField('role', role),
+      // Title is required for tales but was missing here, so an empty title
+      // silently saved as "Untitled Story" with no hint shown to the user.
+      title: validateField('title', title),
       markdown: validateField('markdown', markdown),
     };
 
     setErrors(newErrors);
 
     if (Object.values(newErrors).includes(true)) {
-      alert("Please fill in all required fields.");
+      handleEditorError("Please fill in all required fields.");
       return;
     }
 
@@ -614,14 +631,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
     const payload = {
       exp_text: markdown,
-      name: session?.user?.name || session?.user?.email?.split('@')[0] || "Contributor",
-      profile_pic: session?.user?.image,
       college: finalCollege || "",
       batch: batch || "",
       branch: branch || "",
       company: finalCompany || "General Story",
       role: finalRole || "",
-      email: session?.user?.email,
       content_type: contentType,
       title: title || (isTale ? "Untitled Story" : ""),
       tags: tags
@@ -632,7 +646,6 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       category: isTale ? taleCategory : "",
     };
 
-    console.log("📤 Submitting Payload:", payload);
     setIsLoading(true);
 
     try {
@@ -644,8 +657,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
       const data = await readJson(response, {});
       if (!response.ok) {
-        console.error("❌ Server Error Details:", data);
-        throw new Error(data.message || "Failed to submit markdown");
+        throw new Error(data?.error || data?.message || "Failed to submit");
       }
 
       // After successful submission, reset the draft
@@ -668,14 +680,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         markdown: false,
       });
 
-      // Delete the draft from the backend
+      // Delete the draft from the backend (email comes from the session there)
       await fetch("/api/deleteDraft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: session.user.email,
-          content_type: contentType
-        }),
+        body: JSON.stringify({ contentType }),
       });
 
       // Invalidate frontend feed cache
@@ -691,15 +700,21 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
       setSuccessMessage("Your experience has been successfully submitted!");
 
 
-      // Redirect to home after 2 seconds (for smooth UX)
-      // Loading will be true until new page loads and this component unmounts
-      window.location.href = `/ single / ${data.uid} `;
+      // Loading stays true until the new page loads and this component unmounts.
+      // NB: this template literal used to contain literal spaces
+      // (`/ single / ${uid} `), so every successful post landed on a 404 and
+      // authors re-submitted, creating duplicates.
+      if (data?.uid) {
+        window.location.href = `/single/${data.uid}`;
+      } else {
+        window.location.href = isTale ? "/tales" : "/feed";
+      }
 
 
     } catch (error) {
       console.error("Error submitting markdown:", error);
-      alert("There was an error submitting your markdown.");
-      setIsLoading(false); // Stop loading in case of error
+      handleEditorError(error.message || "There was an error submitting your post.");
+      setIsLoading(false);
     }
   };
 
@@ -1013,8 +1028,8 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
       {/* Warning message for small screens */}
       {isSmallScreen && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 mx-4 mt-[80px] flex items-center justify-center gap-2 rounded-[20px] border border-white/60 bg-white/60 px-4 py-3 text-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/80 dark:bg-slate-900/80 dark:text-slate-200 md:hidden">
-          <AlertCircle className="h-[18px] w-[18px] text-indigo-500 dark:text-cyan-300" />
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 mx-4 mt-[80px] flex items-center justify-center gap-2 rounded-xl border border-white/60 bg-white/60 px-4 py-3 text-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/80 dark:bg-slate-900/80 dark:text-slate-200 md:hidden">
+          <AlertCircle className="h-[18px] w-[18px] text-indigo-500 dark:text-blue-300" />
           <p className="text-[13px] font-bold tracking-tight">Best experienced on a tablet or laptop.</p>
         </motion.div>
       )}
@@ -1025,14 +1040,10 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-3xl dark:border-slate-700/70 dark:bg-slate-900/70 dark:shadow-[0_14px_36px_rgba(2,6,23,0.65)] sm:rounded-[2.5rem] sm:p-7 md:p-9 lg:p-10"
+          className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:shadow-xl dark:shadow-slate-950/30 sm:rounded-xl sm:p-7 md:p-9 lg:p-10"
         >
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-sky-100/40 via-indigo-100/20 to-transparent dark:from-cyan-900/20 dark:via-blue-900/15" />
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-400/10 blur-[80px] dark:bg-cyan-500/15" />
-          <div className="pointer-events-none absolute -left-20 top-40 h-64 w-64 rounded-full bg-purple-400/10 blur-[80px] dark:bg-indigo-500/15" />
-
           <div className="relative mx-auto mb-3 max-w-3xl text-center sm:mb-4">
-            <h1 className="mb-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-[28px] font-extrabold leading-tight tracking-tight text-transparent dark:from-slate-100 dark:via-cyan-300 dark:to-blue-300 sm:mb-3 sm:text-5xl lg:text-6xl">
+            <h1 className="mb-2 text-[28px] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100 sm:mb-3 sm:text-5xl lg:text-6xl">
               {isTale ? "Share Your Story" : "Share Your Journey"}
             </h1>
             <p className="mx-auto px-1 text-[15px] leading-relaxed text-[#111827] dark:text-slate-300 sm:px-0">
@@ -1057,7 +1068,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
             </div>
           </div>
 
-          <div className="relative z-[60] mb-6 w-full overflow-visible rounded-2xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
+          <div className="relative z-[60] mb-6 w-full overflow-visible rounded-xl border border-slate-200/80 bg-white/35 p-3 backdrop-blur-lg dark:border-slate-700/80 dark:bg-slate-900/45 sm:p-4">
             {isTale && (
               <div className="mb-6 grid w-full gap-4 sm:grid-cols-2">
                 <div>
@@ -1070,7 +1081,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Give your story a catchy title (e.g., My First Hackathon: A Rollercoaster of Bugs)"
-                  className={`w-full rounded-2xl border ${errors.title ? 'border-red-400 bg-red-50/10' : 'border-slate-200 bg-white shadow-sm'} px-5 py-4 text-sm font-semibold text-slate-700 transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20`}
+                  className={`w-full rounded-xl border ${errors.title ? 'border-red-400 bg-red-50/10' : 'border-slate-200 bg-white shadow-sm'} px-5 py-4 text-sm font-semibold text-slate-700 transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/20`}
                 />
                 {errors.title && <p className="mt-2 ml-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
                 </div>
@@ -1085,7 +1096,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                     id="tale-category"
                     value={taleCategory}
                     onChange={(event) => setTaleCategory(event.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
                   >
                     <option value="">Choose a category</option>
                     {TALE_CATEGORIES.map((category) => (
@@ -1109,7 +1120,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                 onChange={(event) => setTags(event.target.value)}
                 placeholder={isTale ? "e.g. Hackathon, Projects, Lessons learned" : "e.g. DSA, On-campus, SDE"}
                 maxLength={180}
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
               />
               <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">Separate tags with commas. You can add up to 6.</p>
             </div>
@@ -1118,7 +1129,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
               <div className={`group relative z-[56] rounded-xl p-2 transition-all duration-300 ${errors.college ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <FileSignature className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-300" />
                     <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">College</label>
                   </div>
                   <div className="relative">
@@ -1155,7 +1166,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                             value={customCollege}
                             onChange={handleCustomCollegeChange}
                             placeholder="Enter your college name..."
-                            className="w-full rounded-xl border border-slate-200/60 bg-white/50 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/15"
+                            className="w-full rounded-xl border border-slate-200/60 bg-white/50 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/15"
                             autoFocus
                           />
                         </div>
@@ -1170,7 +1181,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
               <div className={`group relative z-[55] rounded-xl p-2 transition-all duration-300 ${errors.batch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <Calendar className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-300" />
                     <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Batch Year</label>
                   </div>
                   <div className="relative">
@@ -1190,7 +1201,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
               <div className={`group relative z-[54] rounded-xl p-2 transition-all duration-300 ${errors.branch ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                    <GraduationCap className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-300" />
                     <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">Department</label>
                   </div>
                   <div className="relative">
@@ -1212,7 +1223,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                   <div className={`group relative z-[53] rounded-xl p-2 transition-all duration-300 ${errors.company ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
                     <div>
                       <div className="flex items-center gap-2 mb-3">
-                        <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                        <Building2 className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-300" />
                         <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
                           Company
                         </label>
@@ -1236,7 +1247,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                           onChange={handleCustomCompanyChange}
                           placeholder="Enter Company"
                           value={customCompany}
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
                         />
                       )}
                       {errors.company && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
@@ -1247,7 +1258,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                   <div className={`group relative z-[52] rounded-xl p-2 transition-all duration-300 ${errors.role ? "border border-red-300/80 bg-transparent dark:border-rose-500/45" : "border border-transparent bg-transparent"}`}>
                     <div>
                       <div className="flex items-center gap-2 mb-3">
-                        <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-cyan-300" />
+                        <Briefcase className="h-4 w-4 text-slate-400 transition-colors group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-300" />
                         <label className="text-[10.5px] font-medium tracking-normal text-slate-500 transition-colors group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-200">
                           Role
                         </label>
@@ -1269,7 +1280,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                           onChange={handleCustomRoleChange}
                           placeholder="Enter Role"
                           value={customRole}
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-inner transition focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
                         />
                       )}
                       {errors.role && <p className="mt-2 text-xs font-semibold text-red-500 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> Required</p>}
@@ -1286,7 +1297,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                 initial={{ opacity: 0, y: -20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(16,185,129,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-emerald-300 sm:px-8"
+                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(16,185,129,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-emerald-300 sm:px-8"
               >
                 <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                 <p className="text-sm font-bold text-slate-900 dark:text-emerald-200 sm:text-base">{successMessage}</p>
@@ -1298,7 +1309,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                 initial={{ opacity: 0, y: -20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(244,63,94,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-rose-300 sm:px-8"
+                className="fixed bottom-10 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-xl border border-rose-500/30 bg-white/90 px-6 py-4 shadow-[0_20px_50px_rgba(244,63,94,0.2)] backdrop-blur-xl dark:bg-slate-900/90 dark:text-rose-300 sm:px-8"
               >
                 <AlertCircle className="h-6 w-6 text-rose-500" />
                 <p className="text-sm font-bold text-slate-900 dark:text-rose-200 sm:text-base">{errorMessage}</p>
@@ -1312,15 +1323,15 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
             )}
           </AnimatePresence>
           <div className="w-full pb-4 sm:pb-5">
-            <div className="relative mt-2 w-full overflow-visible rounded-[2rem] border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
+            <div className="relative mt-2 w-full overflow-visible rounded-xl border border-slate-300/85 bg-white/92 shadow-2xl shadow-slate-200/50 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-950/88 dark:shadow-[0_18px_44px_rgba(2,6,23,0.72)]">
               <div className="sticky top-4 z-20 w-full rounded-t-[2rem] border-b border-slate-200/70 bg-white/70 p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] backdrop-blur-3xl transition-all dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-[0_12px_34px_rgba(2,6,23,0.65)] sm:p-3">
-                <div className="flex flex-col gap-3 rounded-3xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-2xl sm:p-4">
+                <div className="flex flex-col gap-3 rounded-xl border border-white/60 bg-white/40 p-3 shadow-sm backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/40 md:rounded-xl sm:p-4">
                   {/* Toggle (Left) */}
                   <div className="flex w-full justify-center">
                     <div className={`relative mx-auto flex h-[50px] w-full items-center rounded-full border border-slate-300/75 bg-slate-100/80 p-1.5 shadow-inner dark:border-slate-700 dark:bg-slate-800/90 sm:h-[54px] ${isTale ? "max-w-[260px]" : "max-w-[440px]"}`}>
                       <button
                         onClick={() => handleModeChange('manual')}
-                        className={`relative z-10 flex min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${isTale ? "w-full" : "flex-1"} ${mode === 'manual' ? 'text-blue-700 dark:text-cyan-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                        className={`relative z-10 flex min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${isTale ? "w-full" : "flex-1"} ${mode === 'manual' ? 'text-blue-700 dark:text-blue-200' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                       >
                         <PenLine className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">Manual Writer</span>
                       </button>
@@ -1328,13 +1339,13 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                         <>
                           <button
                             onClick={() => handleModeChange('ai')}
-                            className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-cyan-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+                            className={`relative z-10 flex flex-1 min-w-0 items-center justify-center gap-1 sm:gap-2 whitespace-nowrap rounded-full px-2 sm:px-4 text-[11px] min-[400px]:text-[13px] font-bold transition-colors duration-300 sm:text-sm ${mode === 'ai' ? 'text-indigo-700 dark:text-blue-300' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
                           >
                             <Sparkles className="w-3.5 h-3.5 shrink-0 sm:w-4 sm:h-4" /> <span className="truncate">AI Assistant</span>
                           </button>
 
                           <div
-                            className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-[0_10px_24px_rgba(15,23,42,0.16)] transition-all duration-300 ease-out dark:from-cyan-950/70 dark:to-blue-950/65 dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
+                            className={`absolute bottom-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-blue-50 shadow-sm transition-all duration-300 ease-out dark:bg-slate-950 ${mode === 'manual' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`}
                             style={{
                               border: mode === 'ai' ? '1px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(37, 99, 235, 0.45)'
                             }}
@@ -1350,7 +1361,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                       <button
                         type="button"
                         onClick={handleCopyTemplate}
-                        className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-cyan-500/35 dark:bg-cyan-950/35 dark:text-cyan-300 dark:hover:bg-cyan-950/50 dark:hover:text-cyan-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
+                        className="group flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-2.5 text-[13px] font-bold text-blue-700 transition-all hover:-translate-y-0.5 hover:bg-blue-100 hover:text-blue-800 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-950/50 dark:hover:text-blue-200 sm:w-auto sm:px-5 sm:py-3 sm:text-sm"
                       >
                         Template <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:scale-110" />
                       </button>
@@ -1360,17 +1371,22 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                       <button
                         onClick={handleClearForm}
                         type="button"
-                        className="group flex w-[35%] items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-white/60 bg-white/60 px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-900 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
+                        className="group flex w-[35%] items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-[13px] font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                       >
                         <span className="group-hover:text-red-500 transition-colors">Clear</span>
                       </button>
+                      {/* The primary CTA of the whole app: blue like every other
+                          primary action, and disabled while the request is in
+                          flight so a double click cannot create two posts. */}
                       <button
                         onClick={handleSubmit}
                         type="button"
-                        className="group flex w-[65%] items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-slate-900 px-4 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] active:scale-95 dark:bg-cyan-600 dark:text-slate-950 dark:shadow-cyan-950/45 dark:hover:bg-cyan-500 sm:w-auto sm:px-8 sm:py-3 sm:text-sm"
+                        disabled={isLoading}
+                        aria-busy={isLoading}
+                        className="group flex w-[65%] items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-blue-600 px-4 py-2.5 text-[13px] font-bold text-white shadow-sm transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-400 sm:w-auto sm:px-8 sm:py-3 sm:text-sm"
                       >
-                        <span>Submit Post</span>
-                        <Check className="w-4 h-4 transition-transform group-hover:scale-110" />
+                        <span>{isLoading ? "Submitting..." : "Submit Post"}</span>
+                        <Check className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -1388,7 +1404,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                     {/* Chat header */}
                     <div className="flex items-center justify-between border-b border-indigo-100/50 bg-white/85 px-6 py-5 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 shadow-inner dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50 dark:text-cyan-300">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-200/70 bg-blue-100 text-blue-700 shadow-inner dark:border-blue-500/40 dark:bg-slate-800 dark:text-blue-300">
                           <Sparkles className="w-5 h-5" />
                         </div>
                         <div>
@@ -1409,11 +1425,11 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                           className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                           {msg.role !== 'user' && (
-                            <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
-                              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
+                            <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-blue-100 shadow-sm dark:border-blue-500/40 dark:bg-slate-800">
+                              <Sparkles className="w-4 h-4 text-indigo-600 dark:text-blue-300" />
                             </div>
                           )}
-                          <div className={`max-w-[85%] rounded-2xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-cyan-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/75 bg-white text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100'}`}>
+                          <div className={`max-w-[85%] rounded-xl px-6 py-4 shadow-sm sm:max-w-[75%] ${msg.role === 'user' ? 'rounded-br-sm bg-indigo-600 text-white dark:bg-blue-600 dark:text-slate-950' : 'rounded-bl-sm border border-slate-200/75 bg-white text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100'}`}>
                             <p className="text-sm sm:text-[15px] whitespace-pre-wrap leading-relaxed font-medium">
                               {msg.text}
                             </p>
@@ -1428,10 +1444,10 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
                           animate={{ opacity: 1, y: 0 }}
                           className="flex w-full justify-start"
                         >
-                          <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-gradient-to-br from-blue-100 to-indigo-100 shadow-sm dark:border-cyan-500/35 dark:from-cyan-950/50 dark:to-blue-950/50">
-                            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-cyan-300" />
+                          <div className="mr-3 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-blue-100 shadow-sm dark:border-blue-500/40 dark:bg-slate-800">
+                            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-blue-300" />
                           </div>
-                          <div className="flex items-center gap-3 rounded-2xl rounded-bl-sm border border-slate-200/70 bg-white px-6 py-4 shadow-sm dark:border-slate-600 dark:bg-slate-800/95">
+                          <div className="flex items-center gap-3 rounded-xl rounded-bl-sm border border-slate-200/70 bg-white px-6 py-4 shadow-sm dark:border-slate-600 dark:bg-slate-800/95">
                             <div className="flex items-center gap-1.5">
                               <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
                               <motion.span animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} className="w-2.5 h-2.5 rounded-full bg-indigo-400"></motion.span>
@@ -1445,19 +1461,19 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
                     {/* Chat input form */}
                     <div className="rounded-b-[2rem] border-t border-slate-200/80 bg-white/92 p-4 backdrop-blur-md dark:border-slate-700 dark:bg-slate-900/95 sm:p-6">
-                      <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-2xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+                      <form onSubmit={handleSendChatMessage} className="relative mx-auto flex w-full max-w-4xl gap-3 rounded-xl border border-slate-200/80 bg-white p-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
                         <input
                           type="text"
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           disabled={isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                          className="flex-1 min-w-0 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-sm sm:text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-500/20"
+                          className="flex-1 min-w-0 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-sm sm:text-[15px] font-medium text-slate-800 shadow-inner transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
                           placeholder={chatStage === 'generating' || chatStage === 'done' ? "✨ Generating your perfect experience post..." : "Type your answer here..."}
                         />
                         <button
                           type="submit"
                           disabled={!chatInput.trim() || isGenerating || chatStage === 'generating' || chatStage === 'done'}
-                          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+                          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-all hover:scale-105 hover:bg-blue-700 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-blue-600 dark:bg-blue-500 dark:text-slate-950 dark:hover:bg-blue-400"
                         >
                           <Send className="w-4 h-4 ml-0.5" />
                         </button>

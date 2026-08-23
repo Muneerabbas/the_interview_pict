@@ -4,18 +4,10 @@ import MarkdownRenderer from "@/components/Markdown";
 import SingleExperienceThemeShell from "@/components/SingleExperienceThemeShell";
 import {
   ArrowLeft,
-  BookOpen,
   Briefcase,
   Building2,
   CalendarDays,
-  Compass,
   Eye,
-  FileText,
-  Clock,
-  Share2,
-  Globe,
-  Heart,
-  ThumbsUp,
   GraduationCap,
   Sparkles
 } from "lucide-react";
@@ -32,19 +24,18 @@ import PostCompanyActions from "@/components/PostCompanyActions";
 const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
   ssr: true,
   loading: () => (
-    <section className="relative mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
+    <section className="relative mt-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
       <div className="mb-4 h-7 w-52 animate-pulse rounded-lg bg-slate-200 dark:bg-slate-700" />
-      <div className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800" />
-      <div className="mt-3 h-24 animate-pulse rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800" />
+      <div className="h-24 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800" />
+      <div className="mt-3 h-24 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800" />
     </section>
   ),
 });
 
 import { cache } from "react";
+import { notFound } from "next/navigation";
 
 import SimilarExperienceClient from "@/components/SimilarExperienceClient";
-
-const revalidateTime = 60;
 
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
 const getExperienceData = cache(async (id, baseUrl) => {
@@ -136,27 +127,14 @@ export async function generateMetadata({ params }) {
 export default async function SimilarExperience({ params }) {
   const { id } = await params;
   const baseUrl = await getServerOrigin();
-  if (!id) {
-    return (
-      <SingleExperienceThemeShell>
-        <div className="mx-auto mt-24 max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-lg text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-          Invalid request.
-        </div>
-      </SingleExperienceThemeShell>
-    );
-  }
+
+  // A missing post used to render an error <div> with HTTP 200, so deleted posts
+  // stayed indexable soft-404s and users never saw a real 404 page.
+  if (!id) notFound();
 
   const { data, articles } = await getExperienceData(id, baseUrl);
 
-  if (!data) {
-    return (
-      <SingleExperienceThemeShell>
-        <div className="mx-auto mt-24 max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-lg text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-          Failed to load experience.
-        </div>
-      </SingleExperienceThemeShell>
-    );
-  }
+  if (!data) notFound();
 
   const formatLongDate = (date) => {
     const parsed = new Date(date);
@@ -232,7 +210,7 @@ export default async function SimilarExperience({ params }) {
             </div>
 
             <div className="grid gap-6">
-              <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 {isTale ? (
                   <>
                     <header className="relative border-b border-slate-100 px-4 py-7 pr-14 dark:border-slate-800 sm:px-8 sm:py-8 sm:pr-8 lg:px-10">

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
+import { requireSession } from "@/lib/auth";
+import { jsonError } from "@/lib/api-response";
 
 async function invalidateAfterDelete(email) {
   if (!email || !redis) return;
@@ -8,12 +10,11 @@ async function invalidateAfterDelete(email) {
   const keys = [
     `profile_posts_${encodeURIComponent(email)}`,
     `public_profile_full_v2:${email}`,
-    `user_profile_data:${email}`
+    `user_profile_data:${email}`,
   ];
 
   try {
     await redis.del(keys);
-    console.log("[cache] Delete invalidation completed");
   } catch (err) {
     console.warn("[cache] Delete invalidation failed:", err?.message || err);
   }
@@ -21,33 +22,36 @@ async function invalidateAfterDelete(email) {
 
 // DELETE Handler
 export async function DELETE(req) {
-  try {
-    const body = await req.json();
-    const { uid, email } = body;
+  // The author is the session, never the body: `email` and `uid` are both public
+  // via /api/feed, so trusting the body let anyone delete anyone's post.
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
 
-    if (!uid || !email) {
-      return NextResponse.json({ message: "Missing required fields: uid or email" }, { status: 400 });
+  try {
+    const { uid } = await req.json().catch(() => ({}));
+
+    if (!uid) {
+      return NextResponse.json({ message: "Missing required field: uid" }, { status: 400 });
     }
 
     const db = await getMongoDb({ mode: "write" });
-    const experience = db.collection("experience");
-    const tales = db.collection("tales");
+    const filter = { uid, email: auth.email };
 
-    let result = await experience.deleteOne({ uid, email });
+    let result = await db.collection("experience").deleteOne(filter);
 
     if (result.deletedCount === 0) {
-      result = await tales.deleteOne({ uid, email });
+      result = await db.collection("tales").deleteOne(filter);
     }
 
     if (result.deletedCount === 0) {
       return NextResponse.json({ message: "No matching experience found" }, { status: 404 });
     }
 
-    await invalidateAfterDelete(email);
+    await invalidateAfterDelete(auth.email);
 
     return NextResponse.json({ message: "Experience deleted successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error deleting experience:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to delete experience");
   }
 }

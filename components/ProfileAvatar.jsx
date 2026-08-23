@@ -21,7 +21,7 @@ const ProfileAvatar = ({ src, alt, className, name }) => {
 
   const { initials, bgColor } = useMemo(() => {
     const textToUse = name || alt || "";
-    if (!textToUse) return { initials: "", bgColor: "bg-slate-200" };
+    if (!textToUse) return { initials: "", bgColor: "bg-slate-200 dark:bg-slate-700 dark:text-slate-200" };
 
     const parts = textToUse.trim().split(/\s+/);
     const initialsStr = parts.length > 1
@@ -31,7 +31,7 @@ const ProfileAvatar = ({ src, alt, className, name }) => {
     const colors = [
       "bg-blue-500", "bg-emerald-500", "bg-indigo-500",
       "bg-violet-500", "bg-rose-500", "bg-amber-500",
-      "bg-cyan-500", "bg-teal-500"
+      "bg-blue-500", "bg-teal-500"
     ];
     const colorIdx = (textToUse.length) % colors.length;
     return { initials: initialsStr, bgColor: colors[colorIdx] };

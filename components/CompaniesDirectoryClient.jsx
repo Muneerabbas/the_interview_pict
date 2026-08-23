@@ -81,7 +81,7 @@ export default function CompaniesDirectoryClient({ companies = [], countsMap = {
         </div>
 
         {filteredCompanies.length === 0 ? (
-          <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+          <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
             <Building2 size={40} className="mb-3 text-slate-300 dark:text-slate-600" />
             <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">No companies found</h3>
             <p className="mt-1 text-sm">

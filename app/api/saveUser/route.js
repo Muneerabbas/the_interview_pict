@@ -1,64 +1,46 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
+import { requireSession } from "@/lib/auth";
 import { jsonError } from "@/lib/api-response";
 
 export async function POST(req) {
-  try {
-    const { gmail, name, image } = await req.json();
+  // Identity comes from the Google session; a body-supplied gmail let anyone
+  // rename any account or swap its avatar.
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
 
-    if (!gmail || !name) {
-      return NextResponse.json(
-        { success: false, error: "Gmail and name are required", code: "VALIDATION_ERROR" },
-        { status: 400 }
-      );
-    }
+  try {
+    const gmail = auth.email;
+    const name = auth.name || gmail.split("@")[0];
+    const image = auth.image || "";
 
     const db = await getMongoDb({ mode: "write" });
-    const users = db.collection("user");
 
-    // Check if user exists
-    const existingUser = await users.findOne({ gmail });
-    let result;
-    if (existingUser) {
-      // Update existing user
-      result = await users.updateOne(
-        { gmail },
-        {
-          $set: {
-            name,
-            image,
-            updatedAt: new Date()
-          }
-        }
-      );
-    } else {
-      // Insert new user
-      result = await users.insertOne({
-        gmail,
-        name,
-        image,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
-    }
+    // Single upsert: findOne-then-insert raced two concurrent first logins into
+    // duplicate user documents (or a raw E11000 surfaced as a 500).
+    const result = await db.collection("user").updateOne(
+      { gmail },
+      {
+        $set: { name, image, updatedAt: new Date() },
+        $setOnInsert: { gmail, createdAt: new Date() },
+      },
+      { upsert: true }
+    );
 
-    // Invalidate cache
     if (redis) {
-      await redis.del([
-        `user_profile_data:${gmail}`,
-        `public_profile_full_v2:${gmail}`
-      ]);
+      try {
+        await redis.del([`user_profile_data:${gmail}`, `public_profile_full_v2:${gmail}`]);
+      } catch (err) {
+        console.warn("[cache] saveUser invalidation failed:", err?.message || err);
+      }
     }
 
-    return NextResponse.json({ success: true,
+    return NextResponse.json({
+      success: true,
       message: "User saved successfully",
-      operation: existingUser ? "updated" : "inserted",
-      result
-    }, {
-      status: 200
+      operation: result.upsertedCount ? "inserted" : "updated",
     });
-
   } catch (error) {
     console.error("saveUser API error:", error?.message || error);
     return jsonError(error, "Failed to save user");

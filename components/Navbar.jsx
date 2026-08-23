@@ -5,18 +5,15 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Home,
-  FileText,
-  LogOut,
   User,
   LogIn,
   Menu,
   X,
   List,
   Flame,
-  Info,
   Building2,
 } from "lucide-react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import logo from "../public/app_icon.png";
@@ -25,9 +22,7 @@ import { useAuthModal } from "./AuthModalProvider";
 import ThemeToggle from "./ThemeToggle";
 import { requestJson } from "@/lib/client-api";
 
-import { useTheme } from "next-themes";
-
-export default function Navbar({ showThemeToggle = false }) {
+export default function Navbar({ showThemeToggle = true }) {
   const { data: session } = useSession();
   const { openAuthModal } = useAuthModal();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,13 +33,6 @@ export default function Navbar({ showThemeToggle = false }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const desktopNotificationsRef = useRef(null);
   const mobileNotificationsRef = useRef(null);
-
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -115,6 +103,10 @@ export default function Navbar({ showThemeToggle = false }) {
   }, [loadNotifications, session?.user?.email]);
 
   useEffect(() => {
+    // Only listen while open; this used to fire setNotificationsOpen(false) on
+    // every mousedown anywhere on the page.
+    if (!notificationsOpen) return undefined;
+
     const handleClickOutside = (event) => {
       const clickedDesktopMenu = desktopNotificationsRef.current?.contains(event.target);
       const clickedMobileMenu = mobileNotificationsRef.current?.contains(event.target);
@@ -124,23 +116,17 @@ export default function Navbar({ showThemeToggle = false }) {
       }
     };
 
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setNotificationsOpen(false);
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const clearAllSessionData = () => {
-    document.cookie.split(";").forEach((cookie) => {
-      const cookieName = cookie.split("=")[0].trim();
-      document.cookie = `${cookieName}=; max-age=0; path=/`;
-    });
-    sessionStorage.clear();
-    // Preserve UI preferences like theme while clearing auth/session state.
-  };
-
-  const handleLogout = async () => {
-    clearAllSessionData();
-    await signOut({ callbackUrl: "/" });
-  };
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [notificationsOpen]);
 
   const handleLogin = () => {
     router.push("/login");
@@ -316,7 +302,7 @@ export default function Navbar({ showThemeToggle = false }) {
 
             <button
               onClick={() => setIsMenuOpen((v) => !v)}
-              className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 sm:h-10 sm:w-10"
+              className="relative inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/70 bg-white/85 text-slate-600 shadow-sm backdrop-blur transition-all active:scale-95 hover:-translate-y-[1px] hover:border-blue-300/60 hover:bg-blue-50/70 hover:text-blue-700 dark:border-slate-700/80 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-blue-500/40 dark:hover:bg-slate-800 dark:hover:text-blue-300 sm:h-10 sm:w-10"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
             >
@@ -347,7 +333,7 @@ export default function Navbar({ showThemeToggle = false }) {
               transition={{ duration: 0.2, ease: "easeOut" }}
               className="fixed left-0 right-0 top-[calc(env(safe-area-inset-top)+66px)] z-50 mx-auto w-full max-w-2xl px-3 min-[400px]:px-4 sm:top-[calc(env(safe-area-inset-top)+72px)] sm:px-5 md:top-[calc(env(safe-area-inset-top)+78px)] lg:hidden"
             >
-              <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_24px_50px_rgba(2,6,23,0.7)] dark:supports-[backdrop-filter]:bg-slate-950/90">
+              <div className="overflow-hidden rounded-xl border border-slate-200/80 bg-white/95 shadow-[0_22px_44px_rgba(15,23,42,0.16)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/90 dark:border-slate-800 dark:bg-slate-950/95 dark:shadow-[0_24px_50px_rgba(2,6,23,0.7)] dark:supports-[backdrop-filter]:bg-slate-950/90">
                 <div className="p-3 sm:p-4">
                   <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
                     {navItems.map(({ href, label, Icon }) => (

@@ -3,6 +3,8 @@ import { resolveProfileName } from "@/lib/utils";
 import { getMongoDb } from "@/lib/mongodb";
 import mongoose from "mongoose";
 import { jsonError } from "@/lib/api-response";
+import { getServerSession } from "next-auth/next";
+import { authOptions, normalizeEmail } from "@/lib/auth";
 import { toPlainText } from "@/lib/text-preview";
 
 export const dynamic = "force-dynamic";
@@ -90,7 +92,7 @@ function buildPipeline({
   return pipeline;
 }
 
-function processFeedResults(feed) {
+function processFeedResults(feed, viewerEmail) {
   return feed.map((item) => {
     const authorImage = item.author?.image || item.author?.profile_pic || item.author?.profilePic;
     const preview = toPlainText(item.preview || item.exp_text || "");
@@ -103,9 +105,16 @@ function processFeedResults(feed) {
       college: item.college || "",
       branch: item.branch || "",
       batch: item.batch || "",
-      email: item.email || "",
+      // `email` is deliberately NOT exposed: it is nobody's business publicly,
+      // and it was the second half of the {email, uid} pair the delete/edit
+      // IDORs needed. No client reads it.
       profile_pic: authorImage || item.profile_pic || null,
-      likes: item.likes || 0,
+      // `likes` is stored as an array of emails; returning it raw leaked every
+      // liker's address AND contradicted the "|| 0" that promised a number.
+      likes: Array.isArray(item.likes) ? item.likes.length : Number(item.likes) || 0,
+      // Whether *this* viewer already liked it, computed server-side so we never
+      // have to ship the list of everyone's emails to the browser.
+      liked: Boolean(viewerEmail) && Array.isArray(item.likes) && item.likes.includes(viewerEmail),
       views: item.views || 0,
       content_type: item.content_type || "interview",
       title: item.title || "",
@@ -213,16 +222,23 @@ export async function GET(req) {
     } else {
       const pipeline = buildPipeline({ sort, page, itemsPerPage, companyFilter, collegeFilter, branchFilter, batchFilter, authorFilter, categoryFilter, contentType, searchQuery, authorEmails });
 
-      // If trending but no results, fallback to all-time views
-      const matchStage = pipeline.find(s => s.$match);
-      if (sort === "trending" && matchStage && matchStage.$match.date) {
-        delete matchStage.$match.date;
-      }
-
       feed = await collection.aggregate(pipeline).toArray();
+
+      // Only widen to all-time once the windowed query actually comes back empty.
+      // This used to delete the date filter unconditionally right after building
+      // the pipeline, so "trending" was never "this week" at all.
+      if (sort === "trending" && feed.length === 0) {
+        const matchStage = pipeline.find((stage) => stage.$match);
+        if (matchStage?.$match?.date) {
+          delete matchStage.$match.date;
+          feed = await collection.aggregate(pipeline).toArray();
+        }
+      }
     }
 
-    const data = processFeedResults(feed);
+    const session = await getServerSession(authOptions);
+    const viewerEmail = normalizeEmail(session?.user?.email);
+    const data = processFeedResults(feed, viewerEmail);
 
     return NextResponse.json(data, {
       headers: {

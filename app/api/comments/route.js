@@ -354,6 +354,8 @@ export async function GET(req) {
       .select("_id experience author parentComment rootComment depth text type isResolved upvotes createdAt updatedAt")
       .populate("author", "name profilePic_Url profile_pic image branch batch")
       .sort({ createdAt: 1 })
+      // A thread with thousands of replies was loaded and serialized in full.
+      .limit(500)
       .lean();
 
     const childrenByParent = new Map();
@@ -399,6 +401,7 @@ export async function GET(req) {
       }
     );
   } catch (error) {
+    console.error("Failed to fetch comments:", error);
     return noStoreJson({ error: "Failed to fetch comments" }, 500);
   }
 }
@@ -511,6 +514,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
+    console.error("Failed to post comment:", error);
     return NextResponse.json({ error: "Failed to post comment" }, { status: 500 });
   }
 }
@@ -563,26 +567,29 @@ export async function PATCH(req) {
       const updated = await Comment.findByIdAndUpdate(
         commentId,
         hasUpvoted
-          ? {
-              $pull: { upvotes: viewerId },
-              $set: { updatedAt: new Date() },
-            }
-          : {
-              $addToSet: { upvotes: viewerId },
-              $set: { updatedAt: new Date() },
-            },
+          ? { $pull: { upvotes: viewerId }, $set: { updatedAt: new Date() } }
+          : { $addToSet: { upvotes: viewerId }, $set: { updatedAt: new Date() } },
         { new: true }
       )
         .select("_id upvotes")
         .lean();
+
+      // The comment can be deleted between the read above and this update.
+      if (!updated) {
+        return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+      }
+
+      const upvotes = Array.isArray(updated.upvotes) ? updated.upvotes : [];
 
       return NextResponse.json(
         {
           success: true,
           comment: {
             id: String(updated._id),
-            hasUpvoted: !hasUpvoted,
-            upvotesCount: Array.isArray(updated.upvotes) ? updated.upvotes.length : 0,
+            // Derive from the document we just wrote rather than assuming the
+            // toggle landed the way the earlier read predicted.
+            hasUpvoted: upvotes.some((id) => String(id) === String(viewerId)),
+            upvotesCount: upvotes.length,
           },
         },
         { status: 200 }
@@ -606,6 +613,10 @@ export async function PATCH(req) {
       .select("_id isResolved")
       .lean();
 
+    if (!updated) {
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
     return NextResponse.json(
       {
         success: true,
@@ -617,6 +628,7 @@ export async function PATCH(req) {
       { status: 200 }
     );
   } catch (error) {
+    console.error("Failed to update comment:", error);
     return NextResponse.json({ error: "Failed to update comment" }, { status: 500 });
   }
 }

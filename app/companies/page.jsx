@@ -19,23 +19,33 @@ export const metadata = {
     },
 };
 
-export default async function CompaniesDirectory() {
-    const db = await getMongoDb({ mode: "read" });
-    const expCol = db.collection("experience");
+async function loadDirectory() {
+    // A transient Mongo blip used to take this page from "empty directory" to an
+    // unstyled 500; every sibling server page already catches.
+    try {
+        const db = await getMongoDb({ mode: "read" });
 
-    const [companies, stats] = await Promise.all([
-        db.collection("companies")
-            .find({}, { projection: { name: 1, slug: 1, about: 1, logo: 1, location: 1, tags: 1 } })
-            .sort({ createdAt: -1 })
-            .limit(2000)
-            .toArray(),
-        expCol
-            .aggregate([
-                { $match: { company: { $type: "string", $ne: "" } } },
-                { $group: { _id: { $toLower: "$company" }, count: { $sum: 1 } } }
-            ])
-            .toArray(),
-    ]);
+        return await Promise.all([
+            db.collection("companies")
+                .find({}, { projection: { name: 1, slug: 1, about: 1, logo: 1, location: 1, tags: 1 } })
+                .sort({ createdAt: -1 })
+                .limit(2000)
+                .toArray(),
+            db.collection("experience")
+                .aggregate([
+                    { $match: { company: { $type: "string", $ne: "" } } },
+                    { $group: { _id: { $toLower: "$company" }, count: { $sum: 1 } } }
+                ])
+                .toArray(),
+        ]);
+    } catch (error) {
+        console.error("Failed to load companies directory:", error);
+        return [[], []];
+    }
+}
+
+export default async function CompaniesDirectory() {
+    const [companies, stats] = await loadDirectory();
 
     const countsMap = {};
     stats.forEach((s) => {

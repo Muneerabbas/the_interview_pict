@@ -15,10 +15,6 @@ function normalizeEmail(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
-function escapeRegex(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 function pluralize(count, singular, plural = `${singular}s`) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
@@ -97,27 +93,31 @@ function getExternalLikeCount(likes, userEmail) {
   return likes.filter((email) => normalizeEmail(email) !== userEmail).length;
 }
 
+const OWNED_POST_PROJECTION = {
+  _id: 1,
+  uid: 1,
+  company: 1,
+  role: 1,
+  title: 1,
+  likes: 1,
+  likesUpdatedAt: 1,
+  date: 1,
+};
+
+// Runs on every 30-second poll, so it must stay cheap and must cover tales:
+// this used to query only `experience` (so likes on stories never notified) with
+// an `i`-flagged $regex on email, which no index can serve -- a full collection
+// scan per poll. Emails are stored lowercase, so equality is enough.
 async function getOwnedPosts(db, userEmail) {
   if (!userEmail) return [];
 
-  return db
-    .collection("experience")
-    .find({
-      email: {
-        $regex: `^${escapeRegex(userEmail)}$`,
-        $options: "i",
-      },
-    })
-    .project({
-      _id: 1,
-      uid: 1,
-      company: 1,
-      role: 1,
-      likes: 1,
-      likesUpdatedAt: 1,
-      date: 1,
-    })
-    .toArray();
+  const query = { email: userEmail };
+  const [interviews, tales] = await Promise.all([
+    db.collection("experience").find(query).project(OWNED_POST_PROJECTION).limit(500).toArray(),
+    db.collection("tales").find(query).project(OWNED_POST_PROJECTION).limit(500).toArray(),
+  ]);
+
+  return [...interviews, ...tales];
 }
 
 async function getExperienceMetaMap(db, experienceIds) {
@@ -164,6 +164,8 @@ export async function GET(req) {
     const [ownedComments, ownedPosts] = await Promise.all([
       Comment.find({ author: currentUser._id })
         .select("_id experience text upvotes createdAt updatedAt")
+        .sort({ updatedAt: -1 })
+        .limit(200)
         .lean(),
       getOwnedPosts(db, currentUserEmail),
     ]);

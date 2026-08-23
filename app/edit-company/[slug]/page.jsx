@@ -123,7 +123,7 @@ export default function EditCompanyPage() {
 
           <div className="relative z-10">
             <h1 className="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
-              <Save className="rounded-lg bg-blue-50 p-1 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300" size={32} />
+              <Save className="rounded-lg bg-blue-50 p-1 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300" size={32} />
               Edit Company
             </h1>
             <p className="mb-8 mt-2 text-slate-500 dark:text-slate-400">
@@ -145,7 +145,7 @@ export default function EditCompanyPage() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="e.g. Google"
                 />
               </div>
@@ -158,7 +158,7 @@ export default function EditCompanyPage() {
                   value={formData.about}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="A brief description of the company and what they do..."
                 />
               </div>
@@ -171,7 +171,7 @@ export default function EditCompanyPage() {
                     name="location"
                     value={formData.location}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                     placeholder="e.g. Mountain View, CA"
                   />
                 </div>
@@ -183,7 +183,7 @@ export default function EditCompanyPage() {
                     name="website"
                     value={formData.website}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                     placeholder="https://..."
                   />
                 </div>
@@ -196,7 +196,7 @@ export default function EditCompanyPage() {
                   name="logo"
                   value={formData.logo}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="https://.../logo.png"
                 />
                 <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Provide a direct link to the company&apos;s transparent logo icon.</p>
@@ -209,7 +209,7 @@ export default function EditCompanyPage() {
                   name="tags"
                   value={formData.tags}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="Tech, Cloud, FinTech (comma separated)"
                 />
               </div>

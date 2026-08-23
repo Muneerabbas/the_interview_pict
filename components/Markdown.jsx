@@ -1,48 +1,52 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
+import { useTheme } from "next-themes";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CloudinaryImage from "@/components/CloudinaryImage";
 
+/**
+ * rehypeRaw re-enables raw HTML inside user-submitted markdown, so it MUST be
+ * followed by a sanitizer -- without one, any post body could run script in
+ * every reader's browser.
+ */
+const sanitizeSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    img: [...(defaultSchema.attributes?.img || []), "width", "height", "loading"],
+    code: [...(defaultSchema.attributes?.code || []), ["className", /^language-./]],
+    span: [...(defaultSchema.attributes?.span || []), ["className", /^hljs-./]],
+  },
+};
+
 const MarkdownRenderer = ({ content }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
 
-  useEffect(() => {
-    // Keep markdown styling aligned with the active theme.
-    const checkTheme = () => {
-      setIsDarkMode(document.documentElement.classList.contains("dark"));
-    };
-    checkTheme();
-
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"]
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  const components = {
+  // Rebuilding this map every render gave ReactMarkdown a new identity each time
+  // and remounted the whole article, losing scroll position mid-read.
+  const components = useMemo(() => ({
     div: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</div>,
     section: ({ children }) => <section className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</section>,
     article: ({ children }) => <article className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-slate-300">{children}</article>,
     span: ({ children }) => <span className="text-inherit">{children}</span>,
     h1: ({ children }) => <h1 className="mb-8 mt-2 border-b border-slate-200/80 pb-4 text-[1.95rem] font-extrabold leading-tight tracking-tight text-slate-900 dark:border-slate-700/70 dark:text-slate-50 sm:text-[2.25rem]">{children}</h1>,
     h2: ({ children }) => <h2 className="mb-4 mt-12 rounded-xl border border-slate-200/80 bg-slate-50/70 px-3 py-2 text-[1.35rem] font-extrabold leading-snug text-slate-900 dark:border-slate-700/70 dark:bg-slate-800/50 dark:text-slate-100 sm:text-[1.45rem]">{children}</h2>,
-    h3: ({ children }) => <h3 className="mb-3 mt-8 border-l-4 border-blue-500 pl-3 text-[1.125rem] font-bold leading-snug text-slate-900 dark:border-cyan-400 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
+    h3: ({ children }) => <h3 className="mb-3 mt-8 border-l-4 border-blue-500 pl-3 text-[1.125rem] font-bold leading-snug text-slate-900 dark:border-blue-400 dark:text-slate-100 sm:text-[1.18rem]">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 mt-7 text-[1.05rem] font-bold leading-snug text-slate-900 dark:text-slate-100">{children}</h4>,
-    p: ({ children }) => <div className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</div>,
+    p: ({ children }) => <p className="mb-6 text-[16px] leading-[1.75] text-slate-700 dark:text-[#D1D5DB]">{children}</p>,
     strong: ({ children }) => <strong className="font-semibold text-slate-900 dark:text-slate-100">{children}</strong>,
     em: ({ children }) => <em className="font-medium text-slate-700 dark:text-slate-300">{children}</em>,
     a: ({ href, children }) => (
       <a
         href={href}
-        className="font-medium text-blue-700 underline decoration-blue-300 underline-offset-2 transition hover:text-blue-800 hover:decoration-blue-500 dark:text-cyan-300 dark:decoration-cyan-500/40 dark:hover:text-cyan-200 dark:hover:decoration-cyan-300"
+        className="font-medium text-blue-700 underline decoration-blue-300 underline-offset-2 transition hover:text-blue-800 hover:decoration-blue-500 dark:text-blue-300 dark:decoration-blue-500/40 dark:hover:text-blue-200 dark:hover:decoration-blue-300"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -55,11 +59,11 @@ const MarkdownRenderer = ({ content }) => {
     ),
     li: ({ children }) => <li className="leading-[1.8]">{children}</li>,
     blockquote: ({ children }) => (
-      <blockquote className="my-6 rounded-xl border-l-4 border-blue-500 bg-blue-50/70 px-4 py-3 text-slate-700 dark:border-cyan-400 dark:bg-cyan-950/30 dark:text-slate-300">
+      <blockquote className="my-6 rounded-xl border-l-4 border-blue-500 bg-blue-50/70 px-4 py-3 text-slate-700 dark:border-blue-400 dark:bg-blue-950/30 dark:text-slate-300">
         <div className="text-[15px] leading-7 sm:text-base">{children}</div>
       </blockquote>
     ),
-    code: ({ inline, className, children, ...props }) => {
+    code: ({ node, inline, className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className || "");
       if (!inline) {
         const lang = match?.[1] || "code";
@@ -129,11 +133,15 @@ const MarkdownRenderer = ({ content }) => {
         />
       );
     },
-  };
+  }), [isDarkMode]);
 
   return (
     <div className="markdown-container mx-auto max-w-[760px] px-2 pb-2 sm:px-4">
-      <ReactMarkdown components={components} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+      <ReactMarkdown
+        components={components}
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
+      >
         {content}
       </ReactMarkdown>
     </div>

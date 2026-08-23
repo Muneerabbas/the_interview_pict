@@ -1,41 +1,37 @@
 import { NextResponse } from "next/server";
 import { fetchWithCache } from "@/lib/cache";
 import { getMongoDb } from "@/lib/mongodb";
+import { requireSession } from "@/lib/auth";
+import { jsonError } from "@/lib/api-response";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req) {
+// The caller's own posts. This used to dump every raw post document for any
+// email supplied in the body, with no authentication at all.
+export async function POST() {
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
+
   try {
-    const { email } = await req.json();
-
-    if (!email) {
-      return NextResponse.json({ message: "Email is required" }, { status: 400 });
-    }
-
+    const email = auth.email;
     const cacheKey = `profile_posts_${encodeURIComponent(email)}`;
 
     const posts = await fetchWithCache(cacheKey, 60, async () => {
-      const db = await getMongoDb({ mode: "write" });
-      const experienceCol = db.collection("experience");
-      const talesCol = db.collection("tales");
+      const db = await getMongoDb({ mode: "read" });
 
       const [interviews, tales] = await Promise.all([
-        experienceCol.find({ email }).toArray(),
-        talesCol.find({ email }).toArray()
+        db.collection("experience").find({ email }).limit(200).toArray(),
+        db.collection("tales").find({ email }).limit(200).toArray(),
       ]);
 
-      // Combine and sort by date descending
-      const allPosts = [...interviews, ...tales].sort((a, b) => {
-        const dateA = new Date(a.date || 0);
-        const dateB = new Date(b.date || 0);
-        return dateB - dateA;
-      });
-
-      return allPosts;
+      return [...interviews, ...tales]
+        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        .map((post) => ({ ...post, _id: String(post._id) }));
     });
 
     return NextResponse.json({ posts }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error("Error loading profile posts:", error);
+    return jsonError(error, "Unable to load posts");
   }
 }

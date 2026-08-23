@@ -5,3 +5,9 @@ node_modules/
 .next/
 .next_stale_*/
 .next_stale*/
+
+# OS / editor cruft
+.DS_Store
+
+# stale build artifacts
+build_output*.log

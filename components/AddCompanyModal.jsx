@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Building2, Globe, MapPin, Tag } from "lucide-react";
 import { requestJson } from "@/lib/client-api";
@@ -14,6 +14,26 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    // The modal stays mounted and is toggled with `isOpen`, so the useState
+    // initializer only ever ran once: the name the user typed in the dropdown
+    // never prefilled, and a previous failure's error banner stuck around.
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        setFormData({ name: initialName, about: "", logo: "", location: "", website: "", tags: "" });
+        setError("");
+
+        const onEscape = (event) => {
+            if (event.key === "Escape") onClose?.();
+        };
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        document.addEventListener("keydown", onEscape);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", onEscape);
+        };
+    }, [isOpen, initialName, onClose]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,7 +51,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
         setError("");
 
         try {
-            const response = await fetch("/api/addCompany", {
+            const response = await fetch("/api/postCompanies", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -42,10 +62,15 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
 
             const data = await requestJson(response, {}, {});
 
-            onSuccess(data.company);
+            // requestJson falls back to {} on a non-JSON 2xx; the caller reads
+            // .name straight away, which crashed the whole post page.
+            const created = data?.company || data?.data;
+            if (!created?.name) throw new Error("Unexpected response from server");
+
+            onSuccess(created);
             onClose();
         } catch (err) {
-            setError(err.message);
+            setError(err.message || "Could not add this company.");
         } finally {
             setLoading(false);
         }
@@ -67,14 +92,16 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                             initial={{ opacity: 0, scale: 0.95, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                            className="relative w-full max-w-md overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
                         >
                             <div className="flex items-center justify-between border-b border-slate-100 p-4 dark:border-slate-800">
                                 <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                                     <Building2 size={18} className="text-blue-500" /> Register Company
                                 </h2>
                                 <button
+                                    type="button"
                                     onClick={onClose}
+                                    aria-label="Close"
                                     className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors dark:hover:bg-slate-800 dark:hover:text-slate-300"
                                 >
                                     <X size={18} />
@@ -97,7 +124,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                         placeholder="e.g. Acme Corp"
                                         required
                                     />
@@ -112,7 +139,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                         value={formData.about}
                                         onChange={handleChange}
                                         rows="3"
-                                        className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                        className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                         placeholder="Brief description of the company..."
                                     />
                                 </div>
@@ -127,7 +154,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                             name="website"
                                             value={formData.website}
                                             onChange={handleChange}
-                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                             placeholder="https://..."
                                         />
                                     </div>
@@ -140,7 +167,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                             name="location"
                                             value={formData.location}
                                             onChange={handleChange}
-                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                             placeholder="City, Country"
                                         />
                                     </div>
@@ -155,7 +182,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                         name="logo"
                                         value={formData.logo}
                                         onChange={handleChange}
-                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                         placeholder="https://logo.com/image.png"
                                     />
                                 </div>
@@ -169,7 +196,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
                                         name="tags"
                                         value={formData.tags}
                                         onChange={handleChange}
-                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-[14px] font-medium text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                                         placeholder="e.g. Startup, Fintech, MNC (comma separated)"
                                     />
                                 </div>

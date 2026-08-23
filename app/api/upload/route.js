@@ -1,10 +1,11 @@
 import cloudinary from "@/lib/cloudinary";
+import { requireSession } from "@/lib/auth";
 
 export async function POST(req) {
-  try {
-    // eslint-disable-next-line no-unused-vars
-    const body = await req.json().catch(() => ({}));
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
 
+  try {
     const timestamp = Math.floor(Date.now() / 1000);
 
     // Keep signed params exactly aligned with what the client submits.
@@ -27,9 +28,7 @@ export async function POST(req) {
       folder: paramsToSign.folder,
     });
   } catch (error) {
-    return Response.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    console.error("Cloudinary signature error:", error);
+    return Response.json({ error: "Could not sign upload" }, { status: 500 });
   }
 }

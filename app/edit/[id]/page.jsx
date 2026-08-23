@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Navbar from "../../../components/Navbar";
 import ExperienceTiptapEditor from "../../../components/ExperienceTiptapEditor";
 import postCompanies from "@/data/post-companies.json";
 import { requestJson } from "@/lib/client-api";
+import Alert from "@/components/ui/Alert";
+import Button from "@/components/ui/Button";
 
 const getEditorPlainText = (value = "") =>
   value
@@ -19,6 +21,8 @@ export default function EditPage() {
     const [warningMessage, setWarningMessage] = useState(''); // New warning message state
   const { data: session } = useSession();
   const { id } = useParams();
+  const router = useRouter();
+  const redirectTimer = useRef(null);
   const [markdown, setMarkdown] = useState("");
   const [batch, setBatch] = useState("");
   const [branch, setBranch] = useState("");
@@ -27,9 +31,11 @@ export default function EditPage() {
    const [role, setRole] = useState("");
    const [customRole, setCustomRole] = useState("");
   const [height, setHeight] = useState("calc(100vh)");
-  const [windowWidth, setWindowWidth] = useState(0);
-
   const [bottomMargin, setBottomMargin] = useState("0");
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     batch: false,
     branch: false,
@@ -38,7 +44,9 @@ export default function EditPage() {
     markdown: false,
   });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [expData, setExpData] = useState(null);
+
+  // Cancel the post-save redirect if the user navigates away first.
+  useEffect(() => () => clearTimeout(redirectTimer.current), []);
 
   const years = Array.from({ length: 28 }, (_, index) => 2000 + index).reverse();
   const roles = ["Intern","SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
@@ -62,25 +70,33 @@ export default function EditPage() {
 
 
 
-  const fetchExperienceData = async () => {
-    if (!id) return;
-    try {
-      const response = await fetch(`/api/exp?uid=${id}`);
-      if (!response.ok) throw new Error("Failed to fetch data");
-      const data = await requestJson(response, {}, {});
-      setExpData(data);
-      setMarkdown(data.exp_text);
-      setBatch(data.batch);
-      setBranch(data.branch);
-      setCompany(data.company);
-      setRole(data.role);
-    } catch (error) {
-      console.error("Error fetching experience data:", error);
-    }
-  };
-
   useEffect(() => {
-    if (id) fetchExperienceData();
+    if (!id) return undefined;
+
+    const controller = new AbortController();
+
+    (async () => {
+      setLoadError("");
+      setIsLoaded(false);
+      try {
+        const response = await fetch(`/api/exp?uid=${id}`, { signal: controller.signal });
+        const data = await requestJson(response, {}, {});
+        // Fall back to "" rather than undefined: a controlled input handed
+        // undefined flips to uncontrolled and drops what the user types.
+        setMarkdown(data?.exp_text || "");
+        setBatch(data?.batch || "");
+        setBranch(data?.branch || "");
+        setCompany(data?.company || "");
+        setRole(data?.role || "");
+        setIsLoaded(true);
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        console.error("Error fetching experience data:", error);
+        setLoadError("Could not load this experience. Refresh to try again.");
+      }
+    })();
+
+    return () => controller.abort();
   }, [id]);
 
   const validateField = (fieldName, value) => {
@@ -163,8 +179,16 @@ export default function EditPage() {
 
  // Frontend handleSubmit function
 const handleSubmit = async () => {
+  if (isSubmitting) return;
+
   if (!session) {
-    alert("You need to be logged in to submit!");
+    setFormError("You need to be signed in to save changes.");
+    return;
+  }
+
+  // Submitting before the existing post has loaded would overwrite it with blanks.
+  if (!isLoaded) {
+    setFormError("Still loading this experience. Please wait a moment.");
     return;
   }
 
@@ -180,30 +204,30 @@ const handleSubmit = async () => {
   setErrors(newErrors);
 
   if (Object.values(newErrors).includes(true)) {
-    alert("Please fill in all required fields.");
+    setFormError("Please fill in all required fields.");
     return;
   }
+
+  setFormError("");
+  setIsSubmitting(true);
 
   // Determine the company and role to send to the API
   const finalCompany = company === 'others' ? customCompany : company;
   const finalRole = role === 'others' ? customRole : role;
 
   try {
-    const email = session?.user?.email || "Unknown";
-    const name = session?.user?.name || "Anonymous";
-    const profile_pic = session?.user?.image || "";
     const response = await fetch("/api/edit/", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
+      // The author is taken from the session server-side; sending an email here
+      // was the IDOR that let anyone rewrite anyone's post.
       body: JSON.stringify({
         uid: id,
         exp_text: markdown,
-        name,
         batch,
         branch,
-        company: finalCompany, // Use finalCompany here
-        role: finalRole,       // Use finalRole here
-        email,
+        company: finalCompany,
+        role: finalRole,
       }),
     });
 
@@ -230,25 +254,26 @@ const handleSubmit = async () => {
 
     setWarningMessage("Changes may take a few minutes to appear.");
     setSuccessMessage("Your experience has been successfully updated!");
-     // Set warning message
 
-    setTimeout(() => {
-      window.location.href = `/single/${data.uid}`;
-    }, 3000); // Redirect after 3 seconds, adjust time as needed
-
+    // data.uid can be missing; falling back to `id` avoids /single/undefined.
+    redirectTimer.current = setTimeout(() => {
+      router.push(`/single/${data?.uid || id}`);
+    }, 2000);
   } catch (error) {
     console.error("Error updating experience:", error);
-    alert(error.message || "There was an error updating your experience.");
+    setFormError(error.message || "There was an error updating your experience.");
+  } finally {
+    setIsSubmitting(false);
   }
 };
 
 
   return (
-    <div className="flex flex-col h-screen mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
+    <div className="flex h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 mb-[90vh] sm:mb-[10vh] md:mb-[40vh]">
       <Navbar />
 
       {isSmallScreen && (
-      <div className=" text-gray-500 text-center py-4 mt-[100px]">
+      <div className="mt-[100px] py-4 text-center text-slate-500 dark:text-slate-400">
         <i className="fa fa-exclamation-circle text-red-500 mr-2">Small screen detected</i>
         <p>For the best experience, please use a tablet or laptop.</p>
       </div>
@@ -256,7 +281,7 @@ const handleSubmit = async () => {
 
       <div className="md:mt-[100px] sm:mt-[140px] lg:mt-[120px]">
         <div className="max-w-7xl mx-auto p-4 md:p-6">
-        <div className="text-center text-gray-500 text-sm mb-4">
+        <div className="mb-4 text-center text-sm text-slate-500 dark:text-slate-400">
       <p>Pro Tip: Maximize the editor for a better experience!</p>
     </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -265,8 +290,8 @@ const handleSubmit = async () => {
                 value={batch}
                 onChange={(e) => handleFieldChange("batch", e.target.value)}
                 className={`w-full p-2 border ${
-                  errors.batch ? "border-red-500" : "border-gray-300"
-                } rounded-lg`}
+                  errors.batch ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+                } rounded-lg bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100`}
               >
                 <option value="">Select Year</option>
                 {years.map((year) => (
@@ -285,8 +310,8 @@ const handleSubmit = async () => {
                 value={branch}
                 onChange={(e) => handleFieldChange("branch", e.target.value)}
                 className={`w-full p-2 border ${
-                  errors.branch ? "border-red-500" : "border-gray-300"
-                } rounded-lg`}
+                  errors.branch ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+                } rounded-lg bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100`}
               >
                 <option value="">Select Branch</option>
                 <option value="CS">Computer Science</option>
@@ -305,8 +330,8 @@ const handleSubmit = async () => {
     value={company}
     onChange={handleCompanyChange}
     className={`w-full p-2 border ${
-      errors.company ? "border-red-500" : "border-gray-300"
-    } rounded-lg`}
+      errors.company ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+    } rounded-lg bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100`}
   >
     <option value="">Select Company</option>
     <option value="others">Others...</option>
@@ -325,7 +350,7 @@ const handleSubmit = async () => {
       placeholder="Enter Company Name"
       value={customCompany}
       className={`w-full p-2 border ${
-        errors.company ? "border-red-500" : "border-gray-300"
+        errors.company ? "border-red-500" : "border-slate-300 dark:border-slate-700"
       } rounded-lg mt-2`}
     />
   )}
@@ -340,8 +365,8 @@ const handleSubmit = async () => {
     value={role}
     onChange={handleRoleChange}
     className={`w-full p-2 border ${
-      errors.role ? "border-red-500" : "border-gray-300"
-    } rounded-lg`}
+      errors.role ? "border-red-500" : "border-slate-300 dark:border-slate-700"
+    } rounded-lg bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100`}
   >
     <option value="">Select Role</option>
     <option value="others">Others...</option>
@@ -362,7 +387,7 @@ const handleSubmit = async () => {
       placeholder="Enter Role"
       value={customRole}
       className={`w-full p-2 border ${
-        errors.role ? "border-red-500" : "border-gray-300"
+        errors.role ? "border-red-500" : "border-slate-300 dark:border-slate-700"
       } rounded-lg mt-2`}
     />
   )}
@@ -372,38 +397,21 @@ const handleSubmit = async () => {
   )}
 </div>
           </div>
-          {successMessage && (
-  <div className="bg-[#E7F3FF] text-[#1D1D1D] p-4 rounded-lg shadow-md mb-4 text-center">
-    <div className="flex items-center justify-center">
-      <svg className="w-6 h-6 text-[#00C853] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fillRule="evenodd" d="M16.293 5.293a1 1 0 00-1.414 0L8 11.586 4.121 7.707a1 1 0 10-1.414 1.414l4.243 4.243a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
-      </svg>
-      <p className="font-semibold text-lg text-[#1D1D1D]">{successMessage}</p>
-    </div>
-  </div>
-)}
-{warningMessage && (
-  <div className="bg-[#FFF3CD] text-[#85640A] p-4 rounded-lg shadow-md mb-4 text-center">
-    <div className="flex items-center justify-center">
-      <svg className="w-6 h-6 text-[#FFC107] mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-      </svg>
-      <p className="font-semibold text-md text-[#85640A]">{warningMessage}</p>
-    </div>
-  </div>
-)}
-
+          <div className="mb-4 space-y-2">
+            <Alert tone="error">{loadError}</Alert>
+            <Alert tone="error">{formError}</Alert>
+            <Alert tone="success">{successMessage}</Alert>
+            <Alert tone="info">{warningMessage}</Alert>
+          </div>
 
           {/* Editor Container with fixed height */}
         <div
   className="rounded-lg overflow-hidden relative"
+  // Use the state computed in the resize effect. Reading window.innerWidth here
+  // ran during render on a server-rendered client page and threw
+  // "window is not defined".
   style={{
-    height:
-      window.innerWidth < 768
-        ? 'calc(100vh)'  // For mobile
-        : window.innerWidth < 1024
-        ? 'calc(100vh )'   // For tablet
-        : 'calc(100vh)',         // For laptop and larger screens
+    height,
     marginBottom: bottomMargin,
     minHeight: '100%',
   }}
@@ -411,13 +419,15 @@ const handleSubmit = async () => {
 
           {/* Submit Button at the top */}
           <div className="absolute top-4 w-full px-3 py-1.5 flex justify-center">
-          <button
+          <Button
   onClick={handleSubmit}
   type="button"
-  className="text-sm sm:text-md bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:ring-4 focus:ring-blue-300 focus:outline-none py-2 px-16 z-50"
+  loading={isSubmitting}
+  size="lg"
+  className="z-50 px-16"
 >
-  Submit
-</button>
+  {isSubmitting ? "Saving..." : "Submit"}
+</Button>
 
 
 </div>

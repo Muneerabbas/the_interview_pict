@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import { getMongoDb } from "@/lib/mongodb";
+import { jsonError } from "@/lib/api-response";
+
+/** Clamp a query param to a sane range: `?page=abc` produced $skip: NaN -> a 500. */
+function clampInt(raw, fallback, min, max) {
+  const value = Number.parseInt(raw ?? "", 10);
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(Math.max(value, min), max);
+}
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
-    const page = Number.parseInt(req.nextUrl.searchParams.get("page") || "0", 10);
-    const itemsPerPage = Number.parseInt(req.nextUrl.searchParams.get("itemsPerPage") || "30", 10);
+    const page = clampInt(req.nextUrl.searchParams.get("page"), 0, 0, 1000);
+    const itemsPerPage = clampInt(req.nextUrl.searchParams.get("itemsPerPage"), 30, 1, 50);
 
     const type = req.nextUrl.searchParams.get("type") || "interview";
     const db = await getMongoDb();
@@ -45,6 +53,6 @@ export async function GET(req) {
     });
   } catch (error) {
     console.error("Error fetching top stories:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to load top stories");
   }
 }

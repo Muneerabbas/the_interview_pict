@@ -1,12 +1,33 @@
 import { GoogleGenAI } from "@google/genai";
+import { requireSession } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
 });
 
+// Anything larger is not a set of interview notes; it is someone using this as a
+// free LLM on our Gemini bill.
+const MAX_PAYLOAD_BYTES = 20_000;
+
 export async function POST(req) {
+    const auth = await requireSession();
+    if (auth.response) return auth.response;
+
+    const limited = await checkRateLimit(req, { key: "ai-generate", limit: 15, windowSeconds: 600 });
+    if (limited) return limited;
+
     try {
-        const { data } = await req.json();
+        const { data } = await req.json().catch(() => ({}));
+
+        if (!data || typeof data !== "object") {
+            return Response.json({ error: "Missing data" }, { status: 400 });
+        }
+
+        if (JSON.stringify(data).length > MAX_PAYLOAD_BYTES) {
+            return Response.json({ error: "Input too large" }, { status: 413 });
+        }
+
         const isSkipped = (value) => {
             if (!value) return true;
             const normalized = String(value).trim().toLowerCase();
@@ -95,7 +116,7 @@ End with a short checklist (5-8 bullets) titled exactly "### Quick Checklist for
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("ai-generate failed:", err?.message || err);
         return Response.json({ error: "Failed" }, { status: 500 });
     }
 }

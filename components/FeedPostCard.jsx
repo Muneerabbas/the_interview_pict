@@ -13,10 +13,9 @@ import {
   MessageSquare,
   Share2,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import ProfileAvatar from "./ProfileAvatar";
-import { useAuthModal } from "@/components/AuthModalProvider";
+import { useLike, useLikeSync } from "@/hooks/use-like";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { companySlugFromName } from "@/lib/companySlug";
 import { toPlainText } from "@/lib/text-preview";
@@ -40,13 +39,14 @@ const PILL_NEUTRAL =
 
 export default function FeedPostCard({ profile }) {
   const router = useRouter();
-  const { data: session } = useSession();
-  const { openAuthModal } = useAuthModal();
-  const userEmail = session?.user?.email;
 
-  const [likes, setLikes] = useState(profile?.likes || []);
-  useEffect(() => setLikes(profile?.likes || []), [profile?.likes]);
-  const isLiked = userEmail && likes.includes(userEmail);
+  // /api/feed returns a count plus this viewer's own flag, not the array of
+  // everyone who liked it.
+  const { count: likeCount, isLiked, pending: likePending, toggleLike, sync } = useLike(
+    profile?.uid,
+    Array.isArray(profile?.likes) ? profile.likes : { count: profile?.likes, liked: profile?.liked }
+  );
+  useLikeSync(sync, Array.isArray(profile?.likes) ? profile.likes : { count: profile?.likes, liked: profile?.liked });
 
   const isTale = profile?.content_type === "tale";
   const profilePic = resolveProfileImage(profile);
@@ -73,28 +73,6 @@ export default function FeedPostCard({ profile }) {
   const tags = Array.isArray(profile?.tags) ? profile.tags.filter(Boolean).slice(0, 6) : [];
   const views = Number(profile?.views) || 0;
   const branchBatch = [profile?.branch, profile?.batch].filter(Boolean).join(" · ");
-
-  const handleLike = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!session) {
-      openAuthModal();
-      return;
-    }
-    const previous = likes;
-    const next = isLiked ? likes.filter((x) => x !== userEmail) : [...likes, userEmail];
-    setLikes(next);
-    try {
-      const res = await fetch("/api/like", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: profile.uid, email: userEmail }),
-      });
-      if (!res.ok) throw new Error("like failed");
-    } catch {
-      setLikes(previous);
-    }
-  };
 
   const handleShare = async (e) => {
     e.preventDefault();
@@ -207,9 +185,11 @@ export default function FeedPostCard({ profile }) {
       <div className="mt-3 flex items-center gap-1.5">
         <button
           type="button"
-          onClick={handleLike}
+          onClick={toggleLike}
+          disabled={likePending}
           aria-pressed={isLiked}
-          className={`${PILL} ${
+          aria-label={isLiked ? "Remove upvote" : "Upvote this post"}
+          className={`${PILL} disabled:opacity-70 ${
             isLiked
               ? "bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300"
               : PILL_NEUTRAL
@@ -219,7 +199,7 @@ export default function FeedPostCard({ profile }) {
             size={16}
             className={isLiked ? "fill-blue-600 text-blue-600 dark:fill-blue-400 dark:text-blue-400" : ""}
           />
-          {likes.length}
+          {likeCount}
         </button>
 
         <button

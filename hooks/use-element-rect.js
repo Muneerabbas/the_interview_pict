@@ -104,8 +104,10 @@ export function useElementRect(
     window.addEventListener("resize", handleUpdate, true)
 
     cleanup.push(() => {
-      window.removeEventListener("scroll", handleUpdate)
-      window.removeEventListener("resize", handleUpdate)
+      // The capture flag is part of the listener identity: removing without
+      // `true` silently no-ops and leaks a window listener on every mount.
+      window.removeEventListener("scroll", handleUpdate, true)
+      window.removeEventListener("resize", handleUpdate, true)
     })
 
     return () => {

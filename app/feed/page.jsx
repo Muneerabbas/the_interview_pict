@@ -8,6 +8,7 @@ import FeedSearch from "../../components/FeedSearch";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { requestJson } from "../../lib/client-api";
 import { ArrowUpRight, Loader2, Send, Zap, Clock, SlidersHorizontal, GraduationCap, CalendarDays, Building2, UserRound, X, RefreshCw, ChevronDown } from "lucide-react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -52,6 +53,7 @@ export default function HomePage() {
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
+  const pathname = usePathname();
   const [tabReady, setTabReady] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,8 +74,10 @@ export default function HomePage() {
     const loadCompanyOptions = async () => {
       setCompaniesLoading(true);
       try {
+        // Pass the Response itself: requestJson(res.url, ...) re-fetched the
+        // same endpoint a second time on every mount.
         const res = await fetch("/api/getCompanies");
-        const data = await requestJson(res.url, {}, { success: false, data: [] });
+        const data = await requestJson(res, {}, { success: false, data: [] });
         if (data.success && Array.isArray(data.data)) {
           const names = data.data.map((company) => company.name).filter(Boolean);
           setCompanyOptions(Array.from(new Set(names)).sort((a, b) => a.localeCompare(b)));
@@ -93,7 +97,7 @@ export default function HomePage() {
       setAuthorsLoading(true);
       try {
         const response = await fetch("/api/feed?options=authors");
-        const data = await requestJson(response.url, {}, []);
+        const data = await requestJson(response, {}, []);
         setAuthorOptions(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching authors:", error);
@@ -159,6 +163,10 @@ export default function HomePage() {
     [pageLoading, hasMoreProfiles, profiles.length]
   );
 
+  // The observer lived in a ref and was never disconnected, so leaving the feed
+  // left it holding the last sentinel node and its callback closure alive.
+  useEffect(() => () => observer.current?.disconnect(), []);
+
   const fetchProfiles = useCallback(async (pageNumber, limit, sort, activeFilters, forceRefresh = false, excludedProfileIds = []) => {
     // Avoid redundant fetches if already loading or no more profiles
     if (isFetchingRef.current && pageNumber > 0) return;
@@ -222,7 +230,9 @@ export default function HomePage() {
         setHasMoreProfiles(false);
       }
     } finally {
-      setPageLoading(false);
+      // Only the newest request may clear the spinner. The unconditional call
+      // that used to sit here let a stale/aborted request hide the loader while
+      // a newer one was still in flight.
       if (requestId === feedRequestIdRef.current) {
         setPageLoading(false);
         isFetchingRef.current = false;
@@ -349,9 +359,19 @@ export default function HomePage() {
 
   const skeletonCards = Array.from({ length: 3 });
 
-  const handleShareExperienceClick = () => {
+  const handleShareExperienceClick = (event) => {
+    // A modified click opens a new tab and leaves THIS one under a permanent
+    // full-screen overlay, because nothing ever unmounts to reset the flag.
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return;
+    }
     setIsShareButtonLoading(true);
   };
+
+  // Navigating (or coming back) must always clear the blocking overlay.
+  useEffect(() => {
+    setIsShareButtonLoading(false);
+  }, [pathname]);
 
   const activeFilterCount = [filters.company, filters.author, filters.college, filters.branch, filters.batch].filter(Boolean).length;
 
@@ -678,7 +698,7 @@ export default function HomePage() {
 
             {profiles.length === 0 && !pageLoading && (
               <div className="py-20 text-center">
-                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
                   <Clock size={32} />
                 </div>
                 <p className="text-base font-medium text-slate-500 dark:text-slate-400">
@@ -699,7 +719,7 @@ export default function HomePage() {
 
           <div className="mt-12 flex flex-col items-center space-y-4 pb-2">
             {pageLoading && (
-              <div className="flex items-center space-x-3 rounded-full border border-indigo-100 bg-white px-6 py-3 text-indigo-600 shadow-sm dark:border-cyan-500/30 dark:bg-slate-900 dark:text-cyan-300">
+              <div className="flex items-center space-x-3 rounded-full border border-indigo-100 bg-white px-6 py-3 text-indigo-600 shadow-sm dark:border-blue-500/40 dark:bg-slate-900 dark:text-blue-300">
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <span className="text-sm font-semibold">Loading more experiences...</span>
               </div>

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Share2, Facebook, Twitter, Clipboard, X, Instagram, Linkedin, Globe } from 'lucide-react';
 
@@ -7,9 +7,12 @@ export default function ShareProfileButton({ email, name }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message1, setMessage1] = useState('');
     const [mounted, setMounted] = useState(false);
+    const toastTimer = useRef(null);
 
     useEffect(() => {
         setMounted(true);
+        // The toast timer used to fire setState after unmount.
+        return () => clearTimeout(toastTimer.current);
     }, []);
 
     const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/public/${email}` : '';
@@ -43,16 +46,25 @@ export default function ShareProfileButton({ email, name }) {
         setIsModalOpen(false);
     };
 
-    const handleCopyToClipboard = () => {
-        navigator.clipboard.writeText(profileUrl)
-            .then(() => {
-                setMessage1('Profile URL copied to clipboard!');
-                setTimeout(() => setMessage1(''), 3000);
-            })
-            .catch((err) => {
-                console.error('Error copying to clipboard: ', err);
-                setMessage1('Failed to copy URL.');
-            });
+    const showToast = (text) => {
+        setMessage1(text);
+        clearTimeout(toastTimer.current);
+        toastTimer.current = setTimeout(() => setMessage1(''), 3000);
+    };
+
+    const handleCopyToClipboard = async () => {
+        // navigator.clipboard is undefined on non-secure origins.
+        if (!navigator.clipboard) {
+            showToast('Copying is not available in this browser.');
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(profileUrl);
+            showToast('Profile URL copied to clipboard!');
+        } catch (err) {
+            console.error('Error copying to clipboard: ', err);
+            showToast('Failed to copy URL.');
+        }
     };
 
     const closeModal = () => {
@@ -63,7 +75,7 @@ export default function ShareProfileButton({ email, name }) {
         <>
             <button
                 onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/90 px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-[0.5px] hover:border-blue-300 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800/85 dark:text-slate-200 dark:hover:border-cyan-500/40 dark:hover:text-cyan-300 sm:text-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/90 px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-[0.5px] hover:border-blue-300 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800/85 dark:text-slate-200 dark:hover:border-blue-500/40 dark:hover:text-blue-300 sm:text-sm"
             >
                 <Globe size={16} /> Share Profile
             </button>
@@ -71,7 +83,7 @@ export default function ShareProfileButton({ email, name }) {
             {mounted && isModalOpen && createPortal(
                 <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
                     <div className="absolute inset-0 bg-slate-900/45 backdrop-blur-md dark:bg-black/65" />
-                    <div className="relative w-full max-w-sm rounded-2xl border border-slate-300/90 bg-white/98 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.32)] dark:border-slate-600/85 dark:bg-slate-900/98 animate-in fade-in zoom-in duration-200">
+                    <div className="relative w-full max-w-sm rounded-xl border border-slate-300/90 bg-white/98 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.32)] dark:border-slate-600/85 dark:bg-slate-900/98 animate-in fade-in zoom-in duration-200">
                         <button
                             onClick={closeModal}
                             className="absolute right-3 top-3 rounded-lg p-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"

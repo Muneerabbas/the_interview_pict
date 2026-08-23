@@ -14,6 +14,33 @@ import { TALE_CATEGORIES } from "../../lib/tale-categories";
 
 const ITEMS_PER_PAGE = 10;
 
+const ShareStoryCard = ({ compact = false }) => (
+  <Link
+    href="/post/tale"
+    className={`group relative isolate overflow-hidden rounded-xl border border-l-2 border-slate-200 border-l-blue-500 bg-white text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:border-l-blue-600 hover:shadow-md dark:border-slate-700 dark:border-l-blue-400 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-600 dark:hover:border-l-blue-300 ${compact ? "flex min-w-0 flex-1 items-center p-2.5 sm:flex-none sm:px-4" : "block p-4"}`}
+  >
+    <span className={`relative flex ${compact ? "items-center gap-2.5" : "items-start gap-3"}`}>
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-blue-300">
+        <Send className="h-4 w-4" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-blue-600 dark:text-blue-300">
+          Community stories
+        </span>
+        <span className="mt-1 block truncate text-sm font-bold tracking-tight">
+          Share Your Story
+        </span>
+        {!compact && (
+          <span className="mt-1 block text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+            Share what you built, learned, or overcame.
+          </span>
+        )}
+      </span>
+      <ArrowUpRight className="relative mt-1 h-4 w-4 shrink-0 text-blue-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-blue-300" />
+    </span>
+  </Link>
+);
+
 export default function TalesPage() {
   const [tales, setTales] = useState([]);
   const [page, setPage] = useState(0);
@@ -149,6 +176,11 @@ export default function TalesPage() {
     [pageLoading, hasMore, tales.length]
   );
 
+  // Never disconnected on unmount: the observer kept the last sentinel node and
+  // its callback closure alive after navigating away.
+  useEffect(() => () => observer.current?.disconnect(), []);
+
+
   const skeletonCards = Array.from({ length: 3 });
 
   const renderTabs = (compact = false) => (
@@ -198,14 +230,7 @@ export default function TalesPage() {
 
           <aside className="mb-5 xl:absolute xl:bottom-0 xl:left-[calc(100%+20px)] xl:top-0 xl:mb-0 xl:w-[300px]">
             <div className="space-y-3 xl:sticky xl:top-24">
-              <Link
-                href="/post/tale"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
-              >
-                <Send className="h-4 w-4" />
-                Share Your Story
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              <ShareStoryCard />
               <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 [&>div]:mb-0">
                 <FeedHero contentType="tale" layout="responsive" />
               </div>
@@ -290,10 +315,7 @@ export default function TalesPage() {
               >
                 <RefreshCw className={`h-4 w-4 ${pageLoading ? "animate-spin" : ""}`} />
               </button>
-              <Link href="/post/tale" className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white sm:flex-none">
-                <Send className="h-4 w-4" />
-                Share Your Story
-              </Link>
+              <ShareStoryCard compact />
             </div>
           </section>
 
@@ -320,7 +342,7 @@ export default function TalesPage() {
 
             {tales.length === 0 && !pageLoading && (
               <div className="py-20 text-center">
-                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
+                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
                   <BookOpen size={32} />
                 </div>
                 <p className="text-base font-medium text-slate-500 dark:text-slate-400">

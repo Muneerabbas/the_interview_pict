@@ -1,99 +1,79 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { requestJson } from "@/lib/client-api";
+import Alert from "@/components/ui/Alert";
 
 const Login = ({ compact = false }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const saveAttempted = useRef(false);
+  const [authError, setAuthError] = useState("");
+  const [signingIn, setSigningIn] = useState(false);
 
-  // Function to save user data
-  const saveUserData = useCallback(async (userData) => {
-    console.log("🚀 Attempting to save user data:", userData);
-
-    try {
-      const response = await fetch("/api/saveUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-      0
-      const result = await requestJson(response, {}, {});
-      console.log("✅ User data saved successfully:", result);
-      return result;
-    } catch (error) {
-      console.error("❌ Error saving user data:", error);
-      throw error;
-    }
+  // Upserts the signed-in user. Identity is read from the session server-side,
+  // so there is no body to send.
+  const saveUserData = useCallback(async () => {
+    const response = await fetch("/api/saveUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    return requestJson(response, {}, {});
   }, []);
 
   // Handle Google sign in
   const handleGoogleSignIn = useCallback(async () => {
-    console.log("🔑 Starting Google sign in process");
+    setAuthError("");
+    setSigningIn(true);
     try {
       const result = await signIn("google", {
         redirect: false,
         callbackUrl: window.location.href,
       });
 
-      console.log("📡 Sign in result:", result);
-
+      // Previously these failures were console-only, so a blocked popup made the
+      // button look like it simply did nothing, forever.
       if (result?.error) {
-        console.error("❌ Sign in error:", result.error);
+        setAuthError("Google sign-in failed. Please try again.");
       }
     } catch (error) {
-      console.error("❌ Sign in failed:", error);
+      console.error("Sign in failed:", error);
+      setAuthError("Could not reach Google. Check your connection and try again.");
+    } finally {
+      setSigningIn(false);
     }
   }, []);
 
   useEffect(() => {
-    console.log("🔄 Session status:", status);
-    console.log("👤 Current session:", session);
-    console.log("🎯 Save attempted:", saveAttempted.current);
-
+    // No logging of the session object here: it carries the user's email, name
+    // and avatar straight into the browser console in production.
     const saveUser = async () => {
-      if (session?.user && !saveAttempted.current) {
-        console.log("🎯 Starting save user process");
-        saveAttempted.current = true;
+      if (!session?.user || saveAttempted.current) return;
+      saveAttempted.current = true;
 
-        try {
-          const { email, name, image } = session.user;
-          await saveUserData({
-            gmail: email,
-            name,
-            image,
-          });
-
-          if (window.location.pathname === "/login") {
-            console.log("🚪 Redirecting to home");
-            router.push("/feed");
-          }
-        } catch (error) {
-          console.error("❌ Failed to save user:", error);
-          saveAttempted.current = false;
+      try {
+        await saveUserData();
+        if (window.location.pathname === "/login") {
+          router.push("/feed");
         }
+      } catch (error) {
+        console.error("Failed to save user:", error);
+        saveAttempted.current = false;
       }
     };
 
     if (status === "authenticated") {
       saveUser();
     }
-
-    return () => {
-      console.log("♻️ Cleanup running, save attempted:", saveAttempted.current);
-    };
   }, [session, status, router, saveUserData]);
 
   // Show loading state while checking session
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-blue-300" />
       </div>
     );
   }
@@ -103,7 +83,7 @@ const Login = ({ compact = false }) => {
       <div className="w-full">
         {session ? (
           <div className="flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-cyan-300" />
+            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin dark:border-blue-300" />
           </div>
         ) : (
           <div className={`flex flex-col items-center ${compact ? "space-y-6" : "space-y-6 sm:space-y-8"}`}>
@@ -116,10 +96,13 @@ const Login = ({ compact = false }) => {
               </p>
             </div>
 
+            <Alert tone="error" className="w-full">{authError}</Alert>
+
             <button
               type="button"
               onClick={handleGoogleSignIn}
-              className="group relative w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-700 sm:px-6"
+              disabled={signingIn}
+              className="group relative w-full disabled:opacity-70 rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-700 sm:px-6"
             >
               <div className="relative flex items-center justify-center space-x-2 sm:space-x-3">
                 <svg
@@ -133,7 +116,7 @@ const Login = ({ compact = false }) => {
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
                 <span className="font-medium text-sm sm:text-base whitespace-nowrap">
-                  Continue with Google
+                  {signingIn ? "Connecting..." : "Continue with Google"}
                 </span>
               </div>
             </button>

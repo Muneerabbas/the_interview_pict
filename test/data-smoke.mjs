@@ -65,8 +65,13 @@ assert.equal(sitemap.response.status, 200);
 assert.match(sitemap.contentType, /xml|text/);
 assert.match(sitemap.body, /<(urlset|sitemapindex)/);
 
-const companyPage = await request("/companies/arista");
+// Pick a real slug from the API rather than hard-coding one: this asserted
+// "/companies/arista" while the seeded slug is "arista-networks", so the smoke
+// test had been failing on a 404 regardless of the app's health.
+const [sampleCompany] = companies.data.data;
+assert.ok(sampleCompany?.slug, "expected at least one company from /api/getCompanies");
+const companyPage = await request(`/companies/${sampleCompany.slug}`);
 assert.equal(companyPage.response.status, 200);
-assert.match(companyPage.body, /Arista/i);
+assert.match(companyPage.body, new RegExp(sampleCompany.name.slice(0, 6).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
 console.log("data smoke: passed");

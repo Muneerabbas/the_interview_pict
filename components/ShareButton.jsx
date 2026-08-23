@@ -1,18 +1,24 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Share2, Facebook, Twitter, Clipboard, X, Instagram, Linkedin } from 'lucide-react';
+import { Share2, Facebook, Twitter, Clipboard, X, Linkedin } from 'lucide-react';
 
 export default function ShareButton({ id, data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [message1, setMessage1] = useState('');
   const [mounted, setMounted] = useState(false);
+  const toastTimer = useRef(null);
 
   useEffect(() => {
     setMounted(true);
+    return () => clearTimeout(toastTimer.current);
   }, []);
 
-  const articleUrl = `https://www.pict.live/single/${id}`;
+  // Was hardcoded to https://www.pict.live/... so staging, preview and localhost
+  // all produced production links (to a domain that is no longer ours).
+  const [origin, setOrigin] = useState('');
+  useEffect(() => setOrigin(window.location.origin), []);
+  const articleUrl = `${origin || 'https://theinterviewroom.in'}/single/${id}`;
   const articleDescription = data?.name
     ? `Read ${data.name}'s detailed interview experience as ${data.role} at ${data.company}. Learn about the interview process, questions asked, and valuable insights for ${data.branch} students.`
     : `Read this interview experience on theInterview.`;
@@ -47,24 +53,24 @@ export default function ShareButton({ id, data }) {
     setIsModalOpen(false);
   };
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(articleUrl)
-      .then(() => {
-        setMessage1('Article URL copied to clipboard!');
-        setIsModalOpen(true);
-      })
-      .catch((err) => {
-        console.error('Error copying to clipboard: ', err);
-        setMessage1('Failed to copy URL.');
-        setIsModalOpen(true);
-      });
+  const showToast = (text) => {
+    setMessage1(text);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setMessage1(''), 3000);
   };
 
-  // Function to handle Instagram sharing (opens Instagram app for manual sharing)
-  const handleInstagramShare = () => {
-    const shareUrl = `https://www.instagram.com/stories`;
-    window.open(shareUrl, '_blank');
-    setIsModalOpen(false);
+  const handleCopyToClipboard = async () => {
+    if (!navigator.clipboard) {
+      showToast('Copying is not available in this browser.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(articleUrl);
+      showToast('Article URL copied to clipboard!');
+    } catch (err) {
+      console.error('Error copying to clipboard: ', err);
+      showToast('Failed to copy URL.');
+    }
   };
 
   // Function to close the modal
@@ -75,11 +81,8 @@ export default function ShareButton({ id, data }) {
   return (
     <>
       <button
-        onClick={() => {
-          handleCopyToClipboard();
-          setIsModalOpen(true);
-        }}
-        className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-[0_10px_22px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-500/45 dark:hover:bg-slate-800 dark:hover:text-cyan-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:right-4 sm:top-4 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
+        onClick={() => setIsModalOpen(true)}
+        className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-[1px] hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 hover:shadow-[0_10px_22px_rgba(59,130,246,0.18)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-blue-500/40 dark:hover:bg-slate-800 dark:hover:text-blue-300 dark:hover:shadow-[0_10px_22px_rgba(34,211,238,0.14)] sm:right-4 sm:top-4 sm:h-auto sm:w-auto sm:gap-2 sm:px-3 sm:py-2 sm:text-sm sm:font-semibold"
         aria-label="Share article"
       >
         <Share2 size={16} />
@@ -90,8 +93,7 @@ export default function ShareButton({ id, data }) {
         {/* Modal for Share Options */}
         {mounted && isModalOpen && createPortal(
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm px-4 dark:bg-black/60">
-            <div className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.3)] backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/95">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-50/80 to-transparent dark:from-cyan-950/40" />
+            <div className="relative w-full max-w-sm overflow-hidden rounded-xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.3)] backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/95">
               {/* Close Button */}
               <button
                 onClick={closeModal}
@@ -119,7 +121,7 @@ export default function ShareButton({ id, data }) {
 
                 <button
                   onClick={handleLinkedInShare}
-                  className="flex items-center gap-2 rounded-xl border border-blue-200/80 bg-blue-50/70 px-3 py-2.5 text-sm font-semibold text-blue-700 transition hover:-translate-y-[1px] hover:bg-blue-100 dark:border-cyan-500/35 dark:bg-cyan-950/30 dark:text-cyan-300 dark:hover:bg-cyan-950/45"
+                  className="flex items-center gap-2 rounded-xl border border-blue-200/80 bg-blue-50/70 px-3 py-2.5 text-sm font-semibold text-blue-700 transition hover:-translate-y-[1px] hover:bg-blue-100 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-950/45"
                   aria-label="Share on LinkedIn"
                 >
                   <Linkedin size={18} />
@@ -143,13 +145,15 @@ export default function ShareButton({ id, data }) {
                   Twitter
                 </button>
 
+                {/* Replaces the old "Instagram" button, which opened
+                    instagram.com/stories and shared nothing at all. */}
                 <button
-                  onClick={handleInstagramShare}
-                  className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-pink-200/80 bg-pink-50/70 px-3 py-2.5 text-sm font-semibold text-pink-700 transition hover:-translate-y-[1px] hover:bg-pink-100 dark:border-pink-500/35 dark:bg-pink-950/30 dark:text-pink-300 dark:hover:bg-pink-950/45"
-                  aria-label="Share on Instagram"
+                  onClick={handleCopyToClipboard}
+                  className="col-span-2 flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                  aria-label="Copy link to clipboard"
                 >
-                  <Instagram size={18} />
-                  Instagram
+                  <Clipboard size={18} />
+                  Copy link
                 </button>
               </div>
             </div>
@@ -158,9 +162,9 @@ export default function ShareButton({ id, data }) {
         )}
         {mounted && isModalOpen && message1 && createPortal(
           <div
-            className="fixed bottom-24 left-1/2 z-[100] flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn dark:border-cyan-500/35 dark:bg-cyan-950/45 dark:text-slate-100"
+            className="fixed bottom-24 left-1/2 z-[100] flex w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 transform items-center justify-center space-x-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-slate-800 shadow-lg animate-slideIn dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-slate-100"
           >
-            <Clipboard className="h-5 w-5 text-blue-700 dark:text-cyan-300" />
+            <Clipboard className="h-5 w-5 text-blue-700 dark:text-blue-300" />
             <span className="text-center">{message1}</span>
           </div>,
           document.body

@@ -100,11 +100,18 @@ export default async function CompanyDetails({ params }) {
                         <div className="relative shrink-0">
                             {company.logo ? (
                                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950 sm:h-28 sm:w-28">
+                                    {/* Deliberately a raw <img>: company logos are
+                                        arbitrary third-party URLs, and next/image
+                                        would reject any host missing from
+                                        next.config remotePatterns. Explicit
+                                        width/height avoid the layout shift. */}
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={company.logo}
                                         alt={`${company.name} logo`}
-                                        className="object-contain h-full w-full"
+                                        width={112}
+                                        height={112}
+                                        className="h-full w-full object-contain"
                                         loading="lazy"
                                     />
                                 </div>
@@ -134,9 +141,9 @@ export default async function CompanyDetails({ params }) {
                                         href={company.website}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 hover:underline transition-all dark:text-cyan-400 dark:hover:text-cyan-300"
+                                        className="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 hover:underline transition-all dark:text-blue-400 dark:hover:text-blue-300"
                                     >
-                                        <Globe size={16} className="text-blue-500 dark:text-cyan-500" />
+                                        <Globe size={16} className="text-blue-500 dark:text-blue-500" />
                                         Visit Website
                                     </a>
                                 )}
@@ -159,7 +166,7 @@ export default async function CompanyDetails({ params }) {
 
                         {/* Stats Block */}
                         {!isGeneric && (
-                            <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-auto mt-6 sm:mt-0 bg-slate-50/50 p-4 rounded-2xl border border-slate-200/60 dark:bg-slate-800/40 dark:border-slate-700/50">
+                            <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-auto mt-6 sm:mt-0 bg-slate-50/50 p-4 rounded-xl border border-slate-200/60 dark:bg-slate-800/40 dark:border-slate-700/50">
                                     <div className="flex-1 text-center sm:text-right">
                                     <div className="text-2xl font-black text-slate-900 dark:text-slate-100">{interviewsCount}</div>
                                     <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 dark:text-slate-400">Interviews</div>

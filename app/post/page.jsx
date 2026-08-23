@@ -52,7 +52,7 @@ function PostContent() {
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
             <div className="rounded-xl border border-slate-200 bg-white px-6 py-12 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-10">
               <div className="flex flex-col items-center text-center space-y-4">
-                <FileText size={48} className="text-blue-600 dark:text-cyan-300" />
+                <FileText size={48} className="text-blue-600 dark:text-blue-300" />
                 <h1 className="text-3xl font-bold text-[#1D1D1D] dark:text-slate-100">
                   {isStory ? "Share Your Story" : "Share Your Experience"}
                 </h1>
@@ -92,7 +92,7 @@ function PostContent() {
           {/* Login Overlay */}
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm dark:bg-black/50" />
-            <div className="relative max-w-md w-full mx-4 rounded-2xl border border-slate-200/80 bg-white/95 p-8 shadow-[0_20px_48px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-[0_22px_52px_rgba(2,6,23,0.75)]">
+            <div className="relative max-w-md w-full mx-4 rounded-xl border border-slate-200/80 bg-white/95 p-8 shadow-[0_20px_48px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-[0_22px_52px_rgba(2,6,23,0.75)]">
               <Login />
             </div>
           </div>
@@ -107,7 +107,7 @@ function PostContent() {
                   type="button"
                   onClick={() => setContentType("interview")}
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${contentType === "interview"
-                    ? "bg-slate-900 text-white dark:bg-cyan-400 dark:text-slate-950"
+                    ? "bg-slate-900 text-white dark:bg-blue-400 dark:text-slate-950"
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
                     }`}
                 >
@@ -118,7 +118,7 @@ function PostContent() {
                   type="button"
                   onClick={() => setContentType("tale")}
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${contentType === "tale"
-                    ? "bg-slate-900 text-white dark:bg-cyan-400 dark:text-slate-950"
+                    ? "bg-slate-900 text-white dark:bg-blue-400 dark:text-slate-950"
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
                     }`}
                 >
@@ -137,14 +137,11 @@ function PostContent() {
 }
 
 export default function Post() {
-  const { data: session } = useSession();
-
   return (
     <main className="relative min-h-screen overflow-x-clip bg-slate-50 dark:bg-slate-950">
-
-      {!session && (
-        <Navbar showThemeToggle />
-      )}
+      {/* Always mounted: hiding it once a session existed left signed-in authors
+          with no navigation, and made it flash away after the session resolved. */}
+      <Navbar />
 
       <Suspense fallback={
         <div className="relative flex min-h-screen items-center justify-center">

@@ -48,7 +48,7 @@ export default function ThemeToggle({ className = "" }) {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle theme menu"
-                className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white/80 shadow-sm backdrop-blur-md transition-all hover:-translate-y-[0.5px] hover:border-blue-300/50 hover:bg-white active:scale-95 dark:border-slate-700/80 dark:bg-slate-900/80 dark:hover:border-cyan-500/40 dark:hover:bg-slate-900"
+                className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white/80 shadow-sm backdrop-blur-md transition-all hover:-translate-y-[0.5px] hover:border-blue-300/50 hover:bg-white active:scale-95 dark:border-slate-700/80 dark:bg-slate-900/80 dark:hover:border-blue-500/40 dark:hover:bg-slate-900"
             >
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -76,7 +76,7 @@ export default function ThemeToggle({ className = "" }) {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.95 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute right-0 top-full z-[60] mt-2 min-w-[130px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 p-1.5 shadow-[0_12px_36px_rgba(15,23,42,0.15)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/95 dark:shadow-[0_12px_44px_rgba(2,6,23,0.7)]"
+                        className="absolute right-0 top-full z-[60] mt-2 min-w-[130px] overflow-hidden rounded-xl border border-slate-200/80 bg-white/95 p-1.5 shadow-[0_12px_36px_rgba(15,23,42,0.15)] backdrop-blur-xl dark:border-slate-700/80 dark:bg-slate-950/95 dark:shadow-[0_12px_44px_rgba(2,6,23,0.7)]"
                     >
                         <div className="mb-1 pointer-events-none px-2.5 py-1">
                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Theme</span>
@@ -94,7 +94,7 @@ export default function ThemeToggle({ className = "" }) {
                                     className={cn(
                                         "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-xs font-semibold transition-all",
                                         isActive
-                                            ? "bg-blue-50 text-blue-700 dark:bg-cyan-950/40 dark:text-cyan-300"
+                                            ? "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"
                                             : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
                                     )}
                                 >
@@ -102,7 +102,7 @@ export default function ThemeToggle({ className = "" }) {
                                         <Icon size={14} className={cn(isActive ? "" : "opacity-70", isActive && option.color)} />
                                         {option.label}
                                     </div>
-                                    {isActive && <Check size={12} className="text-blue-600 dark:text-cyan-400" />}
+                                    {isActive && <Check size={12} className="text-blue-600 dark:text-blue-400" />}
                                 </button>
                             );
                         })}

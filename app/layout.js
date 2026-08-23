@@ -1,5 +1,6 @@
 // app/layout.js
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.scss";
 import Providers from "./providers";
 
@@ -64,6 +65,8 @@ export const metadata = {
   },
 };
 
+// The variable name must match what globals.scss feeds to Tailwind's font-sans,
+// otherwise next/font downloads Inter and nothing ever uses it.
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -74,12 +77,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        <link rel="icon" type="image/png" href="/app_icon.png" />
+        {/* The favicon comes from `metadata.icons` above; a manual <link> duplicated it. */}
         <meta name="google-adsense-account" content="ca-pub-9530051498159475" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530051498159475" crossOrigin="anonymous"></script>
       </head>
       <body className="antialiased font-sans">
         <Providers>{children}</Providers>
+        <Script
+          id="adsbygoogle"
+          async
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9530051498159475"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   );

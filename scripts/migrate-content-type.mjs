@@ -8,7 +8,7 @@ const client = new MongoClient(uri);
 async function run() {
   try {
     await client.connect();
-    const db = client.db();
+    const db = client.db(process.env.MONGODB_DB_NAME || "int-exp");
     const experiences = db.collection("experience");
 
     console.log("Updating existing experiences with content_type: 'interview'...");

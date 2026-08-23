@@ -72,14 +72,14 @@ export default function AddCompanyPage() {
           Back to Directory
         </Link>
         
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10">
+        <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10">
           <div className="absolute top-0 right-0 p-8 opacity-5">
             <Building2 size={120} />
           </div>
 
           <div className="relative z-10">
             <h1 className="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
-              <Plus className="rounded-lg bg-blue-50 p-1 text-blue-600 dark:bg-cyan-950/40 dark:text-cyan-300" size={32} />
+              <Plus className="rounded-lg bg-blue-50 p-1 text-blue-600 dark:bg-blue-950/40 dark:text-blue-300" size={32} />
               Add New Company
             </h1>
             <p className="mb-8 mt-2 text-slate-500 dark:text-slate-400">
@@ -101,7 +101,7 @@ export default function AddCompanyPage() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="e.g. Google"
                 />
               </div>
@@ -114,7 +114,7 @@ export default function AddCompanyPage() {
                   rows={4}
                   value={formData.about}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="A brief description of the company and what they do..."
                 />
               </div>
@@ -127,7 +127,7 @@ export default function AddCompanyPage() {
                     name="location"
                     value={formData.location}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                     placeholder="e.g. Mountain View, CA"
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function AddCompanyPage() {
                     name="website"
                     value={formData.website}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                     placeholder="https://..."
                   />
                 </div>
@@ -152,7 +152,7 @@ export default function AddCompanyPage() {
                   name="logo"
                   value={formData.logo}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="https://.../logo.png"
                 />
                 <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Provide a direct link to the company's transparent logo icon.</p>
@@ -165,7 +165,7 @@ export default function AddCompanyPage() {
                   name="tags"
                   value={formData.tags}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-800 dark:focus:ring-cyan-500/20"
+                  className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-100 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20"
                   placeholder="Tech, Cloud, FinTech (comma separated)"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function AddCompanyPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-[15px] font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:-translate-y-[1px] hover:shadow-lg disabled:opacity-70 disabled:hover:translate-y-0"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3.5 text-[15px] font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:-translate-y-[1px] hover:shadow-lg disabled:opacity-70 disabled:hover:translate-y-0"
                 >
                   {submitting ? (
                     <Loader2 size={20} className="animate-spin" />

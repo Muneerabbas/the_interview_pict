@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { getMongoDb } from "@/lib/mongodb";
+import { jsonError } from "@/lib/api-response";
 import { resolveProfileImage, resolveProfileName } from "../../../lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -69,6 +70,6 @@ export async function GET(req) {
     return NextResponse.json(finalData);
   } catch (error) {
     console.error("Error fetching data:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to load experience");
   }
 }

@@ -1,14 +1,8 @@
 "use client";
 import React, { useRef, useState, useEffect } from 'react';
 import TeamMemberCard from "../../components/TeamMemberCard";
-import himg from '../../public/h1.jpg';
-import nimg from '../../public/n2.jpg';
-import niimg from '../../public/n1.jpg';
-import m1img from "../../public/m1.jpeg";
-import m2img from "../../public/m2.jpeg";
-import p1img from "../../public/p1.jpeg";
 import logo from "../../public/app_icon.png";
-import default1 from "../../public/default1.png";
+import { TEAM } from "@/data/team";
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import Navbar from "../../components/Navbar";
@@ -67,13 +61,9 @@ export default function Aboutus() {
 
             <div className="mx-auto mt-6 max-w-5xl">
               <div className="grid grid-cols-1 place-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:sm:col-span-2 [&>*:last-child]:lg:col-span-1 [&>*:last-child]:lg:col-start-2">
-                <TeamMemberCard img={himg} name="Himanshu Gholse" subtitle="PICT'26 ENTC" linkedin="https://www.linkedin.com/in/himanshu-gholse-6604ba227/" github="https://github.com/himanshug-08" email="himanshugholse08@gmail.com" />
-                <TeamMemberCard img={nimg} name="Neeraj Magdum" subtitle="PICT'26 CE" linkedin="https://www.linkedin.com/in/neerajmagdum/" github="https://github.com/nirz306" email="neerajmagdum10@gmail.com" />
-                <TeamMemberCard img={niimg} name="Nilay Tayade" subtitle="PICT'26 CE" linkedin="https://www.linkedin.com/in/nilay-tayade/" github="https://github.com/nilaytayade" email="nilaytayadee@gmail.com" />
-                <TeamMemberCard img={m1img} name="Muneer Abbas" subtitle="PICT'28 CE" linkedin="https://www.linkedin.com/in/muneer-abass-67a095285/" github="https://github.com/muneerabbas" email="muneer.abbas5678@gmail.com" />
-                <TeamMemberCard img={m2img} name="Manas Khairnar" subtitle="PICT`28 CE" linkedin="https://www.linkedin.com/in/manas-khairnar-98329132b/" github="https://github.com/derpx06" email="manaskhairnar1511@gmail.com" />
-                <TeamMemberCard img={p1img} name="Parag Dharamkar" subtitle="PICT'28 CE" linkedin="https://www.linkedin.com/in/parag-dharamkar-b5529632a?utm_source=share_via&utm_content=profile&utm_medium=member_android" github="https://github.com/ParagD1606" email="paragdharamkar2006@gmail.com" />
-                <TeamMemberCard img={default1} name="Riddhesh Kataria" subtitle="PICT'28 CE" linkedin="#" github="#" email="#" />
+                {TEAM.map((member) => (
+                  <TeamMemberCard key={member.name} {...member} />
+                ))}
               </div>
             </div>
           </div>
@@ -98,7 +88,7 @@ export default function Aboutus() {
       <div ref={storyRef} className='relative flex flex-col'>
         <div className='container relative z-10 mx-auto px-6 pb-12 pt-8 sm:pt-10'>
           <div className="mx-auto mb-8 h-px max-w-4xl bg-slate-200 dark:bg-slate-800" />
-          <section className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10">
+          <section className="mx-auto max-w-3xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-10">
             <h2 className="mb-5 text-left text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">Our Story</h2>
             <div className="mx-auto max-w-2xl space-y-5 text-left text-slate-700 dark:text-slate-300">
               <p className="text-[16px] leading-[1.75]">
@@ -122,43 +112,7 @@ export default function Aboutus() {
         </div>
       </div>
 
-      <style jsx global>{`
-        /* Existing animations */
-        @keyframes bubble1 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes bubble2 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(8px); }
-        }
-        @keyframes bubble3 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        @keyframes bubble4 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(5px); }
-        }
 
-        @keyframes logo-spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        .group-hover:animate-logo-spin {
-          animation: logo-spin 1s ease-in-out;
-        }
-
-        .animate-bubble1 { animation: bubble1 6s infinite ease-in-out; }
-        .animate-bubble2 { animation: bubble2 7s infinite ease-in-out; }
-        .animate-bubble3 { animation: bubble3 8s infinite ease-in-out; }
-        .animate-bubble4 { animation: bubble4 9s infinite ease-in-out; }
-      `}</style>
     </main>
   );
 }

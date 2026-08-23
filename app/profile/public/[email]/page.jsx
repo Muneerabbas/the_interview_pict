@@ -22,7 +22,7 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 import ArticleCard from "@/components/ArticleCard";
 import ShareProfileButton from "@/components/ShareProfileButton";
 import ProfileViewTracker from "@/components/ProfileViewTracker";
-import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
+import { resolveProfileImage, resolveProfileName, safeExternalUrl } from "@/lib/utils";
 import { fetchWithCache } from "@/lib/cache";
 import redis from "@/lib/redis";
 
@@ -33,21 +33,18 @@ async function getPublicProfile(email) {
 
   return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
     try {
-      const db = await getMongoDb({ mode: "write" });
+      // Read-only: this is a cached fetcher, so the view $inc that used to live
+      // here only fired on cache misses while <ProfileViewTracker/> counted every
+      // load -- views were both undercounted and double counted. The tracker is
+      // now the single increment path.
+      const db = await getMongoDb({ mode: "read" });
       const experience = db.collection("experience");
       const userCollection = db.collection("user");
 
-      const rawPosts = await experience.find({ email }).sort({ date: -1 }).toArray();
-
-      // Get user statistics and profile info
-      // findOneAndUpdate might return { value: doc } or doc directly depending on driver version
-      const updateResult = await userCollection.findOneAndUpdate(
-        { gmail: email },
-        { $inc: { views: 1 } },
-        { returnDocument: 'after' }
-      );
-
-      const userData = updateResult?.value || updateResult;
+      const [rawPosts, userData] = await Promise.all([
+        experience.find({ email }).sort({ date: -1 }).limit(100).toArray(),
+        userCollection.findOne({ gmail: email }),
+      ]);
 
       // If no user document and no posts, then it's a 404
       if (!userData?.gmail && (!rawPosts || rawPosts.length === 0)) {
@@ -95,6 +92,43 @@ async function getPublicProfile(email) {
       return { posts: [], stats: null, profile: null };
     }
   });
+}
+
+// The /profile layout noindexes the whole subtree, which silently included this
+// PUBLIC, shareable page -- every profile shared via ShareProfileButton was
+// noindexed and titled just "Profile". Page metadata overrides the layout's.
+export async function generateMetadata({ params }) {
+  const { email: rawEmail } = await params;
+  const email = decodeURIComponent(rawEmail || "");
+  const { profile } = await getPublicProfile(email);
+
+  if (!profile) {
+    return { title: "Profile not found", robots: { index: false, follow: false } };
+  }
+
+  const name = profile.name || "Member";
+  const description =
+    profile.headline ||
+    `Interview experiences and insights shared by ${name} on The Interview Room.`;
+
+  return {
+    title: name,
+    description,
+    alternates: { canonical: `/profile/public/${encodeURIComponent(email)}` },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "profile",
+      title: `${name} | The Interview Room`,
+      description,
+      url: `https://theinterviewroom.in/profile/public/${encodeURIComponent(email)}`,
+      images: profile.image ? [{ url: profile.image }] : undefined,
+    },
+    twitter: {
+      card: "summary",
+      title: `${name} | The Interview Room`,
+      description,
+    },
+  };
 }
 
 export default async function PublicProfilePage({ params }) {
@@ -169,17 +203,24 @@ export default async function PublicProfilePage({ params }) {
                     <div className="flex gap-4">
                       {Object.entries(profile.socialLinks).map(([key, value]) => {
                         if (key === 'custom' || !value) return null;
+                        // Unvalidated hrefs are stored XSS (`javascript:...`).
+                        const safeHref = safeExternalUrl(value);
+                        if (!safeHref) return null;
                         return (
-                          <a key={key} href={value} target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400">
+                          <a key={key} href={safeHref} target="_blank" rel="noopener noreferrer" aria-label={`${key} profile`} className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400">
                             <SocialIcon type={key} size={20} />
                           </a>
                         );
                       })}
-                      {profile.socialLinks.custom?.map((link, idx) => (
-                        <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400" title={link.name}>
-                          <Globe size={20} />
-                        </a>
-                      ))}
+                      {profile.socialLinks.custom?.map((link, idx) => {
+                        const safeHref = safeExternalUrl(link?.url);
+                        if (!safeHref) return null;
+                        return (
+                          <a key={`${link.name}-${idx}`} href={safeHref} target="_blank" rel="noopener noreferrer" className="text-slate-400 transition hover:text-blue-500 dark:hover:text-blue-400" title={link.name} aria-label={link.name || "External link"}>
+                            <Globe size={20} />
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

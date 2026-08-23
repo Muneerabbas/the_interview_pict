@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 
 const IconLink = ({ href, label, children }) => {
   if (!href || href === "#") return null;
+  // "#" and empty hrefs render a link that just jumps to the top of the page.
+  if (!href || href === "#") return null;
+
   return (
     <motion.a
       whileHover={{ scale: 1.1, y: -2 }}
@@ -35,7 +38,7 @@ export default function TeamMemberCard({
 
   return (
     <article
-      className="group relative isolate aspect-[3/4] w-full max-w-[19rem] overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800"
+      className="group relative isolate aspect-[3/4] w-full max-w-[19rem] overflow-hidden rounded-xl border border-slate-200 bg-slate-900 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800"
     >
       {/* Background Image */}
       <div className="absolute inset-0">
@@ -48,9 +51,9 @@ export default function TeamMemberCard({
           priority={priority}
         />
         {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 via-42% to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 via-42% to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100 focus-within:translate-y-0" />
         <div className="absolute inset-x-0 bottom-0 h-[52%] bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
-        <div className="absolute inset-0 bg-blue-600/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-blue-600/10 opacity-0 focus-within:opacity-100 transition-opacity duration-500 group-hover:opacity-100 focus-within:translate-y-0" />
       </div>
 
       {/* Content Container - Better Visibility */}
@@ -70,7 +73,7 @@ export default function TeamMemberCard({
         </div>
 
         {/* Social Links - Slide Up on Hover */}
-        <div className="mt-4 flex items-center gap-3 translate-y-8 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 overflow-visible">
+        <div className="mt-4 flex items-center gap-3 translate-y-8 opacity-0 focus-within:opacity-100 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 focus-within:translate-y-0 overflow-visible">
           <IconLink href={linkedin} label={`${name} LinkedIn`}>
             <Linkedin size={18} />
           </IconLink>

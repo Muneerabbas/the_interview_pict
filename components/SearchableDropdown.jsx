@@ -5,7 +5,7 @@ import { ChevronDown, Search, Check, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SearchableDropdown({
-    options,
+    options = [],
     value,
     onChange,
     placeholder = "Select option",
@@ -24,20 +24,38 @@ export default function SearchableDropdown({
     const listRef = useRef(null);
 
     useEffect(() => {
+        if (!isOpen) return undefined;
+
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
         };
+        const handleEscape = (event) => {
+            if (event.key === "Escape") setIsOpen(false);
+        };
+
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [isOpen]);
 
     const normalizeOption = (opt) => typeof opt === 'object' ? opt : { label: opt === "others" ? "Others..." : String(opt), value: String(opt) };
-    const normalizedOptions = useMemo(() => options.map(normalizeOption), [options]);
+    const normalizedOptions = useMemo(
+        () => (Array.isArray(options) ? options : []).map(normalizeOption),
+        [options]
+    );
 
+    const skipInitialSearch = useRef(true);
     useEffect(() => {
-        if (!remoteSearch || !onSearchTermChange) return;
+        if (!remoteSearch || !onSearchTermChange) return undefined;
+        if (skipInitialSearch.current) {
+            skipInitialSearch.current = false;
+            return undefined;
+        }
 
         const timeoutId = window.setTimeout(() => {
             onSearchTermChange(searchTerm);
@@ -54,7 +72,10 @@ export default function SearchableDropdown({
 
     const currentLabel = useMemo(() => {
         const selected = normalizedOptions.find(opt => opt.value === String(value));
-        return selected ? selected.label : value;
+        if (selected) return selected.label;
+        // Fall back to the same label mapping instead of dumping the raw value
+        // (which rendered a literal "others" after picking "Others...").
+        return value ? normalizeOption(value).label : value;
     }, [normalizedOptions, value]);
 
     const handleSelect = (option) => {
@@ -77,8 +98,10 @@ export default function SearchableDropdown({
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`group w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm ${error ? "border-red-300 ring-2 ring-red-500/10" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:bg-slate-800/80 dark:focus:border-cyan-400 dark:focus:bg-slate-900 dark:focus:ring-cyan-500/20"
+                className={`group w-full flex items-center justify-between rounded-xl border bg-slate-50/50 px-3 py-2.5 text-left text-[13px] font-semibold text-slate-700 shadow-inner transition-all sm:px-4 sm:py-3 sm:text-sm dark:bg-slate-800/80 ${error ? "border-red-400 ring-2 ring-red-500/10 dark:border-red-500/70" : "border-slate-200 focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:border-slate-700 dark:focus:border-blue-400 dark:focus:bg-slate-900 dark:focus:ring-blue-500/20"
                     } dark:text-slate-200 cursor-pointer`}
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
             >
                 <span title={currentLabel || placeholder} className={`relative block min-w-0 flex-1 truncate pr-3 text-[13px] sm:text-sm ${!value ? 'font-medium text-slate-500 dark:text-slate-300' : 'text-slate-700 dark:text-slate-200'}`}>
                     {currentLabel || placeholder}
@@ -88,7 +111,7 @@ export default function SearchableDropdown({
                         </span>
                     ) : null}
                 </span>
-                <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-500 dark:text-cyan-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
             </button>
 
             <AnimatePresence>
@@ -108,12 +131,13 @@ export default function SearchableDropdown({
                                 placeholder="Search..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full rounded-lg bg-slate-50 px-9 py-2 text-[13px] font-medium text-slate-700 outline-none transition-colors focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-950 dark:focus:ring-cyan-500/20 sm:text-sm"
+                                className="w-full rounded-lg bg-slate-50 px-9 py-2 text-[13px] font-medium text-slate-700 outline-none transition-colors focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-950 dark:focus:ring-blue-500/20 sm:text-sm"
                             />
                         </div>
 
                         <ul
                             ref={listRef}
+                            role="listbox"
                             onScroll={handleScroll}
                             className="max-h-56 overflow-y-auto p-1"
                         >
@@ -127,9 +151,18 @@ export default function SearchableDropdown({
                                     return (
                                         <li
                                             key={option.value}
-                                            className={`relative flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors sm:text-sm ${isSelected
-                                                ? "bg-blue-50 text-blue-700 dark:bg-cyan-950/40 dark:text-cyan-300"
-                                                : "text-slate-700 hover:bg-blue-100 hover:text-blue-900 dark:text-slate-200 dark:hover:bg-cyan-900/35 dark:hover:text-cyan-100"
+                                            role="option"
+                                            aria-selected={isSelected}
+                                            tabIndex={0}
+                                            onKeyDown={(event) => {
+                                                if (event.key === "Enter" || event.key === " ") {
+                                                    event.preventDefault();
+                                                    handleSelect(option);
+                                                }
+                                            }}
+                                            className={`relative flex cursor-pointer select-none items-center justify-between rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50 sm:text-sm ${isSelected
+                                                ? "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"
+                                                : "text-slate-700 hover:bg-blue-100 hover:text-blue-900 dark:text-slate-200 dark:hover:bg-blue-900/35 dark:hover:text-blue-100"
                                                 }`}
                                             onClick={() => handleSelect(option)}
                                             title={option.label}
@@ -156,7 +189,7 @@ export default function SearchableDropdown({
                             <div className="border-t border-slate-100 p-2 dark:border-slate-800">
                                 <button
                                     type="button"
-                                    className="w-full rounded-lg bg-blue-50 py-2 text-center text-[13px] font-bold text-blue-600 hover:bg-blue-100 transition-colors dark:bg-cyan-900/30 dark:text-cyan-400 dark:hover:bg-cyan-900/50"
+                                    className="w-full rounded-lg bg-blue-50 py-2 text-center text-[13px] font-bold text-blue-600 hover:bg-blue-100 transition-colors dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         if (onAddActionClick) onAddActionClick(searchTerm);

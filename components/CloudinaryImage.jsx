@@ -9,12 +9,27 @@ import { CldImage } from "next-cloudinary";
  */
 export default function CloudinaryImage({ src, alt = "Image", className = "", width, height, style }) {
     const [error, setError] = useState(false);
+    const [broken, setBroken] = useState(false);
 
     // Filter out standard folders/prefix to get the handle (publicId)
     // Cloudinary URLs: https://res.cloudinary.com/<cloud_name>/image/upload/<version>/<public_id>
     const isCloudinary = typeof src === "string" && src.includes("res.cloudinary.com");
 
+    // The cloud name is already in the source URL. Deriving it from `src` keeps
+    // images working no matter which account they were uploaded to; the env var
+    // is only the fallback. (The previous code read the unprefixed
+    // CLOUDINARY_CLOUD_NAME, which is never present in a client bundle, so every
+    // image silently used the hardcoded literal instead.)
+    const cloudName =
+        (isCloudinary && src.match(/res\.cloudinary\.com\/([^/]+)\//)?.[1]) ||
+        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+        "dbbrsoiol";
+
     if (!isCloudinary || error) {
+        // Render nothing rather than a broken-image glyph. The old handler set
+        // e.target.style.display directly, which React undid on the next render.
+        if (broken) return null;
+
         return (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -24,7 +39,7 @@ export default function CloudinaryImage({ src, alt = "Image", className = "", wi
                 width={width}
                 height={height}
                 style={style}
-                onError={(e) => { e.target.style.display = "none"; }}
+                onError={() => setBroken(true)}
             />
         );
     }
@@ -41,11 +56,7 @@ export default function CloudinaryImage({ src, alt = "Image", className = "", wi
                 className="block max-w-full h-auto object-contain"
                 style={style}
                 onError={() => setError(true)}
-                config={{
-                    cloud: {
-                        cloudName: process.env.CLOUDINARY_CLOUD_NAME || 'deb3jdiv3'
-                    }
-                }}
+                config={{ cloud: { cloudName } }}
             />
         </div>
     );

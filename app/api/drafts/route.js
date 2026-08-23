@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { getMongoDb } from "@/lib/mongodb";
+import { requireSession } from "@/lib/auth";
+import { jsonError } from "@/lib/api-response";
 
 // Save draft
 export async function POST(req) {
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
+
   try {
     const db = await getMongoDb({ mode: "write" });
     const drafts = db.collection("drafts");
@@ -16,7 +21,6 @@ export async function POST(req) {
       profile_pic,
       name,
       role,
-      email,
       chatAnswers,
       chatStage,
       chatMessages,
@@ -26,10 +30,9 @@ export async function POST(req) {
       tags
     } = body;
 
-    // Basic validation
-    if (!email) {
-      return NextResponse.json({ message: "User email is required" }, { status: 400 });
-    }
+    // The draft always belongs to the caller; a body-supplied email let anyone
+    // overwrite someone else's unpublished draft.
+    const email = auth.email;
 
     const now = new Date().toISOString();
 
@@ -76,21 +79,21 @@ export async function POST(req) {
 
   } catch (error) {
     console.error("Error saving draft:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to save draft");
   }
 }
 
-// Get draft by email
+// Get the caller's own draft
 export async function GET(req) {
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
+
   try {
     const db = await getMongoDb({ mode: "read" });
     const drafts = db.collection("drafts");
-    const email = req.nextUrl.searchParams.get('email');
+    // Read from the session, not ?email= -- that returned any user's unpublished draft.
+    const email = auth.email;
     const contentType = req.nextUrl.searchParams.get('contentType') || 'interview';
-
-    if (!email) {
-      return NextResponse.json({ message: "Email is required" }, { status: 400 });
-    }
 
     const draft = await drafts.findOne({ email, content_type: contentType });
 
@@ -102,6 +105,6 @@ export async function GET(req) {
 
   } catch (error) {
     console.error("Error retrieving draft:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to load draft");
   }
 }

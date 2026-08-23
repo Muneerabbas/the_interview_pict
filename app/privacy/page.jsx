@@ -39,13 +39,13 @@ const PrivacyPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Navbar showThemeToggle />
 
-      <main className="container mx-auto max-w-4xl px-4 pt-32 pb-20">
+      <main className="container mx-auto max-w-4xl px-4 pt-24 pb-20">
         {/* Header Section */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-cyan-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400">
+          <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
             <Lock size={14} />
             Privacy Policy
           </div>
@@ -62,10 +62,10 @@ const PrivacyPage = () => {
             return (
               <section
                 key={index}
-                className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-cyan-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-cyan-500/30"
+                className="group rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-blue-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-500/40"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 transition-colors group-hover:bg-cyan-100 dark:bg-slate-800 dark:text-cyan-400 dark:group-hover:bg-slate-700">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 dark:bg-slate-800 dark:text-blue-400 dark:group-hover:bg-slate-700">
                     <Icon size={24} />
                   </div>
                   <div className="space-y-3">

@@ -43,7 +43,7 @@ const AVATAR_COLORS = [
   'bg-amber-600',
   'bg-rose-600',
   'bg-indigo-600',
-  'bg-cyan-600',
+  'bg-blue-600',
 ]
 
 const getAvatarColor = (seed = '') => {
@@ -231,6 +231,23 @@ const FilterGroup = ({ icon: Icon, label, children }) => (
 const chipClass =
   'rounded-md border border-slate-200 bg-white px-3 py-1 text-[13px] font-medium text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-800 dark:hover:bg-blue-950/40 dark:hover:text-blue-300'
 
+
+/**
+ * `sort(() => Math.random() - 0.5)` is a biased shuffle, not a fair one. These
+ * run in effects, so the server-rendered order paints first and then visibly
+ * reshuffles on hydration -- a content jump and needless CLS on the landing page.
+ * Fisher-Yates, applied once per data change.
+ */
+function shuffle(items) {
+  if (!Array.isArray(items)) return [];
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 export default function Home({ tales, featuredStories, topStories }) {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -249,27 +266,15 @@ export default function Home({ tales, featuredStories, topStories }) {
   }, [resolvedTheme, mounted])
 
   useEffect(() => {
-    if (Array.isArray(tales)) {
-      setFetchedTales([...tales].sort(() => Math.random() - 0.5))
-    } else {
-      setFetchedTales([])
-    }
+    setFetchedTales(shuffle(tales))
   }, [tales])
 
   useEffect(() => {
-    if (Array.isArray(featuredStories)) {
-      setFetchedFeaturedStories([...featuredStories].sort(() => Math.random() - 0.5))
-    } else {
-      setFetchedFeaturedStories([])
-    }
+    setFetchedFeaturedStories(shuffle(featuredStories))
   }, [featuredStories])
 
   useEffect(() => {
-    if (Array.isArray(topStories)) {
-      setFetchedTopStories([...topStories].sort(() => Math.random() - 0.5))
-    } else {
-      setFetchedTopStories([])
-    }
+    setFetchedTopStories(shuffle(topStories))
   }, [topStories])
 
   useEffect(() => {
@@ -343,7 +348,7 @@ export default function Home({ tales, featuredStories, topStories }) {
       </section>
 
       {/* ── Featured Stories ───────────────────────────────────── */}
-      <section id="featured" className="border-b border-slate-100 bg-slate-50/70 dark:border-slate-900 dark:bg-slate-900/30">
+      <section id="featured" className="border-b border-slate-100 bg-slate-50/70 dark:border-slate-900 dark:bg-slate-900">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <SectionHeader
             icon={Flame}
@@ -393,7 +398,7 @@ export default function Home({ tales, featuredStories, topStories }) {
       </section>
 
       {/* ── Find experiences (company / batch / department) ────── */}
-      <section id="companyspecific" className="border-y border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900/30">
+      <section id="companyspecific" className="border-y border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <SectionHeader
             icon={Building2}
@@ -454,7 +459,7 @@ export default function Home({ tales, featuredStories, topStories }) {
       {/* ── Top Stories ────────────────────────────────────────── */}
       <section
         id="topstories"
-        className="border-t border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900/30"
+        className="border-t border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900"
       >
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <SectionHeader

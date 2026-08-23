@@ -3,9 +3,12 @@ import { nanoid } from "nanoid";
 import slugify from "slugify";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
-import { getDefaultFeedInvalidationKeys } from "@/lib/feedCache";
 import { getMongoDb } from "@/lib/mongodb";
 import { TALE_CATEGORIES } from "@/lib/tale-categories";
+import { requireSession } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { escapeHtml } from "@/lib/utils";
+import { jsonError } from "@/lib/api-response";
 
 
 async function invalidateAfterWrite(email) {
@@ -19,15 +22,27 @@ async function invalidateAfterWrite(email) {
 
   try {
     await redis.del(keys);
-    console.log("[cache] User profile invalidation completed");
   } catch (err) {
     console.warn("[cache] Invalidation failed:", err?.message || err);
   }
 }
 
 export async function POST(req) {
+  // Unauthenticated post creation let anyone publish as another user -- and was
+  // the delivery vector for stored XSS via exp_text.
+  const auth = await requireSession();
+  if (auth.response) return auth.response;
+
+  const limited = await checkRateLimit(req, { key: "saveExp", limit: 10, windowSeconds: 300 });
+  if (limited) return limited;
+
   try {
-    const { exp_text, college, company, branch, batch, profile_pic, name, role, email, content_type, title, tags, category } = await req.json();
+    const { exp_text, college, company, branch, batch, role, content_type, title, tags, category } = await req.json().catch(() => ({}));
+
+    // Author identity always comes from the session.
+    const email = auth.email;
+    const name = auth.name || email.split("@")[0];
+    const profile_pic = auth.image || "";
 
     // For interviews, company and name are required.
     // For tales, title and name are required.
@@ -38,7 +53,6 @@ export async function POST(req) {
     const normalizedCategory = isTale && TALE_CATEGORIES.includes(category) ? category : "";
 
     if (!exp_text) return NextResponse.json({ message: "Content (exp_text) is required" }, { status: 400 });
-    if (!name) return NextResponse.json({ message: "User name is required" }, { status: 400 });
     if (!isTale && !company) return NextResponse.json({ message: "Company is required for interview experiences" }, { status: 400 });
     if (isTale && !title) return NextResponse.json({ message: "Title is required for stories" }, { status: 400 });
 
@@ -58,9 +72,15 @@ export async function POST(req) {
 
     let uid = `${baseSlug}-${nanoid(6)}`; // Append a short unique ID
 
-    // Ensure UID uniqueness in DB
-    while (await experience.findOne({ uid })) {
-      uid = `${baseSlug}-${nanoid(6)}`; // Regenerate if it already exists
+    // Ensure UID uniqueness across BOTH collections: /single/[uid] resolves against
+    // experience first and then tales, so a shared uid would shadow one of them.
+    const talesCol = db.collection("tales");
+    const experienceCol = db.collection("experience");
+    while (
+      (await experienceCol.findOne({ uid }, { projection: { _id: 1 } })) ||
+      (await talesCol.findOne({ uid }, { projection: { _id: 1 } }))
+    ) {
+      uid = `${baseSlug}-${nanoid(6)}`;
     }
 
     // Save experience to DB
@@ -85,7 +105,12 @@ export async function POST(req) {
     };
 
     const result = await experience.insertOne(doc);
-    await backup.insertOne(doc);
+
+    // The mirror write must never fail the request: it used to 500 *after* the
+    // primary insert succeeded, so the client retried and created a duplicate post.
+    backup.insertOne(doc).catch((err) =>
+      console.warn("[backup] insert failed:", err?.message || err)
+    );
 
     // Sync with Company collection only for interviews
     if (!isTale) {
@@ -117,14 +142,15 @@ export async function POST(req) {
 
     await invalidateAfterWrite(email);
 
-    // Send acknowledgment email
+    // Fire-and-forget: awaiting a Gmail SMTP handshake made post creation
+    // time out on the client for something the user never sees.
     const siteUrl = req.nextUrl?.origin || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    await sendAcknowledgmentEmail(name, email, uid, siteUrl);
+    sendAcknowledgmentEmail(name, email, uid, siteUrl);
 
     return NextResponse.json({ message: "Experience saved successfully", uid }, { status: 200 });
   } catch (error) {
     console.error("Error saving experience:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return jsonError(error, "Unable to save experience");
   }
 }
 
@@ -138,8 +164,6 @@ async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
   }
 
   try {
-    console.log("📩 Preparing to send email to:", email); // Debug log
-
     const postUrl = `${siteUrl}/single/${uid}`;
 
     const transporter = nodemailer.createTransport({
@@ -155,7 +179,7 @@ async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
       to: email,
       subject: "🌟 Thank You for Sharing Your Experience! 🌟",
       html: `
-        <p>Hello ${name},</p>
+        <p>Hello ${escapeHtml(name)},</p>
         <p>We truly appreciate you for taking the time to share your interview experience on our platform! 🙌</p>
         <p>Your insights will be incredibly helpful for the next batch of candidates preparing for their placements.</p>
         <p>Here’s your post: <a href="${postUrl}" target="_blank">${postUrl}</a></p>
@@ -167,10 +191,8 @@ async function sendAcknowledgmentEmail(name, email, uid, siteUrl) {
     };
 
 
-    console.log("📤 Sending email..."); // Debug log
     await transporter.sendMail(mailOptions);
-    console.log("✅ Email sent successfully to", email);
   } catch (error) {
-    console.warn("❌ Failed to send email:", error?.code || error?.message || error);
+    console.warn("Failed to send acknowledgment email:", error?.code || error?.message || error);
   }
 }

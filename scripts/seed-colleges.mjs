@@ -106,11 +106,23 @@ async function main() {
   const College = (await import("../models/College.js")).default;
 
   await connectToDatabase();
-  await College.deleteMany({});
-  await College.insertMany(collegeDocs, { ordered: false });
+
+  // Upsert instead of deleteMany + insertMany: an interrupted run used to leave
+  // the collection empty and the college picker permanently broken.
+  const ops = collegeDocs.map((college) => ({
+    updateOne: {
+      filter: { name: college.name },
+      update: { $set: college },
+      upsert: true,
+    },
+  }));
+
+  const result = await College.bulkWrite(ops, { ordered: false });
   await clearCollegeCache();
 
-  console.log(`Replaced colleges collection with ${collegeDocs.length} documents.`);
+  console.log(
+    `Seeded colleges: ${result.upsertedCount || 0} inserted, ${result.modifiedCount || 0} updated (${collegeDocs.length} total).`
+  );
 }
 
 main().catch((error) => {

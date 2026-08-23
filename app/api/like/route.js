@@ -1,21 +1,29 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
+import { requireSession } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { jsonError } from "@/lib/api-response";
 
 export async function POST(req) {
-    try {
-        const { id, email } = await req.json();
+    // Liking as an arbitrary body-supplied email let anyone like on someone else's
+    // behalf and inflate counts.
+    const auth = await requireSession();
+    if (auth.response) return auth.response;
 
-        if (!id || !email) {
+    const limited = await checkRateLimit(req, { key: "like", limit: 60, windowSeconds: 60 });
+    if (limited) return limited;
+
+    try {
+        const { id } = await req.json().catch(() => ({}));
+
+        if (!id) {
             return NextResponse.json({ success: false, error: "Missing required fields", code: "VALIDATION_ERROR" }, { status: 400 });
         }
 
         const db = await getMongoDb({ mode: "write" });
-        const experience = db.collection("experience");
-        const tales = db.collection("tales");
-
-        const now = new Date();
+        const email = auth.email;
 
         const updatePipeline = [
             {
@@ -27,22 +35,48 @@ export async function POST(req) {
                             { $concatArrays: [{ $ifNull: ["$likes", []] }, [email]] }
                         ]
                     },
-                    likesUpdatedAt: now,
+                    likesUpdatedAt: new Date(),
                 }
             }
         ];
 
-        let result = await experience.updateOne({ uid: id }, updatePipeline);
+        let result = await db.collection("experience").findOneAndUpdate(
+            { uid: id },
+            updatePipeline,
+            { returnDocument: "after", projection: { likes: 1, email: 1 } }
+        );
 
-        if (result.matchedCount === 0) {
-            result = await tales.updateOne({ uid: id }, updatePipeline);
+        if (!result) {
+            result = await db.collection("tales").findOneAndUpdate(
+                { uid: id },
+                updatePipeline,
+                { returnDocument: "after", projection: { likes: 1, email: 1 } }
+            );
+        }
+
+        if (!result) {
+            return NextResponse.json({ success: false, error: "Post not found" }, { status: 404 });
+        }
+
+        const likes = Array.isArray(result.likes) ? result.likes : [];
+
+        // The author's public profile caches aggregated like counts; without this
+        // the number there stayed stale for the full 5 minute TTL.
+        if (redis && result.email) {
+            try {
+                await redis.del(`public_profile_full_v2:${result.email}`);
+            } catch (err) {
+                console.warn("[cache] Like invalidation failed:", err?.message || err);
+            }
         }
 
         revalidatePath("/feed");
-        revalidatePath("/topStories");
         revalidatePath(`/single/${id}`);
 
-        return NextResponse.json({ success: true }, { status: 200 });
+        return NextResponse.json(
+            { success: true, count: likes.length, liked: likes.includes(email) },
+            { status: 200 }
+        );
     } catch (error) {
         console.error("Error toggling like:", error);
         return jsonError(error, "Unable to update like");

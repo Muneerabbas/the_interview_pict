@@ -14,7 +14,7 @@ import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
-const FEED_CACHE_PREFIX = "feed_state_v3";
+const FEED_CACHE_PREFIX = "feed_state_v4";
 // The chosen sort tab + filters, so a reload does not dump the reader back on
 // the random "Feed" tab they deliberately switched away from.
 const FEED_VIEW_KEY = "feed_view_v1";
@@ -631,37 +631,25 @@ export default function HomePage() {
           <div className="mb-6 border-b border-slate-100 pb-4 dark:border-slate-800">
             {/* Tab Switcher */}
             <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex min-w-0 flex-1 items-center gap-1 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
-                <button
-                  onClick={() => setActiveTab("latest")}
-                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "latest"
-                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
-                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                    }`}
-                >
-                  <Clock size={16} />
-                  Latest
-                </button>
-                <button
-                  onClick={() => setActiveTab("trending")}
-                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "trending"
-                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
-                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                    }`}
-                >
-                  <Zap size={16} />
-                  Trending
-                </button>
-                <button
-                  onClick={() => setActiveTab("random")}
-                  className={`relative inline-flex items-center gap-2 rounded-md px-3.5 py-1.5 text-sm font-semibold transition-all ${activeTab === "random"
-                    ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
-                    : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                    }`}
-                >
-                  <RefreshCw size={16} />
-                  Feed
-                </button>
+              <div className="grid min-w-0 flex-1 grid-cols-3 gap-0.5 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
+                {[
+                  { value: "latest", label: "Latest", icon: Clock },
+                  { value: "trending", label: "Trending", icon: Zap },
+                  { value: "random", label: "Feed", icon: RefreshCw },
+                ].map(({ value, label, icon: Icon }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setActiveTab(value)}
+                    className={`inline-flex min-w-0 w-full items-center justify-center gap-1 rounded-md px-1.5 py-2 text-[11px] font-semibold whitespace-nowrap transition-all sm:gap-2 sm:px-3.5 sm:py-1.5 sm:text-sm ${activeTab === value
+                      ? "bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400"
+                      : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                      }`}
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+                    <span className="truncate">{label}</span>
+                  </button>
+                ))}
               </div>
 
               <div className="flex shrink-0 items-center">

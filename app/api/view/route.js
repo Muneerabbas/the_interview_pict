@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { getMongoDb } from "@/lib/mongodb";
 import redis from "@/lib/redis";
 import { jsonError } from "@/lib/api-response";
@@ -24,10 +25,15 @@ async function alreadyCounted(req, id) {
 }
 
 export async function POST(req) {
+    const limited = await checkRateLimit(req, { key: "post-view", limit: 120, windowSeconds: 300 });
+    if (limited) return limited;
+
     try {
         const { id } = await req.json().catch(() => ({}));
 
-        if (!id) {
+        // See /api/like: a non-string id turned {uid: id} into an operator filter
+        // and also collapsed the Redis dedupe key to "view:[object Object]:<ip>".
+        if (typeof id !== "string" || !id.trim()) {
             return NextResponse.json({ message: "Missing id" }, { status: 400 });
         }
 

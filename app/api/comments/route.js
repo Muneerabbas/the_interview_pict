@@ -4,6 +4,7 @@ import User from "@/models/User";
 import mongoose from "mongoose";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -407,6 +408,9 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
+  const limited = await checkRateLimit(req, { key: "comment-create", limit: 20, windowSeconds: 300 });
+  if (limited) return limited;
+
   await connectToDatabase();
 
   try {
@@ -431,6 +435,19 @@ export async function POST(req) {
 
     if (!experienceId || !mongoose.Types.ObjectId.isValid(experienceId)) {
       return NextResponse.json({ error: "Valid experienceId is required" }, { status: 400 });
+    }
+
+    // Shape-valid was not enough: any 24-hex string was accepted, so comments
+    // could be attached to posts that do not exist. They then showed up in the
+    // owner's notification queries with no post to resolve them against.
+    const postId = new mongoose.Types.ObjectId(experienceId);
+    const db = mongoose.connection.db;
+    const [postExists, taleExists] = await Promise.all([
+      db.collection("experience").findOne({ _id: postId }, { projection: { _id: 1 } }),
+      db.collection("tales").findOne({ _id: postId }, { projection: { _id: 1 } }),
+    ]);
+    if (!postExists && !taleExists) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     if (!text) {
@@ -520,6 +537,9 @@ export async function POST(req) {
 }
 
 export async function PATCH(req) {
+  const limited = await checkRateLimit(req, { key: "comment-update", limit: 60, windowSeconds: 300 });
+  if (limited) return limited;
+
   await connectToDatabase();
 
   try {

@@ -18,7 +18,10 @@ export async function POST(req) {
     try {
         const { id } = await req.json().catch(() => ({}));
 
-        if (!id) {
+        // typeof, not truthiness: {"id":{"$gt":""}} made the filter an operator
+        // expression that matched the first post in natural order, so a caller
+        // could like a post they never named.
+        if (typeof id !== "string" || !id.trim()) {
             return NextResponse.json({ success: false, error: "Missing required fields", code: "VALIDATION_ERROR" }, { status: 400 });
         }
 

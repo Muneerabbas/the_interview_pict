@@ -52,6 +52,12 @@ export default function EditPage() {
   const roles = ["Intern","SDE", "QA", "Data Scientist", "Product Manager", "UX/UI Designer", "Business Analyst", "DevOps Engineer", "Machine Learning Engineer", "Cybersecurity Analyst", "Cloud Architect", "Systems Engineer", "Full Stack Developer", "Front-End Developer", "Back-End Developer", "Database Administrator (DBA)", "Software Engineer in Test (SET)", "Solutions Architect", "Network Engineer", "Site Reliability Engineer (SRE)", "Security Engineer", "Data Analyst", "Product Designer", "AI Engineer", "BI Analyst", "Marketing Manager", "Sales Engineer", "Customer Success Manager", "Technical Support Specialist", "HR Manager", "Talent Acquisition Specialist", "Project Manager", "Content Strategist", "Technical Writer", "Digital Marketing Manager", "Community Manager", "Legal Counsel", "PR Specialist", "Customer Support Specialist", "Business Development Manager", "Finance Analyst", "Operations Manager", "Product Marketing Manager", "Scrum Master", "Game Developer", "Blockchain Developer"];
   const companies = postCompanies;
 
+  // A post saved with a custom company/role has no matching <option>, so the
+  // select rendered blank while state still held the value -- it looked like a
+  // required field the user had never filled in.
+  const withCurrent = (options, current) =>
+    current && current !== "others" && !options.includes(current) ? [current, ...options] : options;
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -238,12 +244,10 @@ const handleSubmit = async () => {
       throw new Error(data.message || "Failed to edit experience");
     }
 
-    // After successful submission, reset form
-    setBatch("");
-    setBranch("");
-    setCompany("");
-    setRole("");
-    setMarkdown("");
+    // The form used to be blanked here while navigation was deferred 2s, so for
+    // two seconds the user saw an empty form with a live Submit button; pressing
+    // it replaced the success banner with "Please fill in all required fields".
+    // Keep the values, keep the form disabled, then navigate.
     setErrors({
       batch: false,
       branch: false,
@@ -258,11 +262,11 @@ const handleSubmit = async () => {
     // data.uid can be missing; falling back to `id` avoids /single/undefined.
     redirectTimer.current = setTimeout(() => {
       router.push(`/single/${data?.uid || id}`);
-    }, 2000);
+    }, 1200);
+    return;
   } catch (error) {
     console.error("Error updating experience:", error);
     setFormError(error.message || "There was an error updating your experience.");
-  } finally {
     setIsSubmitting(false);
   }
 };
@@ -335,7 +339,7 @@ const handleSubmit = async () => {
   >
     <option value="">Select Company</option>
     <option value="others">Others...</option>
-    {companies.map((comp) => (
+    {withCurrent(companies, company).map((comp) => (
       <option key={comp} value={comp}>
         {comp}
       </option>
@@ -370,7 +374,7 @@ const handleSubmit = async () => {
   >
     <option value="">Select Role</option>
     <option value="others">Others...</option>
-    {roles.map((roleOption) => (
+    {withCurrent(roles, role).map((roleOption) => (
       <option key={roleOption} value={roleOption}>
         {roleOption}
       </option>

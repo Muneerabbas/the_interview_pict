@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import slugify from "slugify";
+import { companySlugFromName } from "@/lib/companySlug";
 import nodemailer from "nodemailer";
 import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
-import { TALE_CATEGORIES } from "@/lib/tale-categories";
+import { normalizeCategory, normalizeShortText, normalizeTags, validateExpText } from "@/lib/post-input";
 import { requireSession } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { escapeHtml } from "@/lib/utils";
@@ -47,14 +48,22 @@ export async function POST(req) {
     // For interviews, company and name are required.
     // For tales, title and name are required.
     const isTale = content_type === "tale";
-    const normalizedTags = Array.isArray(tags)
-      ? [...new Set(tags.map((tag) => String(tag).trim()).filter(Boolean))].slice(0, 6)
-      : [];
-    const normalizedCategory = isTale && TALE_CATEGORIES.includes(category) ? category : "";
+    const normalizedTags = normalizeTags(tags);
+    const normalizedCategory = normalizeCategory(category, isTale);
 
-    if (!exp_text) return NextResponse.json({ message: "Content (exp_text) is required" }, { status: 400 });
-    if (!isTale && !company) return NextResponse.json({ message: "Company is required for interview experiences" }, { status: 400 });
-    if (isTale && !title) return NextResponse.json({ message: "Title is required for stories" }, { status: 400 });
+    // Short fields were stored verbatim: a non-string `company` broke the feed's
+    // equality filter and made slugify() throw further down.
+    const safeCompany = normalizeShortText(company);
+    const safeCollege = normalizeShortText(college);
+    const safeBranch = normalizeShortText(branch);
+    const safeBatch = normalizeShortText(batch);
+    const safeRole = normalizeShortText(role);
+    const safeTitle = normalizeShortText(title);
+
+    const invalidText = validateExpText(exp_text);
+    if (invalidText) return NextResponse.json({ message: invalidText }, { status: 400 });
+    if (!isTale && !safeCompany) return NextResponse.json({ message: "Company is required for interview experiences" }, { status: 400 });
+    if (isTale && !safeTitle) return NextResponse.json({ message: "Title is required for stories" }, { status: 400 });
 
     const db = await getMongoDb({ mode: "write" });
     const collectionName = isTale ? "tales" : "experience";
@@ -65,9 +74,9 @@ export async function POST(req) {
     // Generate a meaningful UID
     let baseSlug;
     if (isTale) {
-      baseSlug = slugify(`${title} by ${name}`, { lower: true, strict: true });
+      baseSlug = slugify(`${safeTitle} by ${name}`, { lower: true, strict: true });
     } else {
-      baseSlug = slugify(`${name}'s experience at ${company} ${role} ${batch} `, { lower: true, strict: true });
+      baseSlug = slugify(`${name}'s experience at ${safeCompany} ${safeRole} ${safeBatch} `, { lower: true, strict: true });
     }
 
     let uid = `${baseSlug}-${nanoid(6)}`; // Append a short unique ID
@@ -88,18 +97,18 @@ export async function POST(req) {
     const doc = {
       uid,
       exp_text,
-      college,
-      company: isTale ? college : company,
-      branch,
-      batch,
+      college: safeCollege,
+      company: isTale ? safeCollege : safeCompany,
+      branch: safeBranch,
+      batch: safeBatch,
       profile_pic,
       name,
       date: now,
       views: 0,
-      role: isTale ? "" : role,
+      role: isTale ? "" : safeRole,
       email,
-      content_type: content_type || "interview",
-      title: title || "",
+      content_type: content_type === "tale" ? "tale" : "interview",
+      title: safeTitle,
       tags: normalizedTags,
       category: normalizedCategory,
     };
@@ -115,14 +124,14 @@ export async function POST(req) {
     // Sync with Company collection only for interviews
     if (!isTale) {
       try {
-        const companySlug = slugify(company, { lower: true, strict: true });
+        const companySlug = companySlugFromName(safeCompany);
         await db.collection("companies").updateOne(
-          { name: company },
+          { name: safeCompany },
           {
             $inc: { "stats.interviewsCount": 1 },
             $setOnInsert: {
               slug: companySlug,
-              about: `Company ${company} interview experience details.`,
+              about: `Company ${safeCompany} interview experience details.`,
               tags: ["Interview"],
               "stats.reviewsCount": 0,
               "stats.rating": 5

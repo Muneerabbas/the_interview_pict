@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { TALES_ENABLED } from "@/lib/feature-flags";
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -248,7 +249,7 @@ function shuffle(items) {
   return out;
 }
 
-export default function Home({ tales, featuredStories, topStories }) {
+export default function Home({ tales, featuredStories, topStories, topCompanies = [] }) {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -407,11 +408,20 @@ export default function Home({ tales, featuredStories, topStories }) {
           />
           <div className="mt-6 rounded-xl border border-slate-200 bg-white px-5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <FilterGroup icon={Building2} label="By company">
-              {COMPANIES.map((company) => (
-                <Link key={company} href="/companies" prefetch className={chipClass}>
-                  {company}
-                </Link>
-              ))}
+              {/* Each chip opens ITS OWN company page. These come from the DB, so
+                  the slug always resolves; the hardcoded list is only a fallback
+                  for an empty database and points at the directory. */}
+              {topCompanies.length > 0
+                ? topCompanies.map((company) => (
+                  <Link key={company.slug} href={`/companies/${company.slug}`} prefetch className={chipClass}>
+                    {company.name}
+                  </Link>
+                ))
+                : COMPANIES.map((company) => (
+                  <Link key={company} href="/companies" prefetch className={chipClass}>
+                    {company}
+                  </Link>
+                ))}
             </FilterGroup>
             <FilterGroup icon={GraduationCap} label="By batch year">
               {batchYears.map((year) => (
@@ -431,7 +441,8 @@ export default function Home({ tales, featuredStories, topStories }) {
         </div>
       </section>
 
-      {/* ── Featured Tales ─────────────────────────────────────── */}
+      {/* ── Featured Tales (hidden until Tales ships) ──────────── */}
+      {TALES_ENABLED && (
       <section id="tales" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
         <SectionHeader
           icon={GraduationCap}
@@ -455,6 +466,7 @@ export default function Home({ tales, featuredStories, topStories }) {
           </ScrollableSection>
         </div>
       </section>
+      )}
 
       {/* ── Top Stories ────────────────────────────────────────── */}
       <section

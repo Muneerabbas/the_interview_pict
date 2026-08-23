@@ -9,6 +9,8 @@ import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { readJson } from "@/lib/client-api";
 import Alert from "@/components/ui/Alert";
 
+const DEFAULT_COMMENT_TYPES = ["doubt", "tip", "experience", "general"];
+
 const TYPE_META = {
   doubt: { label: "Doubt", badgeClass: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/35 dark:text-amber-300 dark:border-amber-500/35" },
   tip: { label: "Tip", badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/35 dark:text-emerald-300 dark:border-emerald-500/35" },
@@ -130,7 +132,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     totalComments: 0,
     countsByType: { doubt: 0, tip: 0, experience: 0, general: 0 },
     resolvedCount: 0,
-    uiConfig: { maxCommentLength: 1000, allowedTypes: ["doubt", "tip", "experience", "general"] },
+    uiConfig: { maxCommentLength: 1000, allowedTypes: DEFAULT_COMMENT_TYPES },
   });
 
   const [sort, setSort] = useState("top");
@@ -168,7 +170,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         totalComments: json.totalComments || 0,
         countsByType: json.countsByType || { doubt: 0, tip: 0, experience: 0, general: 0 },
         resolvedCount: json.resolvedCount || 0,
-        uiConfig: json.uiConfig || { maxCommentLength: 1000, allowedTypes: ["doubt", "tip", "experience", "general"] },
+        uiConfig: json.uiConfig || { maxCommentLength: 1000, allowedTypes: DEFAULT_COMMENT_TYPES },
       });
     } catch (err) {
       if (err.name === "AbortError") return;
@@ -198,6 +200,8 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     return () => window.removeEventListener("hashchange", syncHashTarget);
   }, []);
 
+  // `comments` was a dependency, so every upvote, reply or resolve re-ran this and
+  // yanked the viewport back to the hash target.
   useEffect(() => {
     if (!highlightedCommentId || loading) return;
 
@@ -205,7 +209,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
     if (!target) return;
 
     target.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [comments, highlightedCommentId, loading]);
+  }, [highlightedCommentId, loading]);
 
   const filteredComments = useMemo(() => {
     if (filter === "all") return comments;
@@ -291,6 +295,9 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
           return sort === "recent" ? [created, ...prev] : [...prev, created];
         });
         setMeta((prev) => updateMetaOnCreate(prev, created.type));
+        // The list renders `filteredComments`: posting a "general" comment while
+        // the "tips" pill was active showed nothing at all, so people posted again.
+        setFilter((prev) => (prev === "all" || prev === created.type ? prev : "all"));
       }
       setComposeText("");
     } catch (err) {
@@ -568,7 +575,7 @@ export default function CommentsSection({ experienceId, companyName, articleAuth
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Tag as:</span>
           <div className="flex flex-wrap gap-1.5">
-            {meta.uiConfig.allowedTypes.map((type) => (
+            {(meta.uiConfig?.allowedTypes || DEFAULT_COMMENT_TYPES).map((type) => (
               <button
                 key={type}
                 type="button"

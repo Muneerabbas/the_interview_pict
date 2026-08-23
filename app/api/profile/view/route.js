@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
 import { normalizeEmail } from "@/lib/auth";
@@ -27,6 +28,9 @@ async function alreadyCounted(req, email) {
 // used to also $inc inside its cached fetcher, so counts were both double
 // counted here and skipped on cache hits there.
 export async function POST(req) {
+    const limited = await checkRateLimit(req, { key: "profile-view", limit: 60, windowSeconds: 300 });
+    if (limited) return limited;
+
     try {
         const email = normalizeEmail((await req.json().catch(() => ({}))).email);
 

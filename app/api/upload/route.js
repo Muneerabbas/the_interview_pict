@@ -1,9 +1,14 @@
-import cloudinary from "@/lib/cloudinary";
+import cloudinary, { userFolder } from "@/lib/cloudinary";
 import { requireSession } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req) {
   const auth = await requireSession();
   if (auth.response) return auth.response;
+
+  // Each signature is a ticket for a 4MB upload billed to our Cloudinary account.
+  const limited = await checkRateLimit(req, { key: "upload", limit: 60, windowSeconds: 600 });
+  if (limited) return limited;
 
   try {
     const timestamp = Math.floor(Date.now() / 1000);
@@ -11,7 +16,7 @@ export async function POST(req) {
     // Keep signed params exactly aligned with what the client submits.
     // Use string values to avoid boolean normalization mismatches.
     const paramsToSign = {
-      folder: "interview-pict/articles",
+      folder: userFolder(auth.email),
       timestamp: String(timestamp),
     };
 

@@ -1,4 +1,8 @@
 import LandingPage from "@/components/Landing";
+import { TALES_ENABLED } from "@/lib/feature-flags";
+import { toPublicPost } from "@/lib/post-shape";
+import { companySlugFromName } from "@/lib/companySlug";
+import { fetchWithCache } from "@/lib/cache";
 import Script from "next/script";
 import { getMongoDb } from "@/lib/mongodb";
 
@@ -28,6 +32,8 @@ export const metadata = {
 };
 
 async function fetchTales() {
+    // Tales is hidden: skip the query entirely rather than fetch and drop it.
+    if (!TALES_ENABLED) return [];
     try {
         const db = await getMongoDb();
         const [tales, legacyTales] = await Promise.all([
@@ -50,6 +56,50 @@ async function fetchTales() {
         console.error("Fetching tales failed:", error);
         return [];
     }
+}
+
+/**
+ * The "By company" chips were a hardcoded list that ALL linked to /companies --
+ * clicking "Siemens" never opened Siemens. The names were stale too ("BNY",
+ * "Arista"), so slugging them directly would 404. Resolve the real companies,
+ * most-covered first, and hand the chips a genuine slug each.
+ */
+async function fetchTopCompanies() {
+    return fetchWithCache("home_top_companies_v2", 600, async () => {
+        try {
+            const db = await getMongoDb();
+
+            const grouped = await db
+                .collection("experience")
+                .aggregate([
+                    { $match: { company: { $type: "string", $ne: "" } } },
+                    { $group: { _id: { $toLower: "$company" }, name: { $first: "$company" }, count: { $sum: 1 } } },
+                    { $sort: { count: -1 } },
+                    { $limit: 24 },
+                ])
+                .toArray();
+
+            if (!grouped.length) return [];
+
+            const slugs = grouped.map((group) => companySlugFromName(group.name)).filter(Boolean);
+            const docs = await db
+                .collection("companies")
+                .find({ slug: { $in: slugs } }, { projection: { name: 1, slug: 1 } })
+                .toArray();
+
+            const bySlug = new Map(docs.map((doc) => [doc.slug, doc]));
+
+            // Only chips that resolve to a real company page survive.
+            return grouped
+                .map((group) => bySlug.get(companySlugFromName(group.name)))
+                .filter(Boolean)
+                .map((doc) => ({ name: doc.name, slug: doc.slug }))
+                .slice(0, 8);
+        } catch (error) {
+            console.error("Fetching top companies failed:", error);
+            return [];
+        }
+    });
 }
 
 async function fetchFeaturedStories() {
@@ -102,16 +152,22 @@ async function fetchTopStories() {
 
 // This is a Server Component (default in app/)
 export default async function Home() {
-    const [rawTales, rawFeaturedStories, rawTopStories] = await Promise.all([
+    const [rawTales, rawFeaturedStories, rawTopStories, topCompanies] = await Promise.all([
         fetchTales(),
         fetchFeaturedStories(),
         fetchTopStories(),
+        fetchTopCompanies(),
     ]);
 
-    // Sanitize MongoDB documents for Client Components
-    const tales = JSON.parse(JSON.stringify(rawTales));
-    const featuredStories = JSON.parse(JSON.stringify(rawFeaturedStories));
-    const topStories = JSON.parse(JSON.stringify(rawTopStories));
+    // Sanitize MongoDB documents for Client Components. toPublicPost also strips
+    // the author email and the array of liker emails, which were previously
+    // serialized straight into the RSC payload of the most-visited page, and
+    // truncates the body -- the cards render two lines of it.
+    const forCards = (docs) => JSON.parse(JSON.stringify(docs.map((doc) => toPublicPost(doc, { previewChars: 400 }))));
+
+    const tales = forCards(rawTales);
+    const featuredStories = forCards(rawFeaturedStories);
+    const topStories = forCards(rawTopStories);
 
     return (
         <>
@@ -140,7 +196,7 @@ export default async function Home() {
                     }),
                 }}
             />
-            <LandingPage tales={tales} featuredStories={featuredStories} topStories={topStories} />
+            <LandingPage tales={tales} featuredStories={featuredStories} topStories={topStories} topCompanies={topCompanies} />
         </>
     );
 }

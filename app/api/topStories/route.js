@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getMongoDb } from "@/lib/mongodb";
 import { jsonError } from "@/lib/api-response";
+import { toPublicPost } from "@/lib/post-shape";
 
 /** Clamp a query param to a sane range: `?page=abc` produced $skip: NaN -> a 500. */
 function clampInt(raw, fallback, min, max) {
@@ -43,7 +44,9 @@ export async function GET(req) {
       { $project: { viewsInt: 0 } },
     ];
 
-    const data = await collection.aggregate(pipeline).toArray();
+    const raw = await collection.aggregate(pipeline).toArray();
+    // Was returning whole documents: author email plus every liker's address.
+    const data = raw.map((post) => toPublicPost(post, { previewChars: 400 }));
 
     return NextResponse.json(data, {
       headers: {

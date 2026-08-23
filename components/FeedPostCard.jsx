@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   ArrowBigUp,
+  ArrowUpRight,
   BookOpen,
   Briefcase,
   Building2,
@@ -37,7 +38,7 @@ const PILL =
 const PILL_NEUTRAL =
   "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700";
 
-export default function FeedPostCard({ profile }) {
+export default function FeedPostCard({ profile, onCompanyFilter }) {
   const router = useRouter();
 
   // /api/feed returns a count plus this viewer's own flag, not the array of
@@ -108,7 +109,35 @@ export default function FeedPostCard({ profile }) {
           alt={profileName}
           className="h-6 w-6 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-800"
         />
-        {companySlug ? (
+        {companySlug && onCompanyFilter ? (
+          // Clicking the company name filters the feed -- it used to navigate
+          // straight to the company page, which is not what a chip that looks like
+          // a filter should do. The company page moved to the arrow beside it.
+          <span className="inline-flex items-center gap-1">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCompanyFilter(profile?.company || "");
+              }}
+              title={`Show only ${community} experiences`}
+              className="inline-flex items-center gap-1 font-semibold text-slate-700 hover:underline dark:text-slate-200"
+            >
+              <Building2 size={12} className="text-slate-400" />
+              {community}
+            </button>
+            <Link
+              href={`/companies/${companySlug}`}
+              prefetch
+              onClick={(e) => e.stopPropagation()}
+              title={`${community} company page`}
+              aria-label={`${community} company page`}
+              className="text-slate-400 transition hover:text-blue-600 dark:hover:text-blue-400"
+            >
+              <ArrowUpRight size={12} />
+            </Link>
+          </span>
+        ) : companySlug ? (
           <Link
             href={`/companies/${companySlug}`}
             prefetch

@@ -6,6 +6,9 @@ import { jsonError } from "@/lib/api-response";
 import { getServerSession } from "next-auth/next";
 import { authOptions, normalizeEmail } from "@/lib/auth";
 import { toPlainText } from "@/lib/text-preview";
+import { companyNameFilter } from "@/lib/companySlug";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { fetchWithCache } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +34,7 @@ function buildPipeline({
 }) {
   const pipeline = [];
   const match = { content_type: contentType || "interview" };
-  if (companyFilter) match.company = companyFilter;
+  if (companyFilter) match.company = companyNameFilter(companyFilter);
   if (collegeFilter) match.college = collegeFilter;
   if (branchFilter) match.branch = branchFilter;
   if (batchFilter) match.batch = batchFilter;
@@ -40,6 +43,9 @@ function buildPipeline({
   if (searchQuery) {
     const escaped = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const contains = { $regex: escaped, $options: "i" };
+    // exp_text is deliberately NOT searched: an unanchored case-insensitive regex
+    // over every post body is a full collection scan no index can serve, fired on
+    // every keystroke by an unauthenticated caller.
     match.$or = [
       { company: contains },
       { title: contains },
@@ -47,7 +53,6 @@ function buildPipeline({
       { name: contains },
       { branch: contains },
       { college: contains },
-      { exp_text: contains },
     ];
     if (authorEmails.length > 0) match.$or.push({ email: { $in: authorEmails } });
   }
@@ -143,7 +148,14 @@ export async function GET(req) {
     const contentType = req.nextUrl.searchParams.get("contentType") || "interview";
     const categoryFilter = contentType === "tale" ? req.nextUrl.searchParams.get("category") : "";
     const collectionName = contentType === "tale" ? "tales" : "experience";
-    const searchQuery = req.nextUrl.searchParams.get("q")?.trim().slice(0, 80) || "";
+    // A one-character query matches almost everything and still pays for the scan.
+    const rawQuery = req.nextUrl.searchParams.get("q")?.trim().slice(0, 80) || "";
+    const searchQuery = rawQuery.length >= 2 ? rawQuery : "";
+
+    if (searchQuery) {
+      const limited = await checkRateLimit(req, { key: "feed-search", limit: 60, windowSeconds: 60 });
+      if (limited) return limited;
+    }
     const sort = req.nextUrl.searchParams.get("sort") || "latest";
     const excludedIds = (req.nextUrl.searchParams.get("exclude") || "")
       .split(",")
@@ -153,15 +165,20 @@ export async function GET(req) {
 
     const db = await getMongoDb();
     if (req.nextUrl.searchParams.get("options") === "authors") {
-      const authors = await db.collection(collectionName).aggregate([
+      // Groups the whole collection with a $lookup on every call; the option list
+      // barely changes, so serve it from Redis.
+      const authors = await fetchWithCache(`feed_authors_v1:${contentType}`, 300, async () =>
+        db.collection(collectionName).aggregate([
         { $match: { content_type: contentType, email: { $type: "string", $ne: "" } } },
         { $group: { _id: "$email", postName: { $first: "$name" } } },
         { $lookup: { from: "user", localField: "_id", foreignField: "gmail", as: "profile" } },
         { $addFields: { profile: { $arrayElemAt: ["$profile", 0] } } },
         { $project: { _id: 0, value: "$_id", label: { $ifNull: ["$profile.name", "$postName"] } } },
         { $sort: { label: 1 } },
-      ]).toArray();
-      return NextResponse.json(authors.filter((author) => author.label));
+        { $limit: 500 },
+      ]).toArray()
+      );
+      return NextResponse.json((authors || []).filter((author) => author.label));
     }
     let authorEmails = [];
     if (searchQuery) {
@@ -188,7 +205,7 @@ export async function GET(req) {
 
     if (sort === "random") {
       const randomMatch = { content_type: contentType };
-      if (companyFilter) randomMatch.company = companyFilter;
+      if (companyFilter) randomMatch.company = companyNameFilter(companyFilter);
       if (collegeFilter) randomMatch.college = collegeFilter;
       if (branchFilter) randomMatch.branch = branchFilter;
       if (batchFilter) randomMatch.batch = batchFilter;
@@ -204,7 +221,6 @@ export async function GET(req) {
           { name: contains },
           { branch: contains },
           { college: contains },
-          { exp_text: contains },
         ];
         if (authorEmails.length > 0) randomMatch.$or.push({ email: { $in: authorEmails } });
       }

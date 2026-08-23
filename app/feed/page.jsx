@@ -15,6 +15,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 
 const FEED_CACHE_PREFIX = "feed_state_v3";
+// The chosen sort tab + filters, so a reload does not dump the reader back on
+// the random "Feed" tab they deliberately switched away from.
+const FEED_VIEW_KEY = "feed_view_v1";
+const SORT_TABS = ["latest", "trending", "random"];
+const FILTER_KEYS = ["company", "author", "college", "branch", "batch"];
+const pickFilters = (raw) =>
+  Object.fromEntries(FILTER_KEYS.map((key) => [key, typeof raw?.[key] === "string" ? raw[key] : ""]));
 const BRANCH_OPTIONS = [
   { label: "Computer Science", value: "CS" },
   { label: "Information Technology", value: "IT" },
@@ -49,7 +56,8 @@ export default function HomePage() {
   const [collegeLoading, setCollegeLoading] = useState(false);
   const [page, setPage] = useState(0);
   const itemsPerPage = 10;
-  const [activeTab, setActiveTab] = useState("random"); // 'latest', 'trending', or 'random' (Feed)
+  // null until the persisted choice is read on mount; nothing fetches before then.
+  const [activeTab, setActiveTab] = useState(null); // 'latest', 'trending', or 'random' (Feed)
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMoreProfiles, setHasMoreProfiles] = useState(true);
   const [isShareButtonLoading, setIsShareButtonLoading] = useState(false);
@@ -134,11 +142,17 @@ export default function HomePage() {
     }
   };
 
+  // The 2xl sidebar renders these fields without ever setting `filtersOpen`, so
+  // gating the load on it left the College dropdown permanently empty on wide
+  // screens. Load the first page up front; the panel only drives re-searches.
   useEffect(() => {
-    if (filtersOpen) loadCollegeOptions(collegeSearchTerm, 1);
-  }, [collegeSearchTerm, filtersOpen]);
+    loadCollegeOptions(collegeSearchTerm, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collegeSearchTerm]);
 
   const isFetchingRef = useRef(false);
+  // "No stories found" used to paint before the very first request even started.
+  const hasFetchedRef = useRef(false);
   const feedRequestIdRef = useRef(0);
   const feedAbortRef = useRef(null);
   const skipNextFetchRef = useRef(false);
@@ -234,6 +248,7 @@ export default function HomePage() {
       // that used to sit here let a stale/aborted request hide the loader while
       // a newer one was still in flight.
       if (requestId === feedRequestIdRef.current) {
+        hasFetchedRef.current = true;
         setPageLoading(false);
         isFetchingRef.current = false;
       }
@@ -241,7 +256,30 @@ export default function HomePage() {
   }, [activeTab, searchQuery]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (activeTab !== null) return;
+
+    let saved = null;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(FEED_VIEW_KEY) || "null");
+    } catch (error) {
+      console.warn("Failed to restore feed view:", error);
+    }
+
+    if (saved?.filters) setFilters(pickFilters(saved.filters));
+    setActiveTab(SORT_TABS.includes(saved?.tab) ? saved.tab : "random");
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!activeTab) return;
+    try {
+      sessionStorage.setItem(FEED_VIEW_KEY, JSON.stringify({ tab: activeTab, filters }));
+    } catch (error) {
+      console.warn("Failed to persist feed view:", error);
+    }
+  }, [activeTab, filters]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !activeTab) return;
 
     // Skip persistence for random discovery tab to ensure variety
     if (activeTab === "random") {
@@ -330,7 +368,7 @@ export default function HomePage() {
   }, [profiles, page, hasMoreProfiles, activeTab, filters, tabReady]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !activeTab) return;
 
     const saveScroll = () => {
       try {
@@ -383,11 +421,28 @@ export default function HomePage() {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  // Refresh used to call fetchProfiles(0, ...) without resetting `page`, so the
+  // next intersection asked for page N+1 and everything between 0 and N was
+  // silently skipped.
+  const refreshFeed = () => {
+    setProfiles([]);
+    setHasMoreProfiles(true);
+    skipNextFetchRef.current = false;
+    if (page === 0) {
+      fetchProfiles(0, itemsPerPage, activeTab, filters, true);
+    } else {
+      setPage(0); // the page effect issues the fetch
+    }
+  };
+
   const clearFilters = () => {
     setProfiles([]);
     setPage(0);
     setHasMoreProfiles(true);
     skipNextFetchRef.current = false;
+    // Only set state. This used to ALSO call fetchProfiles directly, and the
+    // filters effect then fired a second request that aborted the first --
+    // throwing away the forceRefresh the direct call was made for.
     setFilters({
       company: "",
       author: "",
@@ -395,8 +450,6 @@ export default function HomePage() {
       branch: "",
       batch: "",
     });
-    // Manually trigger a fresh fetch bypassing API cache
-    fetchProfiles(0, itemsPerPage, activeTab, { company: "", author: "", college: "", branch: "", batch: "" }, true);
   };
 
   const handleSearchChange = useCallback((value) => {
@@ -407,9 +460,13 @@ export default function HomePage() {
     setSearchQuery(value);
   }, []);
 
+  // NB: plain <div>s, not <label>s. A <label> without htmlFor forwards a click to
+  // its first labelable descendant -- the dropdown's toggle button -- so selecting
+  // an option set the value and then immediately re-opened the menu, which read as
+  // "picking a company does nothing".
   const renderFilterFields = () => (
     <div className="space-y-4">
-      <label className="block space-y-2">
+      <div className="block space-y-2">
         <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <Building2 className="h-3.5 w-3.5" />
           Company
@@ -421,9 +478,9 @@ export default function HomePage() {
           placeholder="All companies"
           loading={companiesLoading}
         />
-      </label>
+      </div>
 
-      <label className="block space-y-2">
+      <div className="block space-y-2">
         <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <UserRound className="h-3.5 w-3.5" />
           Author
@@ -435,9 +492,9 @@ export default function HomePage() {
           placeholder="All authors"
           loading={authorsLoading}
         />
-      </label>
+      </div>
 
-      <label className="block space-y-2">
+      <div className="block space-y-2">
         <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <SlidersHorizontal className="h-3.5 w-3.5" />
           College
@@ -457,9 +514,9 @@ export default function HomePage() {
             }
           }}
         />
-      </label>
+      </div>
 
-      <label className="block space-y-2">
+      <div className="block space-y-2">
         <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <GraduationCap className="h-3.5 w-3.5" />
           Department
@@ -470,9 +527,9 @@ export default function HomePage() {
           onChange={(value) => handleFilterChange("branch", value)}
           placeholder="All departments"
         />
-      </label>
+      </div>
 
-      <label className="block space-y-2">
+      <div className="block space-y-2">
         <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           <CalendarDays className="h-3.5 w-3.5" />
           Year
@@ -483,7 +540,7 @@ export default function HomePage() {
           onChange={(value) => handleFilterChange("batch", value)}
           placeholder="All years"
         />
-      </label>
+      </div>
     </div>
   );
 
@@ -519,7 +576,7 @@ export default function HomePage() {
             </div>
             <button
               type="button"
-              onClick={() => fetchProfiles(0, itemsPerPage, activeTab, filters, true)}
+              onClick={refreshFeed}
               disabled={pageLoading}
               className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
               title="Refresh feed"
@@ -610,7 +667,7 @@ export default function HomePage() {
               <div className="flex shrink-0 items-center">
                 <button
                   type="button"
-                  onClick={() => fetchProfiles(0, itemsPerPage, activeTab, filters, true)}
+                  onClick={refreshFeed}
                   disabled={pageLoading}
                   className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
                   title="Refresh feed"
@@ -687,7 +744,13 @@ export default function HomePage() {
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.28, delay: (index % 10) * 0.025 }}
                 >
-                  <FeedPostCard profile={profile} />
+                  <FeedPostCard
+                    profile={profile}
+                    onCompanyFilter={(company) => {
+                      handleFilterChange("company", company);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  />
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -696,7 +759,7 @@ export default function HomePage() {
             {/* Sentinel for Intersection Observer */}
             <div ref={lastProfileElementRef} className="h-4 w-full" />
 
-            {profiles.length === 0 && !pageLoading && (
+            {profiles.length === 0 && !pageLoading && hasFetchedRef.current && (
               <div className="py-20 text-center">
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
                   <Clock size={32} />

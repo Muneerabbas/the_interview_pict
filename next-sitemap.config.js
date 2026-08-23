@@ -10,6 +10,10 @@ require("@next/env").loadEnvConfig(process.cwd());
 // next-sitemap CLI, so it cannot import the ESM module).
 const DB_NAME = process.env.MONGODB_DB_NAME || "int-exp";
 
+// Mirror of lib/feature-flags.js -- this file is CommonJS and cannot import it.
+// Keep the two in sync when Tales ships.
+const TALES_ENABLED = false;
+
 async function getDynamicContentPaths() {
   if (!process.env.MONGODB_URI) {
     console.warn("Dynamic sitemap paths skipped: MONGODB_URI is unavailable.");
@@ -27,18 +31,24 @@ async function getDynamicContentPaths() {
     await client.connect();
     const db = client.db(DB_NAME);
     const [interviews, tales, legacyTales, companies] = await Promise.all([
+      // $ne: "tale" rather than == "interview": documents written before
+      // content_type existed have no such field and were silently dropped.
       db.collection("experience").find(
-        { content_type: "interview", uid: { $type: "string", $ne: "" } },
+        { content_type: { $ne: "tale" }, uid: { $type: "string", $ne: "" } },
         { projection: { uid: 1, date: 1 } }
       ).toArray(),
-      db.collection("tales").find(
-        { uid: { $type: "string", $ne: "" } },
-        { projection: { uid: 1, date: 1 } }
-      ).toArray(),
-      db.collection("experience").find(
-        { content_type: "tale", uid: { $type: "string", $ne: "" } },
-        { projection: { uid: 1, date: 1 } }
-      ).toArray(),
+      TALES_ENABLED
+        ? db.collection("tales").find(
+            { uid: { $type: "string", $ne: "" } },
+            { projection: { uid: 1, date: 1 } }
+          ).toArray()
+        : [],
+      TALES_ENABLED
+        ? db.collection("experience").find(
+            { content_type: "tale", uid: { $type: "string", $ne: "" } },
+            { projection: { uid: 1, date: 1 } }
+          ).toArray()
+        : [],
       db.collection("companies").find(
         { slug: { $type: "string", $ne: "" } },
         { projection: { slug: 1, updatedAt: 1, createdAt: 1 } }
@@ -78,6 +88,8 @@ module.exports = {
   generateRobotsTxt: true,
   additionalPaths: getDynamicContentPaths,
   exclude: [
+    // Placeholder page while Tales is hidden; nothing to index.
+    ...(TALES_ENABLED ? [] : ["/tales"]),
     "/login",
     "/profile",
     "/post",

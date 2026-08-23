@@ -1,4 +1,5 @@
 import connectToDatabase from "@/lib/mongoose";
+import { TALES_ENABLED } from "@/lib/feature-flags";
 import { getMongoDb } from "@/lib/mongodb";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
@@ -114,7 +115,9 @@ async function getOwnedPosts(db, userEmail) {
   const query = { email: userEmail };
   const [interviews, tales] = await Promise.all([
     db.collection("experience").find(query).project(OWNED_POST_PROJECTION).limit(500).toArray(),
-    db.collection("tales").find(query).project(OWNED_POST_PROJECTION).limit(500).toArray(),
+    TALES_ENABLED
+      ? db.collection("tales").find(query).project(OWNED_POST_PROJECTION).limit(500).toArray()
+      : [],
   ]);
 
   return [...interviews, ...tales];
@@ -131,13 +134,17 @@ async function getExperienceMetaMap(db, experienceIds) {
 
   if (!ids.length) return new Map();
 
-  const experiences = await db
-    .collection("experience")
-    .find({ _id: { $in: ids } })
-    .project({ _id: 1, uid: 1, company: 1, role: 1 })
-    .toArray();
+  // Comments live on posts in either collection; looking only in `experience`
+  // left every story notification with a null href and "your post" as the label.
+  const projection = { _id: 1, uid: 1, company: 1, role: 1, title: 1 };
+  const [experiences, tales] = await Promise.all([
+    db.collection("experience").find({ _id: { $in: ids } }).project(projection).toArray(),
+    TALES_ENABLED
+      ? db.collection("tales").find({ _id: { $in: ids } }).project(projection).toArray()
+      : [],
+  ]);
 
-  return new Map(experiences.map((item) => [String(item._id), item]));
+  return new Map([...experiences, ...tales].map((item) => [String(item._id), item]));
 }
 
 export async function GET(req) {

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
+import { TALES_ENABLED } from "@/lib/feature-flags";
 
 export default function TalePostRedirectPage() {
-  redirect("/post?type=tale");
+  redirect(TALES_ENABLED ? "/post?type=tale" : "/post");
 }

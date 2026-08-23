@@ -18,7 +18,9 @@ const MiniTrendingCard = ({ profile }) => {
         ? profile?.title || "Untitled tale"
         : profile?.title || `${profile?.company || "Company"} Interview Experience`;
     const href = `/single/${profile?.uid || profile?._id}`;
-    const likeCount = Array.isArray(profile?.likes) ? profile.likes.length : 0;
+    // /api/feed returns a count, not the array of liker emails -- this branch
+    // always fell through to 0, so every hero card showed no likes.
+    const likeCount = Array.isArray(profile?.likes) ? profile.likes.length : Number(profile?.likes) || 0;
 
     return (
         <Link

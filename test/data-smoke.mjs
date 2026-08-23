@@ -74,4 +74,38 @@ const companyPage = await request(`/companies/${sampleCompany.slug}`);
 assert.equal(companyPage.response.status, 200);
 assert.match(companyPage.body, new RegExp(sampleCompany.name.slice(0, 6).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 
+// --- privacy: no endpoint may hand out the array of liker emails ---
+const topStories = await jsonRequest("/api/topStories?itemsPerPage=3");
+assert.ok(Array.isArray(topStories.data));
+for (const post of topStories.data) {
+  assert.equal(Array.isArray(post.likes), false, "/api/topStories returned the raw likes array of liker emails");
+  assert.equal("email" in post, false, "/api/topStories leaked the author email");
+  assert.equal("author" in post, false, "/api/topStories leaked the joined user document");
+}
+
+const [firstPost] = topStories.data;
+if (firstPost?.uid) {
+  const single = await jsonRequest(`/api/exp?uid=${encodeURIComponent(firstPost.uid)}`);
+  assert.equal(Array.isArray(single.data.likes), false, "/api/exp returned the raw likes array");
+  assert.equal("author" in single.data, false, "/api/exp leaked the joined user document");
+}
+
+const home = await request("/");
+assert.equal(
+  /"likes":\s*\[\s*"/.test(home.body),
+  false,
+  "the landing page RSC payload still carries an array of liker emails"
+);
+
+// --- NoSQL operator injection: {"id": {"$gt": ""}} must not be treated as an id ---
+for (const path of ["/api/like", "/api/view"]) {
+  const injected = await fetch(`${baseUrl}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id: { $gt: "" } }),
+  });
+  // 400 (rejected) or 401 (auth first) -- never 200, which would mean it ran.
+  assert.notEqual(injected.status, 200, `${path} accepted an operator object as an id`);
+}
+
 console.log("data smoke: passed");

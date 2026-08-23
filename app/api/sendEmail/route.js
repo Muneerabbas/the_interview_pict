@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { requireSession } from "@/lib/auth";
 import { escapeHtml } from "@/lib/utils";
 
@@ -8,6 +9,10 @@ export async function POST(req) {
   // recipient and the HTML body, and it sent from our Gmail account.
   const auth = await requireSession();
   if (auth.response) return auth.response;
+
+  // Every send burns a slice of the Gmail daily quota.
+  const limited = await checkRateLimit(req, { key: "send-email", limit: 5, windowSeconds: 600 });
+  if (limited) return limited;
 
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {

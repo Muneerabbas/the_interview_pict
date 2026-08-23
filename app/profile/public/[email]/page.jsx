@@ -27,8 +27,15 @@ import { fetchWithCache } from "@/lib/cache";
 import redis from "@/lib/redis";
 
 import { getMongoDb } from "@/lib/mongodb";
+import { normalizeEmail } from "@/lib/auth";
+import { TALES_ENABLED } from "@/lib/feature-flags";
 
-async function getPublicProfile(email) {
+async function getPublicProfile(rawEmail) {
+  // Every writer invalidates `public_profile_full_v2:<lowercased email>`. Keying
+  // on the raw URL segment meant /profile/public/Someone%40gmail.com cached under
+  // a key nothing ever deleted -- it served deleted posts for the full 5 minutes,
+  // and the DB query below is case-sensitive on `email` anyway.
+  const email = normalizeEmail(rawEmail);
   const cacheKey = `public_profile_full_v2:${email}`;
 
   return await fetchWithCache(cacheKey, 300, async () => { // 5 minute cache
@@ -38,13 +45,21 @@ async function getPublicProfile(email) {
       // load -- views were both undercounted and double counted. The tracker is
       // now the single increment path.
       const db = await getMongoDb({ mode: "read" });
-      const experience = db.collection("experience");
       const userCollection = db.collection("user");
 
-      const [rawPosts, userData] = await Promise.all([
-        experience.find({ email }).sort({ date: -1 }).limit(100).toArray(),
+      // Stories used to be invisible here: an author whose posts are all tales got
+      // an empty profile with zero stats. Now it mirrors /api/profile, flag and all.
+      const [interviews, tales, userData] = await Promise.all([
+        db.collection("experience").find({ email }).sort({ date: -1 }).limit(100).toArray(),
+        TALES_ENABLED
+          ? db.collection("tales").find({ email }).sort({ date: -1 }).limit(100).toArray()
+          : [],
         userCollection.findOne({ gmail: email }),
       ]);
+
+      const rawPosts = [...interviews, ...tales]
+        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        .slice(0, 100);
 
       // If no user document and no posts, then it's a 404
       if (!userData?.gmail && (!rawPosts || rawPosts.length === 0)) {
@@ -88,8 +103,11 @@ async function getPublicProfile(email) {
 
       return { posts, stats, profile };
     } catch (error) {
+      // Do NOT swallow this into a value: fetchWithCache stores whatever it gets
+      // back, so returning a "not found" shape here pinned a 404 on the profile
+      // for 5 minutes after one transient Mongo blip.
       console.error("Public profile fetch error:", error);
-      return { posts: [], stats: null, profile: null };
+      throw error;
     }
   });
 }
@@ -121,7 +139,7 @@ export async function generateMetadata({ params }) {
       title: `${name} | The Interview Room`,
       description,
       url: `https://theinterviewroom.in/profile/public/${encodeURIComponent(email)}`,
-      images: profile.image ? [{ url: profile.image }] : undefined,
+      images: profile.profilePic ? [{ url: profile.profilePic }] : undefined,
     },
     twitter: {
       card: "summary",

@@ -11,8 +11,14 @@ import ProfileCardSkeleton from "../../components/ProfileCardSkeleton";
 import FeedSearch from "../../components/FeedSearch";
 import { requestJson } from "../../lib/client-api";
 import { TALE_CATEGORIES } from "../../lib/tale-categories";
+import { TALES_ENABLED } from "@/lib/feature-flags";
 
 const ITEMS_PER_PAGE = 10;
+// Sort tab + filters survive a reload; otherwise the page always came back on
+// the random "Feed" tab.
+const TALES_VIEW_KEY = "tales_view_v1";
+const SORT_TABS = ["latest", "trending", "random"];
+const asString = (value) => (typeof value === "string" ? value : "");
 
 const ShareStoryCard = ({ compact = false }) => (
   <Link
@@ -41,19 +47,32 @@ const ShareStoryCard = ({ compact = false }) => (
   </Link>
 );
 
-export default function TalesPage() {
+function TalesFeed() {
   const [tales, setTales] = useState([]);
   const [page, setPage] = useState(0);
-  const [activeTab, setActiveTab] = useState("random");
+  // null until the persisted choice is read on mount; nothing fetches before then.
+  const [activeTab, setActiveTab] = useState(null);
   const [pageLoading, setPageLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
   const [author, setAuthor] = useState("");
   const [college, setCollege] = useState("");
+  // What the user is typing. `college` (the fetch input) trails it by 300ms --
+  // it was a fetchTales dependency, so every keystroke blanked and refetched the
+  // whole list.
+  const [collegeInput, setCollegeInput] = useState("");
   const [authorOptions, setAuthorOptions] = useState([]);
+  useEffect(() => {
+    if (collegeInput === college) return undefined;
+    const timer = window.setTimeout(() => setCollege(collegeInput), 300);
+    return () => window.clearTimeout(timer);
+  }, [collegeInput, college]);
+
   const observer = useRef(null);
   const isFetchingRef = useRef(false);
+  // "No tales" used to paint before the first request even started.
+  const hasFetchedRef = useRef(false);
   const requestIdRef = useRef(0);
   const abortRef = useRef(null);
 
@@ -104,6 +123,7 @@ export default function TalesPage() {
       setHasMore(false);
     } finally {
       if (requestId === requestIdRef.current) {
+        hasFetchedRef.current = true;
         setPageLoading(false);
         isFetchingRef.current = false;
       }
@@ -123,6 +143,34 @@ export default function TalesPage() {
   }, []);
 
   useEffect(() => {
+    if (activeTab !== null) return;
+
+    let saved = null;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(TALES_VIEW_KEY) || "null");
+    } catch (error) {
+      console.warn("Failed to restore tales view:", error);
+    }
+
+    if (saved) {
+      setCategory(TALE_CATEGORIES.includes(saved.category) ? saved.category : "");
+      setAuthor(asString(saved.author));
+      setCollege(asString(saved.college));
+    }
+    setActiveTab(SORT_TABS.includes(saved?.tab) ? saved.tab : "random");
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!activeTab) return;
+    try {
+      sessionStorage.setItem(TALES_VIEW_KEY, JSON.stringify({ tab: activeTab, category, author, college }));
+    } catch (error) {
+      console.warn("Failed to persist tales view:", error);
+    }
+  }, [activeTab, category, author, college]);
+
+  useEffect(() => {
+    if (!activeTab) return;
     setTales([]);
     setPage(0);
     setHasMore(true);
@@ -130,7 +178,7 @@ export default function TalesPage() {
   }, [activeTab, fetchTales]);
 
   useEffect(() => {
-    if (page === 0) return;
+    if (page === 0 || !activeTab) return;
     fetchTales(page, activeTab, tales.map((tale) => tale._id));
   }, [page, activeTab, fetchTales]);
 
@@ -151,6 +199,7 @@ export default function TalesPage() {
   const clearFilters = () => {
     setCategory("");
     setAuthor("");
+    setCollegeInput("");
     setCollege("");
     setTales([]);
     setPage(0);
@@ -293,8 +342,8 @@ export default function TalesPage() {
                 College
                 <input
                   type="search"
-                  value={college}
-                  onChange={(event) => setCollege(event.target.value)}
+                  value={collegeInput}
+                  onChange={(event) => setCollegeInput(event.target.value)}
                   placeholder="Search college"
                   maxLength={80}
                   className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -340,7 +389,7 @@ export default function TalesPage() {
 
             <div ref={lastStoryElementRef} className="h-4 w-full" />
 
-            {tales.length === 0 && !pageLoading && (
+            {tales.length === 0 && !pageLoading && hasFetchedRef.current && (
               <div className="py-20 text-center">
                 <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-slate-50 text-slate-300 dark:bg-slate-800/50 dark:text-slate-600">
                   <BookOpen size={32} />
@@ -369,4 +418,53 @@ export default function TalesPage() {
       </div>
     </main>
   );
+}
+
+function TalesComingSoon() {
+  return (
+    <main className="relative min-h-screen bg-slate-50 font-sans dark:bg-slate-950">
+      <Navbar showThemeToggle />
+      <div className="mx-auto flex w-full max-w-[720px] flex-col items-center px-4 pb-20 pt-28 text-center sm:px-6 md:pt-32">
+        <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300">
+          <Sparkles className="h-3.5 w-3.5" />
+          Coming soon
+        </span>
+
+        <h1 className="mt-6 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+          Tales
+        </h1>
+
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+          Everything that happens outside the interview room. Hackathon nights, projects
+          that shipped and projects that did not, internships, competitions, startups and
+          open source, and the comebacks after a rejection &mdash; written by students, for students.
+        </p>
+
+        <p className="mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-400">
+          We are still building it. Until then, interview experiences are live and growing.
+        </p>
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/feed"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+          >
+            <BookOpen className="h-4 w-4" />
+            Read interview experiences
+          </Link>
+          <Link
+            href="/post"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            <Send className="h-4 w-4" />
+            Share your experience
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function TalesPage() {
+  return TALES_ENABLED ? <TalesFeed /> : <TalesComingSoon />;
 }

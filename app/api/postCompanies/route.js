@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import connectToDatabase from "@/lib/mongoose";
 import Company from "@/models/Company";
 import redis from "@/lib/redis";
@@ -31,7 +32,10 @@ function isAdmin(email) {
         .split(",")
         .map((e) => e.trim().toLowerCase())
         .filter(Boolean);
-    return allow.length === 0 || allow.includes(email);
+    // Fail CLOSED. This used to return true when ADMIN_EMAILS was unset -- and it
+    // is unset -- so any signed-in Google account could rewrite the name, slug and
+    // logo of any company page, breaking every inbound link to it.
+    return allow.length > 0 && allow.includes(email);
 }
 
 const text = (v, max) => String(v ?? "").trim().slice(0, max);
@@ -81,6 +85,8 @@ export async function POST(req) {
             return NextResponse.json({ success: false, error: "Company already exists" }, { status: 409 });
         }
 
+        // check-then-create races on the unique slug index; catch below turns the
+        // resulting E11000 into the same 409 rather than a 500.
         const company = await Company.create({
             name,
             slug,
@@ -98,6 +104,9 @@ export async function POST(req) {
         // `company` is kept alongside `data` for the AddCompanyModal caller.
         return NextResponse.json({ success: true, data, company: data }, { status: 201 });
     } catch (error) {
+        if (error?.code === 11000) {
+            return NextResponse.json({ success: false, error: "Company already exists" }, { status: 409 });
+        }
         console.error("Error creating company:", error);
         return jsonError(error, "Unable to create company");
     }
@@ -110,6 +119,9 @@ export async function PUT(req) {
     if (!isAdmin(auth.email)) {
         return NextResponse.json({ success: false, error: "Not allowed" }, { status: 403 });
     }
+
+    const limited = await checkRateLimit(req, { key: "company-edit", limit: 20, windowSeconds: 600 });
+    if (limited) return limited;
 
     try {
         await connectToDatabase();
@@ -156,6 +168,17 @@ export async function PUT(req) {
             },
             { new: true }
         ).lean();
+
+        // Experiences store the company as a plain name string. Renaming the
+        // company doc without them left every existing post matching the OLD name:
+        // the feed filter and /companies/<slug> both return zero results.
+        if (name !== existing.name) {
+            const db = mongoose.connection.db;
+            await Promise.all([
+                db.collection("experience").updateMany({ company: existing.name }, { $set: { company: name } }),
+                db.collection("tales").updateMany({ company: existing.name }, { $set: { company: name } }),
+            ]);
+        }
 
         await invalidateCompanyCache();
 

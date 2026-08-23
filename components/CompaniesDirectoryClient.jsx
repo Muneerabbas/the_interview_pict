@@ -103,9 +103,9 @@ export default function CompaniesDirectoryClient({ companies = [], countsMap = {
           </div>
         ) : (
           <div className="relative z-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredCompanies.map((company) => (
+            {filteredCompanies.filter((company) => company?.slug).map((company) => (
               <Link
-                href={`/companies/${company?.slug}`}
+                href={`/companies/${company.slug}`}
                 key={company._id}
                 className="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 sm:p-6"
               >

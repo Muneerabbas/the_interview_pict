@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar";
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from "next/navigation";
 import { Loader2, FileText, BookOpen, Briefcase } from "lucide-react";
+import { TALES_ENABLED } from "@/lib/feature-flags";
 
 function PostContent() {
   const { data: session, status } = useSession();
@@ -16,7 +17,8 @@ function PostContent() {
 
   useEffect(() => {
     const requestedType = searchParams.get("type");
-    setContentType(requestedType === "tale" ? "tale" : "interview");
+    // ?type=tale must not open the story editor while Tales is hidden.
+    setContentType(requestedType === "tale" && TALES_ENABLED ? "tale" : "interview");
   }, [searchParams]);
 
   // Lock or unlock scroll when the login overlay is shown
@@ -75,14 +77,21 @@ function PostContent() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setContentType("tale")}
+                    onClick={() => TALES_ENABLED && setContentType("tale")}
+                    disabled={!TALES_ENABLED}
+                    title={TALES_ENABLED ? undefined : "Stories are coming soon"}
                     className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${contentType === "tale"
                       ? "bg-white text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100"
                       : "text-slate-500 dark:text-slate-400"
-                      }`}
+                      } ${TALES_ENABLED ? "" : "cursor-not-allowed opacity-60"}`}
                   >
                     <BookOpen size={16} />
                     Story
+                    {!TALES_ENABLED && (
+                      <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                        Soon
+                      </span>
+                    )}
                   </button>
                 </div>
               </div>
@@ -116,14 +125,21 @@ function PostContent() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setContentType("tale")}
+                  onClick={() => TALES_ENABLED && setContentType("tale")}
+                  disabled={!TALES_ENABLED}
+                  title={TALES_ENABLED ? undefined : "Stories are coming soon"}
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${contentType === "tale"
                     ? "bg-slate-900 text-white dark:bg-blue-400 dark:text-slate-950"
                     : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
-                    }`}
+                    } ${TALES_ENABLED ? "" : "cursor-not-allowed opacity-60"}`}
                 >
                   <BookOpen size={16} />
                   Story
+                  {!TALES_ENABLED && (
+                    <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                      Soon
+                    </span>
+                  )}
                 </button>
               </div>
             </div>

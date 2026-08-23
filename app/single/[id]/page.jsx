@@ -18,6 +18,7 @@ import ScrollViewTracker from "@/components/ScrollViewTracker";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { resolveProfileImage, resolveProfileName } from "@/lib/utils";
 import { getServerOrigin } from "@/lib/serverOrigin";
+import { headers } from "next/headers";
 import LikeButton from "@/components/LikeButton";
 import PostCompanyActions from "@/components/PostCompanyActions";
 
@@ -34,14 +35,21 @@ const CommentsSection = dynamic(() => import("@/components/CommentsSection"), {
 
 import { cache } from "react";
 import { notFound } from "next/navigation";
+import { TALES_ENABLED } from "@/lib/feature-flags";
+import { getMongoDb } from "@/lib/mongodb";
+import { companySlugFromName } from "@/lib/companySlug";
 
 import SimilarExperienceClient from "@/components/SimilarExperienceClient";
 
 // Memoized data fetcher to prevent duplicate hits during metadata & page render
-const getExperienceData = cache(async (id, baseUrl) => {
+const getExperienceData = cache(async (id, baseUrl, cookie = "") => {
   try {
+    // Forward the caller's cookie: /api/exp resolves the session to decide whether
+    // THIS viewer has already liked the post (it no longer ships the array of
+    // liker emails for the client to work that out).
     const expResponse = await fetch(`${baseUrl}/api/exp?uid=${id}&_ts=${Date.now()}`, {
       cache: "no-store",
+      headers: cookie ? { cookie } : undefined,
       next: { revalidate: 0 }
     });
 
@@ -84,7 +92,7 @@ const getExperienceData = cache(async (id, baseUrl) => {
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const baseUrl = await getServerOrigin();
-  const { data } = await getExperienceData(id, baseUrl);
+  const { data } = await getExperienceData(id, baseUrl, (await headers()).get("cookie") || "");
 
   if (!data) {
     return {
@@ -94,6 +102,9 @@ export async function generateMetadata({ params }) {
   }
 
   const isTale = data?.content_type === "tale";
+  if (!TALES_ENABLED && isTale) {
+    return { title: "Page not found", robots: { index: false, follow: false } };
+  }
   const title = isTale
     ? (data?.title || `${data?.name}'s Tale`)
     : `${data?.company || "Interview"} Experience`;
@@ -124,6 +135,23 @@ export async function generateMetadata({ params }) {
   };
 }
 
+/**
+ * The card linked to /companies/<slug> for any non-empty company string, including
+ * the literal "Company not shared" placeholder -- a guaranteed 404. Only offer the
+ * link when the company document actually exists.
+ */
+const companyPageExists = cache(async (companyName) => {
+  const slug = companySlugFromName(companyName);
+  if (!slug) return false;
+  try {
+    const db = await getMongoDb({ mode: "read" });
+    return Boolean(await db.collection("companies").findOne({ slug }, { projection: { _id: 1 } }));
+  } catch (error) {
+    console.warn("Company lookup failed:", error?.message || error);
+    return false;
+  }
+});
+
 export default async function SimilarExperience({ params }) {
   const { id } = await params;
   const baseUrl = await getServerOrigin();
@@ -132,9 +160,13 @@ export default async function SimilarExperience({ params }) {
   // stayed indexable soft-404s and users never saw a real 404 page.
   if (!id) notFound();
 
-  const { data, articles } = await getExperienceData(id, baseUrl);
+  const { data, articles } = await getExperienceData(id, baseUrl, (await headers()).get("cookie") || "");
 
   if (!data) notFound();
+
+  // Tales are hidden: an existing story must not stay reachable by direct link
+  // while the rest of the feature is behind the flag.
+  if (!TALES_ENABLED && data.content_type === "tale") notFound();
 
   const formatLongDate = (date) => {
     const parsed = new Date(date);
@@ -155,6 +187,7 @@ export default async function SimilarExperience({ params }) {
   const publicProfilePath = data?.email ? `/profile/public/${encodeURIComponent(data.email)}` : null;
   const readMinutes = Math.max(1, Math.round((data?.exp_text || "").split(/\s+/).filter(Boolean).length / 220));
   const isToday = data?.date && new Date(data.date).toDateString() === new Date().toDateString();
+  const hasCompanyPage = await companyPageExists(data?.company);
   const experienceObjectId =
     typeof data?._id === "string" ? data._id : data?._id?.$oid ? data._id.$oid : String(data?._id || "");
 
@@ -297,7 +330,7 @@ export default async function SimilarExperience({ params }) {
                                 {readMinutes} min read
                               </div>
                               <div className="ml-auto inline-flex items-center gap-2">
-                                <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
+                                <LikeButton id={id} initialLikes={{ count: data?.likes || 0, liked: Boolean(data?.liked) }} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
                               </div>
                             </div>
                           </div>
@@ -393,7 +426,7 @@ export default async function SimilarExperience({ params }) {
                           </div>
 
                           <PostCompanyActions
-                            companyName={data?.company}
+                            companyName={hasCompanyPage ? data?.company : ""}
                             experienceUid={id}
                             authorEmail={typeof data?.email === "string" ? data.email : ""}
                             className="mt-4"
@@ -417,7 +450,7 @@ export default async function SimilarExperience({ params }) {
                               {readMinutes} min read
                             </div>
                             <div className="ml-auto inline-flex items-center gap-2">
-                              <LikeButton id={id} initialLikes={data?.likes || []} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
+                              <LikeButton id={id} initialLikes={{ count: data?.likes || 0, liked: Boolean(data?.liked) }} className="border-0 bg-transparent p-0 shadow-none hover:bg-transparent" />
                             </div>
                           </div>
                         </div>

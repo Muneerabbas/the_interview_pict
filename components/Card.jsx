@@ -17,6 +17,7 @@ const ProfileCard = ({
   deletePost = false,
   disableCardClick = false,
   setGlobalLoading,
+  onDeleted,
 }) => {
   const router = useRouter();
   const [successMessage, setSuccessMessage] = useState(null);
@@ -50,8 +51,11 @@ const ProfileCard = ({
 
   const handleEdit = (e) => {
     e.stopPropagation();
+    // articleId, not profile.uid: a document without a uid navigated to
+    // /edit/undefined and left the overlay up forever.
+    if (!articleId) return;
     setIsLoading(true);
-    router.push(`/edit/${profile.uid}`);
+    router.push(`/edit/${articleId}`);
   };
 
   const handleDeleteClick = (e) => {
@@ -76,7 +80,10 @@ const ProfileCard = ({
       if (response.ok) {
         setIsModalOpen(false);
         setSuccessMessage("Experience deleted successfully!");
-        router.refresh();
+        // router.refresh() did nothing here: the profile list lives in client
+        // state, so the deleted card stayed on screen under a success banner that
+        // never cleared. The owner drops it from its own list instead.
+        onDeleted?.(profile);
       } else {
         setDeleteError(data?.error || data?.message || "Could not delete this post.");
       }

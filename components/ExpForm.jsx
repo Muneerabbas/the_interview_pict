@@ -363,6 +363,21 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
 
 
   // Load draft on initial render
+  const resetDraftFields = useCallback(() => {
+    setTitle("");
+    setCollege("");
+    setCustomCollege("");
+    setBatch("");
+    setBranch("");
+    setCompany("");
+    setRole("");
+    setTags("");
+    setTaleCategory("");
+    setChatAnswers({ eligibility: "", applicationRoute: "", roundsText: "", roundDetails: [], timeline: "", difficulty: "", keyTopics: "", codingSpecifics: "", interviewFocus: "", projectDeepDive: "", hrBehavioral: "" });
+    setChatStage('eligibility');
+    setChatMessages([{ role: 'assistant', text: initialMessage }]);
+  }, []);
+
   useEffect(() => {
     const loadDraft = async () => {
       if (!session?.user?.email) return;
@@ -379,9 +394,12 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         if (response.ok) {
           const draftData = await readJson(response, {});
 
-          // A 200 with an empty/partial body used to blank the editor.
+          // A 200 with an empty/partial body used to blank the editor. It also
+          // returned early, leaving title/college/company/role/tags from the type
+          // the user just switched away from still filled in.
           if (!draftData || typeof draftData.exp_text !== "string" || !draftData.exp_text.trim()) {
             setMarkdown(isTale ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
+            resetDraftFields();
             return;
           }
 
@@ -406,18 +424,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         } else if (response.status === 404) {
           // Reset to default if no draft found for this type
           setMarkdown(isTale ? TALE_TEMPLATE : INTERVIEW_TEMPLATE);
-          setTitle("");
-          setCollege("");
-          setCustomCollege("");
-          setBatch("");
-          setBranch("");
-          setCompany("");
-          setRole("");
-          setTags("");
-          setTaleCategory("");
-          setChatAnswers({ eligibility: "", applicationRoute: "", roundsText: "", roundDetails: [], timeline: "", difficulty: "", keyTopics: "", codingSpecifics: "", interviewFocus: "", projectDeepDive: "", hrBehavioral: "" });
-          setChatStage('eligibility');
-          setChatMessages([{ role: 'assistant', text: initialMessage }]);
+          resetDraftFields();
         }
       } catch (error) {
         console.error("Error loading draft:", error);
@@ -425,7 +432,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
     };
 
     loadDraft();
-  }, [session?.user?.email, contentType]);
+  }, [session?.user?.email, contentType, resetDraftFields]);
 
   // Keep the latest values in a ref so the debounced function below never has to
   // be rebuilt -- rebuilding it orphaned the pending timer and dropped that save.
@@ -435,8 +442,13 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   const saveDraft = useMemo(
     () =>
       debounce(async (draftData) => {
-        const { email, contentType: type } = draftContextRef.current;
+        const { email, contentType: fallbackType } = draftContextRef.current;
         if (!email) return;
+
+        // The type is whatever was current when the save was QUEUED. Reading it
+        // from the ref at fire time meant switching Interview -> Story inside the
+        // 2s debounce window wrote the interview body into the tale draft.
+        const type = draftData.content_type || fallbackType;
 
         try {
           await fetch("/api/drafts", {
@@ -687,13 +699,19 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         body: JSON.stringify({ contentType }),
       });
 
-      // Invalidate frontend feed cache
-      if (isTale) {
-        sessionStorage.removeItem("tales_state_v1:latest");
-        sessionStorage.removeItem("tales_state_v1:trending");
-      } else {
-        sessionStorage.removeItem("feed_state_v2:latest");
-        sessionStorage.removeItem("feed_state_v2:trending");
+      // Invalidate the frontend feed cache. These key names were stale ("v2", and
+      // a tales cache that no longer exists), so the feed restored a <60s-old
+      // snapshot that did not contain the post just published -- the author saw
+      // their post missing and submitted again.
+      try {
+        for (let i = sessionStorage.length - 1; i >= 0; i -= 1) {
+          const key = sessionStorage.key(i);
+          if (key && (key.startsWith("feed_state_") || key.startsWith("tales_state_"))) {
+            sessionStorage.removeItem(key);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to clear feed cache:", err);
       }
 
       // Show success message
@@ -721,6 +739,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
   useEffect(() => {
     if (session?.user?.email) {
       saveDraft({
+        content_type: contentType,
         exp_text: markdown,
         title,
         college,
@@ -738,7 +757,7 @@ export default function MdxEditorPage({ showThemeToggle = false, contentType = "
         currentRound,
       });
     }
-  }, [markdown, title, college, customCollege, batch, branch, company, role, tags, taleCategory, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
+  }, [contentType, markdown, title, college, customCollege, batch, branch, company, role, tags, taleCategory, chatAnswers, chatStage, chatMessages, totalRounds, currentRound, saveDraft, session?.user?.email]);
 
   useEffect(() => {
     setMode("manual");

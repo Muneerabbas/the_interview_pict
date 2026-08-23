@@ -47,6 +47,14 @@ NEXTAUTH_SECRET="replace-with-a-long-random-secret"
 # Email (used by /api/saveExp and /api/sendEmail)
 EMAIL_USER="yourgmail@gmail.com"
 EMAIL_PASS="gmail-app-password"
+
+# Who may edit company pages (PUT /api/postCompanies). Comma separated.
+# REQUIRED: the check fails closed, so with this unset nobody can edit a company.
+ADMIN_EMAILS="you@gmail.com"
+
+# Optional: caching and rate limiting are disabled when these are absent.
+UPSTASH_REDIS_REST_URL="..."
+UPSTASH_REDIS_REST_TOKEN="..."
 ```
 
 Notes:

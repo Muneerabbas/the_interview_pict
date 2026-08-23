@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { Mail, PlusCircle, Loader2, FileText, CalendarDays, Edit3, Github, Linkedin, Twitter, Globe, Facebook, Youtube, Instagram, Trash2, Save, X, Award, Eye, Building2, Briefcase, ThumbsUp, LogOut } from 'lucide-react';
 import Link from 'next/link';
@@ -61,6 +61,20 @@ const ProfilePage = () => {
   const name = resolveProfileName({ ...profileData, name: session?.user?.name });
   const [isEditing, setIsEditing] = useState(false);
   const [editingField, setEditingField] = useState(null); // 'headline', 'about', 'skills', 'education', 'social'
+  // Cancel used to only clear editingField: the typed value stayed in profileData
+  // and the next save of ANY other field persisted the edit the user discarded.
+  const editSnapshotRef = useRef(null);
+
+  const startEditingField = (field) => {
+    editSnapshotRef.current = profileData;
+    setEditingField(field);
+  };
+
+  const cancelEditingField = () => {
+    if (editSnapshotRef.current) setProfileData(editSnapshotRef.current);
+    editSnapshotRef.current = null;
+    setEditingField(null);
+  };
   const [editingSocialField, setEditingSocialField] = useState(null); // 'linkedin', 'twitter', etc.
   const [showSocialOptions, setShowSocialOptions] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
@@ -295,6 +309,11 @@ const ProfilePage = () => {
 
       <Navbar showThemeToggle />
 
+      {/* setGlobalLoading is handed to the signed-in post cards, but this overlay
+          only existed in the signed-out branch -- clicking "Read More" on your own
+          post gave no feedback at all. */}
+      {globalLoading && <LoadingScreen />}
+
       {isEditing && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsEditing(false)} />
@@ -473,7 +492,7 @@ const ProfilePage = () => {
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveProfile()}
                     />
                     <button onClick={() => handleSaveProfile()} className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg"><Save size={18} /></button>
-                    <button onClick={() => setEditingField(null)} className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"><X size={18} /></button>
+                    <button onClick={cancelEditingField} className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"><X size={18} /></button>
                   </div>
                 ) : (
                   <div className="group flex items-center gap-2">
@@ -481,14 +500,14 @@ const ProfilePage = () => {
                       <p className="text-lg font-medium text-slate-600 dark:text-slate-400">{profileData.headline}</p>
                     ) : (
                       <button
-                        onClick={() => setEditingField('headline')}
+                        onClick={() => startEditingField('headline')}
                         className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-100 dark:border-blue-500/40 dark:bg-blue-950/40 dark:text-blue-300"
                       >
                         <PlusCircle size={14} /> Add headline
                       </button>
                     )}
                     {profileData.headline && (
-                      <button onClick={() => setEditingField('headline')} className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-blue-500 transition-all">
+                      <button onClick={() => startEditingField('headline')} className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-blue-500 transition-all">
                         <Edit3 size={14} />
                       </button>
                     )}
@@ -516,7 +535,7 @@ const ProfilePage = () => {
                       <input placeholder="Batch" className="bg-transparent text-sm outline-none w-16 border-l border-slate-200 px-2" value={profileData.batch} onChange={(e) => setProfileData({ ...profileData, batch: e.target.value })} />
                       <input placeholder="Current Company" className="bg-transparent text-sm outline-none w-32 border-l border-slate-200 px-2" value={profileData.currentCompany} onChange={(e) => setProfileData({ ...profileData, currentCompany: e.target.value })} />
                       <button onClick={() => handleSaveProfile()} className="text-blue-600 font-bold text-xs px-2">SAVE</button>
-                      <button onClick={() => setEditingField(null)}><X size={14} /></button>
+                      <button onClick={cancelEditingField}><X size={14} /></button>
                     </div>
                   ) : (
                     <div className="flex flex-wrap items-center gap-2">
@@ -532,11 +551,11 @@ const ProfilePage = () => {
                               <Briefcase size={12} /> @{profileData.currentCompany}
                             </span>
                           )}
-                          <button onClick={() => setEditingField('education')} className="p-1 text-slate-400 hover:text-blue-500 transition-all"><Edit3 size={14} /></button>
+                          <button onClick={() => startEditingField('education')} className="p-1 text-slate-400 hover:text-blue-500 transition-all"><Edit3 size={14} /></button>
                         </div>
                       ) : (
                         <button
-                          onClick={() => setEditingField('education')}
+                          onClick={() => startEditingField('education')}
                           className="inline-flex items-center gap-1 rounded-full border border-slate-300/80 bg-slate-100/80 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-200 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700"
                         >
                           <PlusCircle size={12} /> Add College / Company
@@ -677,10 +696,10 @@ const ProfilePage = () => {
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">About</h3>
               {!profileData.about && editingField !== 'about' && (
-                <button onClick={() => setEditingField('about')} className="text-sm text-blue-600 font-semibold flex items-center gap-1"><PlusCircle size={14} /> Add About</button>
+                <button onClick={() => startEditingField('about')} className="text-sm text-blue-600 font-semibold flex items-center gap-1"><PlusCircle size={14} /> Add About</button>
               )}
               {profileData.about && editingField !== 'about' && (
-                <button onClick={() => setEditingField('about')} className="text-slate-400 hover:text-blue-500"><Edit3 size={14} /></button>
+                <button onClick={() => startEditingField('about')} className="text-slate-400 hover:text-blue-500"><Edit3 size={14} /></button>
               )}
             </div>
 
@@ -695,14 +714,14 @@ const ProfilePage = () => {
                   placeholder="Share a bit about your journey..."
                 />
                 <div className="flex justify-end gap-2">
-                  <button onClick={() => setEditingField(null)} className="px-4 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+                  <button onClick={cancelEditingField} className="px-4 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
                   <button onClick={() => handleSaveProfile()} className="px-6 py-1.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md shadow-blue-500/20">Save About</button>
                 </div>
               </div>
             ) : profileData.about ? (
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{profileData.about}</p>
             ) : (
-              <div className="cursor-pointer rounded-xl border-2 border-dashed border-slate-200 py-3 text-slate-400 transition-all hover:border-blue-400 hover:text-blue-500 dark:border-slate-700" onClick={() => setEditingField('about')}>
+              <div className="cursor-pointer rounded-xl border-2 border-dashed border-slate-200 py-3 text-slate-400 transition-all hover:border-blue-400 hover:text-blue-500 dark:border-slate-700" onClick={() => startEditingField('about')}>
                 <div className="flex flex-col items-center justify-center">
                   <PlusCircle size={20} className="mb-1.5" />
                   <span className="text-sm font-medium">Add a bio to let people know you better</span>
@@ -772,7 +791,16 @@ const ProfilePage = () => {
             <div className="grid gap-5">
               {posts.map((post) => (
                 <div key={post.uid} className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl">
-                  <ProfileCard profile={{ ...post, profile_pic: profile_pic || post.profile_pic }} edit={true} deletePost={true} setGlobalLoading={setGlobalLoading} disableCardClick={true} />
+                  <ProfileCard
+                    profile={{ ...post, profile_pic: profile_pic || post.profile_pic }}
+                    edit={true}
+                    deletePost={true}
+                    setGlobalLoading={setGlobalLoading}
+                    disableCardClick={true}
+                    onDeleted={(deleted) =>
+                      setPosts((prev) => prev.filter((item) => (item.uid || item._id) !== (deleted.uid || deleted._id)))
+                    }
+                  />
                 </div>
               ))}
             </div>

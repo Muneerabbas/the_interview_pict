@@ -28,12 +28,14 @@ export default function CloudinaryImage({ src, alt = "Image", className = "", wi
     if (!isCloudinary || error) {
         // Render nothing rather than a broken-image glyph. The old handler set
         // e.target.style.display directly, which React undid on the next render.
-        if (broken) return null;
+        // An empty src is the same story: browsers resolve <img src=""> to the
+        // current document URL, so it costs a full extra page request.
+        if (broken || !src) return null;
 
         return (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-                src={src || ""}
+                src={src}
                 alt={alt}
                 className={className || "my-6 block max-w-full h-auto rounded-xl border border-slate-200 dark:border-slate-800"}
                 width={width}

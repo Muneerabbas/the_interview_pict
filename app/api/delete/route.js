@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import redis from "@/lib/redis";
 import { getMongoDb } from "@/lib/mongodb";
 import { requireSession } from "@/lib/auth";
@@ -26,6 +27,9 @@ export async function DELETE(req) {
   // via /api/feed, so trusting the body let anyone delete anyone's post.
   const auth = await requireSession();
   if (auth.response) return auth.response;
+
+  const limited = await checkRateLimit(req, { key: "delete-post", limit: 20, windowSeconds: 300 });
+  if (limited) return limited;
 
   try {
     const { uid } = await req.json().catch(() => ({}));

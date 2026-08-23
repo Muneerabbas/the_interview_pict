@@ -18,10 +18,20 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
     // The modal stays mounted and is toggled with `isOpen`, so the useState
     // initializer only ever ran once: the name the user typed in the dropdown
     // never prefilled, and a previous failure's error banner stuck around.
+    //
+    // Reset on OPEN only. `onClose` is an inline arrow at the ExpForm call site, so
+    // its identity changes on every parent render -- with it in the deps, any
+    // unrelated ExpForm state change wiped whatever was typed in this modal.
     useEffect(() => {
-        if (!isOpen) return undefined;
+        if (!isOpen) return;
         setFormData({ name: initialName, about: "", logo: "", location: "", website: "", tags: "" });
         setError("");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen]);
+
+    // Escape-to-close and the scroll lock keep the live `onClose`.
+    useEffect(() => {
+        if (!isOpen) return undefined;
 
         const onEscape = (event) => {
             if (event.key === "Escape") onClose?.();
@@ -33,7 +43,7 @@ export default function AddCompanyModal({ isOpen, onClose, onSuccess, initialNam
             document.body.style.overflow = previousOverflow;
             document.removeEventListener("keydown", onEscape);
         };
-    }, [isOpen, initialName, onClose]);
+    }, [isOpen, onClose]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

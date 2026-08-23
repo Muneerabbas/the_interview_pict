@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { getMongoDb } from "@/lib/mongodb";
 import { jsonError } from "@/lib/api-response";
+import { toPublicPost } from "@/lib/post-shape";
+import { getServerSession } from "next-auth/next";
+import { authOptions, normalizeEmail } from "@/lib/auth";
 import { resolveProfileImage, resolveProfileName } from "../../../lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -60,12 +63,19 @@ export async function GET(req) {
       return NextResponse.json({ message: "Document not found" }, { status: 404 });
     }
 
-    // Merge author info into the top level for helpers to pick it up
-    const finalData = {
-      ...data,
-      profile_pic: resolveProfileImage({ ...data, ...data.author }),
-      name: resolveProfileName({ ...data, ...data.author }),
-    };
+    // Merge author info into the top level for helpers to pick it up. The raw
+    // document also carries the joined `author` user doc and the `likes` array of
+    // liker emails -- toPublicPost drops both. The author's own email stays: the
+    // page builds /profile/public/<email> from it.
+    const session = await getServerSession(authOptions);
+    const finalData = toPublicPost(
+      {
+        ...data,
+        profile_pic: resolveProfileImage({ ...data, ...data.author }),
+        name: resolveProfileName({ ...data, ...data.author }),
+      },
+      { viewerEmail: normalizeEmail(session?.user?.email), keepAuthorEmail: true }
+    );
 
     return NextResponse.json(finalData);
   } catch (error) {

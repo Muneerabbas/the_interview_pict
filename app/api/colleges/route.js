@@ -18,7 +18,9 @@ export async function GET(request) {
     const rawPage = Number.parseInt(searchParams.get("page") || "1", 10);
     const rawLimit = Number.parseInt(searchParams.get("limit") || "20", 10);
 
-    const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+    // Clamped like /api/feed: ?page=100000000 made Mongo walk the whole name index
+    // to service the $skip on every request.
+    const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.min(rawPage, 1000) : 1;
     const limit = Number.isFinite(rawLimit) && rawLimit > 0
       ? Math.min(rawLimit, 50)
       : 20;

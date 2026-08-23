@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { getMongoDb } from "@/lib/mongodb";
 import { requireSession } from "@/lib/auth";
 import { jsonError } from "@/lib/api-response";
@@ -8,10 +9,14 @@ export async function POST(req) {
   const auth = await requireSession();
   if (auth.response) return auth.response;
 
+  const limited = await checkRateLimit(req, { key: "draft-save", limit: 120, windowSeconds: 300 });
+  if (limited) return limited;
+
   try {
     const db = await getMongoDb({ mode: "write" });
     const drafts = db.collection("drafts");
-    const body = await req.json();
+    // Every sibling route guards this; here a malformed body threw a 500.
+    const body = await req.json().catch(() => ({}));
     const {
       exp_text,
       college,

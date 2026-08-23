@@ -1,4 +1,5 @@
 import React from "react";
+import { companyNameFilter } from "@/lib/companySlug";
 import { getMongoDb } from "@/lib/mongodb";
 
 import { notFound } from "next/navigation";
@@ -59,8 +60,11 @@ export default async function CompanyDetails({ params }) {
         return notFound();
     }
     const experience = db.collection("experience");
+    // Case-insensitive: posts store the company as free text, so "CutShort" and
+    // "Cutshort" are the same company and both belong on this page. The directory
+    // counts already group case-insensitively -- this used to disagree with them.
     const experiences = await experience.find({
-        company: company.name
+        company: companyNameFilter(company.name)
     }).sort({ date: -1 }).toArray();
     const interviewsCount = experiences.length;
 

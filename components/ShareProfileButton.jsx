@@ -15,7 +15,7 @@ export default function ShareProfileButton({ email, name }) {
         return () => clearTimeout(toastTimer.current);
     }, []);
 
-    const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/public/${email}` : '';
+    const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/profile/public/${encodeURIComponent(email)}` : '';
     const profileDescription = name
         ? `Check out ${name}'s professional profile on theInterview. View their interview experiences, education, and social links.`
         : `Check out this professional profile on theInterview.`;

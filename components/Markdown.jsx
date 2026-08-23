@@ -110,7 +110,10 @@ const MarkdownRenderer = ({ content }) => {
     th: ({ children }) => <th className="px-3 py-2 text-left font-semibold text-slate-800 dark:text-slate-200">{children}</th>,
     td: ({ children }) => <td className="px-3 py-2 text-slate-700 dark:text-slate-300">{children}</td>,
     img: ({ src, alt, width, height, style }) => {
-      if (typeof src === "string" && src.includes("res.cloudinary.com")) {
+      // <img src=""> resolves to the current document: a wasted page-sized request
+      // and a broken-image glyph.
+      if (typeof src !== "string" || !src) return null;
+      if (src.includes("res.cloudinary.com")) {
         return (
           <CloudinaryImage
             src={src}
@@ -124,7 +127,7 @@ const MarkdownRenderer = ({ content }) => {
       return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src || ""}
+          src={src}
           alt={alt || "Markdown image"}
           width={width}
           height={height}

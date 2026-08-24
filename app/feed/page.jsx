@@ -552,7 +552,7 @@ export default function HomePage() {
       <div className="relative mx-auto w-full max-w-[820px] px-4 pb-14 pt-20 sm:px-6 md:pt-24 2xl:px-0">
         <div className="relative">
           <aside className="hidden 2xl:absolute 2xl:bottom-0 2xl:right-[calc(100%+20px)] 2xl:top-0 2xl:block 2xl:w-[300px]">
-          <div className="space-y-3 2xl:sticky 2xl:top-24">
+          <div className="space-y-3 2xl:sticky 2xl:top-24 2xl:max-h-[calc(100vh-7rem)] 2xl:overflow-y-auto 2xl:pb-4 2xl:[scrollbar-width:none] 2xl:[-ms-overflow-style:none] 2xl:[&::-webkit-scrollbar]:hidden">
           <div className="flex items-center gap-2">
             <div className="inline-flex min-w-0 flex-1 items-center gap-0.5 rounded-lg border border-slate-200 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-800/50">
               {[

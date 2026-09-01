@@ -10,6 +10,7 @@ import { hostFromHeaders, isPlacementHost } from "@/lib/host-gate";
 import { getMongoDb } from "@/lib/mongodb";
 import { fetchWithCache } from "@/lib/cache";
 import { summarise } from "@/lib/placement-stats";
+import { buildCompanyIndex, resolveCompanySlug } from "@/lib/company-link";
 
 // Required: the host gate reads headers(), and the response must never be
 // cached -- a 404 held for theinterviewroom.in must not be replayed to pict.live.
@@ -72,6 +73,24 @@ async function loadPlacements(year) {
   }
 }
 
+/** Company pages the directory already has, for cross-linking placement rows. */
+async function loadCompanyIndex() {
+  try {
+    const companies = await fetchWithCache("placements_company_index", 3600, async () => {
+      const db = await getMongoDb({ mode: "read" });
+      return db
+        .collection("companies")
+        .find({}, { projection: { _id: 0, name: 1, slug: 1 } })
+        .toArray();
+    });
+    return buildCompanyIndex(companies);
+  } catch (error) {
+    // A missing index only costs the links, so degrade instead of failing.
+    console.error("Failed to load company index:", error?.message || error);
+    return buildCompanyIndex([]);
+  }
+}
+
 export default async function PlacementsPage({ params }) {
   const requestHeaders = await headers();
   if (!isPlacementHost(hostFromHeaders((key) => requestHeaders.get(key)))) {
@@ -84,7 +103,7 @@ export default async function PlacementsPage({ params }) {
   if (segments && (segments.length > 1 || !YEARS.includes(segments[0]))) notFound();
   const year = segments?.[0] || LATEST;
 
-  const raw = await loadPlacements(year);
+  const [raw, companyIndex] = await Promise.all([loadPlacements(year), loadCompanyIndex()]);
   const rows = raw.map((row) => ({
     sr: Number(row.sr) || 0,
     variant: String(row.variant || ""),
@@ -108,6 +127,9 @@ export default async function PlacementsPage({ params }) {
     genderMismatch: Boolean(row.genderMismatch),
     branchMismatch: Boolean(row.branchMismatch),
     salaryBand: Boolean(row.salaryBand),
+    // null when the directory has no page for this employer -- the table then
+    // renders plain text instead of a dead link.
+    companySlug: resolveCompanySlug(row.company, companyIndex),
   }));
 
   const stats = rows.length ? summarise(rows) : null;

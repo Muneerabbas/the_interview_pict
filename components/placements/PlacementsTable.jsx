@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { ChevronDown, ChevronUp, Search, Table2, X } from "lucide-react";
 
 /**
@@ -44,6 +45,7 @@ export default function PlacementsTable({ rows }) {
   const [branch, setBranch] = useState("all");
   const [group, setGroup] = useState("all");
   const [sort, setSort] = useState({ key: "total", dir: "desc" });
+  const [linked, setLinked] = useState("all");
 
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -51,6 +53,8 @@ export default function PlacementsTable({ rows }) {
       if (needle && !row.company.toLowerCase().includes(needle)) return false;
       if (group !== "all" && row.group !== group) return false;
       if (branch !== "all" && !(row[branch] > 0)) return false;
+      if (linked === "linked" && !row.companySlug) return false;
+      if (linked === "unlinked" && row.companySlug) return false;
       return true;
     });
 
@@ -62,7 +66,7 @@ export default function PlacementsTable({ rows }) {
       // Stable, readable tiebreak so equal values do not shuffle between sorts.
       return (diff || a.sr - b.sr) * factor;
     });
-  }, [rows, query, branch, group, sort]);
+  }, [rows, query, branch, group, linked, sort]);
 
   const totals = useMemo(
     () =>
@@ -85,8 +89,9 @@ export default function PlacementsTable({ rows }) {
         : { key, dir: key === "company" || key === "sr" ? "asc" : "desc" }
     );
 
-  const clearAll = () => { setQuery(""); setBranch("all"); setGroup("all"); };
-  const isFiltered = query !== "" || branch !== "all" || group !== "all";
+  const clearAll = () => { setQuery(""); setBranch("all"); setGroup("all"); setLinked("all"); };
+  const isFiltered = query !== "" || branch !== "all" || group !== "all" || linked !== "all";
+  const withPage = rows.filter((r) => r.companySlug).length;
 
   const pill = (active) =>
     `whitespace-nowrap rounded-xl border px-4 py-2.5 text-sm font-bold transition-all ${
@@ -155,6 +160,16 @@ export default function PlacementsTable({ rows }) {
               </button>
             ))}
           </div>
+          <span className="mx-1 hidden h-6 w-px bg-slate-200 dark:bg-slate-700 sm:block" />
+          <button
+            type="button"
+            onClick={() => setLinked(linked === "unlinked" ? "all" : "unlinked")}
+            aria-pressed={linked === "unlinked"}
+            title="Companies with no page in the directory yet"
+            className={pill(linked === "unlinked")}
+          >
+            No company page ({rows.length - withPage})
+          </button>
           <span className="ml-auto text-xs tabular-nums text-slate-500 dark:text-slate-400">
             {totals.total} of {rows.reduce((a, r) => a + r.total, 0)} offers
           </span>
@@ -206,7 +221,16 @@ export default function PlacementsTable({ rows }) {
                   >
                     <td className="px-3 py-2 text-right tabular-nums text-slate-400 dark:text-slate-500">{row.sr}</td>
                     <td className="px-3 py-2 font-medium text-slate-800 dark:text-slate-100">
-                      {row.company}
+                      {row.companySlug ? (
+                        <Link
+                          href={`/companies/${row.companySlug}`}
+                          className="rounded text-blue-600 underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 dark:text-blue-400"
+                        >
+                          {row.company}
+                        </Link>
+                      ) : (
+                        row.company
+                      )}
                       {row.group === "II" ? (
                         <span className="ml-2 rounded border border-slate-300 px-1 text-[10px] font-normal text-slate-500 dark:border-slate-600 dark:text-slate-400">
                           II
@@ -273,8 +297,10 @@ export default function PlacementsTable({ rows }) {
       )}
 
       <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
-        Rows badged <span className="rounded border border-slate-300 px-1 dark:border-slate-600">II</span> are
-        Group II recruiters, below 5 LPA. The footer recomputes for the current filter.
+        Company names in blue link to their page in the directory; {withPage} of {rows.length} drives
+        in this year have one. Rows badged{" "}
+        <span className="rounded border border-slate-300 px-1 dark:border-slate-600">II</span> are Group II
+        recruiters, below 5 LPA. The footer recomputes for the current filter.
       </p>
     </section>
   );

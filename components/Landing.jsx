@@ -16,10 +16,12 @@ import {
   GraduationCap,
   Lightbulb,
   PenLine,
+  BarChart3,
   ShieldCheck,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Navbar from './Navbar'
+import { isPlacementHost } from '@/lib/host-gate'
 
 const TRUST_BADGES = [
   { icon: ShieldCheck, label: 'Real Experiences' },
@@ -250,6 +252,15 @@ function shuffle(items) {
 }
 
 export default function Home({ tales, featuredStories, topStories, topCompanies = [] }) {
+  // Placements is a pict.live-only surface. Resolved after mount from the
+  // browser's own hostname: this page is prerendered (revalidate = 1800), and
+  // reading headers() here would turn it server-rendered, which commit 5fe582d
+  // exists to prevent. Defaults to hidden so theinterviewroom.in never flashes it.
+  const [isPlacementSite, setIsPlacementSite] = useState(false)
+  useEffect(() => {
+    setIsPlacementSite(isPlacementHost(window.location.hostname))
+  }, [])
+
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -319,6 +330,16 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
                 Share Your Story
                 <PenLine size={15} />
               </Link>
+              {isPlacementSite ? (
+                <Link
+                  href="/placements"
+                  prefetch
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-6 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 active:scale-[0.98] dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:border-blue-800 dark:hover:bg-blue-950/70"
+                >
+                  Placement Stats
+                  <BarChart3 size={15} />
+                </Link>
+              ) : null}
             </div>
 
             <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">

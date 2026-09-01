@@ -18,7 +18,11 @@
   "ceLpa": 42.0,
   "entcLpa": 28.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -39,7 +43,11 @@
   "ceLpa": 241.2,
   "entcLpa": 13.4,
   "itLpa": 134.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -60,7 +68,11 @@
   "ceLpa": 65.5,
   "entcLpa": 0.0,
   "itLpa": 98.25,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -81,7 +93,11 @@
   "ceLpa": 43.23,
   "entcLpa": 14.41,
   "itLpa": 14.41,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -102,7 +118,11 @@
   "ceLpa": 124.92,
   "entcLpa": 0.0,
   "itLpa": 83.28,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -123,7 +143,11 @@
   "ceLpa": 11.13,
   "entcLpa": 66.78,
   "itLpa": 22.26,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -144,7 +168,11 @@
   "ceLpa": 40.0,
   "entcLpa": 20.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -165,7 +193,11 @@
   "ceLpa": 191.1,
   "entcLpa": 27.3,
   "itLpa": 68.25,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -186,7 +218,11 @@
   "ceLpa": 240.55,
   "entcLpa": 42.45,
   "itLpa": 155.65,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -207,7 +243,11 @@
   "ceLpa": 25.5,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -228,7 +268,11 @@
   "ceLpa": 32.4,
   "entcLpa": 0.0,
   "itLpa": 16.2,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -249,7 +293,11 @@
   "ceLpa": 13.5,
   "entcLpa": 13.5,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -270,7 +318,11 @@
   "ceLpa": 175.5,
   "entcLpa": 40.5,
   "itLpa": 121.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -291,7 +343,11 @@
   "ceLpa": 33.48,
   "entcLpa": 16.74,
   "itLpa": 50.22,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -312,7 +368,11 @@
   "ceLpa": 44.0,
   "entcLpa": 0.0,
   "itLpa": 22.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -333,7 +393,11 @@
   "ceLpa": 0.0,
   "entcLpa": 23.0,
   "itLpa": 23.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -354,7 +418,11 @@
   "ceLpa": 23.0,
   "entcLpa": 0.0,
   "itLpa": 11.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -375,7 +443,11 @@
   "ceLpa": 12.0,
   "entcLpa": 0.0,
   "itLpa": 12.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -396,7 +468,11 @@
   "ceLpa": 53.35,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -417,7 +493,11 @@
   "ceLpa": 12.39,
   "entcLpa": 0.0,
   "itLpa": 12.39,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -438,7 +518,11 @@
   "ceLpa": 15.0,
   "entcLpa": 0.0,
   "itLpa": 7.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -459,7 +543,11 @@
   "ceLpa": 12.0,
   "entcLpa": 0.0,
   "itLpa": 12.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -480,7 +568,11 @@
   "ceLpa": 66.0,
   "entcLpa": 22.0,
   "itLpa": 110.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -501,7 +593,11 @@
   "ceLpa": 9.96,
   "entcLpa": 9.96,
   "itLpa": 9.96,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -522,7 +618,11 @@
   "ceLpa": 18.0,
   "entcLpa": 18.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -543,7 +643,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 8.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -564,7 +668,11 @@
   "ceLpa": 38.0,
   "entcLpa": 19.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -585,7 +693,11 @@
   "ceLpa": 72.0,
   "entcLpa": 32.0,
   "itLpa": 40.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -606,7 +718,11 @@
   "ceLpa": 8.5,
   "entcLpa": 17.0,
   "itLpa": 8.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -627,7 +743,11 @@
   "ceLpa": 17.0,
   "entcLpa": 17.0,
   "itLpa": 8.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -648,7 +768,11 @@
   "ceLpa": 14.0,
   "entcLpa": 7.0,
   "itLpa": 7.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -669,7 +793,11 @@
   "ceLpa": 17.5,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -690,7 +818,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 36.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -711,7 +843,11 @@
   "ceLpa": 17.0,
   "entcLpa": 0.0,
   "itLpa": 8.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -732,7 +868,11 @@
   "ceLpa": 7.5,
   "entcLpa": 7.5,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -753,7 +893,11 @@
   "ceLpa": 10.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -774,7 +918,11 @@
   "ceLpa": 13.64,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -795,7 +943,11 @@
   "ceLpa": 0.0,
   "entcLpa": 27.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -816,7 +968,11 @@
   "ceLpa": 14.0,
   "entcLpa": 28.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -837,7 +993,11 @@
   "ceLpa": 40.5,
   "entcLpa": 0.0,
   "itLpa": 24.3,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -858,7 +1018,11 @@
   "ceLpa": 14.0,
   "entcLpa": 14.0,
   "itLpa": 28.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -879,7 +1043,11 @@
   "ceLpa": 33.0,
   "entcLpa": 22.0,
   "itLpa": 33.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -900,7 +1068,11 @@
   "ceLpa": 70.0,
   "entcLpa": 14.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -921,7 +1093,11 @@
   "ceLpa": 20.0,
   "entcLpa": 0.0,
   "itLpa": 10.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -942,7 +1118,11 @@
   "ceLpa": 26.0,
   "entcLpa": 6.5,
   "itLpa": 26.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -963,7 +1143,11 @@
   "ceLpa": 24.0,
   "entcLpa": 0.0,
   "itLpa": 12.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -984,7 +1168,11 @@
   "ceLpa": 42.32,
   "entcLpa": 21.16,
   "itLpa": 42.32,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1005,7 +1193,11 @@
   "ceLpa": 162.5,
   "entcLpa": 37.5,
   "itLpa": 75.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1026,7 +1218,11 @@
   "ceLpa": 26.88,
   "entcLpa": 0.0,
   "itLpa": 17.92,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1047,7 +1243,11 @@
   "ceLpa": 34.6,
   "entcLpa": 17.3,
   "itLpa": 51.9,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1068,7 +1268,11 @@
   "ceLpa": 9.5,
   "entcLpa": 9.5,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1089,7 +1293,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 11.1,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1110,7 +1318,11 @@
   "ceLpa": 40.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1131,7 +1343,11 @@
   "ceLpa": 0.0,
   "entcLpa": 6.5,
   "itLpa": 13.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1152,7 +1368,11 @@
   "ceLpa": 105.0,
   "entcLpa": 35.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1173,7 +1393,11 @@
   "ceLpa": 72.0,
   "entcLpa": 0.0,
   "itLpa": 36.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1194,7 +1418,11 @@
   "ceLpa": 66.0,
   "entcLpa": 0.0,
   "itLpa": 33.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1215,7 +1443,11 @@
   "ceLpa": 24.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1236,7 +1468,11 @@
   "ceLpa": 60.0,
   "entcLpa": 0.0,
   "itLpa": 40.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1257,7 +1493,11 @@
   "ceLpa": 0.0,
   "entcLpa": 16.2,
   "itLpa": 16.2,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1278,7 +1518,11 @@
   "ceLpa": 8.0,
   "entcLpa": 8.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1299,7 +1543,11 @@
   "ceLpa": 0.0,
   "entcLpa": 8.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1320,7 +1568,11 @@
   "ceLpa": 40.0,
   "entcLpa": 0.0,
   "itLpa": 20.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1341,7 +1593,11 @@
   "ceLpa": 9.02,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1362,7 +1618,11 @@
   "ceLpa": 18.0,
   "entcLpa": 9.0,
   "itLpa": 9.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1383,7 +1643,11 @@
   "ceLpa": 13.0,
   "entcLpa": 13.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1404,7 +1668,11 @@
   "ceLpa": 82.0,
   "entcLpa": 0.0,
   "itLpa": 20.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1425,7 +1693,11 @@
   "ceLpa": 0.0,
   "entcLpa": 27.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1446,7 +1718,11 @@
   "ceLpa": 0.0,
   "entcLpa": 8.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1467,7 +1743,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 16.9,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1488,7 +1768,11 @@
   "ceLpa": 6.0,
   "entcLpa": 12.0,
   "itLpa": 12.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1509,7 +1793,11 @@
   "ceLpa": 20.96,
   "entcLpa": 0.0,
   "itLpa": 31.44,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1530,7 +1818,11 @@
   "ceLpa": 0.0,
   "entcLpa": 12.6,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1551,7 +1843,11 @@
   "ceLpa": 21.0,
   "entcLpa": 0.0,
   "itLpa": 14.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1572,7 +1868,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 8.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1593,7 +1893,11 @@
   "ceLpa": 14.0,
   "entcLpa": 7.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1614,7 +1918,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 25.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1635,7 +1943,11 @@
   "ceLpa": 26.54,
   "entcLpa": 0.0,
   "itLpa": 53.08,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1656,7 +1968,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 5.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1677,7 +1993,11 @@
   "ceLpa": 0.0,
   "entcLpa": 8.0,
   "itLpa": 32.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1698,7 +2018,11 @@
   "ceLpa": 11.0,
   "entcLpa": 33.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1719,7 +2043,11 @@
   "ceLpa": 0.0,
   "entcLpa": 11.0,
   "itLpa": 44.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1740,7 +2068,11 @@
   "ceLpa": 0.0,
   "entcLpa": 16.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1761,7 +2093,11 @@
   "ceLpa": 22.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1782,7 +2118,11 @@
   "ceLpa": 46.0,
   "entcLpa": 0.0,
   "itLpa": 23.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1803,7 +2143,11 @@
   "ceLpa": 39.5,
   "entcLpa": 71.1,
   "itLpa": 71.1,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1824,7 +2168,11 @@
   "ceLpa": 0.0,
   "entcLpa": 6.6,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1845,7 +2193,11 @@
   "ceLpa": 13.0,
   "entcLpa": 13.0,
   "itLpa": 13.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1866,7 +2218,11 @@
   "ceLpa": 0.0,
   "entcLpa": 28.0,
   "itLpa": 7.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1887,7 +2243,11 @@
   "ceLpa": 7.0,
   "entcLpa": 0.0,
   "itLpa": 28.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1908,7 +2268,11 @@
   "ceLpa": 7.0,
   "entcLpa": 21.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1929,7 +2293,11 @@
   "ceLpa": 9.6,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1950,7 +2318,11 @@
   "ceLpa": 16.0,
   "entcLpa": 48.0,
   "itLpa": 24.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1971,7 +2343,11 @@
   "ceLpa": 48.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -1992,7 +2368,11 @@
   "ceLpa": 10.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2013,7 +2393,11 @@
   "ceLpa": 20.4,
   "entcLpa": 30.6,
   "itLpa": 20.4,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2034,7 +2418,11 @@
   "ceLpa": 97.6,
   "entcLpa": 97.6,
   "itLpa": 48.8,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2055,7 +2443,11 @@
   "ceLpa": 56.0,
   "entcLpa": 0.0,
   "itLpa": 28.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2076,7 +2468,11 @@
   "ceLpa": 26.09,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2097,7 +2493,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 13.65,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2118,7 +2518,11 @@
   "ceLpa": 0,
   "entcLpa": 0,
   "itLpa": 26.58,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2139,7 +2543,11 @@
   "ceLpa": 45,
   "entcLpa": 0,
   "itLpa": 45,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2160,7 +2568,11 @@
   "ceLpa": 53,
   "entcLpa": 0,
   "itLpa": 0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2181,7 +2593,11 @@
   "ceLpa": 13,
   "entcLpa": 13,
   "itLpa": 0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2202,7 +2618,11 @@
   "ceLpa": 0,
   "entcLpa": 0,
   "itLpa": 12,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2223,7 +2643,11 @@
   "ceLpa": 0.0,
   "entcLpa": 0.0,
   "itLpa": 0.0,
-  "sourceIncomplete": true
+  "sourceIncomplete": true,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2244,7 +2668,11 @@
   "ceLpa": 5,
   "entcLpa": 0,
   "itLpa": 5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2265,7 +2693,11 @@
   "ceLpa": 14.48,
   "entcLpa": 43.44,
   "itLpa": 0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2286,7 +2718,11 @@
   "ceLpa": 9,
   "entcLpa": 13.5,
   "itLpa": 0,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  },
  {
   "year": "2025-26",
@@ -2307,6 +2743,10 @@
   "ceLpa": 9,
   "entcLpa": 18,
   "itLpa": 13.5,
-  "sourceIncomplete": false
+  "sourceIncomplete": false,
+  "variant": "",
+  "genderMismatch": false,
+  "branchMismatch": false,
+  "salaryBand": false
  }
 ]

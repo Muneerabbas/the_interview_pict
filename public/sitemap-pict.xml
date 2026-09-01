@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Served on pict.live only -- middleware.js rewrites /sitemap.xml to this
-     file for that host. Placements is the single pict.live-only surface, so a
-     second next-sitemap pipeline would be more machinery than one URL needs. -->
+     file for that host. /placements is the latest year; each earlier year has
+     its own URL. 2024-25 is absent: PICT published it only as a scanned image. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://pict.live/placements</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2023-24</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2022-23</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2021-22</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2020-21</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2019-20</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2018-19</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pict.live/placements/2017-18</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

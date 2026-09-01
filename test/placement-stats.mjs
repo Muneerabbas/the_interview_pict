@@ -114,4 +114,50 @@ assert.equal(
   "dev bypass must be closed in production"
 );
 
-console.log("placement-stats: passed");
+
+// --- every other year reconciles against its own printed totals ---------------
+// These expectations come from each report's own "Total count of Students
+// Placed" and "Overall Avg. Sal." rows -- not from my parse. That is what makes
+// them a real check: a transcription slip breaks the equality.
+const YEARS = {
+  "2017-18": { drives: 64, offers: 412, mean: 6.24, cols: [139 + 45, 96 + 30, 95] },
+  "2018-19": { drives: 98, offers: 530, mean: 6.45, cols: [188 + 51, 145 + 35, 104] },
+  "2019-20": { drives: 120, offers: 554, mean: 7.6, cols: [198 + 55, 139 + 39, 122] },
+  "2020-21": { drives: 148, offers: 662, mean: 7.15, cols: [213 + 56, 153 + 49, 190] },
+  // The 2021-22 report's own branch columns sum to 670 against its printed
+  // total of 672 -- a defect in the source, reproduced faithfully here.
+  "2021-22": { drives: 118, offers: 672, mean: 11.09, cols: [191 + 54, 176 + 61, 186], branchShort: 2 },
+  "2022-23": { drives: 113, offers: 706, mean: 12.11, cols: [213 + 59, 171 + 53, 210] },
+  // Seven 2023-24 rows print male + female one or two short of their own total;
+  // the year is three offers light on the gender split as a result.
+  "2023-24": { drives: 111, offers: 668, mean: 10.11, cols: [227 + 60, 151 + 48, 182], genderDiff: -3 },
+};
+
+for (const [year, exp] of Object.entries(YEARS)) {
+  const yearRows = JSON.parse(
+    readFileSync(join(ROOT, `data/pict-placements-${year}.json`), "utf8")
+  );
+  assert.deepEqual(checkInvariants(yearRows), [], `${year}: arithmetic invariants`);
+  assert.equal(yearRows.length, exp.drives, `${year}: drive count`);
+
+  const s = summarise(yearRows);
+  assert.equal(s.headline.offers, exp.offers, `${year}: total offers vs printed`);
+  closeTo(s.headline.meanLpa, exp.mean, 0.005, `${year}: overall average vs printed:`);
+  assert.equal(
+    yearRows.reduce((a, r) => a + r.male + r.female, 0),
+    exp.offers + (exp.genderDiff || 0),
+    `${year}: gender split vs total (source discrepancy pinned)`
+  );
+  assert.deepEqual(
+    s.branches.map((b) => b.offers),
+    exp.cols,
+    `${year}: CE / E&TC / IT counts vs printed (shift columns summed)`
+  );
+  assert.equal(
+    s.branches.reduce((a, b) => a + b.offers, 0) + s.postgrad.offers,
+    exp.offers - (exp.branchShort || 0),
+    `${year}: branch counts must account for every offer (minus the source's own shortfall)`
+  );
+}
+
+console.log(`placement-stats: passed (${Object.keys(YEARS).length + 1} years verified)`);

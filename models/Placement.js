@@ -11,6 +11,9 @@ const PlacementSchema = new mongoose.Schema(
     // Present from day one so 2026-27 is an insert rather than a migration.
     year: { type: String, required: true, trim: true },
     sr: { type: Number, required: true }, // row number in the source report
+    // Repeat drives are printed as 4.a / 4.b (or 3 (a)) under one Sr. No., so the
+    // number alone is not unique within a group.
+    variant: { type: String, default: "", trim: true },
 
     company: { type: String, required: true, trim: true },
     // companySlugFromName(). Company.slug is unique, Company.name is not, so the
@@ -42,14 +45,29 @@ const PlacementSchema = new mongoose.Schema(
     // Row 106 (SLB) ships blank per-branch salary cells. Recorded as data so the
     // UI can explain the discrepancy instead of hardcoding a company name.
     sourceIncomplete: { type: Boolean, default: false },
+
+    // Reports before 2022-23 split CE and E&TC by shift. ce/entc above are the
+    // totals; this preserves the original breakdown rather than discarding it.
+    shifts: {
+      ce1: Number, ce2: Number, entc1: Number, entc2: Number,
+    },
+
+    // Per-row source defects, recorded rather than rejected at seed time.
+    // genderMismatch: male + female != total (seven 2023-24 rows).
+    // branchMismatch: branch counts do not sum to total (2017-18, 2021-22).
+    // salaryBand: the report printed a range ("5.5-7.5"); lpa is totalLpa/total.
+    genderMismatch: { type: Boolean, default: false },
+    branchMismatch: { type: Boolean, default: false },
+    salaryBand: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-// Natural key for the seeder's upsert. `group` is part of it because the report
-// restarts numbering at 1 for Group II -- keying on { year, sr } alone let the
-// four Group II rows overwrite Group I rows 1-4.
-PlacementSchema.index({ year: 1, group: 1, sr: 1 }, { unique: true });
+// Natural key for the seeder's upsert. `group` is in it because 2025-26 restarts
+// numbering at 1 for Group II -- keying on { year, sr } alone let those four rows
+// overwrite Group I rows 1-4. `variant` is in it because older reports print
+// repeat drives as 4.a / 4.b under a single Sr. No.
+PlacementSchema.index({ year: 1, group: 1, sr: 1, variant: 1 }, { unique: true });
 PlacementSchema.index({ year: 1, lpa: -1 });
 
 export default mongoose.models.Placement || mongoose.model("Placement", PlacementSchema);

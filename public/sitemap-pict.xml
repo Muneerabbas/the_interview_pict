@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Served on pict.live only -- middleware.js rewrites /sitemap.xml to this
+     file for that host. Placements is the single pict.live-only surface, so a
+     second next-sitemap pipeline would be more machinery than one URL needs. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://pict.live/placements</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://theinterviewroom.in/about</loc><lastmod>2026-08-23T11:44:05.889Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/feed</loc><lastmod>2026-08-23T11:44:05.890Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/help</loc><lastmod>2026-08-23T11:44:05.890Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/privacy</loc><lastmod>2026-08-23T11:44:05.890Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/team</loc><lastmod>2026-08-23T11:44:05.890Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/terms</loc><lastmod>2026-08-23T11:44:05.890Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/about</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/feed</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/help</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/privacy</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/team</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/terms</loc><lastmod>2026-09-01T10:54:46.690Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/bhavyam-sanghavis-experience-at-bny-mellon-intern-2026-knqqmY</loc><lastmod>2025-02-11T17:31:13.762Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/soumya-garg-experience-at-amazon-sde-2025-ssssss</loc><lastmod>2025-02-12T14:00:00.000Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/neeraj-magdums-experience-at-siemens-intern-2026-whLpVv</loc><lastmod>2025-02-14T16:59:58.368Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -71,7 +72,6 @@
 <url><loc>https://theinterviewroom.in/single/samyak-boras-experience-at-rockwell-automation-graduate-trainee-engineer-2026-dbU-ai</loc><lastmod>2026-01-06T17:08:40.585Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/parikshit-jaybhayes-experience-at-eq-technologic-sde-2026-KpHas9</loc><lastmod>2025-08-08T10:40:19.507Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/sakshi-gangurdes-experience-at-barclays-sde-2026-BxfpdX</loc><lastmod>2025-09-03T18:04:18.284Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/single/nirogixs-experience-at-cornerstone-ondemand-uxui-designer-2027-uwPcpp</loc><lastmod>2025-09-05T20:38:51.810Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/study-sangathans-experience-at-principal-global-services-trainee-developer-2026-GFOiGE</loc><lastmod>2025-09-23T04:30:53.855Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/sakshi-marbhals-experience-at-nice-systems-sde-2026-3ZP4B3</loc><lastmod>2025-09-29T15:42:58.625Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/manaswi-hiremaths-experience-at-phonepe-sde-2026-E4T-TH</loc><lastmod>2025-11-27T17:06:17.838Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -105,6 +105,7 @@
 <url><loc>https://theinterviewroom.in/single/samruddhis-experience-at-bny-mellon-intern-2028-idWjK6</loc><lastmod>2026-08-14T04:21:17.689Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/nigeeta-sahs-experience-at-bloomberg-intern-2028-rvO6xB</loc><lastmod>2026-08-14T15:50:20.629Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/mahesh-khoses-experience-at-bny-mellon-intern-2028-PxF-SA</loc><lastmod>2026-08-14T17:06:49.331Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/single/akshat-patils-experience-at-bloomberg-intern-2028-2JG6x1</loc><lastmod>2026-08-28T14:02:58.322Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/abb</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/abbott</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/aca-group</loc><lastmod>Sat Mar 28 2026 00:22:15 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>

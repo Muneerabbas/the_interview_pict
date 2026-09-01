@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { hostFromHeaders, isPlacementHost } from './lib/host-gate.js'
 
 // This file must live at the project root -- Next.js does not load middleware
 // from inside app/, so the previous copy never ran.
@@ -14,6 +15,26 @@ const corsOptions = {
 }
 
 export function middleware(request) {
+  const { pathname } = request.nextUrl
+  const placementsHost = isPlacementHost(hostFromHeaders((key) => request.headers.get(key)))
+
+  // robots.txt and sitemap.xml are single static files served on both domains.
+  // pict.live needs its own pair so /placements can be indexed there without
+  // advertising it on theinterviewroom.in, where it 404s.
+  if (placementsHost && pathname === '/robots.txt') {
+    return NextResponse.rewrite(new URL('/robots-pict.txt', request.url))
+  }
+  if (placementsHost && pathname === '/sitemap.xml') {
+    return NextResponse.rewrite(new URL('/sitemap-pict.xml', request.url))
+  }
+
+  // Defence in depth. The styled 404 comes from notFound() in the page itself --
+  // a middleware rewrite would return 200, which is the SEO leak we are avoiding.
+  // This exists only so a blocked host never reaches the route or the database.
+  if (pathname.startsWith('/placements') && !placementsHost) {
+    return new NextResponse(null, { status: 404, headers: { 'cache-control': 'no-store' } })
+  }
+
   const origin = request.headers.get('origin') ?? ''
   const isAllowedOrigin = allowedOrigins.includes(origin)
 
@@ -43,5 +64,7 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: '/api/:path*',
+  // Kept narrow on purpose: a broad '/:path*' would put middleware in front of
+  // the prerendered landing page.
+  matcher: ['/api/:path*', '/placements/:path*', '/robots.txt', '/sitemap.xml'],
 }

@@ -12,6 +12,7 @@ import {
   List,
   Flame,
   Building2,
+  TrendingUp,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,6 +22,7 @@ import NotificationsMenu from "./NotificationsMenu";
 import { useAuthModal } from "./AuthModalProvider";
 import ThemeToggle from "./ThemeToggle";
 import { requestJson } from "@/lib/client-api";
+import { isPlacementHost } from "@/lib/host-gate";
 
 export default function Navbar({ showThemeToggle = true }) {
   const { data: session } = useSession();
@@ -176,14 +178,27 @@ export default function Navbar({ showThemeToggle = true }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Placements only exists on pict.live. Resolved after mount rather than from a
+  // server header: reading headers() in the root layout would flip every route,
+  // including the prerendered landing page, to dynamic. Defaults to false so the
+  // server render and the first client render match and nothing flashes on the
+  // domain that should never show it.
+  const [isPlacementSite, setIsPlacementSite] = useState(false);
+  useEffect(() => {
+    setIsPlacementSite(isPlacementHost(window.location.hostname));
+  }, []);
+
   const navItems = useMemo(
     () => [
       { href: "/", label: "Home", Icon: Home },
       { href: "/feed", label: "Interviews", Icon: List },
       { href: "/tales", label: "Tales", Icon: Flame },
       { href: "/companies", label: "Companies", Icon: Building2 },
+      ...(isPlacementSite
+        ? [{ href: "/placements", label: "Placements", Icon: TrendingUp }]
+        : []),
     ],
-    []
+    [isPlacementSite]
   );
 
   const isActive = (href) => {

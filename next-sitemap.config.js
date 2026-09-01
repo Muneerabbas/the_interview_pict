@@ -90,6 +90,9 @@ module.exports = {
   exclude: [
     // Placeholder page while Tales is hidden; nothing to index.
     ...(TALES_ENABLED ? [] : ["/tales"]),
+    // pict.live-only surface. siteUrl here is theinterviewroom.in, where this
+    // path 404s, so listing it would advertise a dead URL.
+    "/placements",
     "/login",
     "/profile",
     "/post",

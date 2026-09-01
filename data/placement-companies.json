@@ -1,0 +1,186 @@
+[
+ {
+  "name": "Bajaj Finance",
+  "slug": "bajaj-finance",
+  "about": "Bajaj Finance is one of India's largest non-banking financial companies, offering consumer, SME and commercial lending along with deposits and wealth products. It is headquartered in Pune and is the lending arm of the Bajaj Finserv group. Distinct from Bajaj Finserv, which is the holding company and recruits separately.",
+  "website": "https://www.bajajfinserv.in",
+  "location": "Pune, India",
+  "tags": ["NBFC", "Finance", "FinTech"]
+ },
+ {
+  "name": "Atos",
+  "slug": "atos",
+  "about": "Atos is a French multinational IT services and consulting company working in cloud, digital transformation, cybersecurity and high-performance computing. It runs large delivery centres across India, including Pune and Mumbai.",
+  "website": "https://atos.net",
+  "location": "Bezons, France",
+  "tags": ["IT Services", "Consulting", "Global"]
+ },
+ {
+  "name": "Vodafone",
+  "slug": "vodafone",
+  "about": "Vodafone is a global telecommunications group. Its India technology and shared-services arm, _VOIS, runs engineering, data and operations centres in Pune and Bengaluru that support Vodafone markets worldwide.",
+  "website": "https://www.vodafone.com",
+  "location": "Newbury, United Kingdom",
+  "tags": ["Telecom", "Shared Services", "Global"]
+ },
+ {
+  "name": "Mediaocean",
+  "slug": "mediaocean",
+  "about": "Mediaocean builds the software advertising agencies and brands use to plan, buy, run and reconcile media campaigns. Its platform handles a large share of US TV and digital ad spend, and it operates an engineering centre in Pune.",
+  "website": "https://www.mediaocean.com",
+  "location": "New York, United States",
+  "tags": ["AdTech", "SaaS", "Product"]
+ },
+ {
+  "name": "Mu Sigma",
+  "slug": "mu-sigma",
+  "about": "Mu Sigma is a decision sciences and analytics firm founded in 2004, providing data science and decision-support services to Fortune 500 clients in retail, finance, healthcare and consumer goods. Its main delivery centre is in Bengaluru.",
+  "website": "https://www.mu-sigma.com",
+  "location": "Bengaluru, India",
+  "tags": ["Analytics", "Data Science", "Consulting"]
+ },
+ {
+  "name": "Oracle Financial Services Software",
+  "slug": "oracle-financial-services-software",
+  "about": "Oracle Financial Services Software (OFSS) builds core banking, risk and analytics products for banks worldwide, best known for the Flexcube banking platform. It is a listed Indian subsidiary of Oracle, headquartered in Mumbai with development centres across India.",
+  "website": "https://www.oracle.com/industries/financial-services/",
+  "location": "Mumbai, India",
+  "tags": ["FinTech", "Banking", "Product"]
+ },
+ {
+  "name": "Finastra",
+  "slug": "finastra",
+  "about": "Finastra is one of the world's largest financial-software companies, formed in 2017 from the merger of Misys and D+H. It builds lending, payments, treasury and core banking systems used by thousands of institutions, with large India engineering sites in Bengaluru and Pune.",
+  "website": "https://www.finastra.com",
+  "location": "London, United Kingdom",
+  "tags": ["FinTech", "Banking", "Product"]
+ },
+ {
+  "name": "Acquia",
+  "slug": "acquia",
+  "about": "Acquia is the digital experience platform company founded in 2007 by Drupal creator Dries Buytaert. It provides enterprise Drupal hosting, marketing and content tools, and is the largest contributor to the open-source Drupal project. It has an engineering office in Pune.",
+  "website": "https://www.acquia.com",
+  "location": "Boston, United States",
+  "tags": ["SaaS", "Open Source", "Product"]
+ },
+ {
+  "name": "SE2",
+  "slug": "se2",
+  "about": "SE2 is an insurance technology and third-party administration provider for US life insurance and annuities carriers, running policy administration platforms end to end. It opened a 35,000 sq ft technology and innovation centre in Pune in 2019.",
+  "website": "https://se2.com",
+  "location": "Topeka, United States",
+  "tags": ["InsurTech", "SaaS", "Product"]
+ },
+ {
+  "name": "Honeywell",
+  "slug": "honeywell",
+  "about": "Honeywell is a diversified technology and manufacturing company spanning aerospace, building automation, industrial control, performance materials and safety. Its India operations include large engineering and technology centres in Pune, Bengaluru and Hyderabad.",
+  "website": "https://www.honeywell.com",
+  "location": "Charlotte, United States",
+  "tags": ["Industrial", "IoT", "Global"]
+ },
+ {
+  "name": "TripStack",
+  "slug": "tripstack",
+  "about": "TripStack is a travel technology company specialising in virtual interlining, stitching together flights from non-partner and low-cost carriers into single itineraries via an API. Part of Etraveli Group, it serves platforms including Booking.com, Google Flights, Skyscanner and Kayak, and has an office in Pune.",
+  "website": "https://www.tripstack.com",
+  "location": "Toronto, Canada",
+  "tags": ["Travel Tech", "API", "Product"]
+ },
+ {
+  "name": "Sophos",
+  "slug": "sophos",
+  "about": "Sophos is a cybersecurity company building endpoint, network, email and cloud security products along with managed detection and response services, used by hundreds of thousands of organisations worldwide.",
+  "website": "https://www.sophos.com",
+  "location": "Abingdon, United Kingdom",
+  "tags": ["Cybersecurity", "Product", "Global"]
+ },
+ {
+  "name": "Publicis Sapient",
+  "slug": "publicis-sapient",
+  "about": "Publicis Sapient is a digital business transformation consultancy combining strategy, product engineering, data and experience design. Formerly Sapient, it is now part of Publicis Groupe and has major delivery centres in Bengaluru, Gurugram and Pune.",
+  "website": "https://www.publicissapient.com",
+  "location": "Boston, United States",
+  "tags": ["Consulting", "Digital", "Product"]
+ },
+ {
+  "name": "Apisero",
+  "slug": "apisero",
+  "about": "Apisero is a MuleSoft and Salesforce consulting partner specialising in integration, automation and data platform work. A repeat MuleSoft Partner of the Year winner, it became part of NTT DATA and has a large India engineering presence.",
+  "website": "https://www.apisero.com",
+  "location": "Phoenix, United States",
+  "tags": ["Salesforce", "Integration", "Consulting"]
+ },
+ {
+  "name": "HashedIn by Deloitte",
+  "slug": "hashedin-by-deloitte",
+  "about": "HashedIn is a product engineering firm building SaaS and cloud products, acquired by Deloitte in 2021 and now operating as HashedIn by Deloitte. It works across cloud-native development, data engineering and platform modernisation from Bengaluru.",
+  "website": "https://hashedin.com",
+  "location": "Bengaluru, India",
+  "tags": ["Product Engineering", "SaaS", "Cloud"]
+ },
+ {
+  "name": "Winjit Technologies",
+  "slug": "winjit-technologies",
+  "about": "Winjit is an engineering services company founded in Nashik in 2004, working across IoT, artificial intelligence and machine learning, blockchain and fintech, and BFSI product engineering. It has expanded to the US, UK, Australia, South Africa and Singapore.",
+  "website": "https://winjit.com",
+  "location": "Nashik, India",
+  "tags": ["IoT", "AI", "Engineering"]
+ },
+ {
+  "name": "Paytm Money",
+  "slug": "paytm-money",
+  "about": "Paytm Money is the wealth and investment arm of Paytm, offering direct mutual funds, equity and derivatives trading, ETFs and the National Pension System through a SEBI-registered entity. Its engineering team is based in Bengaluru.",
+  "website": "https://www.paytmmoney.com",
+  "location": "Bengaluru, India",
+  "tags": ["FinTech", "Investing", "Product"]
+ },
+ {
+  "name": "Rocket Software",
+  "slug": "rocket-software",
+  "about": "Rocket Software builds enterprise infrastructure software spanning mainframe modernisation, data integration, storage and application development, helping large organisations keep and extend their existing systems. It has an engineering office in Pune.",
+  "website": "https://www.rocketsoftware.com",
+  "location": "Waltham, United States",
+  "tags": ["Enterprise Software", "Mainframe", "Product"]
+ },
+ {
+  "name": "eInfochips",
+  "slug": "einfochips",
+  "about": "eInfochips is a product engineering and semiconductor design services company covering silicon, embedded systems, connected devices and cloud. Founded in Ahmedabad, it is now an Arrow Electronics company.",
+  "website": "https://www.einfochips.com",
+  "location": "Ahmedabad, India",
+  "tags": ["Semiconductor", "Embedded", "Product Engineering"]
+ },
+ {
+  "name": "RackWare",
+  "slug": "rackware",
+  "about": "RackWare builds cloud-agnostic software for migrating, protecting and recovering workloads across data centres and public clouds. Based in Silicon Valley, it runs support and development teams in Salt Lake City and Pune.",
+  "website": "https://www.rackwareinc.com",
+  "location": "Milpitas, United States",
+  "tags": ["Cloud", "Infrastructure", "Product"]
+ },
+ {
+  "name": "Reflexis Systems",
+  "slug": "reflexis-systems",
+  "about": "Reflexis builds workforce management, task execution and communication software for retail, food service, hospitality and banking, used by over 275 global retailers and banks. It was acquired by Zebra Technologies in 2020 and has an office in Pune.",
+  "website": "https://www.reflexisinc.com",
+  "location": "Dedham, United States",
+  "tags": ["Retail Tech", "Workforce", "Product"]
+ },
+ {
+  "name": "Varian Medical Systems",
+  "slug": "varian-medical-systems",
+  "about": "Varian designs radiation oncology equipment and software for cancer treatment, including linear accelerators, brachytherapy and treatment planning systems. It became part of Siemens Healthineers in 2021 and has an India engineering centre in Pune.",
+  "website": "https://www.varian.com",
+  "location": "Palo Alto, United States",
+  "tags": ["MedTech", "Healthcare", "Product"]
+ },
+ {
+  "name": "Dragonfly Financial Technologies",
+  "slug": "dragonfly-financial-technologies",
+  "about": "Dragonfly Financial Technologies builds digital business and corporate banking platforms, serving over 1.4 million businesses and a number of tier-one banks. It was carved out of ACI Worldwide's corporate online banking unit in 2022 and acquired by FIS in 2024.",
+  "website": "https://www.dragonflyft.com",
+  "location": "United States",
+  "tags": ["FinTech", "Banking", "Product"]
+ }
+]

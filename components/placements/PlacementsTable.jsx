@@ -214,12 +214,16 @@ export default function PlacementsTable({ rows }) {
               </thead>
 
               <tbody>
-                {visible.map((row) => (
+                {visible.map((row, index) => (
                   <tr
-                    key={`${row.group}-${row.sr}`}
+                    key={`${row.group}-${row.sr}-${row.variant}`}
                     className="border-b border-slate-100 odd:bg-slate-50/60 hover:bg-blue-50/40 dark:border-slate-800 dark:odd:bg-slate-800/30 dark:hover:bg-slate-800/60"
                   >
-                    <td className="px-3 py-2 text-right tabular-nums text-slate-400 dark:text-slate-500">{row.sr}</td>
+                    {/* Position in the current view, not the report's Sr. No. --
+                        that number is meaningless once the table is sorted. */}
+                    <td className="px-3 py-2 text-right tabular-nums text-slate-400 dark:text-slate-500">
+                      {index + 1}
+                    </td>
                     <td className="px-3 py-2 font-medium text-slate-800 dark:text-slate-100">
                       {row.companySlug ? (
                         <Link

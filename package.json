@@ -17,6 +17,8 @@
     "seed:placements": "node scripts/seed-placements.mjs",
     "seed:placements:dry": "node scripts/seed-placements.mjs --dry-run",
     "placements:coverage": "node scripts/placement-company-coverage.mjs",
+    "seed:placement-companies": "node scripts/seed-placement-companies.mjs --logos",
+    "seed:placement-companies:dry": "node scripts/seed-placement-companies.mjs --dry-run",
     "test:security": "node test/security-smoke.mjs",
     "test:placements": "node test/placement-stats.mjs",
     "fix:company-slugs": "node scripts/fix-company-slugs.mjs",

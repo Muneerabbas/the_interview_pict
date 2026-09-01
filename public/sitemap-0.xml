@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://theinterviewroom.in/about</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/feed</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/help</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/privacy</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/team</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://theinterviewroom.in/terms</loc><lastmod>2026-09-01T12:25:07.351Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/about</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/feed</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/help</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/privacy</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/team</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/terms</loc><lastmod>2026-09-01T12:40:57.125Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/nilay-tayades-experience-at-barclays-intern-2026-ipVlH9</loc><lastmod>2025-02-05T16:16:42.049Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/tarun-santani-experience-at-mastercard-sde-2025-aaaaaa</loc><lastmod>2025-02-07T16:16:42.049Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/single/tarun-santani-experience-at-arista-sde-2025-aaaaaa</loc><lastmod>2025-02-07T16:16:42.049Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -112,6 +112,7 @@
 <url><loc>https://theinterviewroom.in/companies/accelva</loc><lastmod>Sat Mar 28 2026 00:22:24 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/accenture</loc><lastmod>Sat Mar 28 2026 00:56:37 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/aci-worldwide</loc><lastmod>Sat Mar 28 2026 01:02:10 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/acquia</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/acuiti-labs</loc><lastmod>Sat Mar 28 2026 00:22:36 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/admin</loc><lastmod>Tue Aug 18 2026 11:35:41 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/adobe</loc><lastmod>Sat Mar 28 2026 00:22:40 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -125,14 +126,17 @@
 <url><loc>https://theinterviewroom.in/companies/amazon-pay</loc><lastmod>Sat Mar 28 2026 00:22:58 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/amdocs</loc><lastmod>Sat Mar 28 2026 00:23:01 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/angellist-india</loc><lastmod>Sat Mar 28 2026 00:23:04 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/apisero</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/apple</loc><lastmod>Sat Mar 28 2026 00:58:39 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/arista-networks</loc><lastmod>Sat Mar 28 2026 00:23:10 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/aspect-ratio</loc><lastmod>Sat Mar 28 2026 00:23:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/atlan</loc><lastmod>Sat Mar 28 2026 00:23:17 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/atos</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/avaya</loc><lastmod>Sat Mar 28 2026 00:23:20 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/avegen</loc><lastmod>Sat Mar 28 2026 00:23:22 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ayaan-autonomous</loc><lastmod>Sat Mar 28 2026 00:23:27 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ayaan-symtronics</loc><lastmod>Sat Mar 28 2026 00:23:24 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/bajaj-finance</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/bajaj-finserv</loc><lastmod>Sat Mar 28 2026 00:23:43 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/bakliwal-tutorials</loc><lastmod>Sat Mar 28 2026 00:23:45 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/bamboohr</loc><lastmod>Sat Mar 28 2026 00:23:48 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -180,6 +184,7 @@
 <url><loc>https://theinterviewroom.in/companies/e2open</loc><lastmod>Sat Mar 28 2026 00:25:48 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/eclerx-services</loc><lastmod>Sat Mar 28 2026 00:37:19 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/edx</loc><lastmod>Sat Mar 28 2026 00:37:26 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/einfochips</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/elastic-run</loc><lastmod>Sat Mar 28 2026 00:26:00 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/emerson</loc><lastmod>Sat Mar 28 2026 00:26:04 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/energy-exemplar</loc><lastmod>Tue Jul 14 2026 21:13:29 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -193,6 +198,7 @@
 <url><loc>https://theinterviewroom.in/companies/exl</loc><lastmod>Sat Mar 28 2026 00:25:57 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/facctum-it-solutions</loc><lastmod>Sat Mar 28 2026 00:26:22 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/facebook-meta</loc><lastmod>Sat Mar 28 2026 00:26:27 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/finastra</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/findability-sciences</loc><lastmod>Sat Mar 28 2026 00:26:33 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/finiq</loc><lastmod>Sat Mar 28 2026 00:26:30 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/fireeye</loc><lastmod>Sat Mar 28 2026 00:26:36 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -217,11 +223,13 @@
 <url><loc>https://theinterviewroom.in/companies/hackerearth</loc><lastmod>Sat Mar 28 2026 00:27:43 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hackerrank</loc><lastmod>Sat Mar 28 2026 00:27:45 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/happiest-minds-technologies</loc><lastmod>Sat Mar 28 2026 00:27:49 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/hashedin-by-deloitte</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hcl-technologies</loc><lastmod>Sat Mar 28 2026 00:27:28 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hdfc-bank</loc><lastmod>Sat Mar 28 2026 00:27:32 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hexaware</loc><lastmod>Sat Mar 28 2026 00:27:53 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hexaware-technologies</loc><lastmod>Sat Mar 28 2026 00:27:56 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/highradius</loc><lastmod>Sat Mar 28 2026 00:27:59 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/honeywell</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hotstar</loc><lastmod>Sat Mar 28 2026 00:28:02 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hp</loc><lastmod>Sat Mar 28 2026 00:27:36 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/hsbc</loc><lastmod>Sat Mar 28 2026 01:03:58 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -262,6 +270,7 @@
 <url><loc>https://theinterviewroom.in/companies/mastercard</loc><lastmod>Mon Mar 23 2026 23:24:41 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/mcafee</loc><lastmod>Sat Mar 28 2026 00:29:58 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/medianet</loc><lastmod>Sat Mar 28 2026 00:30:01 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/mediaocean</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/merilytics</loc><lastmod>Sat Mar 28 2026 00:30:04 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/metro-gsc</loc><lastmod>Sat Mar 28 2026 00:30:07 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/microsoft</loc><lastmod>Sat Mar 28 2026 00:30:11 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -272,6 +281,7 @@
 <url><loc>https://theinterviewroom.in/companies/moglix</loc><lastmod>Sat Mar 28 2026 00:30:26 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/monster-india</loc><lastmod>Sat Mar 28 2026 00:30:29 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/mphasis</loc><lastmod>Sat Mar 28 2026 00:30:32 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/mu-sigma</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/mx-player</loc><lastmod>Sat Mar 28 2026 00:29:47 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/myntra</loc><lastmod>Sat Mar 28 2026 00:30:35 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/naukricom</loc><lastmod>Sat Mar 28 2026 00:30:49 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -290,11 +300,13 @@
 <url><loc>https://theinterviewroom.in/companies/okta</loc><lastmod>Sat Mar 28 2026 00:31:22 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ola</loc><lastmod>Sat Mar 28 2026 00:31:25 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/oracle</loc><lastmod>Sat Mar 28 2026 00:31:29 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/oracle-financial-services-software</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ordway-labs</loc><lastmod>Sat Mar 28 2026 00:31:32 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/palo-alto</loc><lastmod>Sat Mar 28 2026 00:31:38 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/palo-alto-networks</loc><lastmod>Sat Mar 28 2026 00:31:42 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/paypal</loc><lastmod>Sat Mar 28 2026 00:59:47 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/paytm</loc><lastmod>Sat Mar 28 2026 00:31:47 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/paytm-money</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/persistent</loc><lastmod>Sat Mar 28 2026 00:31:51 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/persistent-systems</loc><lastmod>Sat Mar 28 2026 00:31:54 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/phonepe</loc><lastmod>Sun Aug 02 2026 19:43:57 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -303,6 +315,7 @@
 <url><loc>https://theinterviewroom.in/companies/principal-global-services</loc><lastmod>Sat Mar 28 2026 00:32:04 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/principal-global-solutions</loc><lastmod>Sat Mar 28 2026 00:32:07 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/promobi-technology</loc><lastmod>Sat Mar 28 2026 00:32:09 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/publicis-sapient</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/pubmatic</loc><lastmod>Sat Mar 28 2026 00:52:15 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/pubmatic-india</loc><lastmod>Sat Mar 28 2026 00:32:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/pwc</loc><lastmod>Sat Mar 28 2026 00:31:35 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -311,12 +324,15 @@
 <url><loc>https://theinterviewroom.in/companies/quantiphi-analytics</loc><lastmod>Sat Mar 28 2026 00:32:24 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/quick-heal</loc><lastmod>Sat Mar 28 2026 00:32:27 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/quorum-softwares</loc><lastmod>Sat Mar 28 2026 00:32:30 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/rackware</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ramco-systems</loc><lastmod>Sat Mar 28 2026 00:32:40 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/rbl-bank</loc><lastmod>Sat Mar 28 2026 00:32:33 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/red-hat</loc><lastmod>Sat Mar 28 2026 00:32:44 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/reflexis-systems</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/relevel</loc><lastmod>Sat Mar 28 2026 00:32:46 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/ria-advisory-llp</loc><lastmod>Sat Mar 28 2026 00:32:37 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/rinex</loc><lastmod>Sat Mar 28 2026 00:32:49 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/rocket-software</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/rockstar-ltd</loc><lastmod>Tue Aug 18 2026 11:36:29 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/rockwell-automation</loc><lastmod>Sat Mar 28 2026 00:50:11 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/route-mobile</loc><lastmod>Sat Mar 28 2026 00:32:55 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -332,6 +348,7 @@
 <url><loc>https://theinterviewroom.in/companies/sasken-technologies</loc><lastmod>Sat Mar 28 2026 00:33:26 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/scaler</loc><lastmod>Sat Mar 28 2026 00:33:30 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/schlumberger</loc><lastmod>Sat Mar 28 2026 00:33:33 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/se2</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/searce</loc><lastmod>Sat Mar 28 2026 00:33:36 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/selldo</loc><lastmod>Sat Mar 28 2026 00:48:02 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/servicenow</loc><lastmod>Sat Mar 28 2026 00:33:44 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -343,6 +360,7 @@
 <url><loc>https://theinterviewroom.in/companies/sonata-software</loc><lastmod>Sat Mar 28 2026 00:34:03 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/sony</loc><lastmod>Sat Mar 28 2026 00:34:07 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/sonyliv</loc><lastmod>Sat Mar 28 2026 00:34:10 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/sophos</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/sourceone</loc><lastmod>Sat Mar 28 2026 00:34:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/spotify</loc><lastmod>Sat Mar 28 2026 00:45:30 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/stellaris</loc><lastmod>Sat Mar 28 2026 00:34:22 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -367,6 +385,7 @@
 <url><loc>https://theinterviewroom.in/companies/trading-technologies</loc><lastmod>Sat Mar 28 2026 00:35:17 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/trend-micro</loc><lastmod>Sat Mar 28 2026 00:35:20 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/trilogy-innovations</loc><lastmod>Sat Mar 28 2026 00:35:24 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/tripstack</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/turing</loc><lastmod>Sat Mar 28 2026 00:35:28 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/turtlemint</loc><lastmod>Sat Mar 28 2026 00:35:31 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/twitter-x</loc><lastmod>Sat Mar 28 2026 00:35:35 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -377,6 +396,7 @@
 <url><loc>https://theinterviewroom.in/companies/unacademy</loc><lastmod>Sat Mar 28 2026 00:35:54 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/upgrad</loc><lastmod>Sat Mar 28 2026 00:35:57 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/uptiq</loc><lastmod>Mon Mar 23 2026 23:36:45 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/varian-medical-systems</loc><lastmod>Tue Sep 01 2026 18:10:14 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/vedantu</loc><lastmod>Sat Mar 28 2026 00:36:03 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/veras-retail</loc><lastmod>Sat Mar 28 2026 00:36:06 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/veritas</loc><lastmod>Sat Mar 28 2026 00:36:09 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -386,7 +406,9 @@
 <url><loc>https://theinterviewroom.in/companies/vhsmo</loc><lastmod>Fri Apr 10 2026 11:07:51 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/visteon</loc><lastmod>Sat Mar 28 2026 00:36:25 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/vmware</loc><lastmod>Sat Mar 28 2026 00:36:00 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/vodafone</loc><lastmod>Tue Sep 01 2026 18:10:12 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/whatsapp</loc><lastmod>Sat Mar 28 2026 00:36:29 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://theinterviewroom.in/companies/winjit-technologies</loc><lastmod>Tue Sep 01 2026 18:10:13 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/wipro</loc><lastmod>Sat Mar 28 2026 00:36:33 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/wisdmlabs</loc><lastmod>Sat Mar 28 2026 00:36:35 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://theinterviewroom.in/companies/wissen-technology</loc><lastmod>Sat Mar 28 2026 00:36:39 GMT+0530 (India Standard Time)</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>

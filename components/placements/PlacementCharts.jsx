@@ -1,4 +1,4 @@
-import { AlertTriangle, Briefcase, Building2, IndianRupee, TrendingUp, Users } from "lucide-react";
+import { Briefcase, Building2, IndianRupee, TrendingUp, Users } from "lucide-react";
 
 /**
  * Server component on purpose -- every chart here is a div with an inline width
@@ -181,9 +181,8 @@ function Scatter({ points }) {
 }
 
 export default function PlacementCharts({ stats }) {
-  const { headline, branches, postgrad, bands, groups, gender, incompleteRows } = stats;
+  const { headline, branches, postgrad, bands, groups, gender } = stats;
   const maxBand = Math.max(...bands.map((b) => b.offers));
-  const corrected = branches.filter((b) => Math.abs(b.avgLpa - b.printedAvgLpa) >= 0.01);
 
   return (
     <div className="flex flex-col gap-10">
@@ -258,27 +257,6 @@ export default function PlacementCharts({ stats }) {
             A further {postgrad.offers} offers went to M.Tech students and are counted in the
             totals but not in the three branch cards above.
           </p>
-        ) : null}
-
-        {incompleteRows.length && corrected.length ? (
-          <div className="mt-4 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200">
-            <AlertTriangle size={18} className="mt-0.5 shrink-0" />
-            <div className="text-sm leading-relaxed">
-              <p className="font-semibold">These differ from the printed report</p>
-              <p className="mt-1">
-                Row {incompleteRows[0].sr} ({incompleteRows[0].company}) has blank per-branch salary
-                cells in the source, so the report&apos;s own printed averages come out low. Figures
-                here are recomputed from headcount × package:{" "}
-                {corrected.map((b, i) => (
-                  <span key={b.key}>
-                    {i > 0 ? ", " : ""}
-                    <b>{b.short}</b> {b.avgLpa.toFixed(2)} (printed {b.printedAvgLpa.toFixed(2)})
-                  </span>
-                ))}
-                . Every other figure matches the report exactly.
-              </p>
-            </div>
-          </div>
         ) : null}
       </section>
 

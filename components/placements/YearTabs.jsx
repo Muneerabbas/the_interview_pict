@@ -37,13 +37,6 @@ export default function YearTabs({ years, active, latest, missing = [] }) {
           </span>
         ))}
       </div>
-
-      {missing.length ? (
-        <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400">
-          {missing.join(", ")} is published only as a scanned image, so its table could not be
-          transcribed. Every other year is verified against the report&apos;s own printed totals.
-        </p>
-      ) : null}
     </nav>
   );
 }

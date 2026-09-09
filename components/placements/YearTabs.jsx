@@ -19,7 +19,7 @@ export default function YearTabs({ years, active, latest, missing = [] }) {
               className={`whitespace-nowrap rounded-xl border px-4 py-2.5 text-sm font-bold tabular-nums transition-all ${
                 isActive
                   ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-900/40"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50/50 dark:border-white/10 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-900/40"
               }`}
             >
               {year}
@@ -31,7 +31,7 @@ export default function YearTabs({ years, active, latest, missing = [] }) {
           <span
             key={year}
             title="PICT published this year only as a scanned image, so it has no machine-readable table."
-            className="cursor-not-allowed whitespace-nowrap rounded-xl border border-dashed border-slate-300 bg-transparent px-4 py-2.5 text-sm font-bold tabular-nums text-slate-400 dark:border-slate-700 dark:text-slate-600"
+            className="cursor-not-allowed whitespace-nowrap rounded-xl border border-dashed border-slate-300 bg-transparent px-4 py-2.5 text-sm font-bold tabular-nums text-slate-400 dark:border-white/10 dark:text-slate-600"
           >
             {year}
           </span>

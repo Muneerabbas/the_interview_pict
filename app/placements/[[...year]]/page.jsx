@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { BarChart3 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
-import PlacementCharts from "@/components/placements/PlacementCharts";
-import PlacementsTable from "@/components/placements/PlacementsTable";
+import PlacementsView from "@/components/placements/PlacementsView";
 import YearTabs from "@/components/placements/YearTabs";
 import { hostFromHeaders, isPlacementHost } from "@/lib/host-gate";
 import { getMongoDb } from "@/lib/mongodb";
@@ -132,21 +131,30 @@ export default async function PlacementsPage({ params }) {
     companySlug: resolveCompanySlug(row.company, companyIndex),
   }));
 
-  const stats = rows.length ? summarise(rows) : null;
+  // One summary per lens, computed once on the server. Four passes over 110 rows
+  // is nothing, and it keeps the switch instant with no client-side maths.
+  const statsByBranch = rows.length
+    ? {
+      all: summarise(rows),
+      ce: summarise(rows, "ce"),
+      entc: summarise(rows, "entc"),
+      it: summarise(rows, "it"),
+    }
+    : null;
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-slate-50 font-sans dark:bg-slate-950">
+    <main className="relative min-h-screen overflow-x-clip bg-custom-cream font-sans dark:bg-slate-950">
       <Navbar showThemeToggle />
 
       <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6">
         <header className="mb-6">
-          <h1 className="flex items-center gap-3 pb-1 text-[26px] font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/50">
-              <BarChart3 className="text-blue-600 dark:text-blue-400" size={22} />
+          <h1 className="flex items-center gap-3 pb-1 font-display text-[30px] font-extrabold tracking-[-0.04em] text-slate-900 dark:text-slate-100 sm:text-4xl">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-[#CDC6F7] text-[#241E5C]">
+              <BarChart3 size={22} />
             </span>
             Placements {year}
           </h1>
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="mt-3 max-w-2xl text-[15.5px] leading-relaxed text-slate-600 dark:text-slate-400">
             Every recruiting drive from the PICT Training &amp; Placement Report, company by
             company &mdash; packages, branch splits and who actually hired at volume.
           </p>
@@ -154,13 +162,10 @@ export default async function PlacementsPage({ params }) {
 
         <YearTabs years={YEARS} active={year} latest={LATEST} missing={MISSING_YEARS} />
 
-        {stats ? (
-          <>
-            <PlacementCharts stats={stats} />
-            <PlacementsTable rows={rows} />
-          </>
+        {statsByBranch ? (
+          <PlacementsView rows={rows} statsByBranch={statsByBranch} />
         ) : (
-          <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+          <div className="flex h-64 flex-col items-center justify-center rounded-[18px] border border-dashed border-slate-200 bg-white text-slate-500 dark:border-white/10 dark:bg-slate-800">
             <BarChart3 size={28} className="mb-3 opacity-60" />
             <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200">
               Placement data unavailable

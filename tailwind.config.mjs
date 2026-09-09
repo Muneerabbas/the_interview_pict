@@ -18,6 +18,21 @@ export default {
         'interview-blue': '#2447E8', // Interview blue color
         // Warm paper/ink ramp from the "theInterviewRoom Landing" Claude Design
         // file, mapped onto `slate` so existing slate-* classes pick it up.
+        // The design's accent (#2447E8) mapped onto `blue`, so every existing
+        // blue-* class across the app picks it up instead of Tailwind's default.
+        blue: {
+          50: '#EEF1FE',
+          100: '#DDE3FD',
+          200: '#BCC8FB',
+          300: '#93A7F8',
+          400: '#6480F2',
+          500: '#3A5CEC',
+          600: '#2447E8',
+          700: '#1D3AC4',
+          800: '#1B319B',
+          900: '#1B2E7B',
+          950: '#141E4B',
+        },
         slate: {
           50: '#FAF9F5',
           100: '#F1EFE8',

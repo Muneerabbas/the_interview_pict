@@ -191,7 +191,7 @@ const TaleCard = ({ story }) => {
       <h3 className="mt-3.5 line-clamp-2 font-display text-[18px] font-bold leading-[1.28] tracking-[-0.025em] text-slate-900 dark:text-slate-100">
         {story?.title || 'Untitled Tale'}
       </h3>
-      <p className="mt-3 line-clamp-3 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
+      <p className="mt-3 line-clamp-2 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
         {stripToText(story?.exp_text || '') ||
           'A personal story, project journey, and lessons from a real student.'}
       </p>
@@ -225,7 +225,7 @@ const TopStoryCard = ({ story, rank }) => {
       <h3 className="mt-3.5 line-clamp-2 font-display text-[18px] font-bold leading-[1.28] tracking-[-0.025em] text-slate-900 dark:text-slate-100">
         {story?.title || `${story?.company || 'Company'} Interview Experience`}
       </h3>
-      <p className="mt-3 line-clamp-3 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
+      <p className="mt-3 line-clamp-2 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
         {stripToText(story?.exp_text || '') || 'Practical preparation notes from real interview rounds.'}
       </p>
       <div className={footerClass}>

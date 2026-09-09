@@ -24,13 +24,6 @@ const COLUMNS = [
   { key: "totalLpa", label: "Total LPA", numeric: true },
 ];
 
-const BRANCH_FILTERS = [
-  { key: "all", label: "All" },
-  { key: "ce", label: "CE" },
-  { key: "entc", label: "E&TC" },
-  { key: "it", label: "IT" },
-];
-
 const GROUP_FILTERS = [
   { key: "all", label: "Both groups" },
   { key: "I", label: "Group I" },
@@ -40,9 +33,8 @@ const GROUP_FILTERS = [
 const pgOf = (r) => r.mce + r.metc + r.mds;
 const valueOf = (row, key) => (key === "pg" ? pgOf(row) : row[key]);
 
-export default function PlacementsTable({ rows }) {
+export default function PlacementsTable({ rows, branch = "all", onBranchChange }) {
   const [query, setQuery] = useState("");
-  const [branch, setBranch] = useState("all");
   const [group, setGroup] = useState("all");
   const [sort, setSort] = useState({ key: "total", dir: "desc" });
   const [linked, setLinked] = useState("all");
@@ -89,7 +81,7 @@ export default function PlacementsTable({ rows }) {
         : { key, dir: key === "company" || key === "sr" ? "asc" : "desc" }
     );
 
-  const clearAll = () => { setQuery(""); setBranch("all"); setGroup("all"); setLinked("all"); };
+  const clearAll = () => { setQuery(""); onBranchChange?.("all"); setGroup("all"); setLinked("all"); };
   const isFiltered = query !== "" || branch !== "all" || group !== "all" || linked !== "all";
   const withPage = rows.filter((r) => r.companySlug).length;
 
@@ -97,7 +89,7 @@ export default function PlacementsTable({ rows }) {
     `whitespace-nowrap rounded-xl border px-4 py-2.5 text-sm font-bold transition-all ${
       active
         ? "border-blue-600 bg-blue-600 text-white shadow-md shadow-blue-500/20"
-        : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-900/40"
+        : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50/50 dark:border-white/10 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-900/40"
     }`;
 
   return (
@@ -118,7 +110,7 @@ export default function PlacementsTable({ rows }) {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search company…"
             aria-label="Search company"
-            className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-10 text-sm font-medium outline-none transition-all placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-600 dark:focus:border-blue-900/40 dark:focus:ring-blue-900/10"
+            className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-10 pr-10 text-sm font-medium outline-none transition-all placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-100 dark:border-white/10 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-600 dark:focus:border-blue-900/40 dark:focus:ring-blue-900/10"
           />
           {query ? (
             <button
@@ -133,20 +125,6 @@ export default function PlacementsTable({ rows }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by branch">
-            {BRANCH_FILTERS.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => setBranch(option.key)}
-                aria-pressed={branch === option.key}
-                className={pill(branch === option.key)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-          <span className="mx-1 hidden h-6 w-px bg-slate-200 dark:bg-slate-700 sm:block" />
           <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by group">
             {GROUP_FILTERS.map((option) => (
               <button
@@ -177,11 +155,11 @@ export default function PlacementsTable({ rows }) {
       </div>
 
       {visible.length ? (
-        <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-slate-800">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] text-sm">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-700">
+                <tr className="border-b border-slate-200 dark:border-white/10">
                   {COLUMNS.map((column) => {
                     const active = sort.key === column.key;
                     return (
@@ -217,7 +195,7 @@ export default function PlacementsTable({ rows }) {
                 {visible.map((row, index) => (
                   <tr
                     key={`${row.group}-${row.sr}-${row.variant}`}
-                    className="border-b border-slate-100 odd:bg-slate-50/60 hover:bg-blue-50/40 dark:border-slate-800 dark:odd:bg-slate-800/30 dark:hover:bg-slate-800/60"
+                    className="border-b border-slate-100 odd:bg-slate-50/60 hover:bg-blue-50/40 dark:border-white/10 dark:odd:bg-slate-800/30 dark:hover:bg-slate-800/60"
                   >
                     {/* Position in the current view, not the report's Sr. No. --
                         that number is meaningless once the table is sorted. */}
@@ -262,7 +240,7 @@ export default function PlacementsTable({ rows }) {
               </tbody>
 
               <tfoot>
-                <tr className="border-t-2 border-slate-200 bg-slate-50 font-semibold dark:border-slate-700 dark:bg-slate-800/60">
+                <tr className="border-t-2 border-slate-200 bg-slate-50 font-semibold dark:border-white/10 dark:bg-slate-800/60">
                   <td className="px-3 py-2.5" />
                   <td className="px-3 py-2.5 text-slate-700 dark:text-slate-200">
                     {visible.length} drive{visible.length === 1 ? "" : "s"} shown
@@ -284,7 +262,7 @@ export default function PlacementsTable({ rows }) {
           </div>
         </div>
       ) : (
-        <div className="mt-4 flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+        <div className="mt-4 flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white text-slate-500 shadow-sm dark:border-white/10 dark:bg-slate-800 dark:text-slate-400">
           <Table2 size={28} className="mb-3 opacity-60" />
           <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200">No drives match</h3>
           <p className="mt-1 text-sm">Try a different company or branch.</p>

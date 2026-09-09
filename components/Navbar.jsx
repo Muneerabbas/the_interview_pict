@@ -232,7 +232,7 @@ export default function Navbar({ showThemeToggle = true }) {
                 priority
                 className="object-contain"
               />
-              <span className="hidden text-[15px] font-bold min-[400px]:inline sm:text-lg xl:text-xl">
+              <span className="text-[13px] font-bold min-[400px]:text-[15px] sm:text-lg xl:text-xl">
                 the<span className="text-blue-600 dark:text-blue-500">Interview</span>Room
               </span>
             </Link>

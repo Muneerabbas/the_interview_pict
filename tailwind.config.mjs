@@ -13,8 +13,23 @@ export default {
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       colors: {
-        'custom-cream': "#F4F2EF", // Custom cream color
-        'interview-blue': '#3863D3', // Interview blue color
+        'custom-cream': "#F6F4EF", // Custom cream color
+        'interview-blue': '#2447E8', // Interview blue color
+        // Warm paper/ink ramp from the "theInterviewRoom Landing" Claude Design
+        // file, mapped onto `slate` so existing slate-* classes pick it up.
+        slate: {
+          50: '#FAF9F5',
+          100: '#F1EFE8',
+          200: '#E4E0D7',
+          300: '#D6D1C5',
+          400: '#A8A59D',
+          500: '#8A877E',
+          600: '#5E5C56',
+          700: '#3E3C38',
+          800: '#1A1E25',
+          900: '#14161C',
+          950: '#101216',
+        },
       },
       animation: {
         slideIn: 'slideIn 0.5s ease-out',

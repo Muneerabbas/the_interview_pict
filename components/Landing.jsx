@@ -5,29 +5,27 @@ import { TALES_ENABLED } from "@/lib/feature-flags";
 import Link from 'next/link'
 import {
   ArrowRight,
-  ArrowUpRight,
   BadgeCheck,
-  Blocks,
-  Bookmark,
+  BarChart3,
   Building2,
   ChevronLeft,
   ChevronRight,
-  Flame,
   GraduationCap,
   Lightbulb,
   PenLine,
-  BarChart3,
   ShieldCheck,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Navbar from './Navbar'
 import { isPlacementHost } from '@/lib/host-gate'
 
+/* The pastel pairs are literal in the design file (they sit on both themes
+   unchanged), so they stay literal here rather than becoming theme tokens. */
 const TRUST_BADGES = [
-  { icon: ShieldCheck, label: 'Real Experiences' },
-  { icon: BadgeCheck, label: 'Verified Students' },
-  { icon: Building2, label: 'Top Companies' },
-  { icon: Lightbulb, label: 'Interview Tips' },
+  { icon: ShieldCheck, label: 'Real Experiences', bg: '#CDC6F7', fg: '#241E5C' },
+  { icon: BadgeCheck, label: 'Verified Students', bg: '#BCE7CF', fg: '#0C3A26' },
+  { icon: Building2, label: 'Top Companies', bg: '#FFD9A8', fg: '#5A3A0B' },
+  { icon: Lightbulb, label: 'Interview Tips', bg: '#FFD3C7', fg: '#7A2A12' },
 ]
 
 const DEPARTMENTS = [
@@ -39,23 +37,6 @@ const DEPARTMENTS = [
 ]
 
 const COMPANIES = ['Barclays', 'Mastercard', 'BNY', 'Siemens', 'Arista', 'Tracelink', 'PhonePe']
-
-const AVATAR_COLORS = [
-  'bg-blue-600',
-  'bg-emerald-600',
-  'bg-amber-600',
-  'bg-rose-600',
-  'bg-indigo-600',
-  'bg-blue-600',
-]
-
-const getAvatarColor = (seed = '') => {
-  let hash = 0
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = seed.charCodeAt(i) + ((hash << 5) - hash)
-  }
-  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]
-}
 
 const stripToText = (raw = '') => {
   let text = raw.replace(/<[^>]*>?/g, ' ')
@@ -72,7 +53,19 @@ const stripToText = (raw = '') => {
   return text
 }
 
-/* Horizontal scroller with edge controls — dashboard-style rail. */
+/* The design prints reads as "2.4k". Anything under a thousand stays exact, and
+   a post with no views yet prints nothing rather than a fake "0". */
+const formatReads = (views) => {
+  const n = Number(views) || 0
+  if (n <= 0) return ''
+  if (n < 1000) return `${n}`
+  return `${(n / 1000).toFixed(n < 10000 ? 1 : 0).replace(/\.0$/, '')}k`
+}
+
+const initialOf = (value = '') => value.trim().charAt(0).toUpperCase() || 'T'
+
+/* Horizontal scroller with edge controls — the design's plain rail, plus the
+   arrows this page already had. */
 const ScrollableSection = ({ children }) => {
   const scrollContainerRef = useRef(null)
 
@@ -90,7 +83,7 @@ const ScrollableSection = ({ children }) => {
     <div className="relative">
       <button
         onClick={() => scroll('left')}
-        className="absolute -left-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white sm:inline-flex"
+        className="absolute -left-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:text-slate-900 dark:border-white/10 dark:bg-slate-800 dark:text-slate-400 dark:hover:text-slate-100 sm:inline-flex"
         aria-label="Scroll left"
       >
         <ChevronLeft size={18} />
@@ -105,7 +98,7 @@ const ScrollableSection = ({ children }) => {
 
       <button
         onClick={() => scroll('right')}
-        className="absolute -right-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white sm:inline-flex"
+        className="absolute -right-3 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:text-slate-900 dark:border-white/10 dark:bg-slate-800 dark:text-slate-400 dark:hover:text-slate-100 sm:inline-flex"
         aria-label="Scroll right"
       >
         <ChevronRight size={18} />
@@ -114,22 +107,15 @@ const ScrollableSection = ({ children }) => {
   )
 }
 
-/* Section header — title left, optional action link right (Linear/Vercel pattern). */
-const SectionHeader = ({ icon: Icon, title, description, ctaHref, ctaLabel }) => (
-  <div className="flex flex-wrap items-end justify-between gap-3">
+/* Section header — title left, optional action link right. */
+const SectionHeader = ({ title, description, ctaHref, ctaLabel }) => (
+  <div className="flex flex-wrap items-end justify-between gap-5">
     <div className="max-w-2xl">
-      <div className="flex items-center gap-2">
-        {Icon ? (
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
-            <Icon size={15} />
-          </span>
-        ) : null}
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
-          {title}
-        </h2>
-      </div>
+      <h2 className="font-display text-[28px] font-extrabold leading-[1.1] tracking-[-0.04em] text-slate-900 dark:text-slate-100 sm:text-4xl">
+        {title}
+      </h2>
       {description ? (
-        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+        <p className="mt-2.5 text-[15.5px] leading-relaxed text-slate-600 dark:text-slate-400">
           {description}
         </p>
       ) : null}
@@ -138,102 +124,133 @@ const SectionHeader = ({ icon: Icon, title, description, ctaHref, ctaLabel }) =>
       <Link
         href={ctaHref}
         prefetch
-        className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+        className="shrink-0 whitespace-nowrap text-[14.5px] font-bold text-primary transition hover:opacity-80"
       >
-        {ctaLabel}
-        <ArrowRight size={14} />
+        {ctaLabel} →
       </Link>
     ) : null}
   </div>
 )
 
-const StoryCard = ({ story }) => {
-  const isTale = story?.content_type === 'tale'
-  const plainText = stripToText(story?.exp_text || '')
+const cardClass =
+  'flex h-full flex-col rounded-[18px] border border-slate-200 bg-white p-[22px] transition hover:-translate-y-0.5 dark:border-white/10 dark:bg-slate-800'
+const monoClass =
+  'font-mono text-[11px] uppercase tracking-[0.12em] text-slate-500'
+const footerClass =
+  'mt-5 flex items-center gap-2.5 border-t border-black/[0.06] pt-[15px] dark:border-white/[0.07]'
+const avatarClass =
+  'flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-slate-100 text-[13px] font-bold text-slate-700 dark:bg-white/[0.07] dark:text-slate-300'
 
-  const seed = String(story?.uid || story?.company || story?.role || 'story')
-  const avatarColor = getAvatarColor(seed)
-  const authorLabel = story?.name || 'Anonymous'
-  const headerTitle = isTale ? authorLabel : story?.company || 'Top Company'
-  const headerSub = isTale ? story?.college || 'Tale' : story?.role || 'Interview'
-  const cardTitle = isTale
-    ? story?.title || 'Untitled Tale'
-    : story?.title || `${story?.company || 'Company'} Interview Experience`
-  const initial = headerTitle?.charAt(0)?.toUpperCase() || 'T'
-
-  const batchBranch = [story?.branch, story?.batch].filter(Boolean).join(' · ')
-  const chipLabel = isTale ? story?.category || 'Tale' : batchBranch || 'Interview Experience'
-  const tags = Array.isArray(story?.tags) ? story.tags.filter(Boolean).slice(0, 3) : []
+/* Interview card — the design's featured grid tile. */
+const InterviewCard = ({ story }) => {
+  const company = story?.company || 'Top Company'
+  const author = story?.name || 'Anonymous'
+  const meta = [story?.batch, story?.branch].filter(Boolean).join(' · ') || 'Interview Experience'
+  const badge = Array.isArray(story?.tags) ? story.tags.filter(Boolean)[0] : ''
+  const reads = formatReads(story?.views)
 
   return (
-    <article className={`group flex h-full w-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 ${isTale ? 'border-l-2 border-l-emerald-500 dark:border-l-emerald-400' : ''}`}>
-      <div className="flex items-center gap-3">
-        <div
-          className={`${avatarColor} flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-base font-semibold text-white`}
-          aria-hidden="true"
-        >
-          {initial}
-        </div>
-        <div className="min-w-0">
-          <p className="truncate text-[15px] font-semibold leading-tight text-slate-900 dark:text-white">
-            {headerTitle}
-          </p>
-          <p className="truncate text-xs text-slate-500 dark:text-slate-400">{headerSub}</p>
-        </div>
+    <article className={cardClass}>
+      <div className="flex items-center justify-between gap-2.5">
+        <span className={`${monoClass} truncate`}>{meta}</span>
+        {badge ? (
+          <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-[#EEF1E0] px-2.5 py-1 text-[11px] font-bold text-[#3C4410] dark:bg-[#2C3316] dark:text-[#D8F14E]">
+            {badge}
+          </span>
+        ) : null}
       </div>
-
-      <h3 className="mt-4 line-clamp-1 text-[15px] font-semibold text-slate-900 dark:text-white">
-        {cardTitle}
+      <h3 className="mt-3.5 font-display text-[19px] font-bold leading-[1.24] tracking-[-0.025em] text-slate-900 dark:text-slate-100">
+        {company}
       </h3>
-      <p className="mt-1.5 line-clamp-2 flex-1 text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">
-        {plainText ||
-          (isTale
-            ? 'A personal story, project journey, and lessons from a real student.'
-            : 'Practical preparation notes from real interview rounds.')}
+      <div className="mt-1.5 truncate text-[13.5px] text-slate-500">{story?.role || 'Interview'}</div>
+      <p className="mt-3.5 line-clamp-3 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
+        {stripToText(story?.exp_text || '') || 'Practical preparation notes from real interview rounds.'}
       </p>
-
-      <span className="mt-4 inline-flex w-fit max-w-full items-center gap-1 rounded-md bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
-        <span className="truncate">{chipLabel}</span>
-      </span>
-      {tags.length > 0 ? (
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {tags.map((tag) => (
-            <span key={tag} className="max-w-full truncate rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-              #{tag}
-            </span>
-          ))}
-        </div>
-      ) : null}
-
-      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800">
-        <span className="truncate text-xs text-slate-500 dark:text-slate-400">
-          By <span className="font-semibold text-slate-700 dark:text-slate-200">{authorLabel}</span>
+      <div className={footerClass}>
+        <span className={avatarClass}>{initialOf(author)}</span>
+        <span className="truncate text-[13.5px] font-semibold text-slate-700 dark:text-slate-300">
+          {author}
         </span>
-        <Bookmark
-          size={16}
-          className="shrink-0 text-slate-300 transition group-hover:text-blue-500 dark:text-slate-600"
-        />
+        {reads ? (
+          <span className="ml-auto shrink-0 font-mono text-[11.5px] text-slate-500">{reads}</span>
+        ) : null}
       </div>
     </article>
   )
 }
 
-/* Filter group — company / batch / department chips. */
-const FilterGroup = ({ icon: Icon, label, children }) => (
-  <div className="flex flex-col gap-3 border-b border-slate-100 py-4 last:border-0 last:pb-0 dark:border-slate-800 sm:flex-row sm:items-center first:pt-0">
-    <div className="flex w-full items-center gap-2 sm:w-44 sm:shrink-0">
-      <span className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-        <Icon size={15} />
+/* Tale card — mint spine, title-led, author + college in the footer. */
+const TaleCard = ({ story }) => {
+  const author = story?.name || 'Anonymous'
+
+  return (
+    <article className={`${cardClass} border-l-[3px] border-l-[#7FC7A4] dark:border-l-[#7FC7A4]`}>
+      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-[#4E7C63] dark:text-[#8FD9B4]">
+        {story?.category || 'Tale'}
       </span>
-      <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{label}</p>
-    </div>
-    <div className="flex flex-1 flex-wrap gap-2">{children}</div>
+      <h3 className="mt-3.5 line-clamp-2 font-display text-[18px] font-bold leading-[1.28] tracking-[-0.025em] text-slate-900 dark:text-slate-100">
+        {story?.title || 'Untitled Tale'}
+      </h3>
+      <p className="mt-3 line-clamp-3 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
+        {stripToText(story?.exp_text || '') ||
+          'A personal story, project journey, and lessons from a real student.'}
+      </p>
+      <div className={footerClass}>
+        <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-[#E3F3EA] text-[13px] font-bold text-[#0F4A31] dark:bg-[#1D3329] dark:text-[#8FD9B4]">
+          {initialOf(author)}
+        </span>
+        <div className="min-w-0">
+          <div className="truncate text-[13.5px] font-semibold text-slate-700 dark:text-slate-300">
+            {author}
+          </div>
+          <div className="truncate text-[12px] text-slate-500">{story?.college || 'Tale'}</div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+/* Top story card — ranked, reads-led, title-led. */
+const TopStoryCard = ({ story, rank }) => {
+  const author = story?.name || 'Anonymous'
+  const reads = formatReads(story?.views)
+  const sub = [story?.company, story?.batch].filter(Boolean).join(' · ')
+
+  return (
+    <article className={cardClass}>
+      <div className="flex items-center justify-between gap-2.5">
+        <span className={monoClass}>{String(rank).padStart(2, '0')}</span>
+        {reads ? <span className="font-mono text-[11.5px] text-slate-500">{reads}</span> : null}
+      </div>
+      <h3 className="mt-3.5 line-clamp-2 font-display text-[18px] font-bold leading-[1.28] tracking-[-0.025em] text-slate-900 dark:text-slate-100">
+        {story?.title || `${story?.company || 'Company'} Interview Experience`}
+      </h3>
+      <p className="mt-3 line-clamp-3 flex-1 text-[14.5px] leading-[1.58] text-slate-600 dark:text-slate-400">
+        {stripToText(story?.exp_text || '') || 'Practical preparation notes from real interview rounds.'}
+      </p>
+      <div className={footerClass}>
+        <span className={avatarClass}>{initialOf(author)}</span>
+        <div className="min-w-0">
+          <div className="truncate text-[13.5px] font-semibold text-slate-700 dark:text-slate-300">
+            {author}
+          </div>
+          {sub ? <div className="truncate text-[12px] text-slate-500">{sub}</div> : null}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+/* Filter row — label left, chips right, hairline between rows. */
+const FilterGroup = ({ label, children }) => (
+  <div className="grid gap-3 border-b border-black/[0.06] px-[22px] py-[18px] last:border-0 dark:border-white/[0.07] sm:grid-cols-[minmax(150px,190px)_1fr] sm:items-center sm:gap-[18px]">
+    <span className="text-[14.5px] font-bold text-slate-700 dark:text-slate-300">{label}</span>
+    <div className="flex flex-wrap gap-2">{children}</div>
   </div>
 )
 
 const chipClass =
-  'rounded-md border border-slate-200 bg-white px-3 py-1 text-[13px] font-medium text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-800 dark:hover:bg-blue-950/40 dark:hover:text-blue-300'
-
+  'inline-flex rounded-full border border-slate-200 bg-slate-50 px-3.5 py-[7px] text-[13.5px] font-medium text-slate-600 transition hover:border-slate-400 hover:text-slate-900 dark:hover:border-white/25 dark:hover:text-slate-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-400'
 
 /**
  * `sort(() => Math.random() - 0.5)` is a biased shuffle, not a fair one. These
@@ -300,24 +317,24 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
       <Navbar showThemeToggle={true} />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section id="hero" className="border-b border-slate-100 dark:border-slate-900">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-28 sm:pt-32 lg:grid-cols-2 lg:gap-6 lg:pb-16">
+      <section id="hero">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 pt-28 sm:pt-32 lg:grid-cols-2 lg:pb-16">
           {/* Left: copy + CTAs + trust badges */}
           <div className="max-w-xl">
-            <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-[3.35rem]">
+            <h1 className="font-display text-[36px] font-extrabold leading-[1.05] tracking-[-0.045em] text-slate-900 dark:text-slate-100 sm:text-5xl lg:text-[52px]">
               Prepare Better.
               <br />
-              <span className="text-blue-600 dark:text-blue-500">Perform</span> Confidently.
+              <span className="text-primary">Perform</span> Confidently.
             </h1>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-500 dark:text-slate-400">
+            <p className="mt-4 max-w-[430px] text-[17px] leading-[1.55] text-slate-600 dark:text-slate-400">
               Real interview experiences from students who cracked top companies.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-2.5">
               <Link
                 href="/feed"
                 prefetch
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+                className="inline-flex h-[46px] items-center justify-center gap-2.5 rounded-full bg-primary px-[22px] text-[15.5px] font-semibold text-white transition hover:opacity-90 active:scale-[0.98]"
               >
                 Read Stories
                 <ArrowRight size={16} />
@@ -325,7 +342,7 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
               <Link
                 href="/post"
                 prefetch
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-800"
+                className="inline-flex h-[46px] items-center justify-center gap-2 rounded-full bg-slate-900 px-[22px] text-[15.5px] font-semibold text-custom-cream transition hover:opacity-90 active:scale-[0.98] dark:bg-slate-100 dark:text-slate-950"
               >
                 Share Your Story
                 <PenLine size={15} />
@@ -334,7 +351,7 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
                 <Link
                   href="/placements"
                   prefetch
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-6 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 active:scale-[0.98] dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:border-blue-800 dark:hover:bg-blue-950/70"
+                  className="inline-flex h-[46px] items-center justify-center gap-2 rounded-full bg-[#D8F14E] px-[22px] text-[15.5px] font-bold text-[#14161C] transition hover:opacity-90 active:scale-[0.98]"
                 >
                   Placement Stats
                   <BarChart3 size={15} />
@@ -342,13 +359,16 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
               ) : null}
             </div>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
-              {TRUST_BADGES.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-blue-400">
-                    <Icon size={16} />
+            <div className="mt-6 flex flex-wrap items-center gap-x-[26px] gap-y-3">
+              {TRUST_BADGES.map(({ icon: Icon, label, bg, fg }) => (
+                <div key={label} className="flex items-center gap-2.5">
+                  <span
+                    className="flex h-8 w-8 items-center justify-center rounded-[10px]"
+                    style={{ backgroundColor: bg, color: fg }}
+                  >
+                    <Icon size={16} strokeWidth={2.2} />
                   </span>
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                  <span className="text-[14.5px] font-semibold text-slate-700 dark:text-slate-300">
                     {label}
                   </span>
                 </div>
@@ -362,7 +382,7 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
             <img
               src="/hero-illustration.svg"
               alt="Student preparing for an interview"
-              className="mx-auto h-auto w-full max-w-md lg:max-w-none"
+              className="mx-auto h-auto w-full max-w-[430px] lg:max-w-none"
               loading="eager"
             />
           </div>
@@ -370,16 +390,15 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
       </section>
 
       {/* ── Featured Stories ───────────────────────────────────── */}
-      <section id="featured" className="border-b border-slate-100 bg-slate-50/70 dark:border-slate-900 dark:bg-slate-900">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <section id="featured" className="border-t border-slate-200 dark:border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-11 sm:py-14">
           <SectionHeader
-            icon={Flame}
             title="Featured Interviews"
             description="Handpicked interview journeys from students who recently cracked top opportunities."
             ctaHref="/feed"
             ctaLabel="View all stories"
           />
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {fetchedFeaturedStories.slice(0, 4).map((story, index) => (
               <Link
                 key={`${story?.uid || 'featured'}-${index}`}
@@ -387,22 +406,22 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
                 prefetch
                 className="block"
               >
-                <StoryCard story={story} />
+                <InterviewCard story={story} />
               </Link>
             ))}
           </div>
 
           {/* Resources banner */}
-          <div className="mt-6 flex flex-col items-start gap-4 rounded-xl border border-blue-100 bg-blue-50/60 px-5 py-4 dark:border-blue-950/60 dark:bg-blue-950/20 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm dark:bg-slate-900 dark:text-blue-400">
+          <div className="mt-4 flex flex-col items-start gap-5 rounded-[18px] bg-[#CDC6F7] px-6 py-[22px] sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3.5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-[#241E5C] text-[#CDC6F7]">
                 <GraduationCap size={20} />
               </span>
               <div>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                <p className="font-display text-[17px] font-extrabold tracking-[-0.025em] text-[#241E5C]">
                   New to interviews?
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="mt-0.5 text-[14.5px] text-[#3B3480]">
                   Read real experiences and company-specific insights to prepare.
                 </p>
               </div>
@@ -410,7 +429,7 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
             <Link
               href="/feed"
               prefetch
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-800"
+              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-[#241E5C] px-[22px] text-[14.5px] font-semibold text-white transition hover:opacity-90"
             >
               Explore Resources
               <ArrowRight size={15} />
@@ -420,15 +439,19 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
       </section>
 
       {/* ── Find experiences (company / batch / department) ────── */}
-      <section id="companyspecific" className="border-y border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-          <SectionHeader
-            icon={Building2}
-            title="Find experiences that match your goal"
-            description="Filter by company, batch, or branch and jump straight to the relevant interview patterns."
-          />
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white px-5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <FilterGroup icon={Building2} label="By company">
+      <section
+        id="companyspecific"
+        className="border-t border-slate-200 bg-muted dark:border-white/10"
+      >
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <h2 className="max-w-3xl font-display text-[28px] font-extrabold leading-[1.1] tracking-[-0.04em] text-slate-900 dark:text-slate-100 sm:text-4xl">
+            Find experiences that match your goal
+          </h2>
+          <p className="mt-2.5 max-w-[640px] text-[15.5px] leading-relaxed text-slate-600 dark:text-slate-400">
+            Filter by company, batch, or branch and jump straight to the relevant interview patterns.
+          </p>
+          <div className="mt-6 overflow-hidden rounded-[18px] border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-800">
+            <FilterGroup label="By company">
               {/* Each chip opens ITS OWN company page. These come from the DB, so
                   the slug always resolves; the hardcoded list is only a fallback
                   for an empty database and points at the directory. */}
@@ -444,14 +467,14 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
                   </Link>
                 ))}
             </FilterGroup>
-            <FilterGroup icon={GraduationCap} label="By batch year">
+            <FilterGroup label="By batch year">
               {batchYears.map((year) => (
-                <Link key={year} href="/feed" prefetch className={chipClass}>
+                <Link key={year} href="/feed" prefetch className={`${chipClass} font-mono`}>
                   {year}
                 </Link>
               ))}
             </FilterGroup>
-            <FilterGroup icon={Blocks} label="By department">
+            <FilterGroup label="By department">
               {DEPARTMENTS.map((dept) => (
                 <Link key={dept.key} href="/feed" prefetch className={chipClass}>
                   {dept.label}
@@ -464,27 +487,28 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
 
       {/* ── Featured Tales (hidden until Tales ships) ──────────── */}
       {TALES_ENABLED && (
-      <section id="tales" className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-        <SectionHeader
-          icon={GraduationCap}
-          title="Featured Tales"
-          description="Project journeys, late-night fixes, and student stories beyond the interview room."
-          ctaHref="/tales"
-          ctaLabel="View all"
-        />
-        <div className="mt-6">
-          <ScrollableSection>
-            {fetchedTales.map((story, index) => (
-              <Link
-                key={`${story?.uid || 'tale'}-${index}`}
-                href={`/single/${story.uid}`}
-                prefetch
-                className="block w-[290px] shrink-0"
-              >
-                <StoryCard story={story} />
-              </Link>
-            ))}
-          </ScrollableSection>
+      <section id="tales" className="border-t border-slate-200 dark:border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <SectionHeader
+            title="Featured Tales"
+            description="Project journeys, late-night fixes, and student stories beyond the interview room."
+            ctaHref="/tales"
+            ctaLabel="View all"
+          />
+          <div className="mt-7">
+            <ScrollableSection>
+              {fetchedTales.map((story, index) => (
+                <Link
+                  key={`${story?.uid || 'tale'}-${index}`}
+                  href={`/single/${story.uid}`}
+                  prefetch
+                  className="block w-[300px] shrink-0"
+                >
+                  <TaleCard story={story} />
+                </Link>
+              ))}
+            </ScrollableSection>
+          </div>
         </div>
       </section>
       )}
@@ -492,26 +516,25 @@ export default function Home({ tales, featuredStories, topStories, topCompanies 
       {/* ── Top Stories ────────────────────────────────────────── */}
       <section
         id="topstories"
-        className="border-t border-slate-100 bg-slate-50/60 dark:border-slate-900 dark:bg-slate-900"
+        className="border-t border-slate-200 bg-muted dark:border-white/10"
       >
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 py-14">
           <SectionHeader
-            icon={ArrowUpRight}
             title="Top Stories"
             description="The most-read experiences from the community, ranked by what helped candidates most."
             ctaHref="/feed"
             ctaLabel="View all"
           />
-          <div className="mt-6">
+          <div className="mt-7">
             <ScrollableSection>
               {fetchedTopStories.map((story, index) => (
                 <Link
                   key={`${story?.uid || 'top'}-${index}`}
                   href={`/single/${story.uid}`}
                   prefetch
-                  className="block w-[290px] shrink-0"
+                  className="block w-[300px] shrink-0"
                 >
-                  <StoryCard story={story} />
+                  <TopStoryCard story={story} rank={index + 1} />
                 </Link>
               ))}
             </ScrollableSection>

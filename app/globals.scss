@@ -139,12 +139,12 @@
    DESIGN TOKENS — Global UI Polish
    ============================================================ */
 :root {
-  /* var(--font-inter) is the family next/font generates in app/layout.js. Naming
-     "Inter" directly here never resolved to the self-hosted font, so the whole
-     site fell back to system UI fonts. JetBrains Mono is not loaded anywhere, so
-     it is not claimed here either. */
-  --font-sans: var(--font-inter), "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* These are the families next/font generates in app/layout.js. Naming a font
+     directly here never resolved to the self-hosted file, so the whole site fell
+     back to system UI fonts -- always point at the generated variable. */
+  --font-sans: var(--font-instrument), "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-instrument), "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Typography */
   --ui-font-size-body: 15.5px;
@@ -358,7 +358,7 @@ small {
 
 @layer base {
   .theme {
-    --font-heading: var(--font-sans);
+    --font-heading: var(--font-display);
   }
 
   /* Palette from the "theInterviewRoom Landing" Claude Design file (warm paper + ink). */

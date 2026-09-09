@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Globe, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 
 const IconLink = ({ href, label, children }) => {
@@ -31,6 +31,7 @@ export default function TeamMemberCard({
   subtitle,
   linkedin,
   github,
+  website,
   email,
   priority = false,
 }) {
@@ -79,6 +80,10 @@ export default function TeamMemberCard({
           </IconLink>
           <IconLink href={github} label={`${name} GitHub`}>
             <Github size={18} />
+          </IconLink>
+          {/* Optional -- IconLink renders nothing for members without one. */}
+          <IconLink href={website} label={`${name} personal site`}>
+            <Globe size={18} />
           </IconLink>
           <IconLink href={mailHref} label={`Email ${name}`}>
             <Mail size={18} />

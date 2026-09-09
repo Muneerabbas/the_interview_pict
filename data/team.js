@@ -52,6 +52,7 @@ export const TEAM = [
     subtitle: "PICT'28 CE",
     linkedin: "https://www.linkedin.com/in/manas-khairnar-98329132b/",
     github: "https://github.com/derpx06",
+    website: "https://www.derpx06.online/",
     email: "manaskhairnar1511@gmail.com",
   },
   {
